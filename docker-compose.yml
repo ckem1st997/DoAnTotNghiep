@@ -1,0 +1,92 @@
+version: '3.4'
+
+services:
+
+  seq:
+    image: datalust/seq:latest
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+        - "5341:80"
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest 
+    environment:
+            SA_PASSWORD: "Aa!0977751021"
+            ACCEPT_EULA: "Y"
+    ports:
+      - "5433:1433"
+    volumes:
+      - doan-sqlserver:/data/db
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - doan-mongodb:/data/db
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - doan-redis:/data/db
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  warehouse-api:
+    image: ${REGISTRY:-doantotnghiep}/warehouse.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/WareHouse/WareHouse.API/Dockerfile
+    depends_on:
+      - redis
+      - rabbitmq
+      - sqlserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ConnectionString=${DOAN_WAREHOUSE_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Services.CatalogDb;User Id=sa;Password=Aa!0977751021}
+      - PATH_BASE=/warehouse-api
+      - GRPC_PORT=81
+      - PORT=80
+    ports:
+      - "5101:80"
+      - "9101:81"
+  asset-api:
+    image: ${REGISTRY:-doantotnghiep}/asset.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/Asset/Asset.API/Dockerfile
+    depends_on:
+      - redis
+      - rabbitmq
+      - sqlserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ConnectionString=${DOAN_WAREHOUSE_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Services.CatalogDb;User Id=sa;Password=Aa!0977751021}
+      - PATH_BASE=/warehouse-api
+      - GRPC_PORT=81
+      - PORT=80
+    ports:
+      - "5102:80"
+      - "9102:81"
+   
+volumes:
+  doan-sqlserver:
+    external: false
+  doan-redis:
+    external: false
+  doan-mongodb:
+    external: false
+
+ 
