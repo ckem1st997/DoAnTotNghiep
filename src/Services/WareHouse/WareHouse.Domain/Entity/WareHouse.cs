@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace WareHouse.Domain.Entity
 {
-    public partial class WareHouse:BaseEntity
+    public partial class WareHouse : BaseEntity
     {
         public WareHouse()
         {

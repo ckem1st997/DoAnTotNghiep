@@ -8,8 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.3.0" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Application\Queries\GetFisrt\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WareHouse.Domain\WareHouse.Domain.csproj" />
+    <ProjectReference Include="..\WareHouse.Infrastructure\WareHouse.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

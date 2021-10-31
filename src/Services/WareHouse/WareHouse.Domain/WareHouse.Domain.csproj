@@ -6,9 +6,11 @@
 
   <ItemGroup>
     <Folder Include="Events\" />
-    <Folder Include="Exceptions\" />
-    <Folder Include="IRepositories\" />
-    <Folder Include="SeeWork\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.90" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
   </ItemGroup>
 
 </Project>
