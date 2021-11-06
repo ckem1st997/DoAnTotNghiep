@@ -17,7 +17,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.Address)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.Code)
                 .IsRequired()

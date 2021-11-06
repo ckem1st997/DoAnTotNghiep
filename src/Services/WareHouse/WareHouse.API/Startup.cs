@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WareHouse.API.Application.AutoMapper.ConfigureServices;
+using WareHouse.API.Application.Validations.ConfigureServices;
 using WareHouse.API.ConfigureServices.CustomConfiguration;
 
 namespace WareHouse.API
@@ -29,6 +31,8 @@ namespace WareHouse.API
         {
 
             services.AddCustomConfiguration(Configuration);
+            services.AddMapper();
+            services.AddValidator();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

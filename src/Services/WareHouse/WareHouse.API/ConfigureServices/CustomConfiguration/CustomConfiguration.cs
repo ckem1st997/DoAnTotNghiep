@@ -36,8 +36,8 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
                 {
                     options.JsonSerializerOptions.WriteIndented = true;
                     //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-                });
-               // .SetCompatibilityVersion(CompatibilityVersion.Version_3_0).AddNewtonsoftJson();
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0).AddNewtonsoftJson();
 
             services.AddSwaggerGen(c =>
             {
