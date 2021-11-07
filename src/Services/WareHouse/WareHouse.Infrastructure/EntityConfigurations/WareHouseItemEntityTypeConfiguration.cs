@@ -28,11 +28,11 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.Country)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.Inactive)
                 .IsRequired()
@@ -41,7 +41,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(100)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .HasDefaultValueSql("('')");
 
             entity.Property(e => e.UnitId)
@@ -57,7 +57,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.VendorName)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.HasOne(d => d.Category)
                 .WithMany(p => p.WareHouseItems)

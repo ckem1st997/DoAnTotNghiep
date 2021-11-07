@@ -14,8 +14,8 @@ namespace WareHouse.Domain.Entity
 
         public string AuditId { get; set; }
         public string ItemId { get; set; }
-        public int Quantity { get; set; }
-        public int AuditQuantity { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal AuditQuantity { get; set; }
         public string Conclude { get; set; }
 
         public virtual Audit Audit { get; set; }

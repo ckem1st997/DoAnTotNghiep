@@ -15,10 +15,10 @@ namespace WareHouse.Domain.Entity
         public string OutwardId { get; set; }
         public string ItemId { get; set; }
         public string UnitId { get; set; }
-        public int Uiquantity { get; set; }
+        public decimal Uiquantity { get; set; }
         public decimal Uiprice { get; set; }
         public decimal Amount { get; set; }
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
         public decimal Price { get; set; }
         public string DepartmentId { get; set; }
         public string DepartmentName { get; set; }

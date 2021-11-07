@@ -17,7 +17,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.CreatedBy)
                 .HasMaxLength(100)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.CreatedDate)
                 .HasPrecision(0)
@@ -25,7 +25,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.Deliver)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
@@ -33,7 +33,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.ModifiedBy)
                 .HasMaxLength(100)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.ModifiedDate)
                 .HasPrecision(0)
@@ -43,11 +43,11 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.ReasonDescription)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.Receiver)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.Reference)
                 .HasMaxLength(255)

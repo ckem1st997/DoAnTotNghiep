@@ -17,7 +17,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.Address)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.Code)
                 .IsRequired()
@@ -27,7 +27,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.ContactPerson)
                 .HasMaxLength(100)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
@@ -36,7 +36,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(255)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .HasDefaultValueSql("('')");
 
             entity.Property(e => e.Phone)

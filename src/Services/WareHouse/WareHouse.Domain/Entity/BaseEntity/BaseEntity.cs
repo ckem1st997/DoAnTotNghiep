@@ -43,9 +43,15 @@ namespace WareHouse.Domain.Entity
             _domainEvents?.Clear();
         }
 
+
+        /// <summary>
+        /// check Id 
+        /// </summary>
+        /// <returns></returns>
         public bool IsTransient()
         {
-            return this.Id == Guid.NewGuid().ToString();
+            // return this.Id == Guid.NewGuid();
+            return string.IsNullOrEmpty(this.Id);
         }
 
         public override bool Equals(object obj)

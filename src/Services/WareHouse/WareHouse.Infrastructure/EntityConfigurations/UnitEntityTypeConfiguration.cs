@@ -17,7 +17,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.UnitName)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(true);
         }
     }
 }

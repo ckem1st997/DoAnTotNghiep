@@ -25,7 +25,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.CustomerName)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.DepartmentId)
                 .HasMaxLength(36)
@@ -33,7 +33,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.DepartmentName)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.EmployeeId)
                 .HasMaxLength(36)
@@ -41,7 +41,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.EmployeeName)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.ItemId)
                 .IsRequired()
@@ -80,7 +80,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
                 .HasColumnName("UIPrice")
                 .HasDefaultValueSql("((0.00))");
 
-            entity.Property(e => e.Uiquantity).HasColumnName("UIQuantity");
+            entity.Property(e => e.Uiquantity).HasColumnName("UIQuantity").HasColumnType("decimal(15, 2)").HasDefaultValueSql("((0.00))");
 
             entity.Property(e => e.UnitId)
                 .IsRequired()

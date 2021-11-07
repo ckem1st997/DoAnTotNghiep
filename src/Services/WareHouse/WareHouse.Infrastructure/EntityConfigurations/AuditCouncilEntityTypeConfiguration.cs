@@ -28,7 +28,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.EmployeeName)
                 .HasMaxLength(100)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.Role)
                 .HasMaxLength(100)

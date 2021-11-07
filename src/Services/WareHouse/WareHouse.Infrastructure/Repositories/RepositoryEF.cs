@@ -28,7 +28,8 @@ namespace WareHouse.Infrastructure.Repositories
         }
         public virtual async Task<T> AddAsync(T entity)
         {
-            if (entity.IsTransient())
+            // if Id not null
+            if (!entity.IsTransient())
             {
                 return (await _dbSet.AddAsync(entity)).Entity;
             }

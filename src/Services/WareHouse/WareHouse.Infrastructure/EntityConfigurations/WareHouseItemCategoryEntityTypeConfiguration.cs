@@ -23,7 +23,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.Inactive)
                 .IsRequired()
@@ -32,7 +32,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(100)
-                .IsUnicode(false)
+                .IsUnicode(true)
                 .HasDefaultValueSql("('')");
 
             entity.Property(e => e.ParentId)

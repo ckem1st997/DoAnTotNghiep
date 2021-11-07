@@ -9,7 +9,7 @@ namespace WareHouse.Domain.Entity
     {
         public string ItemId { get; set; }
         public string WarehouseId { get; set; }
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
         public decimal Amount { get; set; }
     }
 }

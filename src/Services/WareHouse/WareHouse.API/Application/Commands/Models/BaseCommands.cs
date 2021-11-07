@@ -7,6 +7,11 @@ namespace WareHouse.API.Application.Commands.Models
 {
     public class BaseCommands
     {
-        public string Id { get; set; }
+        string _Id;
+        public string Id
+        {
+            get { return _Id; }
+            set { _Id = Guid.NewGuid().ToString(); }
+        } 
     }
 }

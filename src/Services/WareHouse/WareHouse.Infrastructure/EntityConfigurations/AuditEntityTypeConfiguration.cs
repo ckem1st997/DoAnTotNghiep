@@ -22,7 +22,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.CreatedBy)
                 .HasMaxLength(100)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.CreatedDate)
                 .HasPrecision(0)
@@ -34,7 +34,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
 
             entity.Property(e => e.ModifiedBy)
                 .HasMaxLength(100)
-                .IsUnicode(false);
+                .IsUnicode(true);
 
             entity.Property(e => e.ModifiedDate)
                 .HasPrecision(0)
