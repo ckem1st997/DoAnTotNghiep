@@ -10,6 +10,7 @@ using WareHouse.API.Application.Commands.Delete.WareHouses;
 using WareHouse.API.Application.Commands.Models.WareHouse;
 using WareHouse.API.Application.Commands.Update.WareHouses;
 using WareHouse.API.Application.Extensions;
+using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Queries.Paginated;
 
 namespace WareHouse.API.Controllers
@@ -36,7 +37,14 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> IndexAsync([FromQuery] PaginatedWareHouseCommand paginatedList)
         {
-            return Ok(await _mediat.Send(new PaginatedWareHouseCommand() { KeySearch = paginatedList.KeySearch, PageNumber = paginatedList.PageNumber, fromPrice = paginatedList.fromPrice, toPrice = paginatedList.toPrice, PageIndex = paginatedList.PageIndex }));
+            var data = await _mediat.Send(new PaginatedWareHouseCommand() { KeySearch = paginatedList.KeySearch, PageNumber = paginatedList.PageNumber, fromPrice = paginatedList.fromPrice, toPrice = paginatedList.toPrice, PageIndex = paginatedList.PageIndex });
+            var result = new ResultMessageResponse()
+            {
+                data = data.Result,
+                success = true,
+                totalCount = data.totalCount
+            };
+            return Ok(result);
 
         }
 
@@ -58,11 +66,15 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(WareHouseCommands wareHouseCommands)
         {
+            var data = await _mediat.Send(new CreateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
+            var result = new ResultMessageResponse()
+            {
+                success = data
+            };
+            return Ok(result);
+        }
 
-            return Ok(await _mediat.Send(new CreateWareHouseCommand() { WareHouseCommands = wareHouseCommands }));
-        } 
-        
-        
+
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
