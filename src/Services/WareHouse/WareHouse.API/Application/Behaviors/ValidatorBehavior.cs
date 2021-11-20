@@ -25,7 +25,7 @@ namespace WareHouse.API.Application.Behaviors
         {
             // var typeName = request.GetGenericTypeName();
 
-            // _logger.LogInformation("----- Validating command {CommandType}", typeName);
+             _logger.LogInformation("----- Validating command ");
 
             var failures = _validators
                 .Select(v => v.Validate(request))

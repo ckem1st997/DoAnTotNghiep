@@ -7,19 +7,14 @@ using System.Threading.Tasks;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
 
-namespace WareHouse.API.Application.Queries.Paginated
+namespace WareHouse.API.Application.Queries.Paginated.WareHouses
 {
     [DataContract]
     public class PaginatedWareHouseCommand : IRequest<IPaginatedList<WareHouseDTO>>
     {
         [DataMember]
         public string KeySearch { get; set; }
-
-        [DataMember]
-        public decimal? fromPrice { get; set; }
-
-        [DataMember]
-        public decimal? toPrice { get; set; }
+        
         [DataMember]
         public int PageIndex { get; set; }
         [DataMember]

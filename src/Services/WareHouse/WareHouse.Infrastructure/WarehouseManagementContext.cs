@@ -54,7 +54,7 @@ namespace WareHouse.Infrastructure
         public WarehouseManagementContext(DbContextOptions<WarehouseManagementContext> options, IMediator mediator) : base(options)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            System.Diagnostics.Debug.WriteLine("ProductsContext::ctor ->" + this.GetHashCode());
+            System.Diagnostics.Debug.WriteLine("WarehouseManagementContext::ctor ->" + this.GetHashCode());
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
