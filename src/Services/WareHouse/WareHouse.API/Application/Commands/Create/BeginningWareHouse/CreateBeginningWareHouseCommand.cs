@@ -1,13 +1,12 @@
 ﻿using System.Runtime.Serialization;
 using MediatR;
-using WareHouse.API.Application.Commands.Models.Vendor;
-using WareHouse.API.Application.Commands.Models.WareHouse;
+using WareHouse.API.Application.Commands.Models;
 
-namespace WareHouse.API.Application.Commands.Create.Vendor
+namespace WareHouse.API.Application.Commands.Create
 {
-    public class CreateVendorCommand: IRequest<bool>
+    public partial class CreateInwardCommand: IRequest<bool>
     {
         [DataMember]
-        public VendorCommands VendorCommands { get; set; }
+        public BeginningWareHouseCommands BeginningWareHouseCommands { get; set; }
     }
 }

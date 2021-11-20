@@ -7,23 +7,23 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create.Vendor
 {
-    public class CreateVendorCommandHandler: IRequestHandler<CreateVendorCommand, bool>
+    public class CreateAuditDetailSerialCommandHandler: IRequestHandler<CreateAuditDetailSerialCommand, bool>
     {
-        private readonly IRepositoryEF<Domain.Entity.Vendor> _repository;
+        private readonly IRepositoryEF<Domain.Entity.BeginningWareHouse> _repository;
         private readonly IMapper _mapper;
 
-        public CreateVendorCommandHandler(IRepositoryEF<Domain.Entity.Vendor> repository, IMapper mapper)
+        public CreateAuditDetailSerialCommandHandler(IRepositoryEF<Domain.Entity.BeginningWareHouse> repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(CreateVendorCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CreateAuditDetailSerialCommand request, CancellationToken cancellationToken)
         {
 
             if (request is null)
                 return false;
-            var result = _mapper.Map<Domain.Entity.Vendor>(request.VendorCommands);
+            var result = _mapper.Map<Domain.Entity.BeginningWareHouse>(request.BeginningWareHouseCommands);
             await _repository.AddAsync(result);
             return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }

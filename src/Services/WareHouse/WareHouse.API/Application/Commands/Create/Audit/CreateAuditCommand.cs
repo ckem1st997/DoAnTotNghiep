@@ -2,11 +2,11 @@
 using MediatR;
 using WareHouse.API.Application.Commands.Models;
 
-namespace WareHouse.API.Application.Commands.Create.Vendor
+namespace WareHouse.API.Application.Commands.Create
 {
-    public class CreateBeginningWareHouseCommand: IRequest<bool>
+    public partial class CreateAuditCommand: IRequest<bool>
     {
         [DataMember]
-        public BeginningWareHouseCommands BeginningWareHouseCommands { get; set; }
+        public AuditCommands AuditCommands { get; set; }
     }
 }

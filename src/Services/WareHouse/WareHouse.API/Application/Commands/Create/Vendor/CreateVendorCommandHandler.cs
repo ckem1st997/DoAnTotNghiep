@@ -5,9 +5,9 @@ using AutoMapper;
 using MediatR;
 using WareHouse.Domain.IRepositories;
 
-namespace WareHouse.API.Application.Commands.Create.Vendor
+namespace WareHouse.API.Application.Commands.Create
 {
-    public class CreateVendorCommandHandler: IRequestHandler<CreateVendorCommand, bool>
+    public partial class CreateVendorCommandHandler: IRequestHandler<CreateVendorCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.Vendor> _repository;
         private readonly IMapper _mapper;

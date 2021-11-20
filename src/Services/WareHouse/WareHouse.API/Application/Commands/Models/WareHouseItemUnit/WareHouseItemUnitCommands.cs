@@ -1,13 +1,11 @@
-﻿namespace WareHouse.API.Application.Commands.Models.Vendor
+﻿namespace WareHouse.API.Application.Commands.Models
 {
-    public class VendorCommands: BaseCommands
+    public partial class WareHouseItemUnitCommands: BaseCommands
     {
-        public string Code { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
-        public string ContactPerson { get; set; }
-        public bool Inactive { get; set; }
+        public string ItemId { get; set; }
+        public string UnitId { get; set; }
+        public string UnitName { get; set; }
+        public int ConvertRate { get; set; }
+        public bool? IsPrimary { get; set; }
     }
 }

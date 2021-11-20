@@ -1,13 +1,24 @@
-﻿namespace WareHouse.API.Application.Commands.Models.Vendor
+﻿namespace WareHouse.API.Application.Commands.Models
 {
-    public class BeginningWareHouseCommands: BaseCommands
+    public partial class InwardDetailCommands: BaseCommands
     {
-        public string Code { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
-        public string ContactPerson { get; set; }
-        public bool Inactive { get; set; }
+        public string InwardId { get; set; }
+        public string ItemId { get; set; }
+        public string UnitId { get; set; }
+        public int Uiquantity { get; set; }
+        public decimal Uiprice { get; set; }
+        public decimal Amount { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal Price { get; set; }
+        public string DepartmentId { get; set; }
+        public string DepartmentName { get; set; }
+        public string EmployeeId { get; set; }
+        public string EmployeeName { get; set; }
+        public string StationId { get; set; }
+        public string StationName { get; set; }
+        public string ProjectId { get; set; }
+        public string ProjectName { get; set; }
+        public string CustomerId { get; set; }
+        public string CustomerName { get; set; }
     }
 }

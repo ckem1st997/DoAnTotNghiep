@@ -1,6 +1,6 @@
-﻿namespace WareHouse.API.Application.Commands.Models.Vendor
+﻿namespace WareHouse.API.Application.Commands.Models
 {
-    public class VendorCommands: BaseCommands
+    public partial class VendorCommands: BaseCommands
     {
         public string Code { get; set; }
         public string Name { get; set; }

@@ -7,23 +7,23 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class CreateAuditCouncilCommandHandler: IRequestHandler<CreateAuditCouncilCommand, bool>
+    public partial class CreateWareHouseItemUnitCommandHandler: IRequestHandler<CreateWareHouseItemUnitCommand, bool>
     {
-        private readonly IRepositoryEF<Domain.Entity.AuditCouncil> _repository;
+        private readonly IRepositoryEF<Domain.Entity.WareHouseItemUnit> _repository;
         private readonly IMapper _mapper;
 
-        public CreateAuditCouncilCommandHandler(IRepositoryEF<Domain.Entity.AuditCouncil> repository, IMapper mapper)
+        public CreateWareHouseItemUnitCommandHandler(IRepositoryEF<Domain.Entity.WareHouseItemUnit> repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(CreateAuditCouncilCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CreateWareHouseItemUnitCommand request, CancellationToken cancellationToken)
         {
 
             if (request is null)
                 return false;
-            var result = _mapper.Map<Domain.Entity.AuditCouncil>(request.AuditCouncilCommands);
+            var result = _mapper.Map<Domain.Entity.WareHouseItemUnit>(request.WareHouseItemUnitCommands);
             await _repository.AddAsync(result);
             return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }

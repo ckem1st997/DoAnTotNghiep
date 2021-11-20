@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WareHouse.API.Application.Commands.Models.WareHouse
+namespace WareHouse.API.Application.Commands.Models
 {
-    public class WareHouseCommands : BaseCommands
+    public partial class WareHouseCommands : BaseCommands
     {
         public string Code { get; set; }
         public string Name { get; set; }

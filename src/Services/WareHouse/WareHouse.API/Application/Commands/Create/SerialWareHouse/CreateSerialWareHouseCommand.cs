@@ -4,9 +4,9 @@ using WareHouse.API.Application.Commands.Models;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class CreateAuditCouncilCommand: IRequest<bool>
+    public partial class CreateSerialWareHouseCommand : IRequest<bool>
     {
         [DataMember]
-        public AuditCouncilCommands AuditCouncilCommands { get; set; }
+        public SerialWareHouseCommands SerialWareHouseCommands { get; set; }
     }
 }

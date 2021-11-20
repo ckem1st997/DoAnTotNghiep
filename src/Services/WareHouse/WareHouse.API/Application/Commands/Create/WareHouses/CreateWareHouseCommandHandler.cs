@@ -7,9 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using WareHouse.Domain.IRepositories;
 
-namespace WareHouse.API.Application.Commands.Create.WareHouses
+namespace WareHouse.API.Application.Commands.Create
 {
-    public class CreateWareHouseCommandHandler : IRequestHandler<CreateWareHouseCommand, bool>
+    public partial class CreateWareHouseCommandHandler : IRequestHandler<CreateWareHouseCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
         private readonly IMapper _mapper;

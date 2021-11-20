@@ -7,20 +7,20 @@ using System.Threading;
 using System.Threading.Tasks;
 using WareHouse.Domain.IRepositories;
 
-namespace WareHouse.API.Application.Commands.Delete.WareHouses
+namespace WareHouse.API.Application.Commands.Delete.Vendor
 {
-    public class DeleteVendorCommandHandler : IRequestHandler<DeleteWareHouseCommand, bool>
+    public class DeleteVendorCommandHandler : IRequestHandler<DeleteVendorCommand, bool>
     {
-        private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
+        private readonly IRepositoryEF<Domain.Entity.Vendor> _repository;
         private readonly IMapper _mapper;
 
-        public DeleteWareHouseCommandHandler(IRepositoryEF<Domain.Entity.WareHouse> repository, IMapper mapper)
+        public DeleteVendorCommandHandler(IRepositoryEF<Domain.Entity.Vendor> repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(DeleteWareHouseCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteVendorCommand request, CancellationToken cancellationToken)
         {
 
             if (request is null)

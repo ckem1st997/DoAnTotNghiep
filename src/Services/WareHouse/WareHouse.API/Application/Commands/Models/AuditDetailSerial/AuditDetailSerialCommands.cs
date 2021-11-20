@@ -1,13 +1,9 @@
-﻿namespace WareHouse.API.Application.Commands.Models.Vendor
+﻿namespace WareHouse.API.Application.Commands.Models
 {
-    public class BeginningWareHouseCommands: BaseCommands
+    public partial class AuditDetailSerialCommands: BaseCommands
     {
-        public string Code { get; set; }
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
-        public string ContactPerson { get; set; }
-        public bool Inactive { get; set; }
+        public string ItemId { get; set; }
+        public string Serial { get; set; }
+        public string AuditDetailId { get; set; }
     }
 }

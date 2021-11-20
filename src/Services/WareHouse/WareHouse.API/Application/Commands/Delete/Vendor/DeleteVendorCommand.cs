@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Commands.Models;
 
-namespace WareHouse.API.Application.Commands.Delete.WareHouses
+namespace WareHouse.API.Application.Commands.Delete.Vendor
 {
     public class DeleteVendorCommand : IRequest<bool>
     {

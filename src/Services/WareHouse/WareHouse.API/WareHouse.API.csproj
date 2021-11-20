@@ -24,23 +24,6 @@
 
   <ItemGroup>
     <Folder Include="Application\Cache\" />
-    <Folder Include="Application\Commands\Delete\Vendor" />
-    <Folder Include="Application\Commands\Models\Audit" />
-    <Folder Include="Application\Commands\Models\AuditCouncil" />
-    <Folder Include="Application\Commands\Models\AuditDetail" />
-    <Folder Include="Application\Commands\Models\AuditDetailSerial" />
-    <Folder Include="Application\Commands\Models\BeginningWareHouse" />
-    <Folder Include="Application\Commands\Models\Inward" />
-    <Folder Include="Application\Commands\Models\InwardDetail" />
-    <Folder Include="Application\Commands\Models\Outward" />
-    <Folder Include="Application\Commands\Models\OutwardDetail" />
-    <Folder Include="Application\Commands\Models\SerialWareHouse" />
-    <Folder Include="Application\Commands\Models\Unit" />
-    <Folder Include="Application\Commands\Models\WarehouseBalance" />
-    <Folder Include="Application\Commands\Models\WareHouseItem" />
-    <Folder Include="Application\Commands\Models\WareHouseItemCategory" />
-    <Folder Include="Application\Commands\Models\WareHouseItemUnit" />
-    <Folder Include="Application\Commands\Models\WareHouseLimit" />
     <Folder Include="Application\Commands\Update\Audit" />
     <Folder Include="Application\Commands\Update\AuditCouncil" />
     <Folder Include="Application\Commands\Update\AuditDetail" />

@@ -7,23 +7,23 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create.Vendor
 {
-    public class CreateBeginningWareHouseCommandHandler: IRequestHandler<CreateBeginningWareHouseCommand, bool>
+    public class CreateWareHouseLimitCommandHandler: IRequestHandler<CreateWareHouseLimitCommand, bool>
     {
-        private readonly IRepositoryEF<Domain.Entity.BeginningWareHouse> _repository;
+        private readonly IRepositoryEF<Domain.Entity.WareHouseLimit> _repository;
         private readonly IMapper _mapper;
 
-        public CreateBeginningWareHouseCommandHandler(IRepositoryEF<Domain.Entity.BeginningWareHouse> repository, IMapper mapper)
+        public CreateWareHouseLimitCommandHandler(IRepositoryEF<Domain.Entity.WareHouseLimit> repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(CreateBeginningWareHouseCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CreateWareHouseLimitCommand request, CancellationToken cancellationToken)
         {
 
             if (request is null)
                 return false;
-            var result = _mapper.Map<Domain.Entity.BeginningWareHouse>(request.BeginningWareHouseCommands);
+            var result = _mapper.Map<Domain.Entity.WareHouseLimit>(request.WareHouseLimitCommands);
             await _repository.AddAsync(result);
             return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }

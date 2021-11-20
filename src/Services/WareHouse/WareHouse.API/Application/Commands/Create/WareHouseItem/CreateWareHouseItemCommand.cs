@@ -2,11 +2,11 @@
 using MediatR;
 using WareHouse.API.Application.Commands.Models;
 
-namespace WareHouse.API.Application.Commands.Create.Vendor
+namespace WareHouse.API.Application.Commands.Create
 {
-    public class CreateUnitCommand: IRequest<bool>
+    public partial class CreateWareHouseItemCommand: IRequest<bool>
     {
         [DataMember]
-        public UnitCommands UnitCommands { get; set; }
+        public WareHouseItemCommands WareHouseItemCommands { get; set; }
     }
 }

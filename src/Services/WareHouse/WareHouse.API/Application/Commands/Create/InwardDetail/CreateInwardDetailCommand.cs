@@ -4,9 +4,9 @@ using WareHouse.API.Application.Commands.Models;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class CreateBeginningWareHouseCommand: IRequest<bool>
+    public partial class CreateInwardDetailCommand : IRequest<bool>
     {
         [DataMember]
-        public BeginningWareHouseCommands BeginningWareHouseCommands { get; set; }
+        public InwardDetailCommands InwardDetailCommands { get; set; }
     }
 }
