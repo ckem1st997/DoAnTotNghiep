@@ -9,18 +9,18 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Delete
 {
-    public partial class DeleteWareHouseCommandHandler : IRequestHandler<DeleteWareHouseCommand, bool>
+    public partial class DeleteOutwardDetailCommandHandler : IRequestHandler<DeleteOutwardDetailCommand, bool>
     {
-        private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
+        private readonly IRepositoryEF<Domain.Entity.OutwardDetail> _repository;
         private readonly IMapper _mapper;
 
-        public DeleteWareHouseCommandHandler(IRepositoryEF<Domain.Entity.WareHouse> repository, IMapper mapper)
+        public DeleteOutwardDetailCommandHandler(IRepositoryEF<Domain.Entity.OutwardDetail> repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(DeleteWareHouseCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteOutwardDetailCommand request, CancellationToken cancellationToken)
         {
 
             if (request is null)

@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WareHouse.API.Application.Commands.Models.WareHouse;
+using WareHouse.API.Application.Commands.Models;
 using WareHouse.API.Application.Extensions;
 
-namespace WareHouse.API.Application.Validations.WareHouse
+namespace WareHouse.API.Application.Validations
 {
-    public class WareHouseCommandValidator : AbstractValidator<WareHouseCommands>
+    public partial class WareHouseCommandValidator : AbstractValidator<WareHouseCommands>
     {
         public WareHouseCommandValidator()
         {

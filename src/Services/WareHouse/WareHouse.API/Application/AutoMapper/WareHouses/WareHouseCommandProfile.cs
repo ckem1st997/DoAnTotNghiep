@@ -3,8 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WareHouse.API.Application.Commands.Models.Vendor;
-using WareHouse.API.Application.Commands.Models.WareHouse;
+using WareHouse.API.Application.Commands.Models;
 
 namespace WareHouse.API.Application.AutoMapper.WareHouses
 {

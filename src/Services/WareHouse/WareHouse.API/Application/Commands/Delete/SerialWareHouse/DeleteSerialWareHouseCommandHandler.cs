@@ -9,18 +9,18 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Delete
 {
-    public partial class DeleteWareHouseCommandHandler : IRequestHandler<DeleteWareHouseCommand, bool>
+    public partial class DeleteSerialWareHouseCommandHandler : IRequestHandler<DeleteSerialWareHouseCommand, bool>
     {
-        private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
+        private readonly IRepositoryEF<Domain.Entity.SerialWareHouse> _repository;
         private readonly IMapper _mapper;
 
-        public DeleteWareHouseCommandHandler(IRepositoryEF<Domain.Entity.WareHouse> repository, IMapper mapper)
+        public DeleteSerialWareHouseCommandHandler(IRepositoryEF<Domain.Entity.SerialWareHouse> repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(DeleteWareHouseCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteSerialWareHouseCommand request, CancellationToken cancellationToken)
         {
 
             if (request is null)

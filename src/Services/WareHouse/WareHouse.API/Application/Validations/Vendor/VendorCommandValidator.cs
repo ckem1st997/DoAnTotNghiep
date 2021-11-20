@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
-using WareHouse.API.Application.Commands.Models.Vendor;
+using WareHouse.API.Application.Commands.Models;
 using WareHouse.API.Application.Extensions;
 
-namespace WareHouse.API.Application.Validations.Vendor
+namespace WareHouse.API.Application.Validations
 {
-    public class VendorCommandValidator: AbstractValidator<VendorCommands>
+    public partial class VendorCommandValidator: AbstractValidator<VendorCommands>
     {
         public VendorCommandValidator()
         {

@@ -3,8 +3,8 @@ using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WareHouse.API.Application.Commands.Create.Vendor;
-using WareHouse.API.Application.Commands.Models.Vendor;
+using WareHouse.API.Application.Commands.Create;
+using WareHouse.API.Application.Commands.Models;
 using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Queries.Paginated.Vendor;
 

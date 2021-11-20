@@ -8,7 +8,7 @@ using WareHouse.API.Application.Commands.Models;
 
 namespace WareHouse.API.Application.Commands.Delete
 {
-    public partial class DeleteVendorCommand : IRequest<bool>
+    public partial class DeleteOutwardCommand : IRequest<bool>
     {
         [DataMember]
         public string Id { get; set; }

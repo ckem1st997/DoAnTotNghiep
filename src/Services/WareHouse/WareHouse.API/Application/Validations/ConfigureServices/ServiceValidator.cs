@@ -5,10 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WareHouse.API.Application.Commands.Models.Vendor;
-using WareHouse.API.Application.Commands.Models.WareHouse;
-using WareHouse.API.Application.Validations.Vendor;
-using WareHouse.API.Application.Validations.WareHouse;
+using WareHouse.API.Application.Commands.Models;
+using WareHouse.API.Application.Validations;
 
 namespace WareHouse.API.Application.Validations.ConfigureServices
 {

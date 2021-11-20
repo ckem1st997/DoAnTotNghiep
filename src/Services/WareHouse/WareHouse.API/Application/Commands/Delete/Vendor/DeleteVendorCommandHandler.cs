@@ -7,9 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using WareHouse.Domain.IRepositories;
 
-namespace WareHouse.API.Application.Commands.Delete.Vendor
+namespace WareHouse.API.Application.Commands.Delete
 {
-    public class DeleteVendorCommandHandler : IRequestHandler<DeleteVendorCommand, bool>
+    public partial class DeleteVendorCommandHandler : IRequestHandler<DeleteVendorCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.Vendor> _repository;
         private readonly IMapper _mapper;
