@@ -4,7 +4,7 @@ using WareHouse.API.Application.Commands.Models;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class CreateAuditDetailSerialCommand: IRequest<bool>
+    public partial class UpdateAuditDetailSerialCommand: IRequest<bool>
     {
         [DataMember]
         public AuditDetailSerialCommands AuditDetailSerialCommands { get; set; }

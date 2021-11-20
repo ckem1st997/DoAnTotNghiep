@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using WareHouse.API.Application.Commands.Models.WareHouse;
+using WareHouse.API.Application.Commands.Models;
 
-namespace WareHouse.API.Application.Commands.Update.WareHouses
+namespace WareHouse.API.Application.Commands.Update
 {
     [DataContract]
-    public class UpdateWareHouseCommand : IRequest<bool>
+    public partial class UpdateWareHouseCommand : IRequest<bool>
     {
         [DataMember]
         public WareHouseCommands WareHouseCommands { get; set; }

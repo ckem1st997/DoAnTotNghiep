@@ -5,20 +5,20 @@ using AutoMapper;
 using MediatR;
 using WareHouse.Domain.IRepositories;
 
-namespace WareHouse.API.Application.Commands.Create.Vendor
+namespace WareHouse.API.Application.Commands.Create
 {
-    public class CreateAuditDetailSerialCommandHandler: IRequestHandler<CreateAuditDetailSerialCommand, bool>
+    public partial class CreateBeginningWareHouseCommandHandler : IRequestHandler<CreateBeginningWareHouseCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.BeginningWareHouse> _repository;
         private readonly IMapper _mapper;
 
-        public CreateAuditDetailSerialCommandHandler(IRepositoryEF<Domain.Entity.BeginningWareHouse> repository, IMapper mapper)
+        public CreateBeginningWareHouseCommandHandler(IRepositoryEF<Domain.Entity.BeginningWareHouse> repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(CreateAuditDetailSerialCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CreateBeginningWareHouseCommand request, CancellationToken cancellationToken)
         {
 
             if (request is null)

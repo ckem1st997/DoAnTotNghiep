@@ -7,18 +7,18 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class CreateAuditDetailSerialCommandHandler: IRequestHandler<CreateAuditDetailSerialCommand, bool>
+    public partial class UpdateAuditDetailSerialCommandHandler: IRequestHandler<UpdateAuditDetailSerialCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.AuditDetailSerial> _repository;
         private readonly IMapper _mapper;
 
-        public CreateAuditDetailSerialCommandHandler(IRepositoryEF<Domain.Entity.AuditDetailSerial> repository, IMapper mapper)
+        public UpdateAuditDetailSerialCommandHandler(IRepositoryEF<Domain.Entity.AuditDetailSerial> repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(CreateAuditDetailSerialCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(UpdateAuditDetailSerialCommand request, CancellationToken cancellationToken)
         {
 
             if (request is null)

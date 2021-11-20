@@ -4,7 +4,7 @@ using WareHouse.API.Application.Commands.Models;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class CreateOutwardDetailCommand : IRequest<bool>
+    public partial class UpdateOutwardDetailCommand : IRequest<bool>
     {
         [DataMember]
         public OutwardDetailCommands OutwardDetailCommands { get; set; }

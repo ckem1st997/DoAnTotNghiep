@@ -3,12 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
-using WareHouse.API.Application.Commands.Update.WareHouses;
 using WareHouse.Domain.IRepositories;
 
-namespace WareHouse.API.Application.Commands.Update.Vendor
+namespace WareHouse.API.Application.Commands.Update
 {
-    public class UpdateVendorCommandHandler: IRequestHandler<UpdateVendorCommand, bool>
+    public partial class UpdateVendorCommandHandler: IRequestHandler<UpdateVendorCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.Vendor> _repository;
         private readonly IMapper _mapper;

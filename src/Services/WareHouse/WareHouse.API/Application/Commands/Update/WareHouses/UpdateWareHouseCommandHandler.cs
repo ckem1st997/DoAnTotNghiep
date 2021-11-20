@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WareHouse.API.Application.Commands.Models.WareHouse;
+using WareHouse.API.Application.Commands.Models;
 using WareHouse.Domain.IRepositories;
 
-namespace WareHouse.API.Application.Commands.Update.WareHouses
+namespace WareHouse.API.Application.Commands.Update
 {
-    public class UpdateWareHouseCommandHandler : IRequestHandler<UpdateWareHouseCommand, bool>
+    public partial class UpdateWareHouseCommandHandler : IRequestHandler<UpdateWareHouseCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
         private readonly IMapper _mapper;

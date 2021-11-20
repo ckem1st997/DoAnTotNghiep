@@ -7,18 +7,18 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class CreateAuditDetailCommandHandler: IRequestHandler<CreateAuditDetailCommand, bool>
+    public partial class UpdateAuditDetailCommandHandler: IRequestHandler<UpdateAuditDetailCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.AuditDetail> _repository;
         private readonly IMapper _mapper;
 
-        public CreateAuditDetailCommandHandler(IRepositoryEF<Domain.Entity.AuditDetail> repository, IMapper mapper)
+        public UpdateAuditDetailCommandHandler(IRepositoryEF<Domain.Entity.AuditDetail> repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(CreateAuditDetailCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(UpdateAuditDetailCommand request, CancellationToken cancellationToken)
         {
 
             if (request is null)

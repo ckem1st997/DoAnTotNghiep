@@ -7,18 +7,18 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class CreateUnitCommandHandler: IRequestHandler<CreateUnitCommand, bool>
+    public partial class UpdateUnitCommandHandler: IRequestHandler<UpdateUnitCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.Unit> _repository;
         private readonly IMapper _mapper;
 
-        public CreateUnitCommandHandler(IRepositoryEF<Domain.Entity.Unit> repository, IMapper mapper)
+        public UpdateUnitCommandHandler(IRepositoryEF<Domain.Entity.Unit> repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(CreateUnitCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(UpdateUnitCommand request, CancellationToken cancellationToken)
         {
 
             if (request is null)

@@ -24,22 +24,6 @@
 
   <ItemGroup>
     <Folder Include="Application\Cache\" />
-    <Folder Include="Application\Commands\Update\Audit" />
-    <Folder Include="Application\Commands\Update\AuditCouncil" />
-    <Folder Include="Application\Commands\Update\AuditDetail" />
-    <Folder Include="Application\Commands\Update\AuditDetailSerial" />
-    <Folder Include="Application\Commands\Update\BeginningWareHouse" />
-    <Folder Include="Application\Commands\Update\Inward" />
-    <Folder Include="Application\Commands\Update\InwardDetail" />
-    <Folder Include="Application\Commands\Update\Outward" />
-    <Folder Include="Application\Commands\Update\OutwardDetail" />
-    <Folder Include="Application\Commands\Update\SerialWareHouse" />
-    <Folder Include="Application\Commands\Update\Unit" />
-    <Folder Include="Application\Commands\Update\WarehouseBalance" />
-    <Folder Include="Application\Commands\Update\WareHouseItem" />
-    <Folder Include="Application\Commands\Update\WareHouseItemCategory" />
-    <Folder Include="Application\Commands\Update\WareHouseItemUnit" />
-    <Folder Include="Application\Commands\Update\WareHouseLimit" />
     <Folder Include="Application\Grpc\" />
     <Folder Include="Application\HealthChecks\" />
     <Folder Include="Application\IntegrationEvents\" />
