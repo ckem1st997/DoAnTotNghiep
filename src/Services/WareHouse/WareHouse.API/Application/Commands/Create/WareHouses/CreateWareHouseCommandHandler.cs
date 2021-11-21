@@ -28,6 +28,17 @@ namespace WareHouse.API.Application.Commands.Create
             var result = _mapper.Map<Domain.Entity.WareHouse>(request.WareHouseCommands);
             await _repository.AddAsync(result);
             return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+
+
+            // insert hàng loạt
+            //if (request is null)
+            //    return false;
+            //var result = _mapper.Map<Domain.Entity.WareHouse>(request.WareHouseCommands);
+            //var list = new List<Domain.Entity.WareHouse>();
+            //list.Add(result);
+            //await _repository.BulkInsertAsync(list);
+            //return true;
         }
     }
 }

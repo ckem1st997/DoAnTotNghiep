@@ -17,6 +17,12 @@ namespace WareHouse.Domain.IRepositories
         Task<IEnumerable<T>> ListAllAsync();
         void Update(T entity);
         void Delete(T entity);
+        void BulkInsert(IList<T> listEntity);
+        Task BulkInsertAsync(IList<T> listEntity);  
+        void BulkUpdate(IList<T> listEntity);
+        Task BulkUpdateAsync(IList<T> listEntity);      
+        void BulkDelete(IList<T> listEntity);
+        Task BulkDeleteAsync(IList<T> listEntity);
 
     }
 }
