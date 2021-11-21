@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WareHouse.API.Application.Commands.Create;
+using WareHouse.API.Application.Commands.Delete;
 using WareHouse.API.Application.Commands.Models;
+using WareHouse.API.Application.Commands.Update;
 using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Queries.Paginated.Vendor;
 
@@ -40,20 +42,20 @@ namespace WareHouse.API.Controllers
         }
 
 
-        // [Route("edit")]
-        // [HttpPost]
-        // [ProducesResponseType((int)HttpStatusCode.OK)]
-        // [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        // public async Task<IActionResult> Edit(WareHouseCommands wareHouseCommands)
-        // {
-        //     var result = new ResultMessageResponse()
-        //     {
-        //         success = await _mediat.Send(new UpdateWareHouseCommand() { WareHouseCommands = wareHouseCommands }),
-        //     };
-        //     return Ok(result);
-        // }
-        //
-        //
+        [Route("edit")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Edit(VendorCommands vendorCommands)
+        {
+            var result = new ResultMessageResponse()
+            {
+                success = await _mediat.Send(new UpdateVendorCommand() { VendorCommands = vendorCommands }),
+            };
+            return Ok(result);
+        }
+
+
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -67,20 +69,20 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
-        //
-        //
-        // [Route("delete")]
-        // [HttpPost]
-        // [ProducesResponseType((int)HttpStatusCode.OK)]
-        // [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        // public async Task<IActionResult> Delete(string Id)
-        // {
-        //     var result = new ResultMessageResponse()
-        //     {
-        //         success = await _mediat.Send(new DeleteWareHouseCommand() { Id = Id })
-        //     };
-        //     return Ok(result);
-        // }
+
+
+        [Route("delete")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Delete(string Id)
+        {
+            var result = new ResultMessageResponse()
+            {
+                success = await _mediat.Send(new DeleteVendorCommand() { Id = Id })
+            };
+            return Ok(result);
+        }
 
     }
 }
