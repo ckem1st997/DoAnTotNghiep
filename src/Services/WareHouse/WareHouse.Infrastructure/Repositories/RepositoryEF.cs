@@ -15,29 +15,24 @@ namespace WareHouse.Infrastructure.Repositories
     {
         private readonly WarehouseManagementContext _context;
         private readonly DbSet<T> _dbSet;
+
         public IUnitOfWork UnitOfWork
         {
-            get
-            {
-                return _context;
-            }
+            get { return _context; }
         }
+
         public RepositoryEF(WarehouseManagementContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _dbSet = _context.Set<T>() ?? throw new ArgumentNullException(nameof(_context));
         }
+
         public virtual async Task<T> AddAsync(T entity)
         {
             if (entity is null)
                 throw new NotImplementedException(nameof(entity));
-            // if Id not null
-            if (!entity.IsTransient())
-            {
-                return (await _dbSet.AddAsync(entity)).Entity;
-            }
-            return null;
-
+            entity.Id = Guid.NewGuid().ToString();
+            return (await _dbSet.AddAsync(entity)).Entity;
         }
 
         public virtual void Delete(T entity)
@@ -48,6 +43,7 @@ namespace WareHouse.Infrastructure.Repositories
             {
                 _dbSet.Attach(entity);
             }
+
             _dbSet.Remove(entity);
         }
 

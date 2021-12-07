@@ -3,11 +3,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using WareHouse.Domain;
 using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class CreateVendorCommandHandler: IRequestHandler<CreateVendorCommand, bool>
+    public partial class CreateVendorCommandHandler : IRequestHandler<CreateVendorCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.Vendor> _repository;
         private readonly IMapper _mapper;
@@ -20,11 +21,12 @@ namespace WareHouse.API.Application.Commands.Create
 
         public async Task<bool> Handle(CreateVendorCommand request, CancellationToken cancellationToken)
         {
-
             if (request is null)
                 return false;
             var result = _mapper.Map<Domain.Entity.Vendor>(request.VendorCommands);
-            await _repository.AddAsync(result);
+            var res = await _repository.AddAsync(result);
+            var TestEditDomainEventAfterCreateVendor =
+                new TestEditDomainEventAfterCreateVendor("test nhe 1111111", res.Id);
             return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }

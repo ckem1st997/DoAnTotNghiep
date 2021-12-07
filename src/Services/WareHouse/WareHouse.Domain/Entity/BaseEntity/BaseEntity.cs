@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace WareHouse.Domain.Entity
 {
-    public abstract class BaseEntity
+    public class BaseEntity
     {
         int? _requestedHashCode;
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+       // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
 
         private List<INotification> _domainEvents;
