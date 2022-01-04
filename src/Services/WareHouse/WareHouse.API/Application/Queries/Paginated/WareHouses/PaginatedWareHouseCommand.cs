@@ -6,18 +6,13 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
+using WareHouse.API.Application.Queries.BaseModel;
 
 namespace WareHouse.API.Application.Queries.Paginated.WareHouses
 {
     [DataContract]
     public class PaginatedWareHouseCommand : IRequest<IPaginatedList<WareHouseDTO>>
     {
-        [DataMember]
-        public string KeySearch { get; set; }
-        
-        [DataMember]
-        public int PageIndex { get; set; }
-        [DataMember]
-        public int PageNumber { get; set; }
+        public WareHouseSearchModel SearchModel { get; set; }
     }
 }

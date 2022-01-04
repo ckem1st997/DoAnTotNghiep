@@ -4,7 +4,7 @@ using WareHouse.API.Application.Commands.Models;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class UpdateWareHouseItemCategoryCommand : IRequest<bool>
+    public partial class CreateWareHouseItemCategoryCommand : IRequest<bool>
     {
         [DataMember]
         public WareHouseItemCategoryCommands WareHouseItemCategoryCommands { get; set; }

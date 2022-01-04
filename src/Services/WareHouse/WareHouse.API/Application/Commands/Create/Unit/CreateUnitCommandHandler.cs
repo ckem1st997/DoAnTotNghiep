@@ -7,7 +7,7 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class UpdateUnitCommandHandler: IRequestHandler<UpdateUnitCommand, bool>
+    public partial class UpdateUnitCommandHandler: IRequestHandler<CreateUnitCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.Unit> _repository;
         private readonly IMapper _mapper;
@@ -18,7 +18,7 @@ namespace WareHouse.API.Application.Commands.Create
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(UpdateUnitCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CreateUnitCommand request, CancellationToken cancellationToken)
         {
 
             if (request is null)

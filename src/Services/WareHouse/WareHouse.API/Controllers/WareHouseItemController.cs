@@ -1,4 +1,8 @@
-﻿using MediatR;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using MediatR;
+using WareHouse.API.Controllers.BaseController;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,16 +16,17 @@ using WareHouse.API.Application.Commands.Update;
 using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Queries.BaseModel;
+using WareHouse.API.Application.Queries.Paginated.WareHouseItem;
+using WareHouse.API.Application.Queries.Paginated.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.Paginated.WareHouses;
-using WareHouse.API.Controllers.BaseController;
 
 namespace WareHouse.API.Controllers
 {
-    public class WareHousesController : BaseControllerWareHouse
+    public class WareHouseItemController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
 
-        public WareHousesController(IMediator mediat)
+        public WareHouseItemController(IMediator mediat)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
         }
@@ -30,7 +35,7 @@ namespace WareHouse.API.Controllers
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> IndexAsync([FromQuery] PaginatedWareHouseCommand paginatedList)
+        public async Task<IActionResult> IndexAsync([FromQuery] PaginatedWareHouseItemCommand paginatedList)
         {
             var data = await _mediat.Send(paginatedList);
             var result = new ResultMessageResponse()
@@ -47,11 +52,11 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Edit(WareHouseCommands wareHouseCommands)
+        public async Task<IActionResult> Edit(WareHouseItemCommands itemCommands)
         {
             var result = new ResultMessageResponse()
             {
-                success = await _mediat.Send(new UpdateWareHouseCommand() { WareHouseCommands = wareHouseCommands }),
+                success = await _mediat.Send(new UpdateWareHouseItemCommand() { WareHouseItemCommands = itemCommands }),
             };
             return Ok(result);
         }
@@ -61,9 +66,9 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Create(WareHouseCommands wareHouseCommands)
+        public async Task<IActionResult> Create(WareHouseItemCommands itemCommands)
         {
-            var data = await _mediat.Send(new CreateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
+            var data = await _mediat.Send(new CreateWareHouseItemCommand() { WareHouseItemCommands = itemCommands });
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -80,7 +85,7 @@ namespace WareHouse.API.Controllers
         {
             var result = new ResultMessageResponse()
             {
-                success = await _mediat.Send(new DeleteWareHouseCommand() { Id = Id })
+                success = await _mediat.Send(new DeleteWareHouseItemCommand() { Id = Id })
             };
             return Ok(result);
         }

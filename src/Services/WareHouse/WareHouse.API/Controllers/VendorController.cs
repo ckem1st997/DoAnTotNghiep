@@ -9,13 +9,11 @@ using WareHouse.API.Application.Commands.Models;
 using WareHouse.API.Application.Commands.Update;
 using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Queries.Paginated.Vendor;
+using WareHouse.API.Controllers.BaseController;
 
 namespace WareHouse.API.Controllers
 {
-    
-    [Route("api/v{v:apiVersion}/[controller]")]
-    [ApiController]
-    public class VendorController : ControllerBase
+    public class VendorController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
 
@@ -30,7 +28,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> IndexAsync([FromQuery] PaginatedVendorCommand paginatedList)
         {
-            var data = await _mediat.Send(new PaginatedVendorCommand() { KeySearch = paginatedList.KeySearch, PageNumber = paginatedList.PageNumber,  PageIndex = paginatedList.PageIndex });
+            var data = await _mediat.Send(paginatedList);
             var result = new ResultMessageResponse()
             {
                 data = data.Result,
@@ -38,7 +36,6 @@ namespace WareHouse.API.Controllers
                 totalCount = data.totalCount
             };
             return Ok(result);
-
         }
 
 
@@ -83,6 +80,5 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
-
     }
 }

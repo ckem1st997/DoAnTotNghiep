@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Interface;
@@ -12,9 +13,9 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Queries.Paginated.WareHouses
 {
-    public class PaginatedWareHouseCommandHandler : IRequestHandler<PaginatedWareHouseCommand, IPaginatedList<WareHouseDTO>>
+    public class
+        PaginatedWareHouseCommandHandler : IRequestHandler<PaginatedWareHouseCommand, IPaginatedList<WareHouseDTO>>
     {
-
         private readonly IDapper _repository;
         private readonly IPaginatedList<WareHouseDTO> _list;
 
@@ -22,23 +23,36 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouses
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _list = list ?? throw new ArgumentNullException(nameof(list));
-
         }
-        public async Task<IPaginatedList<WareHouseDTO>> Handle(PaginatedWareHouseCommand request, CancellationToken cancellationToken)
+
+        public async Task<IPaginatedList<WareHouseDTO>> Handle(PaginatedWareHouseCommand request,
+            CancellationToken cancellationToken)
         {
             if (request == null)
                 return null;
-            request.KeySearch = request.KeySearch?.Trim();
-            if (request.KeySearch == null)
-                request.KeySearch = "";
-            string sql = @"select * from WareHouse order by Name OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY";
+            request.SearchModel.KeySearch = request.SearchModel.KeySearch?.Trim();
+            if (request.SearchModel.KeySearch == null)
+                request.SearchModel.KeySearch = "";
+            StringBuilder sbCount = new StringBuilder();
+            sbCount.Append("SELECT COUNT(*) FROM ( select * from WareHouse  ");
+            StringBuilder sb = new StringBuilder();
+            sb.Append("select * from WareHouse ");
+            sb.Append(" where Inactive =@active ");
+            sbCount.Append(" where Inactive =@active ");
+            if (!string.IsNullOrEmpty(request.SearchModel.KeySearch))
+            {
+                sb.Append(" and Code like @key or Name like @key ");
+                sbCount.Append(" and Code like @key or Name like @key ");
+            }
+            sbCount.Append(" ) t   ");
+            sb.Append(" order by Name OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
             DynamicParameters parameter = new DynamicParameters();
-            parameter.Add("@key", '%' + request.KeySearch + '%');
-            parameter.Add("@skip", (request.PageIndex - 1) * request.PageNumber);
-            parameter.Add("@take", request.PageNumber);
-            _list.Result = await _repository.GetList<WareHouseDTO>(sql, parameter, CommandType.Text);
-            string count = @"select count(Id) from WareHouse";
-            _list.totalCount = await _repository.GetAyncFirst<int>(count, parameter, CommandType.Text);
+            parameter.Add("@key", '%' + request.SearchModel.KeySearch + '%');
+            parameter.Add("@skip", (request.SearchModel.PageIndex - 1) * request.SearchModel.PageNumber);
+            parameter.Add("@take", request.SearchModel.PageNumber);
+            parameter.Add("@active", request.SearchModel.Active ? 1 : 0);
+            _list.Result = await _repository.GetList<WareHouseDTO>(sb.ToString(), parameter, CommandType.Text);
+            _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text);
             return _list;
         }
     }

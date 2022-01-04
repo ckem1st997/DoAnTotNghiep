@@ -4,9 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Commands.Models;
+using WareHouse.API.Application.Queries.BaseModel;
 using WareHouse.API.Application.Validations;
+using WareHouse.API.Application.Validations.BaseValidator;
 
 namespace WareHouse.API.Application.Validations.ConfigureServices
 {
@@ -17,6 +20,7 @@ namespace WareHouse.API.Application.Validations.ConfigureServices
             services.AddFluentValidation();
             services.AddTransient<IValidator<WareHouseCommands>, WareHouseCommandValidator>();
             services.AddTransient<IValidator<VendorCommands>, VendorCommandValidator>();
+            services.AddTransient<IValidator<BaseSearchModel>, BaseSearchModelValidator>();
         }
     }
 }
