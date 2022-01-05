@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -9,6 +10,7 @@ using WareHouse.API.Application.Commands.Delete;
 using WareHouse.API.Application.Commands.Models;
 using WareHouse.API.Application.Commands.Update;
 using WareHouse.API.Application.Message;
+using WareHouse.API.Application.Queries.GetAll.Unit;
 using WareHouse.API.Application.Queries.Paginated.Unit;
 using WareHouse.API.Application.Queries.Paginated.Vendor;
 using WareHouse.API.Controllers.BaseController;
@@ -38,7 +40,21 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
-
+        [Route("get-drop-tree")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetTreeAsync([FromQuery] GetDropDownUnitCommand command)
+        {
+            var data = await _mediat.Send(command);
+            var result = new ResultMessageResponse()
+            {
+                data = data,
+                success = true,
+                totalCount = data.Count()
+            };
+            return Ok(result);
+        }
 
         [Route("edit")]
         [HttpPost]

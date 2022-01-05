@@ -18,12 +18,11 @@ namespace WareHouse.API.Application.Commands.Update
         public UpdateWareHouseCommandHandler(IRepositoryEF<Domain.Entity.WareHouse> repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            _mapper = mapper;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public async Task<bool> Handle(UpdateWareHouseCommand request, CancellationToken cancellationToken)
         {
-
             if (request is null)
                 return false;
             var result = _mapper.Map<Domain.Entity.WareHouse>(request.WareHouseCommands);

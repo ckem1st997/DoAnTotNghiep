@@ -17,6 +17,7 @@ using WareHouse.API.Application.Commands.Update;
 using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Queries.BaseModel;
+using WareHouse.API.Application.Queries.GetAll.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.Paginated.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.Paginated.WareHouses;
 
@@ -46,7 +47,23 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
-
+        
+        
+        [Route("get-drop-tree")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetTreeAsync([FromQuery] GetDropDownWareHouseItemCategoryCommand command)
+        {
+            var data = await _mediat.Send(command);
+            var result = new ResultMessageResponse()
+            {
+                data = data,
+                success = true,
+                totalCount = data.Count()
+            };
+            return Ok(result);
+        }
 
         [Route("edit")]
         [HttpPost]

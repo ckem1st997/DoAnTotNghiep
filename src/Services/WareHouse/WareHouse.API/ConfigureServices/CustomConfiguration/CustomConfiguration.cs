@@ -23,7 +23,6 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
 {
     public static class CustomConfiguration
     {
-
         public static void AddCustomConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddOptions();
