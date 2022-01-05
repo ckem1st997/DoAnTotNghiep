@@ -16,6 +16,7 @@ using WareHouse.API.Application.Commands.Update;
 using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Queries.BaseModel;
+using WareHouse.API.Application.Queries.GetAll.WareHouseItem;
 using WareHouse.API.Application.Queries.Paginated.WareHouseItem;
 using WareHouse.API.Application.Queries.Paginated.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.Paginated.WareHouses;
@@ -43,6 +44,21 @@ namespace WareHouse.API.Controllers
                 data = data.Result,
                 success = true,
                 totalCount = data.totalCount
+            };
+            return Ok(result);
+        }
+        [Route("get-drop-tree")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetTreeAsync([FromQuery] GetDopDownWareHouseItemCommand command)
+        {
+            var data = await _mediat.Send(command);
+            var result = new ResultMessageResponse()
+            {
+                data = data,
+                success = true,
+                totalCount = data.Count()
             };
             return Ok(result);
         }
@@ -81,11 +97,14 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Delete(string Id)
+        public async Task<IActionResult> Delete(string Id,string id2)
         {
+            var list = new List<string>();
+            list.Add(id2);
+            list.Add(Id);
             var result = new ResultMessageResponse()
             {
-                success = await _mediat.Send(new DeleteWareHouseItemCommand() { Id = Id })
+                success = await _mediat.Send(new DeleteWareHouseItemCommand() { Id = list })
             };
             return Ok(result);
         }

@@ -1,5 +1,4 @@
-﻿using EFCore.BulkExtensions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,6 +62,13 @@ namespace WareHouse.Infrastructure.Repositories
             return await _dbSet.Where(x => string.IsNullOrEmpty(x.Id)).ToListAsync();
         }
 
+        public async Task<IEnumerable<T>> ListByListId(IEnumerable<string> ids)
+        {
+            if (ids == null) throw new ArgumentNullException(nameof(ids));
+            var res = await _dbSet.Where(x => ids.ToList().Contains(x.Id)).ToListAsync();
+            return res;
+        }
+
         public virtual void Update(T entity)
         {
             if (entity is null)
@@ -107,11 +113,12 @@ namespace WareHouse.Infrastructure.Repositories
             _context.BulkDelete(listEntity);
         }
 
-        public async Task BulkDeleteAsync(IList<T> listEntity)
+        public async Task BulkDeleteAsync(IEnumerable<string> listEntity)
         {
             if (listEntity is null)
                 throw new NotImplementedException(nameof(listEntity));
-            await _context.BulkDeleteAsync(listEntity);
+            //   await _dbSet.DeleteRangeByKeyAsync(listEntity);
+            await _dbSet.DeleteRangeByKeyAsync(listEntity);
         }
     }
 }

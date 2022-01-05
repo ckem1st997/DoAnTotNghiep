@@ -12,9 +12,16 @@ namespace WareHouse.Domain.IRepositories
     public interface IDapper : IDisposable
     {
         DbConnection GetDbconnection();
-        Task<T> GetAyncFirst<T>(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure);
-        Task<IEnumerable<T>> GetList<T>(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure);
-        Task<IEnumerable<T>> GetAllAync<T>(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure);
 
+        Task<T> GetAyncFirst<T>(string sp, DynamicParameters parms,
+            CommandType commandType = CommandType.StoredProcedure);
+
+        Task<IEnumerable<T>> GetList<T>(string sp, DynamicParameters parms,
+            CommandType commandType = CommandType.StoredProcedure);
+
+        Task<IEnumerable<T>> GetAllAync<T>(string sp, DynamicParameters parms,
+            CommandType commandType = CommandType.StoredProcedure);
+
+        Task<IEnumerable<T>> GetListByListId<T>(IEnumerable<string> listId,string nameEntity, CommandType commandType);
     }
 }
