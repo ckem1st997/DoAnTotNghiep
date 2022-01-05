@@ -6,10 +6,11 @@ namespace WareHouse.API.Application.Queries.BaseModel
     public class BaseSearchModel
     {
         
-        [DataMember]
+         [DataMember]
         public string KeySearch { get; set; }
 
-        [DataMember] public bool Active { get; set; } = true;
+        [DataMember] 
+        public bool Active { get; set; } = true;
         
         
         [DataMember]

@@ -4,7 +4,7 @@ using WareHouse.API.Application.Commands.Models;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class UpdateWareHouseLimitCommand : IRequest<bool>
+    public partial class CreateWareHouseLimitCommand : IRequest<bool>
     {
         [DataMember]
         public WareHouseLimitCommands WareHouseLimitCommands { get; set; }

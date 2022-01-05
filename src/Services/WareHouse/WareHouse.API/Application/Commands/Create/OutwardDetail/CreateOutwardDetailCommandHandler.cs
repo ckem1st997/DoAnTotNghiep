@@ -7,18 +7,18 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class UpdateOutwardDetailCommandHandler: IRequestHandler<UpdateOutwardDetailCommand, bool>
+    public partial class CreateOutwardDetailCommandHandler: IRequestHandler<CreateOutwardDetailCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.OutwardDetail> _repository;
         private readonly IMapper _mapper;
 
-        public UpdateOutwardDetailCommandHandler(IRepositoryEF<Domain.Entity.OutwardDetail> repository, IMapper mapper)
+        public CreateOutwardDetailCommandHandler(IRepositoryEF<Domain.Entity.OutwardDetail> repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(UpdateOutwardDetailCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CreateOutwardDetailCommand request, CancellationToken cancellationToken)
         {
 
             if (request is null)

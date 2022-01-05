@@ -7,18 +7,18 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class UpdateSerialWareHouseCommandHandler: IRequestHandler<UpdateSerialWareHouseCommand, bool>
+    public partial class CreateSerialWareHouseCommandHandler: IRequestHandler<CreateSerialWareHouseCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.SerialWareHouse> _repository;
         private readonly IMapper _mapper;
 
-        public UpdateSerialWareHouseCommandHandler(IRepositoryEF<Domain.Entity.SerialWareHouse> repository, IMapper mapper)
+        public CreateSerialWareHouseCommandHandler(IRepositoryEF<Domain.Entity.SerialWareHouse> repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(UpdateSerialWareHouseCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CreateSerialWareHouseCommand request, CancellationToken cancellationToken)
         {
 
             if (request is null)

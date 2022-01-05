@@ -7,12 +7,12 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class UpdateWareHouseItemCategoryCommandHandler: IRequestHandler<CreateWareHouseItemCategoryCommand, bool>
+    public partial class CreateWareHouseItemCategoryCommandHandler: IRequestHandler<CreateWareHouseItemCategoryCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.WareHouseItemCategory> _repository;
         private readonly IMapper _mapper;
 
-        public UpdateWareHouseItemCategoryCommandHandler(IRepositoryEF<Domain.Entity.WareHouseItemCategory> repository, IMapper mapper)
+        public CreateWareHouseItemCategoryCommandHandler(IRepositoryEF<Domain.Entity.WareHouseItemCategory> repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper;

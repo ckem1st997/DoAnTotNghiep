@@ -7,18 +7,18 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class UpdateWareHouseLimitCommandHandler : IRequestHandler<UpdateWareHouseLimitCommand, bool>
+    public partial class CreateWareHouseLimitCommandHandler : IRequestHandler<CreateWareHouseLimitCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.WareHouseLimit> _repository;
         private readonly IMapper _mapper;
 
-        public UpdateWareHouseLimitCommandHandler(IRepositoryEF<Domain.Entity.WareHouseLimit> repository, IMapper mapper)
+        public CreateWareHouseLimitCommandHandler(IRepositoryEF<Domain.Entity.WareHouseLimit> repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(UpdateWareHouseLimitCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CreateWareHouseLimitCommand request, CancellationToken cancellationToken)
         {
 
             if (request is null)

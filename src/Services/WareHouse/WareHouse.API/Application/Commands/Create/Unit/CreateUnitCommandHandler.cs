@@ -7,12 +7,12 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class UpdateUnitCommandHandler: IRequestHandler<CreateUnitCommand, bool>
+    public partial class CreateUnitCommandHandler: IRequestHandler<CreateUnitCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.Unit> _repository;
         private readonly IMapper _mapper;
 
-        public UpdateUnitCommandHandler(IRepositoryEF<Domain.Entity.Unit> repository, IMapper mapper)
+        public CreateUnitCommandHandler(IRepositoryEF<Domain.Entity.Unit> repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper;
