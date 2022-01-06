@@ -25,11 +25,8 @@ namespace WareHouse.API.Application.Commands.Delete
 
             if (request is null)
                 return false;
-            var mode = await _repository.GetFirstAsyncAsNoTracking(request.Id);
-            if (mode is null)
-                return false;
-            _repository.Delete(mode);
-            return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            var res = await _repository.BulkDeleteEditOnDeleteAsync(request.Id);
+            return res > 0;
         }
     }
 }

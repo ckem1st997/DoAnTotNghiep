@@ -40,6 +40,8 @@ namespace WareHouse.API.Application.Queries.Paginated.Unit
                 sb.Append(" and UnitName like @key ");
                 sbCount.Append(" and UnitName like @key ");
             }
+            sb.Append(" and OnDelete=0 ");
+            sbCount.Append(" and OnDelete=0 ");
             //
             sbCount.Append(" ) t   ");
             sb.Append(" order by UnitName OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");

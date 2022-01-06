@@ -97,14 +97,11 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Delete(string Id,string id2)
+        public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
-            var list = new List<string>();
-            list.Add(id2);
-            list.Add(Id);
             var result = new ResultMessageResponse()
             {
-                success = await _mediat.Send(new DeleteWareHouseItemCommand() { Id = list })
+                success = await _mediat.Send(new DeleteUnitCommand() { Id = listIds})
             };
             return Ok(result);
         }

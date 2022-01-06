@@ -10,7 +10,7 @@ using WareHouse.Domain.SeeWork;
 
 namespace WareHouse.Infrastructure.Repositories
 {
-    public class RepositoryEF<T> : IRepositoryEF<T> where T : BaseEntity
+    public class RepositoryEF<T> : IRepositoryEF<T> where T : BaseEntity, new()
     {
         private readonly WarehouseManagementContext _context;
         private readonly DbSet<T> _dbSet;
@@ -113,12 +113,11 @@ namespace WareHouse.Infrastructure.Repositories
             _context.BulkDelete(listEntity);
         }
 
-        public async Task BulkDeleteAsync(IEnumerable<string> listEntity)
+        public async Task<int> BulkDeleteEditOnDeleteAsync(IEnumerable<string> listIds)
         {
-            if (listEntity is null)
-                throw new NotImplementedException(nameof(listEntity));
-            //   await _dbSet.DeleteRangeByKeyAsync(listEntity);
-            await _dbSet.DeleteRangeByKeyAsync(listEntity);
+            if (listIds is null)
+                throw new NotImplementedException(nameof(listIds));
+            return await _dbSet.Where(x => listIds.Contains(x.Id)).UpdateFromQueryAsync(x => new T { OnDelete = true });
         }
     }
 }

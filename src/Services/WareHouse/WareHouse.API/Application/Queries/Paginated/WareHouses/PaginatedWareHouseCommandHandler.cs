@@ -44,6 +44,8 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouses
                 sb.Append(" and Code like @key or Name like @key ");
                 sbCount.Append(" and Code like @key or Name like @key ");
             }
+            sb.Append(" and OnDelete=0 ");
+            sbCount.Append(" and OnDelete=0 ");
             sbCount.Append(" ) t   ");
             sb.Append(" order by Name OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
             DynamicParameters parameter = new DynamicParameters();

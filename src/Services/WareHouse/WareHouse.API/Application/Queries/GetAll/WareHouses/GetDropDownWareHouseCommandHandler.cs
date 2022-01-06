@@ -33,7 +33,7 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
 
         private async Task<IList<WareHouseDTO>> GetWareHousesAsync(bool showHidden = false, bool showList = false)
         {
-            string sql = "select Id,ParentId,Code,Name from WareHouse where Inactive =@active ";
+            string sql = "select Id,ParentId,Code,Name from WareHouse where Inactive =@active and OnDelete=0 ";
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@active", showHidden ? 1 : 0);
             var getAll = await _repository.GetAllAync<WareHouseDTO>(sql, parameter, CommandType.Text);

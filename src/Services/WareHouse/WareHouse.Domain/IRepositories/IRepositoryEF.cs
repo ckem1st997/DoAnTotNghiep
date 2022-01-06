@@ -23,6 +23,6 @@ namespace WareHouse.Domain.IRepositories
         void BulkUpdate(IList<T> listEntity);
         Task BulkUpdateAsync(IList<T> listEntity);
         void BulkDelete(IList<T> listEntity);
-        Task BulkDeleteAsync(IEnumerable<string> listEntity);
+        Task<int> BulkDeleteEditOnDeleteAsync(IEnumerable<string> listEntity);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -89,11 +90,11 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Delete(string Id)
+        public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
             var result = new ResultMessageResponse()
             {
-                success = await _mediat.Send(new DeleteUnitCommand() { Id = Id })
+                success = await _mediat.Send(new DeleteUnitCommand() { Id = listIds})
             };
             return Ok(result);
         }
