@@ -7,8 +7,7 @@ using WareHouse.API.Application.Queries.BaseModel;
 namespace WareHouse.API.Application.Queries.Paginated.WareHouseItemCategory
 {
     [DataContract]
-    public class PaginatedWareHouseItemCategoryCommand: IRequest<IPaginatedList<WareHouseItemCategoryDTO>>
+    public class PaginatedWareHouseItemCategoryCommand:BaseSearchModel, IRequest<IPaginatedList<WareHouseItemCategoryDTO>>
     {
-        public WareHouseItemCategorySearchModel SearchModel { get; set; }
     }
 }

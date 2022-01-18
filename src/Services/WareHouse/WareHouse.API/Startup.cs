@@ -44,6 +44,14 @@ namespace WareHouse.API
                 x.ReportApiVersions = true;
             //    x.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
             });
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder => builder
+                    .WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +67,7 @@ namespace WareHouse.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 

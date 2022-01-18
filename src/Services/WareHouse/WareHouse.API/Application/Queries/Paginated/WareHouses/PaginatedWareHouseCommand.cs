@@ -11,8 +11,7 @@ using WareHouse.API.Application.Queries.BaseModel;
 namespace WareHouse.API.Application.Queries.Paginated.WareHouses
 {
     [DataContract]
-    public class PaginatedWareHouseCommand : IRequest<IPaginatedList<WareHouseDTO>>
+    public class PaginatedWareHouseCommand :BaseSearchModel, IRequest<IPaginatedList<WareHouseDTO>>
     {
-        public WareHouseSearchModel SearchModel { get; set; }
     }
 }

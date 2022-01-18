@@ -27,14 +27,14 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseItem
         {
             if (request == null)
                 return null;
-            request.SearchModel.KeySearch = request.SearchModel.KeySearch?.Trim() ?? "";
+            request.KeySearch = request.KeySearch?.Trim() ?? "";
             StringBuilder sbCount = new StringBuilder();
             sbCount.Append("SELECT COUNT(*) FROM ( select * from WareHouseItem  ");
             StringBuilder sb = new StringBuilder();
             sb.Append("select * from WareHouseItem ");
             sb.Append(" where Inactive =@active ");
             sbCount.Append(" where Inactive =@active ");
-            if (!string.IsNullOrEmpty(request.SearchModel.KeySearch))
+            if (!string.IsNullOrEmpty(request.KeySearch))
             {
                 sb.Append(" and Code like @key or Name like @key ");
                 sbCount.Append(" and Code like @key or Name like @key ");
@@ -45,10 +45,10 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseItem
             sbCount.Append(" ) t   ");
             sb.Append(" order by Name OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
             DynamicParameters parameter = new DynamicParameters();
-            parameter.Add("@key", '%' + request.SearchModel.KeySearch + '%');
-            parameter.Add("@skip", (request.SearchModel.PageIndex - 1) * request.SearchModel.PageNumber);
-            parameter.Add("@take", request.SearchModel.PageNumber);
-            parameter.Add("@active", request.SearchModel.Active ? 1 : 0);
+            parameter.Add("@key", '%' + request.KeySearch + '%');
+            parameter.Add("@skip", request.Skip);
+            parameter.Add("@take", request.Take);
+            parameter.Add("@active", request.Active ? 1 : 0);
             _list.Result = await _repository.GetList<WareHouseItemDTO>(sb.ToString(), parameter, CommandType.Text);
             _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text);
             return _list;

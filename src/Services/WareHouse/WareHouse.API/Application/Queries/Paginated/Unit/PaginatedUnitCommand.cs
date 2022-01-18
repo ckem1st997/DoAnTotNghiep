@@ -5,8 +5,7 @@ using WareHouse.API.Application.Queries.BaseModel;
 
 namespace WareHouse.API.Application.Queries.Paginated.Unit
 {
-    public class PaginatedUnitCommand: IRequest<IPaginatedList<UnitDTO>>
+    public class PaginatedUnitCommand:BaseSearchModel, IRequest<IPaginatedList<UnitDTO>>
     {
-        public UnitSearchModel SearchModel { get; set; }
     }
 }

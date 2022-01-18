@@ -10,16 +10,16 @@ namespace WareHouse.API.Application.Queries.BaseModel
         public string KeySearch { get; set; }
 
         [DataMember] 
-        public bool Active { get; set; } = true;
+        public bool Active { get; set; }
         
         
         [DataMember]
        // [Range(typeof(int), "1", "1000")]
-        public int PageIndex { get; set; }
+        public int Skip { get; set; }
 
 
         [DataMember]
      //   [Range(typeof(int), "1", "1000")]
-        public int PageNumber { get; set; }
+        public int Take { get; set; }
     }
 }

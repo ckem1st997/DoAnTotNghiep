@@ -6,8 +6,6 @@ using WareHouse.API.Application.Queries.BaseModel;
 
 namespace WareHouse.API.Application.Queries.Paginated.Vendor
 {
-    public class PaginatedVendorCommand: IRequest<IPaginatedList<VendorDTO>>
-    {
-       public VendorSearchModel SearchModel { get; set; }
-    }
+    public class PaginatedVendorCommand:BaseSearchModel, IRequest<IPaginatedList<VendorDTO>>
+    { }
 }
