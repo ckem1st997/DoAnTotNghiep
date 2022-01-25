@@ -31,25 +31,29 @@ namespace WareHouse.API.Application.Queries.Paginated.Vendor
             if (request.KeySearch == null)
                 request.KeySearch = "";
             StringBuilder sbCount = new StringBuilder();
-            sbCount.Append("SELECT COUNT(*) FROM ( select * from Vendor  ");
+            sbCount.Append("SELECT COUNT(*) FROM ( select * from Vendor  where ");
             StringBuilder sb = new StringBuilder();
-            sb.Append("select * from Vendor ");
-            sb.Append(" where Inactive =@active ");
-            sbCount.Append(" where Inactive =@active ");
+            sb.Append("select * from Vendor where ");
+            if(request.Active !=null)
+            {
+                sb.Append("  Inactive =@active and ");
+                sbCount.Append("  Inactive =@active and ");
+            }
+
             if (!string.IsNullOrEmpty(request.KeySearch))
             {
-                sb.Append(" and Code like @key or Name like @key or Phone like @key or Email like @key ");
-                sbCount.Append(" and Code like @key or Name like @key or Phone like @key or Email like @key ");
+                sb.Append("  Code like @key or Name like @key or Phone like @key or Email like @key and ");
+                sbCount.Append(" Code like @key or Name like @key or Phone like @key or Email like @key and ");
             }
-            sb.Append(" and OnDelete=0 ");
-            sbCount.Append(" and OnDelete=0 ");
+            sb.Append("  OnDelete=0 ");
+            sbCount.Append("  OnDelete=0 ");
             sbCount.Append(" ) t   ");
             sb.Append(" order by Name OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@key", '%' + request.KeySearch + '%');
             parameter.Add("@skip", request.Skip);
             parameter.Add("@take", request.Take);
-            parameter.Add("@active", request.Active ? 1 : 0);
+            parameter.Add("@active", request.Active==true ? 1 : 0);
             _list.Result = await _repository.GetList<VendorDTO>(sb.ToString(), parameter, CommandType.Text);
             _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text);
             return _list;

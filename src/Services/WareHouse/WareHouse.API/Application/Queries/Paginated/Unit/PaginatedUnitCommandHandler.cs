@@ -30,18 +30,21 @@ namespace WareHouse.API.Application.Queries.Paginated.Unit
                 return null;
             request.KeySearch = request.KeySearch?.Trim() ?? "";
             StringBuilder sbCount = new StringBuilder();
-            sbCount.Append("SELECT COUNT(*) FROM ( select * from Unit  ");
+            sbCount.Append("SELECT COUNT(*) FROM ( select * from Unit where ");
             StringBuilder sb = new StringBuilder();
-            sb.Append("select * from Unit ");
-            sb.Append(" where Inactive =@active ");
-            sbCount.Append(" where Inactive =@active ");
+            sb.Append("select * from Unit where ");
+            if (request.Active != null)
+            {
+                sb.Append("  Inactive =@active and");
+                sbCount.Append("  Inactive =@active and ");
+            }
             if (!string.IsNullOrEmpty(request.KeySearch))
             {
-                sb.Append(" and UnitName like @key ");
-                sbCount.Append(" and UnitName like @key ");
+                sb.Append("  UnitName like @key and ");
+                sbCount.Append("  UnitName like @key and ");
             }
-            sb.Append(" and OnDelete=0 ");
-            sbCount.Append(" and OnDelete=0 ");
+            sb.Append("  OnDelete=0 ");
+            sbCount.Append("  OnDelete=0 ");
             //
             sbCount.Append(" ) t   ");
             sb.Append(" order by UnitName OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
@@ -49,7 +52,7 @@ namespace WareHouse.API.Application.Queries.Paginated.Unit
             parameter.Add("@key", '%' + request.KeySearch + '%');
             parameter.Add("@skip", request.Skip);
             parameter.Add("@take", request.Take);
-            parameter.Add("@active", request.Active ? 1 : 0);
+            parameter.Add("@active", request.Active==true ? 1 : 0);
             _list.Result = await _repository.GetList<UnitDTO>(sb.ToString(), parameter, CommandType.Text);
             _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text);
             return _list;

@@ -10,7 +10,7 @@ namespace WareHouse.API.Application.Queries.BaseModel
         public string KeySearch { get; set; }
 
         [DataMember] 
-        public bool Active { get; set; }
+        public bool? Active { get; set; }
         
         
         [DataMember]
