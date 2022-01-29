@@ -23,6 +23,7 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
                 .ForMember(x => x.WareHouseLimits, opt => opt.Ignore());
             //   CreateMap<Domain.Entity.WareHouse, WareHouseCommands>();
             //
+
             CreateMap<VendorCommands, Domain.Entity.Vendor>()
                 .ForMember(x => x.WareHouseItems, opt => opt.Ignore())
                 .ForMember(x => x.Inwards, opt => opt.Ignore())
