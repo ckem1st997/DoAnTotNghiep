@@ -59,6 +59,23 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
         
+        [Route("get-tree-view")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetTreeViewAsync([FromQuery] GetTreeWareHouseCommand paginatedList)
+        {
+            var data = await _mediat.Send(paginatedList);
+            var result = new ResultMessageResponse()
+            {
+                data = data,
+                success = true,
+                totalCount = data.Count()
+            };
+            return Ok(result);
+        }
+        
+        
 
         [Route("edit")]
         [HttpPost]

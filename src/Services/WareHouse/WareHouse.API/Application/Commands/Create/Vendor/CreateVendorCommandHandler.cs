@@ -24,9 +24,11 @@ namespace WareHouse.API.Application.Commands.Create
             if (request is null)
                 return false;
             var result = _mapper.Map<Domain.Entity.Vendor>(request.VendorCommands);
+            var rd = new Random().Next(1, 10000);
+            result.Name = "Add to number: "+rd;
             var res = await _repository.AddAsync(result);
-            var TestEditDomainEventAfterCreateVendor =
-                new TestEditDomainEventAfterCreateVendor("test nhe 1111111", res.Id);
+            // var TestEditDomainEventAfterCreateVendor =
+            //     new TestEditDomainEventAfterCreateVendor("test nhe 1111111", res.Id);
             return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }

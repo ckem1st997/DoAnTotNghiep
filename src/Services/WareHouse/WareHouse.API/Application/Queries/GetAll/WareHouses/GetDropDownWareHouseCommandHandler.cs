@@ -27,7 +27,7 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
         {
             if (request == null)
                 return null;
-            var models = await GetWareHousesAsync(request.Ative);
+            var models = await GetWareHousesAsync(request.Active);
             return GetWareHouseTreeModel(models);
         }
 

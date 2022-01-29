@@ -59,7 +59,7 @@ namespace WareHouse.Infrastructure.Repositories
 
         public virtual async Task<IEnumerable<T>> ListAllAsync()
         {
-            return await _dbSet.Where(x => string.IsNullOrEmpty(x.Id)).ToListAsync();
+            return await _dbSet.Where(x => !string.IsNullOrEmpty(x.Id)).AsNoTracking().ToListAsync();
         }
 
         public async Task<IEnumerable<T>> ListByListId(IEnumerable<string> ids)
