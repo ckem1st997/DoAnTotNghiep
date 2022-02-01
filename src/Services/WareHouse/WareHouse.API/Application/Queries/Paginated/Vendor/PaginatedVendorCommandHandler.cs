@@ -42,8 +42,8 @@ namespace WareHouse.API.Application.Queries.Paginated.Vendor
 
             if (!string.IsNullOrEmpty(request.KeySearch))
             {
-                sb.Append("  Code like @key or Name like @key or Phone like @key or Email like @key and ");
-                sbCount.Append(" Code like @key or Name like @key or Phone like @key or Email like @key and ");
+                sb.Append("  (Code like @key or Name like @key or Phone like @key or Email like @key) and ");
+                sbCount.Append(" (Code like @key or Name like @key or Phone like @key or Email like @key) and ");
             }
             sb.Append("  OnDelete=0 ");
             sbCount.Append("  OnDelete=0 ");
