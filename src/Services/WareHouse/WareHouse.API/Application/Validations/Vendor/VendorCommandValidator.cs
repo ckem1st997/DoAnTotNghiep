@@ -8,7 +8,7 @@ namespace WareHouse.API.Application.Validations
     {
         public VendorCommandValidator()
         {
-            RuleFor(order => order.Code).NotEmpty().WithMessage(ValidatorString.GetMessageNotNull("Mã sản phẩm")).MinimumLength(10);
+            RuleFor(order => order.Code).NotEmpty().WithMessage(ValidatorString.GetMessageNotNull("Mã sản phẩm"));
             RuleFor(order => order.Code).NotNull().WithMessage(ValidatorString.GetMessageNotNull("Mã sản phẩm"));
             RuleFor(order => order.Name).NotEmpty().WithMessage(ValidatorString.GetMessageNotNull("Tên sản phẩm"));
             RuleFor(order => order.Name).NotNull().WithMessage(ValidatorString.GetMessageNotNull("Tên sản phẩm"));

@@ -90,7 +90,7 @@ namespace WareHouse.API.Controllers
         {
             var result = new ResultMessageResponse()
             {
-                success = await _mediat.Send(new DeleteUnitCommand() {Id = listIds})
+                success = await _mediat.Send(new DeleteVendorCommand() {Id = listIds})
             };
             return Ok(result);
         }
