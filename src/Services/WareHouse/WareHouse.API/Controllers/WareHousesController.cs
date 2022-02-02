@@ -15,6 +15,7 @@ using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Queries.BaseModel;
 using WareHouse.API.Application.Queries.GetAll.WareHouses;
+using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
 using WareHouse.API.Application.Queries.Paginated.WareHouses;
 using WareHouse.API.Controllers.BaseController;
 
@@ -47,6 +48,21 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+        [Route("get-by-id")]
+        [HttpGet]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetByIdAsync([FromQuery] WareHouseGetFirstCommand firstCommand)
+        {
+            var data = await _mediat.Send(firstCommand);
+            var result = new ResultMessageResponse()
+            {
+                data = data,
+                success = true
+            };
+            return Ok(result);
+        }
+
         [Route("get-drop-tree")]
         [HttpGet]
         [ProducesResponseType((int) HttpStatusCode.OK)]
@@ -54,7 +70,7 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> GetTreeAsync([FromQuery] GetDropDownWareHouseCommand paginatedList)
         {
             paginatedList.CacheKey = string.Format(WareHouseCacheName.WareHouseDropDown, paginatedList.Active);
-            paginatedList.BypassCache = false;
+            paginatedList.BypassCache = true;
             var data = await _mediat.Send(paginatedList);
             var result = new ResultMessageResponse()
             {
@@ -72,7 +88,7 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> GetTreeViewAsync([FromQuery] GetTreeWareHouseCommand paginatedList)
         {
             paginatedList.CacheKey = string.Format(WareHouseCacheName.WareHouseTreeView, paginatedList.Active);
-            paginatedList.BypassCache = false;
+            paginatedList.BypassCache = true;
             var data = await _mediat.Send(paginatedList);
             var result = new ResultMessageResponse()
             {
