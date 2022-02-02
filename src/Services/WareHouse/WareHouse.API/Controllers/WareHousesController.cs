@@ -25,10 +25,10 @@ namespace WareHouse.API.Controllers
         private readonly IMediator _mediat;
         private readonly ICacheExtension _cacheExtension;
 
-        public WareHousesController(IMediator mediat,ICacheExtension cacheExtension)
+        public WareHousesController(IMediator mediat, ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
-            _cacheExtension=cacheExtension?? throw new ArgumentNullException(nameof(cacheExtension));
+            _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
         }
 
         [Route("get-list")]
@@ -90,9 +90,12 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Edit(WareHouseCommands wareHouseCommands)
         {
+            var res = await _mediat.Send(new UpdateWareHouseCommand() {WareHouseCommands = wareHouseCommands});
+            if (res)
+                await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
-                success = await _mediat.Send(new UpdateWareHouseCommand() {WareHouseCommands = wareHouseCommands}),
+                success = res
             };
             return Ok(result);
         }
@@ -105,6 +108,8 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Create(WareHouseCommands wareHouseCommands)
         {
             var data = await _mediat.Send(new CreateWareHouseCommand() {WareHouseCommands = wareHouseCommands});
+            if (data)
+                await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -119,9 +124,12 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
+            var res = await _mediat.Send(new DeleteUnitCommand() {Id = listIds});
+            if (res)
+                await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
-                success = await _mediat.Send(new DeleteUnitCommand() {Id = listIds})
+                success = res
             };
             return Ok(result);
         }

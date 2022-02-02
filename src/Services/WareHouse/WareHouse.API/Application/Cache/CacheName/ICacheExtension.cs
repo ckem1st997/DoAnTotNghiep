@@ -3,13 +3,35 @@ using System.Threading.Tasks;
 
 namespace WareHouse.API.Application.Cache.CacheName
 {
+    /// <summary>
+    /// Extension Cache Redis
+    /// </summary>
     public interface ICacheExtension
     {
-       IEnumerable<string> GetAllNameKey();
-       IEnumerable<string> GetAllNameKeyByContains(string contains);
+        /// <summary>
+        /// Get All Name Keys
+        /// </summary>
+        /// <returns>List Name Keys</returns>
+        IEnumerable<string> GetAllNameKey();
 
-       Task RemoveAllKeys();
-       
-       Task RemoveAllKeysBy(string contains);
+        /// <summary>
+        /// Get All Name Keys By contains
+        /// </summary>
+        /// <param name="contains">Search by</param>
+        /// <returns></returns>
+        IEnumerable<string> GetAllNameKeyByContains(string contains);
+
+        /// <summary>
+        /// Remove All Keys
+        /// </summary>
+        /// <returns></returns>
+        Task RemoveAllKeys();
+
+        /// <summary>
+        /// Remove All Keys By
+        /// </summary>
+        /// <param name="contains">Remove by</param>
+        /// <returns></returns>
+        Task RemoveAllKeysBy(string contains);
     }
 }
