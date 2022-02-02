@@ -6,6 +6,7 @@ namespace WareHouse.API.Application.Cache.CacheName
     {
         public const string WareHouseTreeView  = "WareHouse-1-TreeView-{0}";
         public const string WareHouseDropDown  = "WareHouse-1-DropDown-{0}";
+        public const string Prefix = "WareHouse-1-";
         public static List<string> Domain { get { return typeof(WareHouseCacheName).GetAllPublicConstantValues<string>(); } }
     }
     

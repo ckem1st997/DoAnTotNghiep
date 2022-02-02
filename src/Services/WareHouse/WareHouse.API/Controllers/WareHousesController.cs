@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using StackExchange.Redis;
 using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Commands.Create;
 using WareHouse.API.Application.Commands.Delete;
@@ -22,23 +23,13 @@ namespace WareHouse.API.Controllers
     public class WareHousesController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
+        private readonly ICacheExtension _cacheExtension;
 
-        public WareHousesController(IMediator mediat)
+        public WareHousesController(IMediator mediat,ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
+            _cacheExtension=cacheExtension?? throw new ArgumentNullException(nameof(cacheExtension));
         }
-
-        
-        [Route("get-list11")]
-        [HttpGet]
-        [ProducesResponseType((int) HttpStatusCode.OK)]
-        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
-        public IActionResult getname()
-        {
-            List<string> result = WareHouseCacheName.Domain;
-            return Ok(result);
-        }
-
 
         [Route("get-list")]
         [HttpGet]

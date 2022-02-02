@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
+using WareHouse.API.Application.Cache.CacheName;
 
 namespace WareHouse.API.Application.Cache
 {
@@ -22,6 +23,7 @@ namespace WareHouse.API.Application.Cache
                 };
             });
             services.Configure<CacheSettings>(configuration.GetSection("CacheSettings"));
+            services.AddScoped<ICacheExtension,CacheExtension>();
             //services.Add(ServiceDescriptor.Singleton<IDistributedCache, RedisCache>());
         }
     }
