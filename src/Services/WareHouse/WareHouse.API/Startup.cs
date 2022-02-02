@@ -14,6 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WareHouse.API.Application.AutoMapper.ConfigureServices;
 using WareHouse.API.Application.Behaviors.ConfigureServices;
+using WareHouse.API.Application.Cache;
 using WareHouse.API.Application.Validations.ConfigureServices;
 using WareHouse.API.ConfigureServices.CustomConfiguration;
 
@@ -36,6 +37,7 @@ namespace WareHouse.API
             services.AddMapper();
             services.AddValidator();
             services.AddBehavior();
+            services.AddCache(Configuration);
             services.AddApiVersioning(x =>
             {
                 // setup ApiVersion v1 

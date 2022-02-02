@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Commands.Create;
 using WareHouse.API.Application.Commands.Delete;
 using WareHouse.API.Application.Commands.Models;
@@ -27,10 +28,22 @@ namespace WareHouse.API.Controllers
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
         }
 
+        
+        [Route("get-list11")]
+        [HttpGet]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        public IActionResult getname()
+        {
+            List<string> result = WareHouseCacheName.Domain;
+            return Ok(result);
+        }
+
+
         [Route("get-list")]
         [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> IndexAsync([FromQuery] PaginatedWareHouseCommand paginatedList)
         {
             var data = await _mediat.Send(paginatedList);
@@ -45,10 +58,12 @@ namespace WareHouse.API.Controllers
 
         [Route("get-drop-tree")]
         [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetTreeAsync([FromQuery] GetDropDownWareHouseCommand paginatedList)
         {
+            paginatedList.CacheKey = string.Format(WareHouseCacheName.WareHouseDropDown, paginatedList.Active);
+            paginatedList.BypassCache = false;
             var data = await _mediat.Send(paginatedList);
             var result = new ResultMessageResponse()
             {
@@ -58,13 +73,15 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
-        
+
         [Route("get-tree-view")]
         [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetTreeViewAsync([FromQuery] GetTreeWareHouseCommand paginatedList)
         {
+            paginatedList.CacheKey = string.Format(WareHouseCacheName.WareHouseTreeView, paginatedList.Active);
+            paginatedList.BypassCache = false;
             var data = await _mediat.Send(paginatedList);
             var result = new ResultMessageResponse()
             {
@@ -74,18 +91,17 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
-        
-        
+
 
         [Route("edit")]
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Edit(WareHouseCommands wareHouseCommands)
         {
             var result = new ResultMessageResponse()
             {
-                success = await _mediat.Send(new UpdateWareHouseCommand() { WareHouseCommands = wareHouseCommands }),
+                success = await _mediat.Send(new UpdateWareHouseCommand() {WareHouseCommands = wareHouseCommands}),
             };
             return Ok(result);
         }
@@ -93,11 +109,11 @@ namespace WareHouse.API.Controllers
 
         [Route("create")]
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(WareHouseCommands wareHouseCommands)
         {
-            var data = await _mediat.Send(new CreateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
+            var data = await _mediat.Send(new CreateWareHouseCommand() {WareHouseCommands = wareHouseCommands});
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -106,16 +122,15 @@ namespace WareHouse.API.Controllers
         }
 
 
-    
         [Route("delete")]
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int) HttpStatusCode.OK)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
             var result = new ResultMessageResponse()
             {
-                success = await _mediat.Send(new DeleteUnitCommand() { Id = listIds})
+                success = await _mediat.Send(new DeleteUnitCommand() {Id = listIds})
             };
             return Ok(result);
         }

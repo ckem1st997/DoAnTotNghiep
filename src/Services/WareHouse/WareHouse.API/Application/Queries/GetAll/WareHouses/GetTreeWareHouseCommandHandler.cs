@@ -4,15 +4,24 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using WareHouse.API.Application.Cache;
+using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;
 using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Queries.GetAll.WareHouses
 {
-    public class GetTreeWareHouseCommand : IRequest<IEnumerable<WareHousesTreeModel>>
+    public class GetTreeWareHouseCommand : IRequest<IEnumerable<WareHousesTreeModel>>, ICacheableMediatrQuery
     {
         public bool Active { get; set; }
+        [BindNever]
+        public bool BypassCache { get; set; }
+        [BindNever]
+        public string CacheKey { get; set; }
+        [BindNever]
+        public TimeSpan? SlidingExpiration { get; set; }
     }
 
     public class

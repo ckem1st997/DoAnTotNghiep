@@ -14,6 +14,7 @@ namespace WareHouse.API.Application.Behaviors.ConfigureServices
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>));
         }
     }
 }
