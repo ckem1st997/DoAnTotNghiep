@@ -107,8 +107,8 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Edit(WareHouseCommands wareHouseCommands)
         {
             var res = await _mediat.Send(new UpdateWareHouseCommand() {WareHouseCommands = wareHouseCommands});
-            if (res)
-                await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
+            // if (res)
+            //     await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
                 success = res
@@ -124,8 +124,8 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Create(WareHouseCommands wareHouseCommands)
         {
             var data = await _mediat.Send(new CreateWareHouseCommand() {WareHouseCommands = wareHouseCommands});
-            if (data)
-                await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
+            // if (data)
+            //     await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -140,9 +140,9 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
-            var res = await _mediat.Send(new DeleteUnitCommand() {Id = listIds});
-            if (res)
-                await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
+            var res = await _mediat.Send(new DeleteWareHouseCommand() {Id = listIds});
+            // if (res)
+            //     await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
                 success = res

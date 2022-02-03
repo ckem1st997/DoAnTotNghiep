@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using WareHouse.Domain.Entity;
@@ -11,6 +12,7 @@ namespace WareHouse.Domain.IRepositories
     public partial interface IRepositoryEF<T> where T : BaseEntity
     {
         public IUnitOfWork UnitOfWork { get; }
+        IEnumerable<T> GetList(Func<T, bool> filter = null);
         Task<T> GetFirstAsync(string id);
         Task<T> GetFirstAsyncAsNoTracking(string id);
         Task<T> AddAsync(T entity);

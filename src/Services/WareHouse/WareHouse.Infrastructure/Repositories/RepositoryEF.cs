@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using WareHouse.Domain.Entity;
@@ -118,6 +119,15 @@ namespace WareHouse.Infrastructure.Repositories
             if (listIds is null)
                 throw new NotImplementedException(nameof(listIds));
             return await _dbSet.Where(x => listIds.Contains(x.Id)).UpdateFromQueryAsync(x => new T { OnDelete = true });
+        }
+
+        public IEnumerable<T> GetList(Func<T, bool> filter = null)
+        {
+            IEnumerable<T> query = _dbSet;
+            if (filter != null)
+                query = query.Where(filter);
+            return query;
+
         }
     }
 }

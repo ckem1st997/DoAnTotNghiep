@@ -44,17 +44,18 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouses
             }
             if (!string.IsNullOrEmpty(request.KeySearch))
             {
-                 sb.Append("  (Code like @key or Name like @key) and ");
-                 sbCount.Append("  (Code like @key or Name like @key) and ");
+                sb.Append("  (Code like @key  or Name like @key ) and ");
+                sbCount.Append("  (Code like @key or Name like @key) and ");
             }
             sb.Append("  OnDelete=0 ");
             sbCount.Append("  OnDelete=0 ");
             sbCount.Append(" ) t   ");
             sb.Append(" order by Name OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
             DynamicParameters parameter = new DynamicParameters();
+            parameter.Add("@key", '%' + request.KeySearch + '%');
             parameter.Add("@skip", request.Skip);
             parameter.Add("@take", request.Take);
-            parameter.Add("@active", request.Active==true ? 1 : 0);
+            parameter.Add("@active", request.Active == true ? 1 : 0);
             _list.Result = await _repository.GetList<WareHouseDTO>(sb.ToString(), parameter, CommandType.Text);
             _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text);
             return _list;
