@@ -30,10 +30,9 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouses
         {
             if (request == null)
                 return null;
-            request.KeySearch = request.KeySearch?.Trim();
+            request.KeySearch = request.KeySearch?.Trim().Replace("=","");
             if (request.KeySearch == null)
                 request.KeySearch = "";
-            var key = "'%"+request.KeySearch+"%'";
             StringBuilder sbCount = new StringBuilder();
             sbCount.Append("SELECT COUNT(*) FROM ( select * from WareHouse where ");
             StringBuilder sb = new StringBuilder();

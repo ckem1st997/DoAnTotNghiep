@@ -39,8 +39,8 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseItem
             }
             if (!string.IsNullOrEmpty(request.KeySearch))
             {
-                sb.Append("  (Code like @key or Name like @key) and ");
-                sbCount.Append("  (Code like @key or Name like @key) and ");
+                sb.Append("  (Code like '%"+request.KeySearch+"%' or Name like '%"+request.KeySearch+"%') and ");
+                sbCount.Append("  (Code like '%"+request.KeySearch+"%' or Name like '%"+request.KeySearch+"%') and ");
             }
             sb.Append("  OnDelete=0 ");
             sbCount.Append("  OnDelete=0 ");

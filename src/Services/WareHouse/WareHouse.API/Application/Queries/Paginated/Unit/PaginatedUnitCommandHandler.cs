@@ -40,8 +40,8 @@ namespace WareHouse.API.Application.Queries.Paginated.Unit
             }
             if (!string.IsNullOrEmpty(request.KeySearch))
             {
-                sb.Append("  (UnitName like @key) and ");
-                sbCount.Append("  (UnitName like @key) and ");
+                sb.Append("  (UnitName like '%"+request.KeySearch+"%') and ");
+                sbCount.Append("  (UnitName like '%"+request.KeySearch+"%') and ");
             }
             sb.Append("  OnDelete=0 ");
             sbCount.Append("  OnDelete=0 ");
