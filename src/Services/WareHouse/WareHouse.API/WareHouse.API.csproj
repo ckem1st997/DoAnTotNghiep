@@ -1,40 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>d1b20302-8cb9-4498-a3d4-14408ecc6173</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..\..</DockerfileContext>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.3.0" />
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-    <PackageReference Include="FluentValidation" Version="10.3.4" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.4" />
-    <PackageReference Include="MediatR" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.11" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="5.0.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-    <PackageReference Include="Z.Dapper.Plus" Version="4.0.22" />
+    <PackageReference Include="Autofac" Version="6.3.0"/>
+    <PackageReference Include="AutoMapper" Version="10.1.1"/>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1"/>
+    <PackageReference Include="FluentValidation" Version="10.3.4"/>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.4"/>
+    <PackageReference Include="MediatR" Version="9.0.0"/>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.11"/>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="5.0.1"/>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.11.1"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+    <PackageReference Include="Serilog" Version="2.10.0"/>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3"/>
+    <PackageReference Include="MiniProfiler.Integrations" Version="2.5.1"/>
   </ItemGroup>
-
   <ItemGroup>
-    <Folder Include="Application\Cache\" />
-    <Folder Include="Application\Grpc\" />
-    <Folder Include="Application\HealthChecks\" />
-    <Folder Include="Application\IntegrationEvents\" />
-    <Folder Include="Application\Queries\GetFisrt\" />
+    <Folder Include="Application\Cache\"/>
+    <Folder Include="Application\Grpc\"/>
+    <Folder Include="Application\HealthChecks\"/>
+    <Folder Include="Application\IntegrationEvents\"/>
+    <Folder Include="Application\Queries\GetFisrt\"/>
   </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\WareHouse.Domain\WareHouse.Domain.csproj" />
-    <ProjectReference Include="..\WareHouse.Infrastructure\WareHouse.Infrastructure.csproj" />
+    <ProjectReference Include="..\WareHouse.Domain\WareHouse.Domain.csproj"/>
+    <ProjectReference Include="..\WareHouse.Infrastructure\WareHouse.Infrastructure.csproj"/>
   </ItemGroup>
-
 </Project>

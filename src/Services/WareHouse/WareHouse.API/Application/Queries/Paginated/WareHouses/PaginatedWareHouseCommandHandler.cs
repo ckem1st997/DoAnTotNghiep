@@ -33,6 +33,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouses
             request.KeySearch = request.KeySearch?.Trim();
             if (request.KeySearch == null)
                 request.KeySearch = "";
+            var key = "'%"+request.KeySearch+"%'";
             StringBuilder sbCount = new StringBuilder();
             sbCount.Append("SELECT COUNT(*) FROM ( select * from WareHouse where ");
             StringBuilder sb = new StringBuilder();
@@ -44,8 +45,8 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouses
             }
             if (!string.IsNullOrEmpty(request.KeySearch))
             {
-                sb.Append("  (Code like @key  or Name like @key ) and ");
-                sbCount.Append("  (Code like @key or Name like @key) and ");
+                sb.Append("  (Code like '%"+request.KeySearch+"%'  or Name like '%"+request.KeySearch+"%' )  and ");
+                sbCount.Append("  (Code like '%"+request.KeySearch+"%' or Name like '%"+request.KeySearch+"%' ) and ");
             }
             sb.Append("  OnDelete=0 ");
             sbCount.Append("  OnDelete=0 ");
