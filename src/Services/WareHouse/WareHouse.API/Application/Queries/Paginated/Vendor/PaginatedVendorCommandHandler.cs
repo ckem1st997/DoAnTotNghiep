@@ -42,14 +42,15 @@ namespace WareHouse.API.Application.Queries.Paginated.Vendor
 
             if (!string.IsNullOrEmpty(request.KeySearch))
             {
-                sb.Append("  (Code like '%"+request.KeySearch+"%' or Name like '%"+request.KeySearch+"%' or Phone like '%"+request.KeySearch+"%' or Email like '%"+request.KeySearch+"%') and ");
-                sbCount.Append(" (Code like '%"+request.KeySearch+"%' or Name like '%"+request.KeySearch+"%' or Phone like '%"+request.KeySearch+"%' or Email like '%"+request.KeySearch+"%') and ");
+                sb.Append("  (Code like @key or Name like @key or Phone like @key or Email like @key) and ");
+                sbCount.Append(" (Code like @key or Name like @key or Phone like @key or Email like @key) and ");
             }
             sb.Append("  OnDelete=0 ");
             sbCount.Append("  OnDelete=0 ");
             sbCount.Append(" ) t   ");
             sb.Append(" order by Name OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
             DynamicParameters parameter = new DynamicParameters();
+            Console.WriteLine(request.KeySearch);
             parameter.Add("@key", '%' + request.KeySearch + '%');
             parameter.Add("@skip", request.Skip);
             parameter.Add("@take", request.Take);

@@ -19,6 +19,9 @@ namespace WareHouse.API.Application.Validations.ConfigureServices
         {
             services.AddFluentValidation();
             services.AddTransient<IValidator<WareHouseCommands>, WareHouseCommandValidator>();
+            services.AddTransient<IValidator<WareHouseItemCommands>, WareHouseItemCommandValidator>();
+            services.AddTransient<IValidator<WareHouseItemCategoryCommands>, WareHouseItemCategoryCommandValidator>();
+            services.AddTransient<IValidator<UnitCommands>, UnitCommandValidator>();
             services.AddTransient<IValidator<VendorCommands>, VendorCommandValidator>();
             services.AddTransient<IValidator<BaseSearchModel>, BaseSearchModelValidator>();
         }

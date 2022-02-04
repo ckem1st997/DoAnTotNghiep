@@ -20,6 +20,7 @@ using WareHouse.API.Application.Queries.BaseModel;
 using WareHouse.API.Application.Queries.GetAll.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.Paginated.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.Paginated.WareHouses;
+using WareHouse.API.Application.Cache.CacheName;
 
 namespace WareHouse.API.Controllers
 {
@@ -47,14 +48,16 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
-        
-        
+
+
         [Route("get-drop-tree")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetTreeAsync([FromQuery] GetDropDownWareHouseItemCategoryCommand command)
         {
+            command.CacheKey = string.Format(WareHouseItemCategoryCacheName.WareHouseItemCategoryDropDown, command.Active);
+            command.BypassCache = true;
             var data = await _mediat.Send(command);
             var result = new ResultMessageResponse()
             {
@@ -71,9 +74,12 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Edit(WareHouseItemCategoryCommands wareHouseCommands)
         {
+            var res = await _mediat.Send(new UpdateWareHouseItemCategoryCommand() { WareHouseItemCategoryCommands = wareHouseCommands });
+            // if (res)
+            //     await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
-                success = await _mediat.Send(new UpdateWareHouseItemCategoryCommand() {  WareHouseItemCategoryCommands = wareHouseCommands}),
+                success = res
             };
             return Ok(result);
         }
@@ -86,6 +92,8 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Create(WareHouseItemCategoryCommands wareHouseCommands)
         {
             var data = await _mediat.Send(new CreateWareHouseItemCategoryCommand() { WareHouseItemCategoryCommands = wareHouseCommands });
+            // if (data)
+            //   await _cacheExtension.RemoveAllKeysBy(WareHouseItemCategoryCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -94,16 +102,19 @@ namespace WareHouse.API.Controllers
         }
 
 
-        
+
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
+            var res = await _mediat.Send(new DeleteWareHouseItemCategoryCommand() { Id = listIds });
+            // if (res)
+            //   await _cacheExtension.RemoveAllKeysBy(WareHouseItemCategoryCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
-                success = await _mediat.Send(new DeleteUnitCommand() { Id = listIds})
+                success = res
             };
             return Ok(result);
         }
