@@ -30,7 +30,6 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
             var models = await GetWareHousesAsync(request.Active);
             return GetWareHouseTreeModel(models);
         }
-
         private async Task<IList<WareHouseDTO>> GetWareHousesAsync(bool showHidden = false, bool showList = false)
         {
             string sql = "select Id,ParentId,Code,Name from WareHouse where Inactive =@active and OnDelete=0 ";

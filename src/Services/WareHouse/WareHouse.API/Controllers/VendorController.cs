@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Commands.Create;
 using WareHouse.API.Application.Commands.Delete;
 using WareHouse.API.Application.Commands.Models;
 using WareHouse.API.Application.Commands.Update;
 using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Querie.CheckCode;
+using WareHouse.API.Application.Queries.GetAll;
 using WareHouse.API.Application.Queries.Paginated.Vendor;
 using WareHouse.API.Application.Validations;
 using WareHouse.API.Controllers.BaseController;
@@ -21,11 +24,13 @@ namespace WareHouse.API.Controllers
     {
         private readonly IMediator _mediat;
 
-        public VendorController(IMediator mediat)
+        private readonly ICacheExtension _cacheExtension;
+        public VendorController(IMediator mediat, ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
+            _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
         }
-
+        #region R
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -42,6 +47,28 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+        [Route("get-drop-tree")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetTreeAsync([FromQuery] VendorDropDownCommand command)
+        {
+            command.CacheKey = string.Format(VendorCacheName.VendorCacheNameDropDown, command.Active);
+            command.BypassCache = false;
+            var data = await _mediat.Send(command);
+            var result = new ResultMessageResponse()
+            {
+                data = data,
+                success = true,
+                totalCount = data.Count()
+            };
+            return Ok(result);
+        }
+
+
+        #endregion
+
+        #region CUD
 
         [Route("edit")]
         [HttpPost]
@@ -95,5 +122,9 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+        #endregion
+
+
+
     }
 }

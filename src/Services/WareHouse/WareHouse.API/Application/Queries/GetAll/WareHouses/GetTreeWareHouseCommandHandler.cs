@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WareHouse.API.Application.Cache;
-using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;
 using WareHouse.Domain.IRepositories;
@@ -53,7 +52,6 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
             var result = new List<WareHousesTreeModel>();
             var convertToRoot = new List<WareHousesTreeModel>();
             var wareHouseModels = await GetOrganizationalUnits(showHidden);
-            //   organizationalUnitModels = organizationalUnitModels.ToList();
             foreach (var s in wareHouseModels)
             {
                 var tem = new WareHousesTreeModel
@@ -119,12 +117,6 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
 
         private async Task<IList<WareHouseDTO>> GetOrganizationalUnits(bool showHidden = false)
         {
-            // var cacheKey = WarehouseCacheKeys.Warehouses.AllCacheKey.FormatWith(showHidden);
-            // var models = _cacheManager.GetDb(cacheKey, () =>
-            // {
-            //     var result = _organizationalUnitService.GetAll(showHidden);
-            //     return result.ToList();
-            // });
             var models = await _rep.ListAllAsync();
             var res = new List<WareHouseDTO>();
             var wareHouses = models.ToList();

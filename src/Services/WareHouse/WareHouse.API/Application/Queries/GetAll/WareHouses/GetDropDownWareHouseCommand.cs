@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WareHouse.API.Application.Cache;
-using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
 
 namespace WareHouse.API.Application.Queries.GetAll.WareHouses

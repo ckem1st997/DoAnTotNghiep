@@ -11,7 +11,7 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Queries.Paginated.WareHouseItem
 {
-    public class PaginatedWareHouseItemCommandHandler: IRequestHandler<PaginatedWareHouseItemCommand, IPaginatedList<WareHouseItemDTO>>
+    public class PaginatedWareHouseItemCommandHandler : IRequestHandler<PaginatedWareHouseItemCommand, IPaginatedList<WareHouseItemDTO>>
     {
         private readonly IDapper _repository;
         private readonly IPaginatedList<WareHouseItemDTO> _list;
@@ -29,29 +29,44 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseItem
                 return null;
             request.KeySearch = request.KeySearch?.Trim() ?? "";
             StringBuilder sbCount = new StringBuilder();
-            sbCount.Append("SELECT COUNT(*) FROM ( select * from WareHouseItem where ");
+            sbCount.Append("SELECT COUNT(*) FROM (  ");
+
+            sbCount.Append(" select WareHouseItem.Id ");
+            sbCount.Append(" from WareHouseItem  ");
+            sbCount.Append(" left join Vendor on WareHouseItem.VendorID=Vendor.Id  ");
+            sbCount.Append(" left join Unit on WareHouseItem.UnitId=Unit.Id ");
+            sbCount.Append(" left join WareHouseItemCategory on WareHouseItem.CategoryID=WareHouseItemCategory.Id where ");
+
+
+
             StringBuilder sb = new StringBuilder();
-            sb.Append("select * from WareHouseItem where ");
+
+            sb.Append(" select WareHouseItem.Id, WareHouseItem.Code,WareHouseItem.Name,WareHouseItem.Description, ");
+            sb.Append(" WareHouseItem.Country,WareHouseItem.Inactive,  ");
+            sb.Append(" WareHouseItemCategory.Name as CategoryID, Vendor.Name as VendorID, Unit.UnitName as UnitId from WareHouseItem  ");
+            sb.Append(" left join Vendor on WareHouseItem.VendorID=Vendor.Id  ");
+            sb.Append(" left join Unit on WareHouseItem.UnitId=Unit.Id ");
+            sb.Append(" left join WareHouseItemCategory on WareHouseItem.CategoryID=WareHouseItemCategory.Id where ");
             if (request.Active != null)
             {
-                sb.Append("  Inactive =@active and ");
-                sbCount.Append("  Inactive =@active and ");
+                sb.Append("  WareHouseItem.Inactive =@active and ");
+                sbCount.Append("  WareHouseItem.Inactive =@active and ");
             }
             if (!string.IsNullOrEmpty(request.KeySearch))
             {
-                sb.Append("  (Code like @key or Name like @key) and ");
-                sbCount.Append("  (Code like @key or Name like @key) and ");
+                sb.Append("  (WareHouseItem.Code like @key or WareHouseItem.Name like @key) and ");
+                sbCount.Append("  (WareHouseItem.Code like @key or WareHouseItem.Name like @key) and ");
             }
-            sb.Append("  OnDelete=0 ");
-            sbCount.Append("  OnDelete=0 ");
+            sb.Append("  WareHouseItem.OnDelete=0 ");
+            sbCount.Append("  WareHouseItem.OnDelete=0 ");
             //
             sbCount.Append(" ) t   ");
-            sb.Append(" order by Name OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
+            sb.Append(" order by WareHouseItem.Name OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@key", '%' + request.KeySearch + '%');
             parameter.Add("@skip", request.Skip);
             parameter.Add("@take", request.Take);
-            parameter.Add("@active", request.Active==true ? 1 : 0);
+            parameter.Add("@active", request.Active == true ? 1 : 0);
             _list.Result = await _repository.GetList<WareHouseItemDTO>(sb.ToString(), parameter, CommandType.Text);
             _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text);
             return _list;

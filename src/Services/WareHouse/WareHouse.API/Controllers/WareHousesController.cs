@@ -33,6 +33,7 @@ namespace WareHouse.API.Controllers
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
         }
 
+        #region R
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -71,7 +72,7 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> GetTreeAsync([FromQuery] GetDropDownWareHouseCommand paginatedList)
         {
             paginatedList.CacheKey = string.Format(WareHouseCacheName.WareHouseDropDown, paginatedList.Active);
-            paginatedList.BypassCache = true;
+            paginatedList.BypassCache = false;
             var data = await _mediat.Send(paginatedList);
             var result = new ResultMessageResponse()
             {
@@ -89,7 +90,7 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> GetTreeViewAsync([FromQuery] GetTreeWareHouseCommand paginatedList)
         {
             paginatedList.CacheKey = string.Format(WareHouseCacheName.WareHouseTreeView, paginatedList.Active);
-            paginatedList.BypassCache = true;
+            paginatedList.BypassCache = false;
             var data = await _mediat.Send(paginatedList);
             var result = new ResultMessageResponse()
             {
@@ -108,8 +109,8 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Edit(WareHouseCommands wareHouseCommands)
         {
             var res = await _mediat.Send(new UpdateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
-            // if (res)
-            //     await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
+            if (res)
+                await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
                 success = res
@@ -117,7 +118,9 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+        #endregion
 
+        #region CUD
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -137,8 +140,8 @@ namespace WareHouse.API.Controllers
                 });
             }
             var data = await _mediat.Send(new CreateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
-            // if (data)
-            //     await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
+            if (data)
+                await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -154,13 +157,16 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
             var res = await _mediat.Send(new DeleteWareHouseCommand() { Id = listIds });
-            // if (res)
-            //     await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
+            if (res)
+                await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
                 success = res
             };
             return Ok(result);
         }
+        #endregion
+
+
     }
 }

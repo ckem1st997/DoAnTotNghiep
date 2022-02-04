@@ -28,12 +28,15 @@ namespace WareHouse.API.Controllers
     public class WareHouseItemCategoryController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
-
-        public WareHouseItemCategoryController(IMediator mediat)
+        private readonly ICacheExtension _cacheExtension;
+        public WareHouseItemCategoryController(IMediator mediat, ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
+            _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
         }
 
+
+        #region R
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -58,7 +61,7 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> GetTreeAsync([FromQuery] GetDropDownWareHouseItemCategoryCommand command)
         {
             command.CacheKey = string.Format(WareHouseItemCategoryCacheName.WareHouseItemCategoryDropDown, command.Active);
-            command.BypassCache = true;
+            command.BypassCache = false;
             var data = await _mediat.Send(command);
             var result = new ResultMessageResponse()
             {
@@ -68,7 +71,9 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+        #endregion
 
+        #region CUD
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -76,8 +81,8 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Edit(WareHouseItemCategoryCommands wareHouseCommands)
         {
             var res = await _mediat.Send(new UpdateWareHouseItemCategoryCommand() { WareHouseItemCategoryCommands = wareHouseCommands });
-            // if (res)
-            //     await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
+            if (res)
+                await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
                 success = res
@@ -105,8 +110,8 @@ namespace WareHouse.API.Controllers
                 });
             }
             var data = await _mediat.Send(new CreateWareHouseItemCategoryCommand() { WareHouseItemCategoryCommands = wareHouseCommands });
-            // if (data)
-            //   await _cacheExtension.RemoveAllKeysBy(WareHouseItemCategoryCacheName.Prefix);
+            if (data)
+                await _cacheExtension.RemoveAllKeysBy(WareHouseItemCategoryCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -123,13 +128,18 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
             var res = await _mediat.Send(new DeleteWareHouseItemCategoryCommand() { Id = listIds });
-            // if (res)
-            //   await _cacheExtension.RemoveAllKeysBy(WareHouseItemCategoryCacheName.Prefix);
+            if (res)
+                await _cacheExtension.RemoveAllKeysBy(WareHouseItemCategoryCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
                 success = res
             };
             return Ok(result);
         }
+        #endregion
+
+
+
+
     }
 }

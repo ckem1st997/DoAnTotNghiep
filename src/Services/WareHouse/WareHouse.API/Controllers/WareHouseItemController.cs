@@ -21,6 +21,7 @@ using WareHouse.API.Application.Queries.Paginated.WareHouseItem;
 using WareHouse.API.Application.Queries.Paginated.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.Paginated.WareHouses;
 using WareHouse.API.Application.Querie.CheckCode;
+using WareHouse.API.Application.Cache.CacheName;
 
 namespace WareHouse.API.Controllers
 {
@@ -32,7 +33,7 @@ namespace WareHouse.API.Controllers
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
         }
-
+        #region R
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -54,6 +55,8 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetTreeAsync([FromQuery] GetDopDownWareHouseItemCommand command)
         {
+            command.CacheKey = string.Format(WareHouseItemCacheName.WareHouseItemCacheNameDropDown, command.Active);
+            command.BypassCache = false;
             var data = await _mediat.Send(command);
             var result = new ResultMessageResponse()
             {
@@ -63,8 +66,9 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+        #endregion
 
-
+        #region CUD
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -118,5 +122,10 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+        #endregion
+
+
+
+
     }
 }
