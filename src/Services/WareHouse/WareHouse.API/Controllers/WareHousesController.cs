@@ -126,7 +126,7 @@ namespace WareHouse.API.Controllers
         {
             var check = await _mediat.Send(new WareHouseCodeCommand()
             {
-                Code = wareHouseCommands.Code
+                Code = wareHouseCommands.Code.Trim()
             });
             if (check)
             {

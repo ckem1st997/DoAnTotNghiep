@@ -21,6 +21,7 @@ using WareHouse.API.Application.Queries.GetAll.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.Paginated.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.Paginated.WareHouses;
 using WareHouse.API.Application.Cache.CacheName;
+using WareHouse.API.Application.Querie.CheckCode;
 
 namespace WareHouse.API.Controllers
 {
@@ -91,6 +92,18 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(WareHouseItemCategoryCommands wareHouseCommands)
         {
+            var check = await _mediat.Send(new WareHouseItemCategotyCodeCommand()
+            {
+                Code = wareHouseCommands.Code.Trim()
+            });
+            if (check)
+            {
+                return Ok(new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Mã đã tồn tại, xin vui lòng chọn mã khác !"
+                });
+            }
             var data = await _mediat.Send(new CreateWareHouseItemCategoryCommand() { WareHouseItemCategoryCommands = wareHouseCommands });
             // if (data)
             //   await _cacheExtension.RemoveAllKeysBy(WareHouseItemCategoryCacheName.Prefix);

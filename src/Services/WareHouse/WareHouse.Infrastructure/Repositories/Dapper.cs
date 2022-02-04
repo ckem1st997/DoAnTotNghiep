@@ -61,14 +61,14 @@ namespace WareHouse.Infrastructure.Repositories
             return new SqlConnection(_config.GetConnectionString(Connectionstring));
         }
 
-        public async Task<IEnumerable<T>> CheckCode<T>(string code, string nameEntity)
+        public async Task<int> CheckCode<T>(string code, string nameEntity)
         {
             using var connection = new SqlConnection(_config.GetConnectionString(Connectionstring));
             var sp = "select Id from " + nameEntity + " where Code = @code";
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@code", code);
-            Console.Write(sp.ToString());
-            return await connection.QueryAsync<T>(sp, parameter, commandType: CommandType.Text);
+            var res = await connection.QueryAsync<T>(sp, parameter, commandType: CommandType.Text);
+            return res.Count();
         }
     }
 }

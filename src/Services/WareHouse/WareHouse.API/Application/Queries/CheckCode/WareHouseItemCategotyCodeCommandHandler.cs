@@ -11,26 +11,26 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Querie.CheckCode
 {
-    public class WareHouseCodeCommand : IRequest<bool>
+    public class  WareHouseItemCategotyCodeCommand : IRequest<bool>
     {
         public string Code { get; set; }
     }
-    public class WareHouseCodeCommandHandler : IRequestHandler<WareHouseCodeCommand, bool>
+    public class WareHouseItemCategotyCodeCommandHandler : IRequestHandler<WareHouseItemCategotyCodeCommand, bool>
     {
         private readonly IDapper _repository;
 
-        public WareHouseCodeCommandHandler(IDapper repository)
+        public WareHouseItemCategotyCodeCommandHandler(IDapper repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public async Task<bool> Handle(WareHouseCodeCommand request,
+        public async Task<bool> Handle(WareHouseItemCategotyCodeCommand request,
             CancellationToken cancellationToken)
         {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
-            var res = await _repository.CheckCode<Domain.Entity.WareHouse>(request.Code, nameof(Domain.Entity.WareHouse));
-            return res>0;
+            var res = await _repository.CheckCode<Domain.Entity.WareHouse>(request.Code, nameof(Domain.Entity.WareHouseItemCategory));
+           return res>0;
         }
     }
 }

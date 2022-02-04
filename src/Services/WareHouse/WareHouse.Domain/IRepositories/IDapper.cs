@@ -24,6 +24,6 @@ namespace WareHouse.Domain.IRepositories
 
         Task<IEnumerable<T>> GetListByListId<T>(IEnumerable<string> listId, string nameEntity, CommandType commandType);
 
-        Task<IEnumerable<T>> CheckCode<T>(string code, string nameEntity);
+        Task<int> CheckCode<T>(string code, string nameEntity);
     }
 }
