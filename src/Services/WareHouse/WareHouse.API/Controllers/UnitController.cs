@@ -26,7 +26,7 @@ namespace WareHouse.API.Controllers
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
         }
-    #region R
+        #region R
         #endregion
 
         #region CUD
@@ -71,9 +71,12 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Edit(UnitCommands unitCommands)
         {
+            var data = await _mediat.Send(new UpdateUnitCommand() { UnitCommands = unitCommands });
+            if (data)
+                await _cacheExtension.RemoveAllKeysBy(UnitCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
-                success = await _mediat.Send(new UpdateUnitCommand() { UnitCommands = unitCommands }),
+                success = data
             };
             return Ok(result);
         }
@@ -86,6 +89,8 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Create(UnitCommands unitCommands)
         {
             var data = await _mediat.Send(new CreateUnitCommand() { UnitCommands = unitCommands });
+            if (data)
+                await _cacheExtension.RemoveAllKeysBy(UnitCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -100,9 +105,12 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
+            var data = await _mediat.Send(new DeleteUnitCommand() { Id = listIds });
+            if (data)
+                await _cacheExtension.RemoveAllKeysBy(UnitCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
-                success = await _mediat.Send(new DeleteUnitCommand() { Id = listIds })
+                success = data
             };
             return Ok(result);
         }

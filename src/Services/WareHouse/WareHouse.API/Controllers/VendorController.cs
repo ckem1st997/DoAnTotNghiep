@@ -78,7 +78,8 @@ namespace WareHouse.API.Controllers
         {
             var result = new ResultMessageResponse();
             result.success = await _mediat.Send(new UpdateVendorCommand() { VendorCommands = vendorCommands });
-
+            if (result.success)
+                await _cacheExtension.RemoveAllKeysBy(VendorCacheName.Prefix);
             return Ok(result);
         }
 
@@ -102,6 +103,8 @@ namespace WareHouse.API.Controllers
                 });
             }
             var data = await _mediat.Send(new CreateVendorCommand() { VendorCommands = vendorCommands });
+            if (data)
+                await _cacheExtension.RemoveAllKeysBy(VendorCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -116,9 +119,12 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
+            var res = await _mediat.Send(new DeleteVendorCommand() { Id = listIds });
+            if (res)
+                await _cacheExtension.RemoveAllKeysBy(VendorCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
-                success = await _mediat.Send(new DeleteVendorCommand() { Id = listIds })
+                success = res
             };
             return Ok(result);
         }

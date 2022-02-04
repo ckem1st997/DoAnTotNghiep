@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace WareHouse.API.Application.Model
 {
-    public partial class WareHouseItemDTO: BaseModel
+    public partial class WareHouseItemDTO : BaseModel
     {
         public WareHouseItemDTO()
         {
@@ -29,6 +29,9 @@ namespace WareHouse.API.Application.Model
         public bool? Inactive { get; set; }
 
         public virtual WareHouseItemCategoryDTO Category { get; set; }
+        public virtual IEnumerable<WareHouseItemCategoryDTO> CategoryDTO { get; set; }
+        public virtual IEnumerable<UnitDTO> UnitDTO { get; set; }
+        public virtual IEnumerable<VendorDTO> VendorDTO { get; set; }
         public virtual UnitDTO Unit { get; set; }
         public virtual VendorDTO Vendor { get; set; }
         public virtual ICollection<AuditDetailSerialDTO> AuditDetailSerials { get; set; }

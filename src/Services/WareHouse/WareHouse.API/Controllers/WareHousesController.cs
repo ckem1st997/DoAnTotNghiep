@@ -166,7 +166,5 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
         #endregion
-
-
     }
 }
