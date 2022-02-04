@@ -22,6 +22,8 @@ namespace WareHouse.Domain.IRepositories
         Task<IEnumerable<T>> GetAllAync<T>(string sp, DynamicParameters parms,
             CommandType commandType = CommandType.StoredProcedure);
 
-        Task<IEnumerable<T>> GetListByListId<T>(IEnumerable<string> listId,string nameEntity, CommandType commandType);
+        Task<IEnumerable<T>> GetListByListId<T>(IEnumerable<string> listId, string nameEntity, CommandType commandType);
+
+        Task<IEnumerable<T>> CheckCode<T>(string code, string nameEntity);
     }
 }

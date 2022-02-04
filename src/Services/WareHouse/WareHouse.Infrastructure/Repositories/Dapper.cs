@@ -47,8 +47,8 @@ namespace WareHouse.Infrastructure.Repositories
             using var connection = new SqlConnection(_config.GetConnectionString(Connectionstring));
             return await connection.QueryAsync<T>(sp, parms, commandType: commandType);
         }
-        
-        public async Task<IEnumerable<T>> GetListByListId<T>(IEnumerable<string> listId,string nameEntity, CommandType commandType)
+
+        public async Task<IEnumerable<T>> GetListByListId<T>(IEnumerable<string> listId, string nameEntity, CommandType commandType)
         {
             using var connection = new SqlConnection(_config.GetConnectionString(Connectionstring));
             var sp = "select * from " + nameEntity + " where " + nameof(BaseEntity.Id) + " in @ids";
@@ -61,6 +61,14 @@ namespace WareHouse.Infrastructure.Repositories
             return new SqlConnection(_config.GetConnectionString(Connectionstring));
         }
 
-
+        public async Task<IEnumerable<T>> CheckCode<T>(string code, string nameEntity)
+        {
+            using var connection = new SqlConnection(_config.GetConnectionString(Connectionstring));
+            var sp = "select Id from " + nameEntity + " where Code = @code";
+            DynamicParameters parameter = new DynamicParameters();
+            parameter.Add("@code", code);
+            Console.Write(sp.ToString());
+            return await connection.QueryAsync<T>(sp, parameter, commandType: CommandType.Text);
+        }
     }
 }

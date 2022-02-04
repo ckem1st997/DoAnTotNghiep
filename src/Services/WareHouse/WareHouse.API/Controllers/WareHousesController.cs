@@ -18,6 +18,7 @@ using WareHouse.API.Application.Queries.GetAll.WareHouses;
 using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
 using WareHouse.API.Application.Queries.Paginated.WareHouses;
 using WareHouse.API.Controllers.BaseController;
+using WareHouse.API.Application.Querie.CheckCode;
 
 namespace WareHouse.API.Controllers
 {
@@ -34,8 +35,8 @@ namespace WareHouse.API.Controllers
 
         [Route("get-list")]
         [HttpGet]
-        [ProducesResponseType((int) HttpStatusCode.OK)]
-        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> IndexAsync([FromQuery] PaginatedWareHouseCommand paginatedList)
         {
             var data = await _mediat.Send(paginatedList);
@@ -50,8 +51,8 @@ namespace WareHouse.API.Controllers
 
         [Route("get-by-id")]
         [HttpGet]
-        [ProducesResponseType((int) HttpStatusCode.OK)]
-        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetByIdAsync([FromQuery] WareHouseGetFirstCommand firstCommand)
         {
             var data = await _mediat.Send(firstCommand);
@@ -65,8 +66,8 @@ namespace WareHouse.API.Controllers
 
         [Route("get-drop-tree")]
         [HttpGet]
-        [ProducesResponseType((int) HttpStatusCode.OK)]
-        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetTreeAsync([FromQuery] GetDropDownWareHouseCommand paginatedList)
         {
             paginatedList.CacheKey = string.Format(WareHouseCacheName.WareHouseDropDown, paginatedList.Active);
@@ -83,8 +84,8 @@ namespace WareHouse.API.Controllers
 
         [Route("get-tree-view")]
         [HttpGet]
-        [ProducesResponseType((int) HttpStatusCode.OK)]
-        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetTreeViewAsync([FromQuery] GetTreeWareHouseCommand paginatedList)
         {
             paginatedList.CacheKey = string.Format(WareHouseCacheName.WareHouseTreeView, paginatedList.Active);
@@ -102,11 +103,11 @@ namespace WareHouse.API.Controllers
 
         [Route("edit")]
         [HttpPost]
-        [ProducesResponseType((int) HttpStatusCode.OK)]
-        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Edit(WareHouseCommands wareHouseCommands)
         {
-            var res = await _mediat.Send(new UpdateWareHouseCommand() {WareHouseCommands = wareHouseCommands});
+            var res = await _mediat.Send(new UpdateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
             // if (res)
             //     await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
             var result = new ResultMessageResponse()
@@ -119,11 +120,23 @@ namespace WareHouse.API.Controllers
 
         [Route("create")]
         [HttpPost]
-        [ProducesResponseType((int) HttpStatusCode.OK)]
-        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(WareHouseCommands wareHouseCommands)
         {
-            var data = await _mediat.Send(new CreateWareHouseCommand() {WareHouseCommands = wareHouseCommands});
+            var check = await _mediat.Send(new WareHouseCodeCommand()
+            {
+                Code = wareHouseCommands.Code
+            });
+            if (check)
+            {
+                return Ok(new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Mã đã tồn tại, xin vui lòng chọn mã khác !"
+                });
+            }
+            var data = await _mediat.Send(new CreateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
             // if (data)
             //     await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
             var result = new ResultMessageResponse()
@@ -136,11 +149,11 @@ namespace WareHouse.API.Controllers
 
         [Route("delete")]
         [HttpPost]
-        [ProducesResponseType((int) HttpStatusCode.OK)]
-        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
-            var res = await _mediat.Send(new DeleteWareHouseCommand() {Id = listIds});
+            var res = await _mediat.Send(new DeleteWareHouseCommand() { Id = listIds });
             // if (res)
             //     await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
             var result = new ResultMessageResponse()
