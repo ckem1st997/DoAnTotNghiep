@@ -57,8 +57,8 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseItem
                 sb.Append("  (WareHouseItem.Code like @key or WareHouseItem.Name like @key) and ");
                 sbCount.Append("  (WareHouseItem.Code like @key or WareHouseItem.Name like @key) and ");
             }
-            sb.Append("  WareHouseItem.OnDelete=0 ");
-            sbCount.Append("  WareHouseItem.OnDelete=0 ");
+            sb.Append("  WareHouseItem.OnDelete=0 and Vendor.OnDelete=0 and Unit.OnDelete=0 and WareHouseItemCategory.OnDelete=0 ");
+            sbCount.Append("  WareHouseItem.OnDelete=0 and Vendor.OnDelete=0 and Unit.OnDelete=0 and WareHouseItemCategory.OnDelete=0 ");
             //
             sbCount.Append(" ) t   ");
             sb.Append(" order by WareHouseItem.Name OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
@@ -67,6 +67,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseItem
             parameter.Add("@skip", request.Skip);
             parameter.Add("@take", request.Take);
             parameter.Add("@active", request.Active == true ? 1 : 0);
+            Console.WriteLine(sb.ToString());
             _list.Result = await _repository.GetList<WareHouseItemDTO>(sb.ToString(), parameter, CommandType.Text);
             _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text);
             return _list;
