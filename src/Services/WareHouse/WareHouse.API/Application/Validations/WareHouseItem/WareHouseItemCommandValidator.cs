@@ -16,6 +16,8 @@ namespace WareHouse.API.Application.Validations
             RuleFor(order => order.Code).NotNull().WithMessage(ValidatorString.GetMessageNotNull("Mã loại sản phẩm"));
             RuleFor(order => order.Name).NotEmpty().WithMessage(ValidatorString.GetMessageNotNull("Tên loại sản phẩm"));
             RuleFor(order => order.Name).NotNull().WithMessage(ValidatorString.GetMessageNotNull("Tên loại sản phẩm"));
+            RuleFor(order => order.UnitId).NotEmpty().WithMessage(ValidatorString.GetMessageNotNull("Đơn vị tính sản phẩm"));
+            RuleFor(order => order.UnitId).NotNull().WithMessage(ValidatorString.GetMessageNotNull("Đơn vị tính sản phẩm"));
         }
     }
 }

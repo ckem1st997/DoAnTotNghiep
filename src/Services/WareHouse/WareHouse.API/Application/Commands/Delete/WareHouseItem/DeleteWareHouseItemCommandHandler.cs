@@ -27,15 +27,8 @@ namespace WareHouse.API.Application.Commands.Delete
         {
             if (request is null)
                 return false;
-            // var mode = await _repository.GetFirstAsyncAsNoTracking(request.Id);
-            // if (mode is null)
-            //     return false;
-            // var list = await _dapper.GetListByListId<WareHouseItem>(request.Id, nameof(WareHouseItem),
-            //     CommandType.Text);
-            // var list = await _repository.ListByListId(request.Id);
-            // await _repository.BulkUpdateAsync();
-            // await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
-            return true;
+            var res = await _repository.BulkDeleteEditOnDeleteAsync(request.Id);
+            return res > 0;
         }
     }
 }

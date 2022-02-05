@@ -33,9 +33,9 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseItem
 
             sbCount.Append(" select WareHouseItem.Id ");
             sbCount.Append(" from WareHouseItem  ");
-            sbCount.Append(" left join Vendor on WareHouseItem.VendorID=Vendor.Id  ");
-            sbCount.Append(" left join Unit on WareHouseItem.UnitId=Unit.Id ");
-            sbCount.Append(" left join WareHouseItemCategory on WareHouseItem.CategoryID=WareHouseItemCategory.Id where ");
+            sbCount.Append(" left join Vendor on WareHouseItem.VendorID=Vendor.Id and Vendor.OnDelete=0  ");
+            sbCount.Append(" left join Unit on WareHouseItem.UnitId=Unit.Id and Unit.OnDelete=0 ");
+            sbCount.Append(" left join WareHouseItemCategory on WareHouseItem.CategoryID=WareHouseItemCategory.Id  and WareHouseItemCategory.OnDelete=0 where ");
 
 
 
@@ -44,9 +44,9 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseItem
             sb.Append(" select WareHouseItem.Id, WareHouseItem.Code,WareHouseItem.Name,WareHouseItem.Description, ");
             sb.Append(" WareHouseItem.Country,WareHouseItem.Inactive,  ");
             sb.Append(" WareHouseItemCategory.Name as CategoryID, Vendor.Name as VendorID, Unit.UnitName as UnitId from WareHouseItem  ");
-            sb.Append(" left join Vendor on WareHouseItem.VendorID=Vendor.Id  ");
-            sb.Append(" left join Unit on WareHouseItem.UnitId=Unit.Id ");
-            sb.Append(" left join WareHouseItemCategory on WareHouseItem.CategoryID=WareHouseItemCategory.Id where ");
+            sb.Append(" left join Vendor on WareHouseItem.VendorID=Vendor.Id and Vendor.OnDelete=0  ");
+            sb.Append(" left join Unit on WareHouseItem.UnitId=Unit.Id and Unit.OnDelete=0 ");
+            sb.Append(" left join WareHouseItemCategory on WareHouseItem.CategoryID=WareHouseItemCategory.Id  and WareHouseItemCategory.OnDelete=0 where ");
             if (request.Active != null)
             {
                 sb.Append("  WareHouseItem.Inactive =@active and ");
@@ -57,8 +57,8 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseItem
                 sb.Append("  (WareHouseItem.Code like @key or WareHouseItem.Name like @key) and ");
                 sbCount.Append("  (WareHouseItem.Code like @key or WareHouseItem.Name like @key) and ");
             }
-            sb.Append("  WareHouseItem.OnDelete=0 and Vendor.OnDelete=0 and Unit.OnDelete=0 and WareHouseItemCategory.OnDelete=0 ");
-            sbCount.Append("  WareHouseItem.OnDelete=0 and Vendor.OnDelete=0 and Unit.OnDelete=0 and WareHouseItemCategory.OnDelete=0 ");
+            sb.Append("  WareHouseItem.OnDelete=0  ");
+            sbCount.Append("  WareHouseItem.OnDelete=0  ");
             //
             sbCount.Append(" ) t   ");
             sb.Append(" order by WareHouseItem.Name OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");

@@ -26,6 +26,7 @@ using WareHouse.API.Application.Queries.GetAll.Unit;
 using WareHouse.API.Application.Queries.GetAll;
 using WareHouse.API.Application.Queries.GetAll.WareHouseItemCategory;
 using WareHouse.API.Application.Model;
+using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
 
 namespace WareHouse.API.Controllers
 {
@@ -97,6 +98,47 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create()
         {
+            var res = new WareHouseItemDTO();
+            await GetDataToDrop(res);
+            var result = new ResultMessageResponse()
+            {
+                data = res
+            };
+            return Ok(result);
+        }
+
+
+        [Route("edit")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id is null)
+            {
+                var resu = new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Chưa chọn mã !"
+                };
+                return Ok(resu);
+            }
+
+            var command = new WareHouseItemFirstCommand()
+            {
+                Id = id
+            };
+            var res = await _mediat.Send(command);
+            await GetDataToDrop(res);
+            var result = new ResultMessageResponse()
+            {
+                data = res
+            };
+            return Ok(result);
+        }
+
+        private async Task<WareHouseItemDTO> GetDataToDrop(WareHouseItemDTO res)
+        {
             var getUnit = new GetDropDownUnitCommand()
             {
                 Active = true,
@@ -121,17 +163,11 @@ namespace WareHouse.API.Controllers
             };
             var dataWareHouseItemCategory = await _mediat.Send(getWareHouseItemCategory);
 
-            var res = new WareHouseItemDTO();
             res.CategoryDTO = dataWareHouseItemCategory;
             res.VendorDTO = dataVendor;
             res.UnitDTO = dataUnit;
-            var result = new ResultMessageResponse()
-            {
-                data = res
-            };
-            return Ok(result);
+            return res;
         }
-
 
         [Route("create")]
         [HttpPost]
@@ -168,7 +204,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
-            var res = await _mediat.Send(new DeleteUnitCommand() { Id = listIds });
+            var res = await _mediat.Send(new DeleteWareHouseItemCommand() { Id = listIds });
             if (res)
                 await _cacheExtension.RemoveAllKeysBy(WareHouseItemCacheName.Prefix);
             var result = new ResultMessageResponse()
