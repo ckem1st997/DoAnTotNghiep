@@ -20,6 +20,7 @@ using WareHouse.API.ConfigureServices.CustomConfiguration;
 
 namespace WareHouse.API
 {
+    //Scaffold-DbContext "Server=tcp:127.0.0.1,5433;Initial Catalog=WarehouseManagement;Persist Security Info=True;User ID=sa;Password=Aa!0977751021;MultipleActiveResultSets = true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
     public class Startup
     {
         public Startup(IConfiguration configuration)

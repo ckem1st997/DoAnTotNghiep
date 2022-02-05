@@ -5,7 +5,8 @@ using System.Collections.Generic;
 
 namespace WareHouse.Domain.Entity
 {
-    public partial class WareHouseItem:BaseEntity
+    /// trigger
+     public partial class WareHouseItem:BaseEntity
     {
         public WareHouseItem()
         {
@@ -18,6 +19,7 @@ namespace WareHouse.Domain.Entity
             WareHouseItemUnits = new HashSet<WareHouseItemUnit>();
             WareHouseLimits = new HashSet<WareHouseLimit>();
         }
+
         public string Code { get; set; }
         public string Name { get; set; }
         public string CategoryId { get; set; }

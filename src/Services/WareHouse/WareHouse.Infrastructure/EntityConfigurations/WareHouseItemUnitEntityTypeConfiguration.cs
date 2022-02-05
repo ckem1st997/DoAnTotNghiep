@@ -31,9 +31,9 @@ namespace WareHouse.Infrastructure.EntityConfigurations
                 .IsUnicode(false)
                 .HasDefaultValueSql("('')");
 
-            entity.Property(e => e.UnitName)
-                .HasMaxLength(255)
-                .IsUnicode(true);
+            // entity.Property(e => e.UnitName)
+            //     .HasMaxLength(255)
+            //     .IsUnicode(true);
 
             entity.HasOne(d => d.Item)
                 .WithMany(p => p.WareHouseItemUnits)
