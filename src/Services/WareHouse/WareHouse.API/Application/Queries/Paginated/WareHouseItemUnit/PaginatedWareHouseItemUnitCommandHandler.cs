@@ -40,20 +40,20 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseItemUnit
             if (request.KeySearch == null)
                 request.KeySearch = "";
             StringBuilder sbCount = new StringBuilder();
-            sbCount.Append("SELECT COUNT(*) FROM ( select * from WareHouseItemUnit where ");
+            //  sbCount.Append("SELECT COUNT(*) FROM ( select * from WareHouseItemUnit where ");
             StringBuilder sb = new StringBuilder();
             sb.Append("select * from WareHouseItemUnit  inner join Unit on WareHouseItemUnit.UnitId=Unit.Id where ");
             if (string.IsNullOrEmpty(request.KeySearch))
                 return _list;
             sb.Append("  ItemId=@key  and ");
-            sbCount.Append("  ItemId=@key and ");
+            // sbCount.Append("  ItemId=@key and ");
             sb.Append("  WareHouseItemUnit.OnDelete=0 ");
-            sbCount.Append("  WareHouseItemUnit.OnDelete=0 ");
-            sbCount.Append(" ) t   ");
+            //   sbCount.Append("  WareHouseItemUnit.OnDelete=0 ");
+            //   sbCount.Append(" ) t   ");
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@key", request.KeySearch);
             _list.Result = await _repository.GetList<WareHouseItemUnitDTO>(sb.ToString(), parameter, CommandType.Text);
-            _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text);
+            //  _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text);
             return _list;
         }
     }

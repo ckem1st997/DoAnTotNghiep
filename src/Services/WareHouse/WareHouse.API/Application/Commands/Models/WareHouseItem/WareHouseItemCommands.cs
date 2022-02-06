@@ -1,4 +1,6 @@
-﻿namespace WareHouse.API.Application.Commands.Models
+﻿using System.Collections.Generic;
+
+namespace WareHouse.API.Application.Commands.Models
 {
     public partial class WareHouseItemCommands: BaseCommands
     {
@@ -10,5 +12,7 @@
         public string Country { get; set; }
         public string UnitId { get; set; }
         public bool? Inactive { get; set; }
+        public IEnumerable<WareHouseItemUnitCommands> wareHouseItemUnits { get; set; }
+
     }
 }

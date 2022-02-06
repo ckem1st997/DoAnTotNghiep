@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using EFCore.BulkExtensions;
 using WareHouse.Domain.Entity;
 using WareHouse.Domain.IRepositories;
 using WareHouse.Domain.SeeWork;
@@ -118,7 +120,14 @@ namespace WareHouse.Infrastructure.Repositories
         {
             if (listIds is null)
                 throw new NotImplementedException(nameof(listIds));
-            return await _dbSet.Where(x => listIds.Contains(x.Id)).UpdateFromQueryAsync(x => new T { OnDelete = true });
+            return await _dbSet.Where(x => listIds.Contains(x.Id)).UpdateFromQueryAsync(x => new T {OnDelete = true});
+        }
+
+        public async Task BulkInsertOrUpdateAsync(IList<T> listEntity)
+        {
+            if (listEntity is null)
+                throw new NotImplementedException(nameof(listEntity));
+            await _context.BulkInsertOrUpdateAsync(listEntity);
         }
 
         public IEnumerable<T> GetList(Func<T, bool> filter = null)
@@ -127,7 +136,6 @@ namespace WareHouse.Infrastructure.Repositories
             if (filter != null)
                 query = query.Where(filter);
             return query;
-
         }
     }
 }

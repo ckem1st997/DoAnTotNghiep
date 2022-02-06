@@ -27,6 +27,7 @@ using WareHouse.API.Application.Queries.GetAll;
 using WareHouse.API.Application.Queries.GetAll.WareHouseItemCategory;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
+using WareHouse.API.Application.Queries.Paginated.WareHouseItemUnit;
 
 namespace WareHouse.API.Controllers
 {
@@ -83,7 +84,18 @@ namespace WareHouse.API.Controllers
         {
             var data = await _mediat.Send(new UpdateWareHouseItemCommand() { WareHouseItemCommands = itemCommands });
             if (data)
+            {
                 await _cacheExtension.RemoveAllKeysBy(WareHouseItemCacheName.Prefix);
+                //CreateOrUpdateWareHouseItemUnitCommand
+                if (itemCommands.wareHouseItemUnits !=null && itemCommands.wareHouseItemUnits.Count()>0)
+                {
+                    var createUnitItem = new CreateOrUpdateWareHouseItemUnitCommand()
+                    {
+                        wareHouseItemUnitCommands = itemCommands.wareHouseItemUnits
+                    };
+                    await _mediat.Send(createUnitItem);
+                }
+            }
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -130,6 +142,12 @@ namespace WareHouse.API.Controllers
             };
             var res = await _mediat.Send(command);
             await GetDataToDrop(res);
+            var search = new PaginatedWareHouseItemUnitCommand()
+            {
+                KeySearch = id
+            };
+            var data = await _mediat.Send(search);
+            res.WareHouseItemUnits = (ICollection<WareHouseItemUnitDTO>)data.Result;
             var result = new ResultMessageResponse()
             {
                 data = res

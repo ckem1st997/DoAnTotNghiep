@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -26,5 +27,7 @@ namespace WareHouse.Domain.IRepositories
         Task BulkUpdateAsync(IList<T> listEntity);
         void BulkDelete(IList<T> listEntity);
         Task<int> BulkDeleteEditOnDeleteAsync(IEnumerable<string> listEntity);
+        
+        Task BulkInsertOrUpdateAsync(IList<T> listEntity);
     }
 }
