@@ -42,7 +42,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseItemUnit
             StringBuilder sbCount = new StringBuilder();
             //  sbCount.Append("SELECT COUNT(*) FROM ( select * from WareHouseItemUnit where ");
             StringBuilder sb = new StringBuilder();
-            sb.Append("select * from WareHouseItemUnit  inner join Unit on WareHouseItemUnit.UnitId=Unit.Id where ");
+            sb.Append("select WareHouseItemUnit.Id,WareHouseItemUnit.ItemId,WareHouseItemUnit.UnitId,WareHouseItemUnit.ConvertRate,Unit.UnitName,WareHouseItemUnit.IsPrimary from WareHouseItemUnit  inner join Unit on WareHouseItemUnit.UnitId=Unit.Id where ");
             if (string.IsNullOrEmpty(request.KeySearch))
                 return _list;
             sb.Append("  ItemId=@key  and ");
