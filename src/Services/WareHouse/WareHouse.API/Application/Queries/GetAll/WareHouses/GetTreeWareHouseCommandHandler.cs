@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Dapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WareHouse.API.Application.Cache;
@@ -40,7 +42,7 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
         {
             if (request == null)
                 return null;
-            return await GetWareHouseTree(2,request.Active);
+            return await GetWareHouseTree(2, request.Active);
         }
 
         public virtual async Task<IList<WareHousesTreeModel>> GetWareHouseTree(int? expandLevel,
@@ -117,25 +119,25 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
 
         private async Task<IList<WareHouseDTO>> GetOrganizationalUnits(bool showHidden = false)
         {
-            var models = await _rep.ListAllAsync();
+            string sql = "select Id,ParentId,Code,Name,Path from WareHouse where Inactive =@active and OnDelete=0 ";
+            DynamicParameters parameter = new DynamicParameters();
+            parameter.Add("@active", showHidden ? 1 : 0);
+            var models = await _repository.GetAllAync<WareHouseDTO>(sql, parameter, CommandType.Text);
             var res = new List<WareHouseDTO>();
             var wareHouses = models.ToList();
             if (wareHouses?.Count() > 0)
             {
                 foreach (var x in wareHouses)
                 {
-                    if (x.Inactive.Equals(showHidden))
+                    var m = new WareHouseDTO
                     {
-                        var m = new WareHouseDTO
-                        {
-                            Id = x.Id,
-                            Code = x.Code,
-                            Name = x.Name,
-                            ParentId = x.ParentId,
-                            Path = x.Path
-                        };
-                        res.Add(m);
-                    }
+                        Id = x.Id,
+                        Code = x.Code,
+                        Name = x.Name,
+                        ParentId = x.ParentId,
+                        Path = x.Path
+                    };
+                    res.Add(m);
                 }
             }
 

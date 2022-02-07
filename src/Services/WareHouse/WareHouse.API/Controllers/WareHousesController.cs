@@ -102,6 +102,12 @@ namespace WareHouse.API.Controllers
         }
 
 
+
+        #endregion
+
+        #region CUD
+
+        
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -117,10 +123,6 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
-
-        #endregion
-
-        #region CUD
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

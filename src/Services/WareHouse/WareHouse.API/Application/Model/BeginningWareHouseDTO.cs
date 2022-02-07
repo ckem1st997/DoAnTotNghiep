@@ -11,6 +11,8 @@ namespace WareHouse.API.Application.Model
         public string ItemId { get; set; }
         public string UnitId { get; set; }
         public string UnitName { get; set; }
+        public string WareHouseName{get;set;}
+        public string ItemName{get;set;}
         public decimal Quantity { get; set; }
         public DateTime CreatedDate { get; set; }
         public string CreatedBy { get; set; }
