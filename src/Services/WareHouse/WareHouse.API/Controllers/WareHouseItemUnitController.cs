@@ -69,6 +69,38 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+
+        [Route("check-item-unit")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CheckAsync(string idItem, string unitId)
+        {
+            if (string.IsNullOrEmpty(idItem) || string.IsNullOrEmpty(unitId))
+            {
+                var res = new ResultMessageResponse()
+                {
+                    data = null,
+                    success = false,
+                    totalCount = 0
+                };
+                return Ok(res);
+            }
+
+            var search = new WareHouseItemUnitCheckExitsCommand()
+            {
+                ItemId = idItem,
+                UnitId = unitId
+            };
+            var data = await _mediat.Send(search);
+            var result = new ResultMessageResponse()
+            {
+                success = data,
+            };
+            return Ok(result);
+        }
+
+
         #endregion
 
         #region CD
@@ -80,18 +112,6 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(WareHouseItemUnitCommands itemCommands)
         {
-            // var check = await _mediat.Send(new WareHouseItemCodeCommand()
-            // {
-            //     Code = itemCommands.Code.Trim()
-            // });
-            // if (check)
-            // {
-            //     return Ok(new ResultMessageResponse()
-            //     {
-            //         success = false,
-            //         message = "Mã đã tồn tại, xin vui lòng chọn mã khác !"
-            //     });
-            // }
             var data = await _mediat.Send(new CreateWareHouseItemUnitCommand() { WareHouseItemUnitCommands = itemCommands });
             var result = new ResultMessageResponse()
             {
