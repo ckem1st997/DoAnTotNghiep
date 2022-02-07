@@ -22,6 +22,8 @@ using WareHouse.API.Application.Queries.Paginated.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.Paginated.WareHouses;
 using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Querie.CheckCode;
+using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
+using WareHouse.API.Application.Queries.GetFisrt;
 
 namespace WareHouse.API.Controllers
 {
@@ -80,6 +82,24 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Edit(WareHouseItemCategoryCommands wareHouseCommands)
         {
+            if (wareHouseCommands is null)
+                return Ok(new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Không tồn tại !"
+                });
+            var commandCheck = new WareHouseItemCategoryFirstCommand()
+            {
+                Id = wareHouseCommands.Id
+            };
+            var resc = await _mediat.Send(commandCheck);
+            if (resc is null)
+                return Ok(new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Không tồn tại !"
+                });
+
             var res = await _mediat.Send(new UpdateWareHouseItemCategoryCommand() { WareHouseItemCategoryCommands = wareHouseCommands });
             if (res)
                 await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);

@@ -94,7 +94,7 @@ namespace WareHouse.API.Controllers
             {
                 Active = true,
                 BypassCache = false,
-                CacheKey =  string.Format(WareHouseCacheName.WareHouseDropDown, true)
+                CacheKey = string.Format(WareHouseCacheName.WareHouseDropDown, true)
             };
             var dataWareHouse = await _mediat.Send(getWareHouse);
 
@@ -120,9 +120,28 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Edit(UpdateBeginningWareHouseCommand command)
+        public async Task<IActionResult> Edit(BeginningWareHouseCommands command)
         {
-            var data = await _mediat.Send(new UpdateBeginningWareHouseCommand() { BeginningWareHouseCommands = command.BeginningWareHouseCommands });
+            if (command is null)
+                return Ok(new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Không tồn tại tồn kho !"
+                });
+            var commandCheck = new BeginningWareHouseGetFirstCommand()
+            {
+                Id = command.Id
+            };
+            var res = await _mediat.Send(commandCheck);
+            if (res is null)
+                return Ok(new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Không tồn tại tồn kho !"
+                });
+            command.CreatedDate = res.CreatedDate;
+            command.ModifiedDate = DateTime.Now;
+            var data = await _mediat.Send(new UpdateBeginningWareHouseCommand() { BeginningWareHouseCommands = command });
             var result = new ResultMessageResponse()
             {
                 success = data

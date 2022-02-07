@@ -82,12 +82,30 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Edit(WareHouseItemCommands itemCommands)
         {
+            if (itemCommands is null)
+                return Ok(new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Không tồn tại !"
+                });
+            var commandCheck = new WareHouseItemFirstCommand()
+            {
+                Id = itemCommands.Id
+            };
+            var res = await _mediat.Send(commandCheck);
+            if (res is null)
+                return Ok(new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Không tồn tại !"
+                });
+
             var data = await _mediat.Send(new UpdateWareHouseItemCommand() { WareHouseItemCommands = itemCommands });
             if (data)
             {
                 await _cacheExtension.RemoveAllKeysBy(WareHouseItemCacheName.Prefix);
                 //CreateOrUpdateWareHouseItemUnitCommand
-                if (itemCommands.wareHouseItemUnits !=null && itemCommands.wareHouseItemUnits.Count()>0)
+                if (itemCommands.wareHouseItemUnits != null && itemCommands.wareHouseItemUnits.Count() > 0)
                 {
                     var createUnitItem = new CreateOrUpdateWareHouseItemUnitCommand()
                     {

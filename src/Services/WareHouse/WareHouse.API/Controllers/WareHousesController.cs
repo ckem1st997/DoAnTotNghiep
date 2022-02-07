@@ -107,13 +107,30 @@ namespace WareHouse.API.Controllers
 
         #region CUD
 
-        
+
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Edit(WareHouseCommands wareHouseCommands)
         {
+            if (wareHouseCommands is null)
+                return Ok(new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Không tồn tại !"
+                });
+            var commandCheck = new WareHouseGetFirstCommand()
+            {
+                Id = wareHouseCommands.Id
+            };
+            var resc = await _mediat.Send(commandCheck);
+            if (resc is null)
+                return Ok(new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Không tồn tại !"
+                });
             var res = await _mediat.Send(new UpdateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
             if (res)
                 await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
