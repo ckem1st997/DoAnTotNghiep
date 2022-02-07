@@ -15,6 +15,12 @@ using WareHouse.API.Application.Queries.Paginated.Unit;
 using WareHouse.API.Controllers.BaseController;
 using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Queries.Paginated;
+using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
+using WareHouse.API.Application.Model;
+using WareHouse.API.Application.Queries.GetAll;
+using WareHouse.API.Application.Queries.GetAll.WareHouseItemCategory;
+using WareHouse.API.Application.Queries.GetAll.WareHouses;
+using WareHouse.API.Application.Queries.GetAll.WareHouseItem;
 
 namespace WareHouse.API.Controllers
 {
@@ -44,6 +50,72 @@ namespace WareHouse.API.Controllers
         #endregion
 
         #region CUD
+
+        [Route("edit")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id is null)
+            {
+                var resu = new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Chưa chọn tồn kho !"
+                };
+                return Ok(resu);
+            }
+
+            var command = new BeginningWareHouseGetFirstCommand()
+            {
+                Id = id
+            };
+            var res = await _mediat.Send(command);
+            await GetDataToDrop(res);
+            var result = new ResultMessageResponse()
+            {
+                data = res
+            };
+            return Ok(result);
+        }
+
+        private async Task<BeginningWareHouseDTO> GetDataToDrop(BeginningWareHouseDTO res)
+        {
+            var getUnit = new GetDropDownUnitCommand()
+            {
+                Active = true,
+                BypassCache = false,
+                CacheKey = string.Format(UnitCacheName.UnitCacheNameDropDown, true)
+            };
+            var dataUnit = await _mediat.Send(getUnit);
+
+            var getWareHouse = new GetDropDownWareHouseCommand()
+            {
+                Active = true,
+                BypassCache = false,
+                CacheKey =  string.Format(WareHouseCacheName.WareHouseDropDown, true)
+            };
+            var dataWareHouse = await _mediat.Send(getWareHouse);
+
+            var getWareHouseItem = new GetDopDownWareHouseItemCommand()
+            {
+                Active = true,
+                BypassCache = false,
+                CacheKey = string.Format(WareHouseItemCacheName.WareHouseItemCacheNameDropDown, true)
+            };
+            var dataWareHouseItem = await _mediat.Send(getWareHouseItem);
+
+            res.UnitDTO = dataUnit;
+            res.WareHouseDTO = dataWareHouse;
+            res.WareHouseItemDTO = dataWareHouseItem;
+            return res;
+        }
+
+
+
+
+
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

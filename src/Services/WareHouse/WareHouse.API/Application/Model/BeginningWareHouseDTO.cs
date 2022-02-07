@@ -19,6 +19,12 @@ namespace WareHouse.API.Application.Model
         public DateTime ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
 
+
+       public virtual IEnumerable<WareHouseItemDTO> WareHouseItemDTO { get; set; }
+        public virtual IEnumerable<UnitDTO> UnitDTO { get; set; }
+        public virtual IEnumerable<WareHouseDTO> WareHouseDTO { get; set; }
+
+
         public virtual WareHouseItemDTO Item { get; set; }
         public virtual UnitDTO Unit { get; set; }
         public virtual WareHouseDTO WareHouse { get; set; }

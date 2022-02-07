@@ -38,15 +38,15 @@ namespace WareHouse.API.Application.Queries.Paginated
             StringBuilder sbCount = new StringBuilder();
             sbCount.Append("SELECT COUNT(*) FROM ( ");
             sbCount.Append(" select BeginningWareHouse.Id from BeginningWareHouse ");
-            sbCount.Append(" join WareHouse on BeginningWareHouse.WareHouseId=WareHouse.Id ");
-            sbCount.Append(" join WareHouseItem on BeginningWareHouse.ItemId=WareHouseItem.Id ");
-            sbCount.Append(" join Unit on BeginningWareHouse.UnitId=Unit.Id ");
+            sbCount.Append(" join WareHouse on BeginningWareHouse.WareHouseId=WareHouse.Id and WareHouse.OnDelete=0 ");
+            sbCount.Append(" join WareHouseItem on BeginningWareHouse.ItemId=WareHouseItem.Id and WareHouseItem.OnDelete=0 ");
+            sbCount.Append(" join Unit on BeginningWareHouse.UnitId=Unit.Id and Unit.OnDelete=0 ");
             sbCount.Append(" where ");
             StringBuilder sb = new StringBuilder();
             sb.Append("select BeginningWareHouse.Id,WareHouse.Name as WareHouseName,Unit.UnitName,WareHouseItem.Name as ItemName,BeginningWareHouse.Quantity from BeginningWareHouse ");
-            sb.Append(" join WareHouse on BeginningWareHouse.WareHouseId=WareHouse.Id ");
-            sb.Append(" join WareHouseItem on BeginningWareHouse.ItemId=WareHouseItem.Id ");
-            sb.Append(" join Unit on BeginningWareHouse.UnitId=Unit.Id ");
+            sb.Append(" join WareHouse on BeginningWareHouse.WareHouseId=WareHouse.Id and WareHouse.OnDelete=0 ");
+            sb.Append(" join WareHouseItem on BeginningWareHouse.ItemId=WareHouseItem.Id and WareHouseItem.OnDelete=0 ");
+            sb.Append(" join Unit on BeginningWareHouse.UnitId=Unit.Id and Unit.OnDelete=0 ");
             sb.Append(" where ");
             if (!string.IsNullOrEmpty(request.KeySearch))
             {

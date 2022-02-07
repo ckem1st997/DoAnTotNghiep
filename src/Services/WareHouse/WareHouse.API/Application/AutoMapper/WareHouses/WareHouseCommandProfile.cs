@@ -83,6 +83,20 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
             .ForMember(x => x.OnDelete, opt => opt.Ignore());
 
             CreateMap<Domain.Entity.WareHouseItemUnit, WareHouseItemUnitDTO>();
+
+
+            ///
+
+            CreateMap<Domain.Entity.BeginningWareHouse, BeginningWareHouseCommands>();
+
+            CreateMap<BeginningWareHouseCommands, Domain.Entity.BeginningWareHouse>()
+            .ForMember(x => x.Unit, opt => opt.Ignore())
+            .ForMember(x => x.Item, opt => opt.Ignore())
+             .ForMember(x => x.WareHouse, opt => opt.Ignore())
+            .ForMember(x => x.DomainEvents, opt => opt.Ignore())
+            .ForMember(x => x.OnDelete, opt => opt.Ignore());
+
+            CreateMap<Domain.Entity.BeginningWareHouse, BeginningWareHouseDTO>();
         }
     }
 }
