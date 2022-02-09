@@ -51,6 +51,25 @@ namespace WareHouse.API.Controllers
 
         #region CUD
 
+        
+        [Route("create")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Create(string idWareHouse)
+        {
+            var res = new BeginningWareHouseDTO()
+            {
+                WareHouseId = idWareHouse
+            };
+            await GetDataToDrop(res);
+            var result = new ResultMessageResponse()
+            {
+                data = res
+            };
+            return Ok(result);
+        }
+        
         [Route("edit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]

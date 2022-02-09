@@ -19,8 +19,7 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
                 .ForMember(x => x.DomainEvents, opt => opt.Ignore())
                 .ForMember(x => x.Audits, opt => opt.Ignore())
                 .ForMember(x => x.Inwards, opt => opt.Ignore())
-                     .ForMember(x => x.OnDelete, opt => opt.Ignore())
-
+                .ForMember(x => x.OnDelete, opt => opt.Ignore())
                 .ForMember(x => x.WareHouseLimits, opt => opt.Ignore());
             //   CreateMap<Domain.Entity.WareHouse, WareHouseCommands>();
             //
@@ -32,42 +31,40 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
                 .ForMember(x => x.Audits, opt => opt.Ignore())
                 .ForMember(x => x.Inwards, opt => opt.Ignore())
                 .ForMember(x => x.OnDelete, opt => opt.Ignore())
-
                 .ForMember(x => x.WareHouseLimits, opt => opt.Ignore());
             CreateMap<Domain.Entity.WareHouse, WareHouseDTO>();
 
             CreateMap<VendorCommands, Domain.Entity.Vendor>()
                 .ForMember(x => x.WareHouseItems, opt => opt.Ignore())
                 .ForMember(x => x.Inwards, opt => opt.Ignore())
-                     .ForMember(x => x.OnDelete, opt => opt.Ignore())
-
+                .ForMember(x => x.OnDelete, opt => opt.Ignore())
                 .ForMember(x => x.DomainEvents, opt => opt.Ignore());
             CreateMap<UnitCommands, Domain.Entity.Unit>()
-     .ForMember(x => x.WareHouseItems, opt => opt.Ignore())
-     .ForMember(x => x.WareHouseLimits, opt => opt.Ignore())
-     .ForMember(x => x.BeginningWareHouses, opt => opt.Ignore())
-     .ForMember(x => x.InwardDetails, opt => opt.Ignore())
-     .ForMember(x => x.OutwardDetails, opt => opt.Ignore())
-     .ForMember(x => x.WareHouseItemUnits, opt => opt.Ignore())
-     .ForMember(x => x.WareHouseLimits, opt => opt.Ignore())
-     .ForMember(x => x.OnDelete, opt => opt.Ignore())
-     .ForMember(x => x.DomainEvents, opt => opt.Ignore());
+                .ForMember(x => x.WareHouseItems, opt => opt.Ignore())
+                .ForMember(x => x.WareHouseLimits, opt => opt.Ignore())
+                .ForMember(x => x.BeginningWareHouses, opt => opt.Ignore())
+                .ForMember(x => x.InwardDetails, opt => opt.Ignore())
+                .ForMember(x => x.OutwardDetails, opt => opt.Ignore())
+                .ForMember(x => x.WareHouseItemUnits, opt => opt.Ignore())
+                .ForMember(x => x.WareHouseLimits, opt => opt.Ignore())
+                .ForMember(x => x.OnDelete, opt => opt.Ignore())
+                .ForMember(x => x.DomainEvents, opt => opt.Ignore());
             //   CreateMap<Domain.Entity.WareHouse, WareHouseCommands>();
 
             CreateMap<WareHouseItemCategoryCommands, Domain.Entity.WareHouseItemCategory>()
-               .ForMember(x => x.DomainEvents, opt => opt.Ignore())
-               .ForMember(x => x.OnDelete, opt => opt.Ignore())
+                .ForMember(x => x.DomainEvents, opt => opt.Ignore())
+                .ForMember(x => x.OnDelete, opt => opt.Ignore())
                 .ForMember(x => x.WareHouseItems, opt => opt.Ignore())
-                 .ForMember(x => x.InverseParent, opt => opt.Ignore());
+                .ForMember(x => x.InverseParent, opt => opt.Ignore());
             CreateMap<Domain.Entity.WareHouseItemCategory, WareHouseItemCategoryCommands>();
 
             //
             CreateMap<Domain.Entity.WareHouseItem, WareHouseItemCommands>()
-            .ForMember(x => x.wareHouseItemUnits, opt => opt.Ignore());
+                .ForMember(x => x.wareHouseItemUnits, opt => opt.Ignore());
 
             CreateMap<WareHouseItemCommands, Domain.Entity.WareHouseItem>()
-            .ForMember(x => x.DomainEvents, opt => opt.Ignore())
-            .ForMember(x => x.OnDelete, opt => opt.Ignore());
+                .ForMember(x => x.DomainEvents, opt => opt.Ignore())
+                .ForMember(x => x.OnDelete, opt => opt.Ignore());
 
             CreateMap<Domain.Entity.WareHouseItem, WareHouseItemDTO>();
 
@@ -77,10 +74,10 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
             CreateMap<Domain.Entity.WareHouseItemUnit, WareHouseItemUnitCommands>();
 
             CreateMap<WareHouseItemUnitCommands, Domain.Entity.WareHouseItemUnit>()
-            .ForMember(x => x.Unit, opt => opt.Ignore())
-            .ForMember(x => x.Item, opt => opt.Ignore())
-            .ForMember(x => x.DomainEvents, opt => opt.Ignore())
-            .ForMember(x => x.OnDelete, opt => opt.Ignore());
+                .ForMember(x => x.Unit, opt => opt.Ignore())
+                .ForMember(x => x.Item, opt => opt.Ignore())
+                .ForMember(x => x.DomainEvents, opt => opt.Ignore())
+                .ForMember(x => x.OnDelete, opt => opt.Ignore());
 
             CreateMap<Domain.Entity.WareHouseItemUnit, WareHouseItemUnitDTO>();
 
@@ -90,25 +87,24 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
             CreateMap<Domain.Entity.BeginningWareHouse, BeginningWareHouseCommands>();
 
             CreateMap<BeginningWareHouseCommands, Domain.Entity.BeginningWareHouse>()
-            .ForMember(x => x.Unit, opt => opt.Ignore())
-            .ForMember(x => x.Item, opt => opt.Ignore())
-             .ForMember(x => x.WareHouse, opt => opt.Ignore())
-            .ForMember(x => x.DomainEvents, opt => opt.Ignore())
-            .ForMember(x => x.OnDelete, opt => opt.Ignore());
+                .ForMember(x => x.Unit, opt => opt.Ignore())
+                .ForMember(x => x.Item, opt => opt.Ignore())
+                .ForMember(x => x.WareHouse, opt => opt.Ignore())
+                .ForMember(x => x.DomainEvents, opt => opt.Ignore())
+                .ForMember(x => x.OnDelete, opt => opt.Ignore());
 
             CreateMap<Domain.Entity.BeginningWareHouse, BeginningWareHouseDTO>();
 
 
-               //
+            //
             CreateMap<Domain.Entity.WareHouseItemCategory, WareHouseItemCategoryCommands>();
 
             CreateMap<WareHouseItemCategoryCommands, Domain.Entity.WareHouseItemCategory>()
-             .ForMember(x => x.WareHouseItems, opt => opt.Ignore())
-            .ForMember(x => x.DomainEvents, opt => opt.Ignore())
-            .ForMember(x => x.OnDelete, opt => opt.Ignore());
+                .ForMember(x => x.WareHouseItems, opt => opt.Ignore())
+                .ForMember(x => x.DomainEvents, opt => opt.Ignore())
+                .ForMember(x => x.OnDelete, opt => opt.Ignore());
 
             CreateMap<Domain.Entity.WareHouseItemCategory, WareHouseItemCategoryDTO>();
-
         }
     }
 }
