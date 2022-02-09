@@ -17,6 +17,7 @@ using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Queries.Paginated;
 using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
 using WareHouse.API.Application.Model;
+using WareHouse.API.Application.Querie.CheckCode;
 using WareHouse.API.Application.Queries.GetAll;
 using WareHouse.API.Application.Queries.GetAll.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.GetAll.WareHouses;
@@ -27,11 +28,14 @@ namespace WareHouse.API.Controllers
     public class BeginningWareHouseController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
+
         public BeginningWareHouseController(IMediator mediat, ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
         }
+
         #region R
+
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -47,11 +51,11 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+
         #endregion
 
         #region CUD
 
-        
         [Route("create")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -60,7 +64,8 @@ namespace WareHouse.API.Controllers
         {
             var res = new BeginningWareHouseDTO()
             {
-                WareHouseId = idWareHouse
+                WareHouseId = idWareHouse,
+                Id = Guid.NewGuid().ToString()
             };
             await GetDataToDrop(res);
             var result = new ResultMessageResponse()
@@ -69,7 +74,7 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
-        
+
         [Route("edit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -132,9 +137,6 @@ namespace WareHouse.API.Controllers
         }
 
 
-
-
-
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -160,7 +162,8 @@ namespace WareHouse.API.Controllers
                 });
             command.CreatedDate = res.CreatedDate;
             command.ModifiedDate = DateTime.Now;
-            var data = await _mediat.Send(new UpdateBeginningWareHouseCommand() { BeginningWareHouseCommands = command });
+            var data = await _mediat.Send(
+                new UpdateBeginningWareHouseCommand() { BeginningWareHouseCommands = command });
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -173,9 +176,22 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Create(CreateBeginningWareHouseCommand command)
+        public async Task<IActionResult> Create(BeginningWareHouseCommands command)
         {
-            var data = await _mediat.Send(new CreateBeginningWareHouseCommand() { BeginningWareHouseCommands = command.BeginningWareHouseCommands });
+            var check = await _mediat.Send(new BeginningCheckItemAndWareHouseCommand()
+            {
+                ItemId = command.ItemId,
+                WareHouseId = command.WareHouseId
+            });
+
+            if (check)
+                return Ok(new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Vật tư đã có tồn trong kho !"
+                });
+            var data = await _mediat.Send(
+                new CreateBeginningWareHouseCommand() { BeginningWareHouseCommands = command });
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -197,9 +213,7 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+
         #endregion
-
-
-
     }
 }

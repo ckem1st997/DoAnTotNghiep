@@ -24,6 +24,7 @@ namespace WareHouse.API.Application.Commands.Update
             if (request is null)
                 return false;
             var result = _mapper.Map<Domain.Entity.BeginningWareHouse>(request.BeginningWareHouseCommands);
+            result.ModifiedDate=DateTime.Now;
             _repository.Update(result);
             return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
