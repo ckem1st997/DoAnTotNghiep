@@ -22,6 +22,8 @@ using WareHouse.API.Application.Queries.GetAll;
 using WareHouse.API.Application.Queries.GetAll.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.GetAll.WareHouses;
 using WareHouse.API.Application.Queries.GetAll.WareHouseItem;
+using WareHouse.API.Application.Queries.GetFisrt;
+using WareHouse.Domain.Entity;
 
 namespace WareHouse.API.Controllers
 {
@@ -75,34 +77,36 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-        // [Route("edit")]
-        // [HttpGet]
-        // [ProducesResponseType((int)HttpStatusCode.OK)]
-        // [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        // public async Task<IActionResult> Edit(string id)
-        // {
-        //     if (id is null)
-        //     {
-        //         var resu = new ResultMessageResponse()
-        //         {
-        //             success = false,
-        //             message = "Chưa chọn tồn kho !"
-        //         };
-        //         return Ok(resu);
-        //     }
-        //
-        //     var command = new BeginningWareHouseGetFirstCommand()
-        //     {
-        //         Id = id
-        //     };
-        //     var res = await _mediat.Send(command);
-        //     await GetDataToDrop(res);
-        //     var result = new ResultMessageResponse()
-        //     {
-        //         data = res
-        //     };
-        //     return Ok(result);
-        // }
+        
+        
+        [Route("edit")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id is null)
+            {
+                var resu = new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Chưa chọn tồn kho !"
+                };
+                return Ok(resu);
+            }
+
+            var command = new WareHouseLimitGetFirstCommand()
+            {
+                Id = id
+            };
+            var res = await _mediat.Send(command);
+            await GetDataToDrop(res);
+            var result = new ResultMessageResponse()
+            {
+                data = res
+            };
+            return Ok(result);
+        }
 
         private async Task<WareHouseLimitDTO> GetDataToDrop(WareHouseLimitDTO res)
         {
@@ -141,15 +145,15 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Edit(BeginningWareHouseCommands command)
+        public async Task<IActionResult> Edit(WareHouseLimitCommands command)
         {
             if (command is null)
                 return Ok(new ResultMessageResponse()
                 {
                     success = false,
-                    message = "Không tồn tại tồn kho !"
+                    message = "Không tồn tại định mức kho !"
                 });
-            var commandCheck = new BeginningWareHouseGetFirstCommand()
+            var commandCheck = new WareHouseLimitGetFirstCommand()
             {
                 Id = command.Id
             };
@@ -158,12 +162,12 @@ namespace WareHouse.API.Controllers
                 return Ok(new ResultMessageResponse()
                 {
                     success = false,
-                    message = "Không tồn tại tồn kho !"
+                    message = "Không tồn tại định mức kho !"
                 });
             command.CreatedDate = res.CreatedDate;
             command.ModifiedDate = DateTime.Now;
             var data = await _mediat.Send(
-                new UpdateBeginningWareHouseCommand() { BeginningWareHouseCommands = command });
+                new UpdateWareHouseLimitCommand() { WareHouseLimitCommands = command });
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -176,9 +180,9 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Create(BeginningWareHouseCommands command)
+        public async Task<IActionResult> Create(WareHouseLimitCommands command)
         {
-            var check = await _mediat.Send(new BeginningCheckItemAndWareHouseCommand()
+            var check = await _mediat.Send(new CheckItemAndWareHouseLimitCommand()
             {
                 ItemId = command.ItemId,
                 WareHouseId = command.WareHouseId
@@ -188,10 +192,10 @@ namespace WareHouse.API.Controllers
                 return Ok(new ResultMessageResponse()
                 {
                     success = false,
-                    message = "Vật tư đã có tồn trong kho !"
+                    message = "Vật tư đã có định mức trong kho !"
                 });
             var data = await _mediat.Send(
-                new CreateBeginningWareHouseCommand() { BeginningWareHouseCommands = command });
+                new CreateWareHouseLimitCommand() { WareHouseLimitCommands = command });
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -206,7 +210,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
-            var data = await _mediat.Send(new DeleteBeginningWareHouseCommand() { Id = listIds });
+            var data = await _mediat.Send(new DeleteWareHouseLimitCommand() { Id = listIds });
             var result = new ResultMessageResponse()
             {
                 success = data

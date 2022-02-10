@@ -22,7 +22,6 @@ using WareHouse.API.Application.Queries.GetAll;
 using WareHouse.API.Application.Queries.GetAll.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.GetAll.WareHouses;
 using WareHouse.API.Application.Queries.GetAll.WareHouseItem;
-using WareHouse.Domain.Entity;
 
 namespace WareHouse.API.Controllers
 {
@@ -142,7 +141,7 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Edit(WareHouseLimitCommands command)
+        public async Task<IActionResult> Edit(BeginningWareHouseCommands command)
         {
             if (command is null)
                 return Ok(new ResultMessageResponse()
@@ -164,7 +163,7 @@ namespace WareHouse.API.Controllers
             command.CreatedDate = res.CreatedDate;
             command.ModifiedDate = DateTime.Now;
             var data = await _mediat.Send(
-                new UpdateWareHouseLimitCommand() { WareHouseLimitCommands = command });
+                new UpdateBeginningWareHouseCommand() { BeginningWareHouseCommands = command });
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -177,7 +176,7 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Create(WareHouseLimitCommands command)
+        public async Task<IActionResult> Create(BeginningWareHouseCommands command)
         {
             var check = await _mediat.Send(new BeginningCheckItemAndWareHouseCommand()
             {
@@ -192,7 +191,7 @@ namespace WareHouse.API.Controllers
                     message = "Vật tư đã có tồn trong kho !"
                 });
             var data = await _mediat.Send(
-                new CreateWareHouseLimitCommand() { WareHouseLimitCommands = command });
+                new CreateBeginningWareHouseCommand() { BeginningWareHouseCommands = command });
             var result = new ResultMessageResponse()
             {
                 success = data

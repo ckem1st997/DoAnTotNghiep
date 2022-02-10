@@ -11,6 +11,7 @@ using WareHouse.API.Application.Queries.BaseModel;
 using WareHouse.API.Application.Validations;
 using WareHouse.API.Application.Validations.BaseValidator;
 using WareHouse.API.Application.Validations.BeginningWareHouse;
+using WareHouse.API.Application.Validations.WareHouseLimit;
 
 namespace WareHouse.API.Application.Validations.ConfigureServices
 {
@@ -25,6 +26,7 @@ namespace WareHouse.API.Application.Validations.ConfigureServices
             services.AddTransient<IValidator<UnitCommands>, UnitCommandValidator>();
             services.AddTransient<IValidator<VendorCommands>, VendorCommandValidator>();
             services.AddTransient<IValidator<BeginningWareHouseCommands>, BeginningWareHouseCommandValidator>();
+            services.AddTransient<IValidator<WareHouseLimitCommands>, WareHouseLimitCommandValidator>();
             services.AddTransient<IValidator<BaseSearchModel>, BaseSearchModelValidator>();
             services.AddTransient<IValidator<BaseSearchModel>, BaseSearchModelValidator>();
         }

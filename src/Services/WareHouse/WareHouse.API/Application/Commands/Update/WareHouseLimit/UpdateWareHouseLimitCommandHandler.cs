@@ -24,7 +24,7 @@ namespace WareHouse.API.Application.Commands.Update
             if (request is null)
                 return false;
             var result = _mapper.Map<Domain.Entity.WareHouseLimit>(request.WareHouseLimitCommands);
-            await _repository.AddAsync(result);
+             _repository.Update(result);
             return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }
