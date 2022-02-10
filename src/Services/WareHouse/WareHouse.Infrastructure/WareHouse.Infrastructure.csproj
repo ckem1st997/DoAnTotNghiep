@@ -23,6 +23,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Seq.Extensions.Logging" Version="6.0.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.1-dev-00296" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.2-dev-00890" />
+    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.5.0-alpha0003" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00947" />
+    <PackageReference Include="Serilog.Sinks.Http" Version="8.0.0-beta.10" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="5.1.1" />
     <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="5.13.5" />
   </ItemGroup>
 

@@ -55,6 +55,16 @@ namespace WareHouse.API
                     .AllowAnyHeader()
                     .AllowCredentials());
             });
+            
+            
+            // send log to seq by Microsoft.Extensions.Logging
+            services.AddLogging(loggingBuilder =>
+            {
+                //   loggingBuilder.UseSerilog(Configuration);
+                var seqServerUrl = Configuration["Serilog:SeqServerUrl"];
+
+                loggingBuilder.AddSeq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl, apiKey: "0QEfAbE4THZTcUu6I7bQ");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
