@@ -20,7 +20,7 @@ namespace WareHouse.API.Application.Model
         public string ModifiedBy { get; set; }
 
 
-       public virtual IEnumerable<WareHouseItemDTO> WareHouseItemDTO { get; set; }
+        public virtual IEnumerable<WareHouseItemDTO> WareHouseItemDTO { get; set; }
         public virtual IEnumerable<UnitDTO> UnitDTO { get; set; }
         public virtual IEnumerable<WareHouseDTO> WareHouseDTO { get; set; }
 

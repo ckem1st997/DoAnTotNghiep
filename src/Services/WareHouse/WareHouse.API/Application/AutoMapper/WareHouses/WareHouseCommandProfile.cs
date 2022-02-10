@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Commands.Models;
 using WareHouse.API.Application.Model;
+using WareHouse.Domain.Entity;
 
 namespace WareHouse.API.Application.AutoMapper.WareHouses
 {
@@ -105,6 +106,18 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
                 .ForMember(x => x.OnDelete, opt => opt.Ignore());
 
             CreateMap<Domain.Entity.WareHouseItemCategory, WareHouseItemCategoryDTO>();
+            
+            //
+            CreateMap<Domain.Entity.WareHouseLimit, WareHouseLimitCommands>();
+
+            CreateMap<WareHouseLimitCommands, Domain.Entity.WareHouseLimit>()
+                .ForMember(x => x.WareHouse, opt => opt.Ignore())
+                .ForMember(x => x.Item, opt => opt.Ignore())
+                .ForMember(x => x.Unit, opt => opt.Ignore())
+                .ForMember(x => x.DomainEvents, opt => opt.Ignore())
+                .ForMember(x => x.OnDelete, opt => opt.Ignore());
+
+            CreateMap<Domain.Entity.WareHouseLimit, WareHouseLimitDTO>();
         }
     }
 }

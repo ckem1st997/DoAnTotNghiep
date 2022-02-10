@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,15 +22,14 @@ using WareHouse.API.Application.Queries.GetAll;
 using WareHouse.API.Application.Queries.GetAll.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.GetAll.WareHouses;
 using WareHouse.API.Application.Queries.GetAll.WareHouseItem;
-using WareHouse.Domain.Entity;
 
 namespace WareHouse.API.Controllers
 {
-    public class BeginningWareHouseController : BaseControllerWareHouse
+    public class WareHouseLimitController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
 
-        public BeginningWareHouseController(IMediator mediat, ICacheExtension cacheExtension)
+        public WareHouseLimitController(IMediator mediat, ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
         }
@@ -41,7 +40,7 @@ namespace WareHouse.API.Controllers
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> IndexAsync([FromQuery] PaginatedBeginningWareHouseCommand paginatedList)
+        public async Task<IActionResult> IndexAsync([FromQuery] PaginatedWareHouseLimitCommand paginatedList)
         {
             var data = await _mediat.Send(paginatedList);
             var result = new ResultMessageResponse()
@@ -63,7 +62,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(string idWareHouse)
         {
-            var res = new BeginningWareHouseDTO()
+            var res = new WareHouseLimitDTO()
             {
                 WareHouseId = idWareHouse,
                 Id = Guid.NewGuid().ToString()
@@ -76,36 +75,36 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-        [Route("edit")]
-        [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id is null)
-            {
-                var resu = new ResultMessageResponse()
-                {
-                    success = false,
-                    message = "Chưa chọn tồn kho !"
-                };
-                return Ok(resu);
-            }
+        // [Route("edit")]
+        // [HttpGet]
+        // [ProducesResponseType((int)HttpStatusCode.OK)]
+        // [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        // public async Task<IActionResult> Edit(string id)
+        // {
+        //     if (id is null)
+        //     {
+        //         var resu = new ResultMessageResponse()
+        //         {
+        //             success = false,
+        //             message = "Chưa chọn tồn kho !"
+        //         };
+        //         return Ok(resu);
+        //     }
+        //
+        //     var command = new BeginningWareHouseGetFirstCommand()
+        //     {
+        //         Id = id
+        //     };
+        //     var res = await _mediat.Send(command);
+        //     await GetDataToDrop(res);
+        //     var result = new ResultMessageResponse()
+        //     {
+        //         data = res
+        //     };
+        //     return Ok(result);
+        // }
 
-            var command = new BeginningWareHouseGetFirstCommand()
-            {
-                Id = id
-            };
-            var res = await _mediat.Send(command);
-            await GetDataToDrop(res);
-            var result = new ResultMessageResponse()
-            {
-                data = res
-            };
-            return Ok(result);
-        }
-
-        private async Task<BeginningWareHouseDTO> GetDataToDrop(BeginningWareHouseDTO res)
+        private async Task<WareHouseLimitDTO> GetDataToDrop(WareHouseLimitDTO res)
         {
             var getUnit = new GetDropDownUnitCommand()
             {
@@ -142,7 +141,7 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Edit(WareHouseLimitCommands command)
+        public async Task<IActionResult> Edit(BeginningWareHouseCommands command)
         {
             if (command is null)
                 return Ok(new ResultMessageResponse()
@@ -164,7 +163,7 @@ namespace WareHouse.API.Controllers
             command.CreatedDate = res.CreatedDate;
             command.ModifiedDate = DateTime.Now;
             var data = await _mediat.Send(
-                new UpdateWareHouseLimitCommand() { WareHouseLimitCommands = command });
+                new UpdateBeginningWareHouseCommand() { BeginningWareHouseCommands = command });
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -177,7 +176,7 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Create(WareHouseLimitCommands command)
+        public async Task<IActionResult> Create(BeginningWareHouseCommands command)
         {
             var check = await _mediat.Send(new BeginningCheckItemAndWareHouseCommand()
             {
@@ -192,7 +191,7 @@ namespace WareHouse.API.Controllers
                     message = "Vật tư đã có tồn trong kho !"
                 });
             var data = await _mediat.Send(
-                new CreateWareHouseLimitCommand() { WareHouseLimitCommands = command });
+                new CreateBeginningWareHouseCommand() { BeginningWareHouseCommands = command });
             var result = new ResultMessageResponse()
             {
                 success = data
