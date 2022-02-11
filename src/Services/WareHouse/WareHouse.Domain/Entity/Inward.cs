@@ -18,7 +18,7 @@ namespace WareHouse.Domain.Entity
         public string Deliver { get; set; }
         public string Receiver { get; set; }
         public string VendorId { get; set; }
-        public int Reason { get; set; }
+        public string Reason { get; set; }
         public string ReasonDescription { get; set; }
         public string Description { get; set; }
         public string Reference { get; set; }

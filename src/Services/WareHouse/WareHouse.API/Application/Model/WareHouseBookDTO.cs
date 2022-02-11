@@ -1,23 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 
-#nullable disable
-
-namespace WareHouse.Domain.Entity
+namespace WareHouse.API.Application.Model
 {
-    public partial class Outward:BaseEntity
+    public class WareHouseBookDTO
     {
-        public Outward()
-        {
-            OutwardDetails = new HashSet<OutwardDetail>();
-        }
-
         public string VoucherCode { get; set; }
         public DateTime VoucherDate { get; set; }
         public string WareHouseId { get; set; }
-        public string ToWareHouseId { get; set; }
         public string Deliver { get; set; }
         public string Receiver { get; set; }
+        public string VendorId { get; set; }
         public string Reason { get; set; }
         public string ReasonDescription { get; set; }
         public string Description { get; set; }
@@ -26,9 +18,7 @@ namespace WareHouse.Domain.Entity
         public string CreatedBy { get; set; }
         public DateTime ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
-
-        public virtual WareHouse ToWareHouse { get; set; }
-        public virtual WareHouse WareHouse { get; set; }
-        public virtual ICollection<OutwardDetail> OutwardDetails { get; set; }
+        public  string Type { get; set; }
+        public  string WareHouseName { get; set; }
     }
 }
