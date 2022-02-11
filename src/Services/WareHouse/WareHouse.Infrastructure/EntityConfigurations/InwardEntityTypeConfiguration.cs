@@ -39,7 +39,7 @@ namespace WareHouse.Infrastructure.EntityConfigurations
                 .HasPrecision(0)
                 .HasDefaultValueSql("(getdate())");
 
-            entity.Property(e => e.Reason).HasDefaultValueSql("");
+         //   entity.Property(e => e.Reason).HasDefaultValueSql("");
 
             entity.Property(e => e.ReasonDescription)
                 .HasMaxLength(255)
