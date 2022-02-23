@@ -30,7 +30,11 @@ namespace WareHouse.Domain.Entity
         public string ProjectName { get; set; }
         public string CustomerId { get; set; }
         public string CustomerName { get; set; }
+        public  string AccountMore { get; set; }
 
+        public  string AccountYes { get; set; }
+
+        public string Status { get; set; }
         public virtual Inward Inward { get; set; }
         public virtual WareHouseItem Item { get; set; }
         public virtual Unit Unit { get; set; }

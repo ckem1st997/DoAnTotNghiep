@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace WareHouse.Domain.Entity
 {
-    public partial class OutwardDetail:BaseEntity
+    public partial class OutwardDetail : BaseEntity
     {
         public OutwardDetail()
         {
@@ -30,6 +30,11 @@ namespace WareHouse.Domain.Entity
         public string ProjectName { get; set; }
         public string CustomerId { get; set; }
         public string CustomerName { get; set; }
+        public string AccountMore { get; set; }
+
+        public string AccountYes { get; set; }
+
+        public string Status { get; set; }
 
         public virtual WareHouseItem Item { get; set; }
         public virtual Outward Outward { get; set; }

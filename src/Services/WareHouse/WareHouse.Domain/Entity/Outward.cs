@@ -26,7 +26,17 @@ namespace WareHouse.Domain.Entity
         public string CreatedBy { get; set; }
         public DateTime ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
+        public string DeliverPhone { get; set; }
 
+        public string DeliverAddress { get; set; }
+
+        public string DeliverDepartment { get; set; }
+
+        public string ReceiverPhone { get; set; }
+
+        public string ReceiverAddress { get; set; }
+
+        public string ReceiverDepartment { get; set; }
         public virtual WareHouse ToWareHouse { get; set; }
         public virtual WareHouse WareHouse { get; set; }
         public virtual ICollection<OutwardDetail> OutwardDetails { get; set; }
