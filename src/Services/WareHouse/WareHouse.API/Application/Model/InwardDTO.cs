@@ -5,12 +5,13 @@ using System.Collections.Generic;
 
 namespace WareHouse.API.Application.Model
 {
-    public partial class InwardDTO: BaseModel
+    public partial class InwardDTO : BaseModel
     {
         public InwardDTO()
         {
             InwardDetails = new HashSet<InwardDetailDTO>();
         }
+
 
         public string VoucherCode { get; set; }
         public DateTime VoucherDate { get; set; }
@@ -18,7 +19,7 @@ namespace WareHouse.API.Application.Model
         public string Deliver { get; set; }
         public string Receiver { get; set; }
         public string VendorId { get; set; }
-        public int Reason { get; set; }
+        public string Reason { get; set; }
         public string ReasonDescription { get; set; }
         public string Description { get; set; }
         public string Reference { get; set; }
@@ -27,8 +28,22 @@ namespace WareHouse.API.Application.Model
         public DateTime ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
 
+        public string DeliverPhone { get; set; }
+
+        public string DeliverAddress { get; set; }
+
+        public string DeliverDepartment { get; set; }
+
+        public string ReceiverPhone { get; set; }
+
+        public string ReceiverAddress { get; set; }
+
+        public string ReceiverDepartment { get; set; }
+
         public virtual VendorDTO Vendor { get; set; }
         public virtual WareHouseDTO WareHouse { get; set; }
         public virtual ICollection<InwardDetailDTO> InwardDetails { get; set; }
+        public virtual IEnumerable<WareHouseDTO> WareHouseDTO { get; set; }
+        public virtual IEnumerable<VendorDTO> VendorDTO { get; set; }
     }
 }
