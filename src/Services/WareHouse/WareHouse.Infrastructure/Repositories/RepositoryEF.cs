@@ -33,7 +33,8 @@ namespace WareHouse.Infrastructure.Repositories
         {
             if (entity is null)
                 throw new NotImplementedException(nameof(entity));
-            entity.Id = Guid.NewGuid().ToString();
+            if (string.IsNullOrEmpty(entity.Id))
+                entity.Id = Guid.NewGuid().ToString();
             return (await _dbSet.AddAsync(entity)).Entity;
         }
 
@@ -120,7 +121,7 @@ namespace WareHouse.Infrastructure.Repositories
         {
             if (listIds is null)
                 throw new NotImplementedException(nameof(listIds));
-            return await _dbSet.Where(x => listIds.Contains(x.Id)).UpdateFromQueryAsync(x => new T {OnDelete = true});
+            return await _dbSet.Where(x => listIds.Contains(x.Id)).UpdateFromQueryAsync(x => new T { OnDelete = true });
         }
 
         public async Task BulkInsertOrUpdateAsync(IList<T> listEntity)
