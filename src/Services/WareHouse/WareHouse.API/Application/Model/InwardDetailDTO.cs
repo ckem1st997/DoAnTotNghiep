@@ -11,7 +11,6 @@ namespace WareHouse.API.Application.Model
         {
             SerialWareHouses = new HashSet<SerialWareHouseDTO>();
         }
-
         public string InwardId { get; set; }
         public string ItemId { get; set; }
         public string UnitId { get; set; }
@@ -30,7 +29,13 @@ namespace WareHouse.API.Application.Model
         public string ProjectName { get; set; }
         public string CustomerId { get; set; }
         public string CustomerName { get; set; }
+        public  string AccountMore { get; set; }
 
+        public  string AccountYes { get; set; }
+
+        public string Status { get; set; }
+        public virtual IEnumerable<WareHouseItemDTO> WareHouseItemDTO { get; set; }
+        public virtual IEnumerable<UnitDTO> UnitDTO { get; set; }
         public virtual InwardDTO Inward { get; set; }
         public virtual WareHouseItemDTO Item { get; set; }
         public virtual UnitDTO Unit { get; set; }

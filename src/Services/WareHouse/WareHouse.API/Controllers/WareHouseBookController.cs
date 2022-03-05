@@ -15,6 +15,8 @@ using WareHouse.API.Application.Queries.Paginated.Unit;
 using WareHouse.API.Controllers.BaseController;
 using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Queries.Paginated.WareHouseBook;
+using WareHouse.API.Application.Model;
+using WareHouse.API.Application.Queries.GetAll.WareHouseItem;
 
 namespace WareHouse.API.Controllers
 {
@@ -26,12 +28,7 @@ namespace WareHouse.API.Controllers
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
         }
         #region R
-        #endregion
-
-        #region CUD
-
-        #endregion
-        [Route("get-list")]
+          [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -46,6 +43,7 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+        
         [Route("get-drop-tree")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -62,6 +60,48 @@ namespace WareHouse.API.Controllers
                 totalCount = data.Count()
             };
             return Ok(result);
+        }
+        #endregion
+
+        #region CUD
+
+        #endregion
+        [Route("create-inward-details")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Create()
+        {
+            var res = new InwardDetailDTO();
+            await GetDataToDrop(res);
+            var result = new ResultMessageResponse()
+            {
+                data = res
+            };
+            return Ok(result);
+        }
+        private async Task<InwardDetailDTO> GetDataToDrop(InwardDetailDTO res)
+        {
+            var getUnit = new GetDropDownUnitCommand()
+            {
+                Active = true,
+                BypassCache = false,
+                CacheKey = string.Format(UnitCacheName.UnitCacheNameDropDown, true)
+            };
+            var dataUnit = await _mediat.Send(getUnit);
+
+
+          var getWareHouseItem = new GetDopDownWareHouseItemCommand()
+            {
+                Active = true,
+                BypassCache = false,
+                CacheKey = string.Format(WareHouseItemCacheName.WareHouseItemCacheNameDropDown, true)
+            };
+            var dataWareHouseItem = await _mediat.Send(getWareHouseItem);
+
+            res.WareHouseItemDTO = dataWareHouseItem;
+            res.UnitDTO = dataUnit;
+            return res;
         }
 
         [Route("edit")]

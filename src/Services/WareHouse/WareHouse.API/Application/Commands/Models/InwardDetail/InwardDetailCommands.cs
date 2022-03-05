@@ -2,6 +2,7 @@
 {
     public partial class InwardDetailCommands: BaseCommands
     {
+       
         public string InwardId { get; set; }
         public string ItemId { get; set; }
         public string UnitId { get; set; }
@@ -20,5 +21,10 @@
         public string ProjectName { get; set; }
         public string CustomerId { get; set; }
         public string CustomerName { get; set; }
+        public  string AccountMore { get; set; }
+
+        public  string AccountYes { get; set; }
+
+        public string Status { get; set; }
     }
 }

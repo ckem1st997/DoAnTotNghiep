@@ -118,6 +118,16 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
                 .ForMember(x => x.OnDelete, opt => opt.Ignore());
 
             CreateMap<Domain.Entity.WareHouseLimit, WareHouseLimitDTO>();
+            //
+               CreateMap<Domain.Entity.InwardDetail, InwardDetailCommands>();
+
+            CreateMap<InwardDetailCommands, Domain.Entity.InwardDetail>()
+                .ForMember(x => x.Item, opt => opt.Ignore())
+                .ForMember(x => x.Unit, opt => opt.Ignore())
+                .ForMember(x => x.DomainEvents, opt => opt.Ignore())
+                .ForMember(x => x.OnDelete, opt => opt.Ignore());
+
+            CreateMap<Domain.Entity.InwardDetail,InwardDetailDTO>();
         }
     }
 }
