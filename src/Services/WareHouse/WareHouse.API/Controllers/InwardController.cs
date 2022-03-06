@@ -118,7 +118,6 @@ namespace WareHouse.API.Controllers
                 CacheKey = string.Format(WareHouseItemCategoryCacheName.WareHouseItemCategoryDropDown, true)
             };
             var dataWareHouseItemCategory = await _mediat.Send(getWareHouseItemCategory);
-
             res.WareHouseDTO = dataWareHouseItemCategory;
             res.VendorDTO = dataVendor;
             return res;

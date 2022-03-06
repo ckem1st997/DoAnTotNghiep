@@ -100,14 +100,13 @@ namespace WareHouse.API.Controllers
         }
         private async Task<InwardDetailDTO> GetDataToDrop(InwardDetailDTO res)
         {
-            // var getUnit = new GetDropDownUnitCommand()
-            // {
-            //     Active = true,
-            //     BypassCache = false,
-            //     CacheKey = string.Format(UnitCacheName.UnitCacheNameDropDown, true)
-            // };
-            // var dataUnit = await _mediat.Send(getUnit);
-
+            var getUnit = new GetDropDownUnitCommand()
+            {
+                Active = true,
+                BypassCache = false,
+                CacheKey = string.Format(UnitCacheName.UnitCacheNameDropDown, true)
+            };
+            var dataUnit = await _mediat.Send(getUnit);
 
             var getWareHouseItem = new GetDopDownWareHouseItemCommand()
             {
@@ -118,7 +117,12 @@ namespace WareHouse.API.Controllers
             var dataWareHouseItem = await _mediat.Send(getWareHouseItem);
 
             res.WareHouseItemDTO = dataWareHouseItem;
-            //  res.UnitDTO = dataUnit;
+            res.UnitDTO = dataUnit;
+            res.GetDepartmentDTO = FakeData.GetDepartment();
+            res.GetCustomerDTO = FakeData.GetCustomer();
+            res.GetEmployeeDTO = FakeData.GetEmployee();
+            res.GetProjectDTO = FakeData.GetProject();
+            res.GetStationDTO = FakeData.GetStation();
             return res;
         }
 
