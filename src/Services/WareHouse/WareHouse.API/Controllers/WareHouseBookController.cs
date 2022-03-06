@@ -28,7 +28,7 @@ namespace WareHouse.API.Controllers
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
         }
         #region R
-          [Route("get-list")]
+        [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -43,7 +43,7 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
-        
+
         [Route("get-drop-tree")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -61,6 +61,24 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+
+
+        [Route("get-unit-by-id")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetUnitByIdAsync(string IdItem)
+        {
+            var data = await _mediat.Send(new GetWareHouseUnitByIdItemCommand() { IdItem = IdItem });
+            var result = new ResultMessageResponse()
+            {
+                data = data,
+                success = true,
+                totalCount = 1
+            };
+            return Ok(result);
+        }
+
         #endregion
 
         #region CUD
@@ -82,16 +100,16 @@ namespace WareHouse.API.Controllers
         }
         private async Task<InwardDetailDTO> GetDataToDrop(InwardDetailDTO res)
         {
-            var getUnit = new GetDropDownUnitCommand()
-            {
-                Active = true,
-                BypassCache = false,
-                CacheKey = string.Format(UnitCacheName.UnitCacheNameDropDown, true)
-            };
-            var dataUnit = await _mediat.Send(getUnit);
+            // var getUnit = new GetDropDownUnitCommand()
+            // {
+            //     Active = true,
+            //     BypassCache = false,
+            //     CacheKey = string.Format(UnitCacheName.UnitCacheNameDropDown, true)
+            // };
+            // var dataUnit = await _mediat.Send(getUnit);
 
 
-          var getWareHouseItem = new GetDopDownWareHouseItemCommand()
+            var getWareHouseItem = new GetDopDownWareHouseItemCommand()
             {
                 Active = true,
                 BypassCache = false,
@@ -100,7 +118,7 @@ namespace WareHouse.API.Controllers
             var dataWareHouseItem = await _mediat.Send(getWareHouseItem);
 
             res.WareHouseItemDTO = dataWareHouseItem;
-            res.UnitDTO = dataUnit;
+            //  res.UnitDTO = dataUnit;
             return res;
         }
 

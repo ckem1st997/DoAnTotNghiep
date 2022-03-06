@@ -37,7 +37,7 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouseItem
             CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            const string sql = "select Id,CONCAT('[',Code,'] ',Name) as Name,UnitId from WareHouseItem where Inactive =@active and OnDelete=0 ";
+            const string sql = "select Id,CONCAT('[',Code,'] ',Name) as Name,UnitId from WareHouseItem where Inactive =@active and OnDelete=0 order by Name";
             var parameter = new DynamicParameters();
             parameter.Add("@active", request.Active ? 1 : 0);
             var getAll = await _repository.GetAllAync<WareHouseItemDTO>(sql, parameter, CommandType.Text);
