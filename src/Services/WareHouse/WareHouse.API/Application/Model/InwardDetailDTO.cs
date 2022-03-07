@@ -40,7 +40,8 @@ namespace WareHouse.API.Application.Model
         public virtual IEnumerable<BaseSelectDTO> GetEmployeeDTO { get; set; }
         public virtual IEnumerable<BaseSelectDTO> GetStationDTO { get; set; }
         public virtual IEnumerable<BaseSelectDTO> GetProjectDTO { get; set; }
-        public virtual IEnumerable<BaseSelectDTO> GetCustomerDTO { get; set; }
+        public virtual IEnumerable<BaseSelectDTO> GetCustomerDTO { get; set; }      
+
         public virtual InwardDTO Inward { get; set; }
         public virtual WareHouseItemDTO Item { get; set; }
         public virtual UnitDTO Unit { get; set; }

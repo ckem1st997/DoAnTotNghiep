@@ -91,6 +91,7 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Create(string idWareHouse)
         {
             var modelCreate = new InwardDTO();
+            modelCreate.Voucher=new Random().Next(1, 999999999).ToString();
             modelCreate.WareHouseId = idWareHouse;
             await GetDataToDrop(modelCreate);
             var result = new ResultMessageResponse()
@@ -120,6 +121,7 @@ namespace WareHouse.API.Controllers
             var dataWareHouseItemCategory = await _mediat.Send(getWareHouseItemCategory);
             res.WareHouseDTO = dataWareHouseItemCategory;
             res.VendorDTO = dataVendor;
+            res.GetCreateBy=FakeData.GetCreateBy();
             return res;
         }
 

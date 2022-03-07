@@ -76,5 +76,19 @@ namespace WareHouse.API.Application.Model
             }
             return data;
         }
+
+         public static IEnumerable<BaseSelectDTO> GetCreateBy()
+        {
+            var data = new List<BaseSelectDTO>();
+            for (int i = 0; i < 10; i++)
+            {
+                data.Add(new BaseSelectDTO()
+                {
+                    Id = i.ToString(),
+                    Name = $"CreateBy {i}"
+                });
+            }
+            return data;
+        }
     }
 }

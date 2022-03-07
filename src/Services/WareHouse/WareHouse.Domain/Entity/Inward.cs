@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 namespace WareHouse.Domain.Entity
 {
-    public partial class Inward:BaseEntity
+    public partial class Inward : BaseEntity
     {
         public Inward()
         {
             InwardDetails = new HashSet<InwardDetail>();
         }
-
+        public string Voucher { get; set; }
         public string VoucherCode { get; set; }
         public DateTime VoucherDate { get; set; }
         public string WareHouseId { get; set; }
@@ -42,7 +42,7 @@ namespace WareHouse.Domain.Entity
         public virtual Vendor Vendor { get; set; }
         public virtual WareHouse WareHouse { get; set; }
 
-        
+
         public virtual ICollection<InwardDetail> InwardDetails { get; set; }
     }
 }
