@@ -1,4 +1,6 @@
-﻿namespace WareHouse.API.Application.Commands.Models
+﻿using System.Collections.Generic;
+
+namespace WareHouse.API.Application.Commands.Models
 {
     public partial class InwardDetailCommands: BaseCommands
     {
@@ -26,5 +28,7 @@
         public  string AccountYes { get; set; }
 
         public string Status { get; set; }
+
+        public virtual IEnumerable<SerialWareHouseCommands> SerialWareHouses { get; set; }
     }
 }

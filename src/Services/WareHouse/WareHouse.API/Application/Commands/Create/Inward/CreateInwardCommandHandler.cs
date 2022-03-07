@@ -7,7 +7,7 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class CreateInwardCommandHandler: IRequestHandler<CreateInwardCommand, bool>
+    public partial class CreateInwardCommandHandler : IRequestHandler<CreateInwardCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.Inward> _repository;
         private readonly IMapper _mapper;

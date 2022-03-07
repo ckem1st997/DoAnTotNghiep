@@ -28,7 +28,8 @@ namespace WareHouse.API.Application.Validations.ConfigureServices
             services.AddTransient<IValidator<BeginningWareHouseCommands>, BeginningWareHouseCommandValidator>();
             services.AddTransient<IValidator<WareHouseLimitCommands>, WareHouseLimitCommandValidator>();
             services.AddTransient<IValidator<BaseSearchModel>, BaseSearchModelValidator>();
-            services.AddTransient<IValidator<BaseSearchModel>, BaseSearchModelValidator>();
+            services.AddTransient<IValidator<InwardCommands>, InwardCommandValidator>();
+
         }
     }
 }

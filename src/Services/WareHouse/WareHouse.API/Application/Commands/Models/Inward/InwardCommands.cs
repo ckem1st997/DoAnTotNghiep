@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WareHouse.API.Application.Commands.Models
 {
-    public partial class InwardCommands: BaseCommands
+    public partial class InwardCommands : BaseCommands
     {
-      
+        public string Voucher { get; set; }
         public string VoucherCode { get; set; }
         public DateTime VoucherDate { get; set; }
         public string WareHouseId { get; set; }
@@ -31,5 +32,7 @@ namespace WareHouse.API.Application.Commands.Models
         public string ReceiverAddress { get; set; }
 
         public string ReceiverDepartment { get; set; }
+
+        public virtual IEnumerable<InwardDetailCommands> InwardDetails { get; set; }
     }
 }

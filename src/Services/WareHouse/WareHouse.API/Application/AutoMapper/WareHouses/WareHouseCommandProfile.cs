@@ -123,11 +123,32 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
 
             CreateMap<InwardDetailCommands, Domain.Entity.InwardDetail>()
                 .ForMember(x => x.Item, opt => opt.Ignore())
+               // .ForMember(x => x.SerialWareHouses, opt => opt.Ignore())
                 .ForMember(x => x.Unit, opt => opt.Ignore())
                 .ForMember(x => x.DomainEvents, opt => opt.Ignore())
                 .ForMember(x => x.OnDelete, opt => opt.Ignore());
 
             CreateMap<Domain.Entity.InwardDetail,InwardDetailDTO>();
+
+             //
+               CreateMap<Domain.Entity.Inward, InwardCommands>();
+
+            CreateMap<InwardCommands, Domain.Entity.Inward>()
+               // .ForMember(x => x.InwardDetails, opt => opt.Ignore())
+                .ForMember(x => x.DomainEvents, opt => opt.Ignore())
+                .ForMember(x => x.OnDelete, opt => opt.Ignore());
+
+            CreateMap<Domain.Entity.Inward,InwardDTO>();
+
+              //
+               CreateMap<Domain.Entity.SerialWareHouse, SerialWareHouseCommands>();
+
+            CreateMap<SerialWareHouseCommands, Domain.Entity.SerialWareHouse>()
+               // .ForMember(x => x.InwardDetails, opt => opt.Ignore())
+                .ForMember(x => x.DomainEvents, opt => opt.Ignore())
+                .ForMember(x => x.OnDelete, opt => opt.Ignore());
+
+            CreateMap<Domain.Entity.SerialWareHouse,SerialWareHouseDTO>();
         }
     }
 }

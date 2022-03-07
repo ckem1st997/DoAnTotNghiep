@@ -17,6 +17,7 @@ using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.GetAll;
 using WareHouse.API.Application.Queries.GetAll.WareHouses;
+using WareHouse.API.Application.Querie.CheckCode;
 
 namespace WareHouse.API.Controllers
 {
@@ -91,13 +92,13 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Create(string idWareHouse)
         {
             var modelCreate = new InwardDTO();
-            modelCreate.Voucher=new Random().Next(1, 999999999).ToString();
+            modelCreate.Voucher = new Random().Next(1, 999999999).ToString();
             modelCreate.WareHouseId = idWareHouse;
             await GetDataToDrop(modelCreate);
             var result = new ResultMessageResponse()
             {
                 data = modelCreate,
-                success=true
+                success = true
             };
             return Ok(result);
         }
@@ -121,7 +122,7 @@ namespace WareHouse.API.Controllers
             var dataWareHouseItemCategory = await _mediat.Send(getWareHouseItemCategory);
             res.WareHouseDTO = dataWareHouseItemCategory;
             res.VendorDTO = dataVendor;
-            res.GetCreateBy=FakeData.GetCreateBy();
+            res.GetCreateBy = FakeData.GetCreateBy();
             return res;
         }
 
@@ -129,17 +130,25 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Create(UnitCommands unitCommands)
+        public async Task<IActionResult> Create(InwardCommands inwardCommands)
         {
-            var data = await _mediat.Send(new CreateUnitCommand() { UnitCommands = unitCommands });
-            if (data)
-                await _cacheExtension.RemoveAllKeysBy(UnitCacheName.Prefix);
+            inwardCommands.CreatedDate = DateTime.Now;
+            inwardCommands.ModifiedDate = DateTime.Now;
+            foreach (var item in inwardCommands.InwardDetails)
+            {
+                item.Amount = item.Uiquantity * item.Uiprice;
+                int convertRate = await _mediat.Send(new GetConvertRateByIdItemCommand() { IdItem = item.ItemId, IdUnit = item.UnitId });
+                item.Quantity = convertRate * item.Uiquantity;
+                item.Price = item.Amount;
+            }
+            var data = await _mediat.Send(new CreateInwardCommand() { InwardCommands = inwardCommands });
             var result = new ResultMessageResponse()
             {
                 success = data
             };
             return Ok(result);
         }
+
 
 
         [Route("delete")]
