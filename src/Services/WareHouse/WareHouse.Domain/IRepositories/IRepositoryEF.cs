@@ -13,6 +13,15 @@ namespace WareHouse.Domain.IRepositories
     public partial interface IRepositoryEF<T> where T : BaseEntity
     {
         public IUnitOfWork UnitOfWork { get; }
+
+        public IEnumerable<T> Get(
+            Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, int records = 0,
+            string includeProperties = "");
+        public Task<IEnumerable<T>> GetAync(
+        Expression<Func<T, bool>> filter = null,
+        Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, int records = 0,
+        string includeProperties = "");
         IEnumerable<T> GetList(Func<T, bool> filter = null);
         Task<T> GetFirstAsync(string id);
         Task<T> GetFirstAsyncAsNoTracking(string id);
@@ -27,7 +36,7 @@ namespace WareHouse.Domain.IRepositories
         Task BulkUpdateAsync(IList<T> listEntity);
         void BulkDelete(IList<T> listEntity);
         Task<int> BulkDeleteEditOnDeleteAsync(IEnumerable<string> listEntity);
-        
+
         Task BulkInsertOrUpdateAsync(IList<T> listEntity);
     }
 }

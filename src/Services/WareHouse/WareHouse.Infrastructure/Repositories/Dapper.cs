@@ -29,7 +29,6 @@ namespace WareHouse.Infrastructure.Repositories
             GC.SuppressFinalize(this);
         }
 
-
         public async Task<T> GetAyncFirst<T>(string sp, DynamicParameters parms, CommandType commandType)
         {
             using var connection = new SqlConnection(_config.GetConnectionString(Connectionstring));
