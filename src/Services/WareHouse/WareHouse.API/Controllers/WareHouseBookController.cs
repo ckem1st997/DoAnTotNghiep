@@ -20,6 +20,7 @@ using WareHouse.API.Application.Queries.GetAll.WareHouseItem;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Aspose.Cells;
 
 namespace WareHouse.API.Controllers
 {
@@ -85,43 +86,6 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-
-        //public List<SelectListItem> GetListAccountIdentifier()
-        //{
-        //    var tmpPath = Path.Combine(_hostingEnvironment.WebRootPath, "/Excel/He_thong_tai_khoan kế toán.xlsx"); 
-        //    Workbook wb = new Workbook(tmpPath);
-        //    //Get the first worksheet.
-        //    Worksheet worksheet = wb.Worksheets[0];
-        //    //Get the cells collection.
-        //    Cells cells = worksheet.Cells;
-
-        //    //Define the list.
-        //    var list = new List<SelectListItem>(); //Get the AA column index. (Since "Status" is always @ AA column.
-        //    int col = CellsHelper.ColumnNameToIndex("A");
-        //    //  int col2 = CellsHelper.ColumnNameToIndex("B");
-
-        //    //Get the last row index in AA column.
-        //    int last_row = worksheet.Cells.GetLastDataRow(col);
-
-        //    //Loop through the "Status" column while start collecting values from row 9
-        //    //to save each value to List
-        //    for (int i = 2; i < 259; i++)
-        //    {
-        //        //    myList.Add(cells[i, col].Value.ToString(), cells[i, col + 1].Value.ToString());
-        //        var code = cells[i, col].Value.ToString() == null ? "" : cells[i, col].Value.ToString();
-        //        var name = cells[i, col + 1].Value.ToString() == null ? "" : cells[i, col + 1].Value.ToString();
-        //        var tem = new SelectListItem();
-        //        tem.Text = $"[{code.Trim()}] {name.Trim()}";
-        //        tem.Value = code.Trim();
-        //        list.Add(tem);
-        //    }
-
-        //    return list;
-        //}
-
-
-
-
         #endregion
 
         #region CUD
@@ -166,8 +130,55 @@ namespace WareHouse.API.Controllers
             res.GetEmployeeDTO = FakeData.GetEmployee();
             res.GetProjectDTO = FakeData.GetProject();
             res.GetStationDTO = FakeData.GetStation();
+            res.GetAccountDTO = FakeData.GetListAccountIdentifier(_hostingEnvironment);
             return res;
         }
+
+
+
+        [Route("create-outward-details")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CreateOut()
+        {
+            var res = new OutwardDetailDTO();
+            await GetDataToDrop(res);
+            var result = new ResultMessageResponse()
+            {
+                data = res
+            };
+            return Ok(result);
+        }
+        private async Task<OutwardDetailDTO> GetDataToDrop(OutwardDetailDTO res)
+        {
+            var getUnit = new GetDropDownUnitCommand()
+            {
+                Active = true,
+                BypassCache = false,
+                CacheKey = string.Format(UnitCacheName.UnitCacheNameDropDown, true)
+            };
+            var dataUnit = await _mediat.Send(getUnit);
+
+            var getWareHouseItem = new GetDopDownWareHouseItemCommand()
+            {
+                Active = true,
+                BypassCache = false,
+                CacheKey = string.Format(WareHouseItemCacheName.WareHouseItemCacheNameDropDown, true)
+            };
+            var dataWareHouseItem = await _mediat.Send(getWareHouseItem);
+
+            res.WareHouseItemDTO = dataWareHouseItem;
+            res.UnitDTO = dataUnit;
+            res.GetDepartmentDTO = FakeData.GetDepartment();
+            res.GetCustomerDTO = FakeData.GetCustomer();
+            res.GetEmployeeDTO = FakeData.GetEmployee();
+            res.GetProjectDTO = FakeData.GetProject();
+            res.GetStationDTO = FakeData.GetStation();
+            res.GetAccountDTO = FakeData.GetListAccountIdentifier(_hostingEnvironment);
+            return res;
+        }
+
 
         [Route("edit")]
         [HttpPost]
