@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +18,7 @@ using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.GetAll;
 using WareHouse.API.Application.Queries.GetAll.WareHouses;
 using WareHouse.API.Application.Querie.CheckCode;
+using WareHouse.API.Application.Queries.GetFisrt;
 
 namespace WareHouse.API.Controllers
 {
@@ -30,44 +31,37 @@ namespace WareHouse.API.Controllers
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
         }
-        #region R
+        #region R      
         #endregion
 
         #region CUD
 
         #endregion
-        [Route("get-list")]
+
+        [Route("edit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> IndexAsync([FromQuery] PaginatedUnitCommand paginatedList)
+        public async Task<IActionResult> Edit(string id)
         {
-            var data = await _mediat.Send(paginatedList);
+            if (string.IsNullOrEmpty(id))
+            {
+                var resError= new ResultMessageResponse()
+                {
+                    success = false,
+                    message="Chưa nhập Id của phiếu !"
+                };
+                return Ok(resError);
+            }
+            var data = await _mediat.Send(new InwardGetFirstCommand() { Id = id });
             var result = new ResultMessageResponse()
             {
-                data = data.Result,
-                success = true,
-                totalCount = data.totalCount
+               data= data,
+               success=data !=null
             };
             return Ok(result);
         }
-        [Route("get-drop-tree")]
-        [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetTreeAsync([FromQuery] GetDropDownUnitCommand command)
-        {
-            command.CacheKey = string.Format(UnitCacheName.UnitCacheNameDropDown, command.Active);
-            command.BypassCache = false;
-            var data = await _mediat.Send(command);
-            var result = new ResultMessageResponse()
-            {
-                data = data,
-                success = true,
-                totalCount = data.Count()
-            };
-            return Ok(result);
-        }
+
 
         [Route("edit")]
         [HttpPost]

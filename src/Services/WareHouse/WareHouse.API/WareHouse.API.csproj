@@ -33,7 +33,6 @@
     <Folder Include="Application\Grpc\" />
     <Folder Include="Application\HealthChecks\" />
     <Folder Include="Application\IntegrationEvents\" />
-    <Folder Include="Application\Queries\GetFisrt\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WareHouse.Domain\WareHouse.Domain.csproj" />
