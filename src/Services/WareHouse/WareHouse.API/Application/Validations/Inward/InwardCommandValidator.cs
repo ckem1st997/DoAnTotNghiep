@@ -15,6 +15,7 @@ namespace WareHouse.API.Application.Validations.BeginningWareHouse
             RuleFor(order => order.CreatedBy).NotNull().NotEmpty().WithMessage(ValidatorString.GetMessageNotNull("người tạo"));
             RuleFor(order => order.Deliver).NotNull().NotEmpty().WithMessage(ValidatorString.GetMessageNotNull("người giao"));
             RuleFor(order => order.Receiver).NotNull().NotEmpty().WithMessage(ValidatorString.GetMessageNotNull("người nhận"));           
+            RuleFor(order => order.InwardDetails).NotNull().NotEmpty().WithMessage(ValidatorString.GetMessageNotNull("chưa có vật tư"));           
         }
     }
 }
