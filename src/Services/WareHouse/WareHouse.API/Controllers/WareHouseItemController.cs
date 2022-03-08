@@ -2,9 +2,6 @@
 using System;
 using MediatR;
 using WareHouse.API.Controllers.BaseController;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;

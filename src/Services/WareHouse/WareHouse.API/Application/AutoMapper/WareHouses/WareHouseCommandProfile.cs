@@ -106,7 +106,7 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
                 .ForMember(x => x.OnDelete, opt => opt.Ignore());
 
             CreateMap<Domain.Entity.WareHouseItemCategory, WareHouseItemCategoryDTO>();
-            
+
             //
             CreateMap<Domain.Entity.WareHouseLimit, WareHouseLimitCommands>();
 
@@ -119,36 +119,60 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
 
             CreateMap<Domain.Entity.WareHouseLimit, WareHouseLimitDTO>();
             //
-               CreateMap<Domain.Entity.InwardDetail, InwardDetailCommands>();
+            CreateMap<Domain.Entity.InwardDetail, InwardDetailCommands>();
 
             CreateMap<InwardDetailCommands, Domain.Entity.InwardDetail>()
                 .ForMember(x => x.Item, opt => opt.Ignore())
-               // .ForMember(x => x.SerialWareHouses, opt => opt.Ignore())
+                // .ForMember(x => x.SerialWareHouses, opt => opt.Ignore())
                 .ForMember(x => x.Unit, opt => opt.Ignore())
                 .ForMember(x => x.DomainEvents, opt => opt.Ignore())
                 .ForMember(x => x.OnDelete, opt => opt.Ignore());
 
-            CreateMap<Domain.Entity.InwardDetail,InwardDetailDTO>();
+            CreateMap<Domain.Entity.InwardDetail, InwardDetailDTO>();
 
-             //
-               CreateMap<Domain.Entity.Inward, InwardCommands>();
+            //
+            CreateMap<Domain.Entity.Inward, InwardCommands>();
 
             CreateMap<InwardCommands, Domain.Entity.Inward>()
-               // .ForMember(x => x.InwardDetails, opt => opt.Ignore())
+                // .ForMember(x => x.InwardDetails, opt => opt.Ignore())
                 .ForMember(x => x.DomainEvents, opt => opt.Ignore())
                 .ForMember(x => x.OnDelete, opt => opt.Ignore());
 
-            CreateMap<Domain.Entity.Inward,InwardDTO>();
+            CreateMap<Domain.Entity.Inward, InwardDTO>();
 
-              //
-               CreateMap<Domain.Entity.SerialWareHouse, SerialWareHouseCommands>();
+            //
+            CreateMap<Domain.Entity.SerialWareHouse, SerialWareHouseCommands>();
 
             CreateMap<SerialWareHouseCommands, Domain.Entity.SerialWareHouse>()
-               // .ForMember(x => x.InwardDetails, opt => opt.Ignore())
+                // .ForMember(x => x.InwardDetails, opt => opt.Ignore())
                 .ForMember(x => x.DomainEvents, opt => opt.Ignore())
                 .ForMember(x => x.OnDelete, opt => opt.Ignore());
 
-            CreateMap<Domain.Entity.SerialWareHouse,SerialWareHouseDTO>();
+            CreateMap<Domain.Entity.SerialWareHouse, SerialWareHouseDTO>();
+            //
+
+
+            //
+            CreateMap<Domain.Entity.OutwardDetail, OutwardDetailCommands>();
+
+            CreateMap<OutwardDetailCommands, Domain.Entity.OutwardDetail>()
+                .ForMember(x => x.Item, opt => opt.Ignore())
+                .ForMember(x => x.Unit, opt => opt.Ignore())
+                .ForMember(x => x.DomainEvents, opt => opt.Ignore())
+                .ForMember(x => x.OnDelete, opt => opt.Ignore());
+
+            CreateMap<Domain.Entity.OutwardDetail, OutwardDetailDTO>();
+
+            //
+            CreateMap<Domain.Entity.Outward, OutwardCommands>();
+
+            CreateMap<OutwardCommands, Domain.Entity.Outward>()
+                .ForMember(x => x.DomainEvents, opt => opt.Ignore())
+                .ForMember(x => x.OnDelete, opt => opt.Ignore());
+
+            CreateMap<Domain.Entity.Outward, OutwardDTO>();
+
+            //
         }
     }
 }

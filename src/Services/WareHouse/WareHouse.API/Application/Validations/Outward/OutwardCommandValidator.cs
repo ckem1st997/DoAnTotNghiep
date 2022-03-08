@@ -8,14 +8,12 @@ namespace WareHouse.API.Application.Validations
     {
         public OutwardCommandValidator()
         {
-           // RuleFor(order => order.Voucher).NotNull().NotEmpty().WithMessage(ValidatorString.GetMessageNotNull("số chứng từ"));
             RuleFor(order => order.VoucherCode).NotNull().NotEmpty().WithMessage(ValidatorString.GetMessageNotNull("số chứng từ thực tế"));
             RuleFor(order => order.WareHouseId).NotNull().NotEmpty().WithMessage(ValidatorString.GetMessageNotNull("Kho"));
             RuleFor(order => order.VoucherDate).NotNull().NotEmpty().WithMessage(ValidatorString.GetMessageNotNull("ngày tạo"));
             RuleFor(order => order.CreatedBy).NotNull().NotEmpty().WithMessage(ValidatorString.GetMessageNotNull("người tạo"));
             RuleFor(order => order.Deliver).NotNull().NotEmpty().WithMessage(ValidatorString.GetMessageNotNull("người giao"));
             RuleFor(order => order.Receiver).NotNull().NotEmpty().WithMessage(ValidatorString.GetMessageNotNull("người nhận"));
-
         }
     }
 }

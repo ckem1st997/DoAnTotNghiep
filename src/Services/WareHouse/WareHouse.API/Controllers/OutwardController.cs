@@ -1,32 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using MediatR;
+using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Commands.Create;
 using WareHouse.API.Application.Commands.Delete;
 using WareHouse.API.Application.Commands.Models;
 using WareHouse.API.Application.Commands.Update;
 using WareHouse.API.Application.Message;
-using WareHouse.API.Application.Queries.GetAll.Unit;
-using WareHouse.API.Application.Queries.Paginated.Unit;
-using WareHouse.API.Controllers.BaseController;
-using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Model;
-using WareHouse.API.Application.Queries.GetAll;
-using WareHouse.API.Application.Queries.GetAll.WareHouses;
 using WareHouse.API.Application.Querie.CheckCode;
+using WareHouse.API.Application.Queries.GetAll.WareHouses;
 using WareHouse.API.Application.Queries.GetFisrt;
+using WareHouse.API.Controllers.BaseController;
 
 namespace WareHouse.API.Controllers
 {
-    public class InwardController : BaseControllerWareHouse
+    public class OutwardController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
         private readonly ICacheExtension _cacheExtension;
-        public InwardController(IMediator mediat, ICacheExtension cacheExtension)
+        public OutwardController(IMediator mediat, ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
@@ -53,7 +49,7 @@ namespace WareHouse.API.Controllers
                 };
                 return Ok(resError);
             }
-            var data = await _mediat.Send(new InwardGetFirstCommand() { Id = id });
+            var data = await _mediat.Send(new OutwardGetFirstCommand() { Id = id });
             var result = new ResultMessageResponse()
             {
                 data = data,
@@ -67,17 +63,17 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Edit(InwardCommands inwardCommands)
+        public async Task<IActionResult> Edit(OutwardCommands outwardCommands)
         {
-            inwardCommands.ModifiedDate = DateTime.Now;
-            foreach (var item in inwardCommands.InwardDetails)
+            outwardCommands.ModifiedDate = DateTime.Now;
+            foreach (var item in outwardCommands.OutwardDetails)
             {
                 item.Amount = item.Uiquantity * item.Uiprice;
                 int convertRate = await _mediat.Send(new GetConvertRateByIdItemCommand() { IdItem = item.ItemId, IdUnit = item.UnitId });
                 item.Quantity = convertRate * item.Uiquantity;
                 item.Price = item.Amount;
             }
-            var data = await _mediat.Send(new UpdateInwardCommand() { InwardCommands = inwardCommands });
+            var data = await _mediat.Send(new UpdateOutwardCommand() { OutwardCommands=outwardCommands });
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -91,7 +87,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(string idWareHouse)
         {
-            var modelCreate = new InwardDTO();
+            var modelCreate = new OutwardDTO();
             modelCreate.Voucher = new Random().Next(1, 999999999).ToString();
             modelCreate.WareHouseId = idWareHouse;
             await GetDataToDrop(modelCreate);
@@ -102,16 +98,8 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
-        private async Task<InwardDTO> GetDataToDrop(InwardDTO res)
+        private async Task<OutwardDTO> GetDataToDrop(OutwardDTO res)
         {
-
-            var getVendor = new VendorDropDownCommand()
-            {
-                Active = true,
-                BypassCache = false,
-                CacheKey = string.Format(VendorCacheName.VendorCacheNameDropDown, true)
-            };
-            var dataVendor = await _mediat.Send(getVendor);
 
             var getWareHouseItemCategory = new GetDropDownWareHouseCommand()
             {
@@ -121,8 +109,8 @@ namespace WareHouse.API.Controllers
             };
             var dataWareHouseItemCategory = await _mediat.Send(getWareHouseItemCategory);
             res.WareHouseDTO = dataWareHouseItemCategory;
-            res.VendorDTO = dataVendor;
             res.GetCreateBy = FakeData.GetCreateBy();
+            res.GetModifiedBy = FakeData.GetCreateBy();
             return res;
         }
 
@@ -130,18 +118,18 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Create(InwardCommands inwardCommands)
+        public async Task<IActionResult> Create(OutwardCommands outwardCommands)
         {
-            inwardCommands.CreatedDate = DateTime.Now;
-            inwardCommands.ModifiedDate = DateTime.Now;
-            foreach (var item in inwardCommands.InwardDetails)
+            outwardCommands.CreatedDate = DateTime.Now;
+            outwardCommands.ModifiedDate = DateTime.Now;
+            foreach (var item in outwardCommands.OutwardDetails)
             {
                 item.Amount = item.Uiquantity * item.Uiprice;
                 int convertRate = await _mediat.Send(new GetConvertRateByIdItemCommand() { IdItem = item.ItemId, IdUnit = item.UnitId });
                 item.Quantity = convertRate * item.Uiquantity;
                 item.Price = item.Amount;
             }
-            var data = await _mediat.Send(new CreateInwardCommand() { InwardCommands = inwardCommands });
+            var data = await _mediat.Send(new CreateOutwardCommand() { OutwardCommands = outwardCommands });
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -157,7 +145,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
-            var data = await _mediat.Send(new DeleteInwardCommand() { Id = listIds });        
+            var data = await _mediat.Send(new DeleteOutwardCommand() { Id = listIds });
             var result = new ResultMessageResponse()
             {
                 success = data

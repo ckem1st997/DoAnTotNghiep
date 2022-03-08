@@ -11,7 +11,7 @@ namespace WareHouse.API.Application.Model
         {
             OutwardDetails = new HashSet<OutwardDetailDTO>();
         }
-
+        public string Voucher { get; set; }
         public string VoucherCode { get; set; }
         public DateTime VoucherDate { get; set; }
         public string WareHouseId { get; set; }
@@ -30,5 +30,8 @@ namespace WareHouse.API.Application.Model
         public virtual WareHouseDTO ToWareHouse { get; set; }
         public virtual WareHouseDTO WareHouse { get; set; }
         public virtual ICollection<OutwardDetailDTO> OutwardDetails { get; set; }
+        public virtual IEnumerable<WareHouseDTO> WareHouseDTO { get; set; }
+        public virtual IEnumerable<BaseSelectDTO> GetCreateBy { get; set; }
+        public virtual IEnumerable<BaseSelectDTO> GetModifiedBy { get; set; }
     }
 }

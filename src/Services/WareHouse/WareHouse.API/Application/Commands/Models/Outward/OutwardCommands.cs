@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WareHouse.API.Application.Commands.Models
 {
@@ -18,5 +19,7 @@ namespace WareHouse.API.Application.Commands.Models
         public string CreatedBy { get; set; }
         public DateTime ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
+
+        public virtual IEnumerable<OutwardDetailCommands> OutwardDetails { get; set; }
     }
 }
