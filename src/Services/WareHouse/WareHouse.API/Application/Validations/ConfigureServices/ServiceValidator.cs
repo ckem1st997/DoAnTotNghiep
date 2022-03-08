@@ -32,8 +32,6 @@ namespace WareHouse.API.Application.Validations.ConfigureServices
             services.AddTransient<IValidator<InwardDetailCommands>, InwardDetailsCommandValidator>();
             services.AddTransient<IValidator<OutwardCommands>, OutwardCommandValidator>();
             services.AddTransient<IValidator<OutwardDetailCommands>, OutwardDetailsCommandValidator>();
-
-
         }
     }
 }
