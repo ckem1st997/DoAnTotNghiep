@@ -17,15 +17,21 @@ using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Queries.Paginated.WareHouseBook;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.GetAll.WareHouseItem;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace WareHouse.API.Controllers
 {
     public class WareHouseBookController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
-        public WareHouseBookController(IMediator mediat, ICacheExtension cacheExtension)
+        private readonly IWebHostEnvironment _hostingEnvironment;
+
+        public WareHouseBookController(IWebHostEnvironment hostEnvironment, IMediator mediat, ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
+            _hostingEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         }
         #region R
         [Route("get-list")]
@@ -78,6 +84,43 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+
+
+        //public List<SelectListItem> GetListAccountIdentifier()
+        //{
+        //    var tmpPath = Path.Combine(_hostingEnvironment.WebRootPath, "/Excel/He_thong_tai_khoan kế toán.xlsx"); 
+        //    Workbook wb = new Workbook(tmpPath);
+        //    //Get the first worksheet.
+        //    Worksheet worksheet = wb.Worksheets[0];
+        //    //Get the cells collection.
+        //    Cells cells = worksheet.Cells;
+
+        //    //Define the list.
+        //    var list = new List<SelectListItem>(); //Get the AA column index. (Since "Status" is always @ AA column.
+        //    int col = CellsHelper.ColumnNameToIndex("A");
+        //    //  int col2 = CellsHelper.ColumnNameToIndex("B");
+
+        //    //Get the last row index in AA column.
+        //    int last_row = worksheet.Cells.GetLastDataRow(col);
+
+        //    //Loop through the "Status" column while start collecting values from row 9
+        //    //to save each value to List
+        //    for (int i = 2; i < 259; i++)
+        //    {
+        //        //    myList.Add(cells[i, col].Value.ToString(), cells[i, col + 1].Value.ToString());
+        //        var code = cells[i, col].Value.ToString() == null ? "" : cells[i, col].Value.ToString();
+        //        var name = cells[i, col + 1].Value.ToString() == null ? "" : cells[i, col + 1].Value.ToString();
+        //        var tem = new SelectListItem();
+        //        tem.Text = $"[{code.Trim()}] {name.Trim()}";
+        //        tem.Value = code.Trim();
+        //        list.Add(tem);
+        //    }
+
+        //    return list;
+        //}
+
+
+
 
         #endregion
 
