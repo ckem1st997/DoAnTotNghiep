@@ -64,7 +64,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
             sbCount.Append(" where ");
 
 
-            sb.Append("select *,WareHouse.Name as WareHouseName from  ");
+            sb.Append("select d1.*,WareHouse.Name as WareHouseName from  ");
             sb.Append(
                 "(select Inward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu nhập ' as Type,Inward.OnDelete from Inward inner join InwardDetail on Inward.Id=InwardDetail.InwardId ");
             sb.Append("union all  ");

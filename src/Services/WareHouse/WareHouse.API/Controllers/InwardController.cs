@@ -54,6 +54,8 @@ namespace WareHouse.API.Controllers
                 return Ok(resError);
             }
             var data = await _mediat.Send(new InwardGetFirstCommand() { Id = id });
+            await GetDataToDrop(data);
+
             var result = new ResultMessageResponse()
             {
                 data = data,
@@ -61,7 +63,6 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
-
 
         [Route("edit")]
         [HttpPost]

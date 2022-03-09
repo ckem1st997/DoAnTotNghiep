@@ -13,8 +13,7 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Queries.Paginated.WareHouses
 {
-    public class
-        PaginatedWareHouseCommandHandler : IRequestHandler<PaginatedWareHouseCommand, IPaginatedList<WareHouseDTO>>
+    public class PaginatedWareHouseCommandHandler : IRequestHandler<PaginatedWareHouseCommand, IPaginatedList<WareHouseDTO>>
     {
         private readonly IDapper _repository;
         private readonly IPaginatedList<WareHouseDTO> _list;
@@ -30,7 +29,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouses
         {
             if (request == null)
                 return null;
-            request.KeySearch = request.KeySearch?.Trim().Replace("=","");
+            request.KeySearch = request.KeySearch?.Trim().Replace("=", "");
             if (request.KeySearch == null)
                 request.KeySearch = "";
             StringBuilder sbCount = new StringBuilder();
