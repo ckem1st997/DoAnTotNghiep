@@ -14,7 +14,7 @@ namespace WareHouse.API.Application.Model
         public string InwardId { get; set; }
         public string ItemId { get; set; }
         public string UnitId { get; set; }
-        public int Uiquantity { get; set; }
+        public decimal Uiquantity { get; set; }
         public decimal Uiprice { get; set; }
         public decimal Amount { get; set; }
         public decimal Quantity { get; set; }

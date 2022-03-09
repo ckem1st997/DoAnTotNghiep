@@ -12,7 +12,6 @@ namespace WareHouse.API.Application.Queries.GetFisrt
     public class WareHouseLimitGetFirstCommand : Model.BaseModel, IRequest<WareHouseLimitDTO>
     {
     }
-
     public class WareHouseLimitGetFirstCommandHandler : IRequestHandler<WareHouseLimitGetFirstCommand, WareHouseLimitDTO>
     {
         private readonly IMapper _mapper;

@@ -11,7 +11,6 @@ namespace WareHouse.API.Application.Queries.GetFisrt
     public class WareHouseItemCategoryFirstCommand : Model.BaseModel, IRequest<WareHouseItemCategoryDTO>
     {
     }
-
     public class WareHouseItemCategoryFirstCommandHandler : IRequestHandler<WareHouseItemCategoryFirstCommand, WareHouseItemCategoryDTO>
     {
         private readonly IMapper _mapper;

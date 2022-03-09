@@ -132,7 +132,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
             }
 
             sb.Append("    ");
-            sb.Append(" d1.OnDelete=0 order by d1.VoucherDate ");
+            sb.Append(" d1.OnDelete=0 order by d1.VoucherDate desc ");
             sb.Append("OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
 
             sbCount.Append("    ");

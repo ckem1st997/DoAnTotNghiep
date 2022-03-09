@@ -2,7 +2,7 @@
 
 namespace WareHouse.API.Application.Model
 {
-    public class WareHouseBookDTO
+    public class WareHouseBookDTO: BaseModel
     {
         public string VoucherCode { get; set; }
         public DateTime VoucherDate { get; set; }

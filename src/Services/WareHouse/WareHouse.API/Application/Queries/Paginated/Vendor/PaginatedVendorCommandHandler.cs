@@ -50,7 +50,6 @@ namespace WareHouse.API.Application.Queries.Paginated.Vendor
             sbCount.Append(" ) t   ");
             sb.Append(" order by Name OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
             DynamicParameters parameter = new DynamicParameters();
-            Console.WriteLine(request.KeySearch);
             parameter.Add("@key", '%' + request.KeySearch + '%');
             parameter.Add("@skip", request.Skip);
             parameter.Add("@take", request.Take);
