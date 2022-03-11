@@ -103,7 +103,7 @@ namespace WareHouse.Infrastructure.Repositories
         {
             if (entity is null)
                 throw new NotImplementedException(nameof(entity));
-            if (string.IsNullOrEmpty(entity.Id))
+            if (string.IsNullOrEmpty(entity.Id) || entity.Id.Length<10)
                 entity.Id = Guid.NewGuid().ToString();
             return (await _dbSet.AddAsync(entity)).Entity;
         }

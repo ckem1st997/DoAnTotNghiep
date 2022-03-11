@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using WareHouse.Domain.Entity;
 using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {
-    public partial class CreateSerialWareHouseCommandHandler: IRequestHandler<CreateSerialWareHouseCommand, bool>
+    public partial class CreateSerialWareHouseCommandHandler : IRequestHandler<CreateSerialWareHouseCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.SerialWareHouse> _repository;
         private readonly IMapper _mapper;
@@ -23,9 +25,18 @@ namespace WareHouse.API.Application.Commands.Create
 
             if (request is null)
                 return false;
-            var result = _mapper.Map<Domain.Entity.SerialWareHouse>(request.SerialWareHouseCommands);
-            await _repository.AddAsync(result);
-            return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            var list = new List<SerialWareHouse>();
+            foreach (var item in request.SerialWareHouseCommands)
+            {
+                var serialWareHouse = _mapper.Map<SerialWareHouse>(item);
+                list.Add(serialWareHouse);
+            }
+
+            await _repository.BulkInsertAsync(list);
+            return true;
+            //var result = _mapper.Map<Domain.Entity.SerialWareHouse>(request.SerialWareHouseCommands);
+            //await _repository.AddAsync(result);
+            //return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }
 }

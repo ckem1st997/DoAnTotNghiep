@@ -141,6 +141,65 @@ namespace WareHouse.API.Controllers
             }
 
             var res = await _mediat.Send(new UpdateInwardDetailCommand() { InwardDetailCommands = inwardDetailCommands });
+            if (res)
+            {
+                var listEntity = await _mediat.Send(new GetSerialByIdInwardDetailsCommand() { Id = inwardDetailCommands.Id });
+                if (listEntity.Count() == 0 && inwardDetailCommands.SerialWareHouses != null)
+                {
+                    await _mediat.Send(new CreateSerialWareHouseCommand() { SerialWareHouseCommands = inwardDetailCommands.SerialWareHouses });
+                }
+                else if (listEntity.Count() > 0 && inwardDetailCommands.SerialWareHouses == null)
+                {
+                    var listIds = new List<string>();
+                    foreach (var item in inwardDetailCommands.SerialWareHouses)
+                    {
+                        listIds.Add(item.Id);
+                        await _mediat.Send(new DeleteSerialWareHouseCommand() { Ids = listIds });
+
+                    }
+
+                }
+                else if (listEntity.Count() > 0 && inwardDetailCommands.SerialWareHouses != null)
+                {
+
+                    var listIds = new List<string>();
+                    foreach (var item in listEntity)
+                    {
+                        var check = true;
+                        foreach (var item2 in inwardDetailCommands.SerialWareHouses)
+                        {
+                            if (item.Id.Equals(item2.Id))
+                            {
+                                check = false;
+                                break;
+                            }
+                        }
+                        if (check)
+                            listIds.Add(item.Id);
+                    }
+                    if (listIds.Count > 0)
+                        await _mediat.Send(new DeleteSerialWareHouseCommand() { Ids = listIds });
+
+                    //add
+                    var listApps = new List<SerialWareHouseCommands>();
+                    foreach (var item in inwardDetailCommands.SerialWareHouses)
+                    {
+                        var check = true;
+                        foreach (var item2 in listEntity)
+                        {
+                            if (item.Id.Equals(item2.Id))
+                            {
+                                check = false;
+                                break;
+                            }
+                        }
+                        if (check)
+                            listApps.Add(item);
+                    }
+                    if (listApps.Count > 0)
+                        await _mediat.Send(new CreateSerialWareHouseCommand() { SerialWareHouseCommands = listApps });
+                }
+            }
             var result = new ResultMessageResponse()
             {
                 success = res

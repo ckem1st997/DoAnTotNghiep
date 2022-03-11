@@ -10,7 +10,7 @@ namespace WareHouse.API.Application.Commands.Delete
 {
     public partial class DeleteSerialWareHouseCommand : IRequest<bool>
     {
-        [DataMember] public IEnumerable<string> Id { get; set; }
+        [DataMember] public IEnumerable<string> Ids { get; set; }
 
     }
 }

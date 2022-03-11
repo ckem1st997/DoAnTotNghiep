@@ -40,12 +40,12 @@ namespace WareHouse.API.Application.Queries.GetFisrt
             var res = await _repository.GetFirstAsyncAsNoTracking(request.Id);
             if (res != null)
             {
-                res.InwardDetails = (System.Collections.Generic.ICollection<Domain.Entity.InwardDetail>)await _repositoryDetail.GetAync(x => x.InwardId.Equals(request.Id));
+                res.InwardDetails = (System.Collections.Generic.ICollection<Domain.Entity.InwardDetail>)await _repositoryDetail.GetAync(x => x.InwardId.Equals(request.Id) && x.OnDelete==false);
                 if (res.InwardDetails != null)
                 {
                     foreach (var item in res.InwardDetails)
                     {
-                        item.SerialWareHouses = (System.Collections.Generic.ICollection<Domain.Entity.SerialWareHouse>)await _repositorySeri.GetAync(x => x.InwardDetailId.Equals(item.Id));
+                        item.SerialWareHouses = (System.Collections.Generic.ICollection<Domain.Entity.SerialWareHouse>)await _repositorySeri.GetAync(x => x.InwardDetailId.Equals(item.Id) && x.OnDelete == false);
 
                     }
                 }

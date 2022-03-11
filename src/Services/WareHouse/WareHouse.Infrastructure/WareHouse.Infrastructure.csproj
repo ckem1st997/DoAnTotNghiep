@@ -30,7 +30,7 @@
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00947" />
     <PackageReference Include="Serilog.Sinks.Http" Version="8.0.0-beta.10" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="5.1.1" />
-    <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="5.13.5" />
+    <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="5.13.14" />
   </ItemGroup>
 
   <ItemGroup>
