@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Aspose.Cells;
+using WareHouse.API.Application.Queries.GetFisrt;
 
 namespace WareHouse.API.Controllers
 {
@@ -105,6 +106,48 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+
+        [Route("edit-inward-details")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> EditInwardDetails(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new ArgumentException($"'{nameof(id)}' cannot be null or empty.", nameof(id));
+            }
+            var res = await _mediat.Send(new InwardDetailsGetFirstCommand() { Id = id });
+            if (res != null)
+                await GetDataToDrop(res);
+            var result = new ResultMessageResponse()
+            {
+                data = res
+            };
+            return Ok(result);
+        }
+
+
+
+        [Route("edit-inward-details")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> EditInwardDetails(InwardDetailCommands inwardDetailCommands)
+        {
+            if (inwardDetailCommands is null)
+            {
+                throw new ArgumentNullException(nameof(inwardDetailCommands));
+            }
+
+            var res = await _mediat.Send(new UpdateInwardDetailCommand() { InwardDetailCommands = inwardDetailCommands });
+            var result = new ResultMessageResponse()
+            {
+                success = res
+            };
+            return Ok(result);
+        }
+
         private async Task<InwardDetailDTO> GetDataToDrop(InwardDetailDTO res)
         {
             var getUnit = new GetDropDownUnitCommand()

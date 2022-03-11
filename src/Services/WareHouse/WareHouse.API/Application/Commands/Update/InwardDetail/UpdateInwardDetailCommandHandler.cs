@@ -7,7 +7,7 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Update
 {
-    public partial class UpdateInwardDetailCommandHandler: IRequestHandler<UpdateInwardDetailCommand, bool>
+    public partial class UpdateInwardDetailCommandHandler : IRequestHandler<UpdateInwardDetailCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.InwardDetail> _repository;
         private readonly IMapper _mapper;
@@ -24,7 +24,7 @@ namespace WareHouse.API.Application.Commands.Update
             if (request is null)
                 return false;
             var result = _mapper.Map<Domain.Entity.InwardDetail>(request.InwardDetailCommands);
-            await _repository.AddAsync(result);
+            _repository.Update(result);
             return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }
