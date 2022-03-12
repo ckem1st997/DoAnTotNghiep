@@ -22,7 +22,7 @@ namespace WareHouse.API.Filters
                 var responseObj = new ResultMessageResponse
                 {
                     code = "200",
-                    message = "One or more validation errors occurred.",
+                    message = "Đã xảy ra lỗi với dữ liệu đầu vào !",
                     errors = new Dictionary<string, IEnumerable<string>>()
                     {
                         {

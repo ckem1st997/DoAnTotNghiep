@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace WareHouse.API.Filters
 {
+    //respone return error
     public class InternalServerErrorObjectResult : ObjectResult
     {
         public InternalServerErrorObjectResult(object error)

@@ -144,7 +144,9 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
             CreateMap<Domain.Entity.SerialWareHouse, SerialWareHouseCommands>();
 
             CreateMap<SerialWareHouseCommands, Domain.Entity.SerialWareHouse>()
-                // .ForMember(x => x.InwardDetails, opt => opt.Ignore())
+                 .ForMember(x => x.InwardDetail, opt => opt.Ignore())
+                  .ForMember(x => x.OutwardDetail, opt => opt.Ignore())
+                   .ForMember(x => x.Item, opt => opt.Ignore())
                 .ForMember(x => x.DomainEvents, opt => opt.Ignore())
                 .ForMember(x => x.OnDelete, opt => opt.Ignore());
 

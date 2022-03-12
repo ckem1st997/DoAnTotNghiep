@@ -103,7 +103,7 @@ namespace WareHouse.Infrastructure.Repositories
         {
             if (entity is null)
                 throw new NotImplementedException(nameof(entity));
-            if (string.IsNullOrEmpty(entity.Id) || entity.Id.Length<10)
+            if (string.IsNullOrEmpty(entity.Id) || entity.Id.Length < 10)
                 entity.Id = Guid.NewGuid().ToString();
             return (await _dbSet.AddAsync(entity)).Entity;
         }
@@ -163,7 +163,15 @@ namespace WareHouse.Infrastructure.Repositories
         {
             if (listEntity is null)
                 throw new NotImplementedException(nameof(listEntity));
-            await _context.BulkInsertAsync(listEntity);
+            var sb = new StringBuilder();
+            await _context.BulkInsertAsync(listEntity, options =>
+            {
+                options.Log= s => sb.AppendLine(s);
+
+            });
+            // Result
+            Console.WriteLine("Logging Sql to Raw");
+            Console.WriteLine(sb.ToString());
         }
 
         public void BulkUpdate(IList<T> listEntity)

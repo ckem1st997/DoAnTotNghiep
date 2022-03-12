@@ -9,10 +9,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using WareHouse.API.Application.Message;
 using WareHouse.Domain.Exceptions;
 
 namespace WareHouse.API.Filters
 {
+    /// custom response nếu có lỗi trong server ở phần base xảy ra ngoài ý muốn
+    // bộ lọc Exceptions toàn server
     public class HttpGlobalExceptionFilter : IExceptionFilter
     {
         private readonly IWebHostEnvironment env;
@@ -46,19 +49,20 @@ namespace WareHouse.API.Filters
             }
             else
             {
-                var json = new JsonErrorResponse
-                {
-                    Messages = new[] { "An error occur.Try it again." }
+                var jsonResult=new ResultMessageResponse{
+                    message="Có lỗi ngoài ý muốn xảy ra, xin vui lòng liên hệ bộ phận liên quan !",
+                    httpStatusCode=(int)HttpStatusCode.InternalServerError,
+                    success=false
                 };
 
                 if (env.IsDevelopment())
                 {
-                    json.DeveloperMessage = context.Exception;
+                    jsonResult.data = context.Exception;
                 }
 
                 // Result asigned to a result object but in destiny the response is empty. This is a known bug of .net core 1.1
                 // It will be fixed in .net core 1.1.2. See https://github.com/aspnet/Mvc/issues/5594 for more information
-                context.Result = new InternalServerErrorObjectResult(json);
+                context.Result = new InternalServerErrorObjectResult(jsonResult);
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
             context.ExceptionHandled = true;

@@ -29,14 +29,9 @@ namespace WareHouse.API.Application.Commands.Create
             foreach (var item in request.SerialWareHouseCommands)
             {
                 var serialWareHouse = _mapper.Map<SerialWareHouse>(item);
-                list.Add(serialWareHouse);
+                await _repository.AddAsync(serialWareHouse);
             }
-
-            await _repository.BulkInsertAsync(list);
-            return true;
-            //var result = _mapper.Map<Domain.Entity.SerialWareHouse>(request.SerialWareHouseCommands);
-            //await _repository.AddAsync(result);
-            //return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         }
     }
 }
