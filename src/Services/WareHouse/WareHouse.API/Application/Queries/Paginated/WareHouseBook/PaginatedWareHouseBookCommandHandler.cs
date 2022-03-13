@@ -57,7 +57,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
             sbCount.Append("SELECT COUNT(*) FROM (  ");
             sbCount.Append("select d1.Id from  ");
             sbCount.Append(
-                "(select Inward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu nhập ' as Type,Inward.OnDelete from Inward inner join InwardDetail on Inward.Id=InwardDetail.InwardId ");
+                "(select Inward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu nhập' as Type,Inward.OnDelete from Inward inner join InwardDetail on Inward.Id=InwardDetail.InwardId ");
             sbCount.Append("union all  ");
             sbCount.Append(
                 "select Outward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu xuất' as Type,Outward.OnDelete from Outward inner join OutwardDetail on Outward.Id=OutwardDetail.OutwardId ) d1 ");
@@ -66,7 +66,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
 
             sb.Append("select d1.*,WareHouse.Name as WareHouseName from  ");
             sb.Append(
-                "(select Inward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu nhập ' as Type,Inward.OnDelete from Inward inner join InwardDetail on Inward.Id=InwardDetail.InwardId ");
+                "(select Inward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu nhập' as Type,Inward.OnDelete from Inward inner join InwardDetail on Inward.Id=InwardDetail.InwardId ");
             sb.Append("union all  ");
             sb.Append(
                 "select Outward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu xuất' as Type,Outward.OnDelete from Outward inner join OutwardDetail on Outward.Id=OutwardDetail.OutwardId ) d1 ");

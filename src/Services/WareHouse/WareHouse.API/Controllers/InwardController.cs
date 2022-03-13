@@ -38,6 +38,32 @@ namespace WareHouse.API.Controllers
 
         #endregion
 
+        [Route("details")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Details(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                var resError = new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Chưa nhập Id của phiếu !"
+                };
+                return Ok(resError);
+            }
+            var data = await _mediat.Send(new InwardGetFirstCommand() { Id = id });
+            await GetDataToDrop(data, true);
+
+            var result = new ResultMessageResponse()
+            {
+                data = data,
+                success = data != null
+            };
+            return Ok(result);
+        }
+
         [Route("edit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -103,7 +129,7 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
-        private async Task<InwardDTO> GetDataToDrop(InwardDTO res)
+        private async Task<InwardDTO> GetDataToDrop(InwardDTO res, bool details = false)
         {
 
             var getVendor = new VendorDropDownCommand()
@@ -114,16 +140,27 @@ namespace WareHouse.API.Controllers
             };
             var dataVendor = await _mediat.Send(getVendor);
 
-            var getWareHouseItemCategory = new GetDropDownWareHouseCommand()
+            var getWareHouse = new GetDropDownWareHouseCommand()
             {
                 Active = true,
                 BypassCache = false,
                 CacheKey = string.Format(WareHouseItemCategoryCacheName.WareHouseItemCategoryDropDown, true)
             };
-            var dataWareHouseItemCategory = await _mediat.Send(getWareHouseItemCategory);
-            res.WareHouseDTO = dataWareHouseItemCategory;
-            res.VendorDTO = dataVendor;
-            res.GetCreateBy = FakeData.GetCreateBy();
+            var dataWareHouse = await _mediat.Send(getWareHouse);
+
+            if (details)
+            {
+                res.WareHouseDTO = dataWareHouse.Where(x => x.Id.Equals(res.WareHouseId));
+                res.VendorDTO = dataVendor.Where(x => x.Id.Equals(res.VendorId));
+                res.GetCreateBy = FakeData.GetCreateBy().Where(x => x.Id.Equals(res.CreatedBy));
+            }
+            else
+            {
+                res.WareHouseDTO = dataWareHouse;
+                res.VendorDTO = dataVendor;
+                res.GetCreateBy = FakeData.GetCreateBy();
+            }
+
             return res;
         }
 
@@ -158,7 +195,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
-            var data = await _mediat.Send(new DeleteInwardCommand() { Id = listIds });        
+            var data = await _mediat.Send(new DeleteInwardCommand() { Id = listIds });
             var result = new ResultMessageResponse()
             {
                 success = data

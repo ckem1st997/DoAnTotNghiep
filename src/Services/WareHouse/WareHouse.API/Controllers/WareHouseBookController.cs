@@ -129,6 +129,31 @@ namespace WareHouse.API.Controllers
 
 
 
+        [Route("details-inward-details")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> DetailsInwardDetails(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                var result1 = new ResultMessageResponse()
+                {
+                    message = "Id is null or empty"
+                };
+                return Ok(result1);
+            }
+            var res = await _mediat.Send(new InwardDetailsGetFirstCommand() { Id = id });
+            if (res != null)
+                await GetDataToDrop(res, true);
+            var result = new ResultMessageResponse()
+            {
+                data = res
+            };
+            return Ok(result);
+        }
+
+
         [Route("edit-inward-details")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -207,7 +232,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-        private async Task<InwardDetailDTO> GetDataToDrop(InwardDetailDTO res)
+        private async Task<InwardDetailDTO> GetDataToDrop(InwardDetailDTO res, bool details = false)
         {
             var getUnit = new GetDropDownUnitCommand()
             {
@@ -224,15 +249,26 @@ namespace WareHouse.API.Controllers
                 CacheKey = string.Format(WareHouseItemCacheName.WareHouseItemCacheNameDropDown, true)
             };
             var dataWareHouseItem = await _mediat.Send(getWareHouseItem);
+            if (details)
+            {
+                res.WareHouseItemDTO = dataWareHouseItem.Where(x => x.Id == res.ItemId);
+                res.UnitDTO = dataUnit.Where(x => x.Id == res.UnitId);
+                res.GetAccountDTO = FakeData.GetListAccountIdentifier(_hostingEnvironment).Where(x => x.Id.Equals(res.AccountMore) || x.Id.Equals(res.AccountYes));
+            }
+            else
+            {
+                res.WareHouseItemDTO = dataWareHouseItem;
+                res.UnitDTO = dataUnit;
+                res.GetDepartmentDTO = FakeData.GetDepartment();
+                res.GetCustomerDTO = FakeData.GetCustomer();
+                res.GetEmployeeDTO = FakeData.GetEmployee();
+                res.GetProjectDTO = FakeData.GetProject();
+                res.GetStationDTO = FakeData.GetStation();
+                res.GetAccountDTO = FakeData.GetListAccountIdentifier(_hostingEnvironment);
 
-            res.WareHouseItemDTO = dataWareHouseItem;
-            res.UnitDTO = dataUnit;
-            res.GetDepartmentDTO = FakeData.GetDepartment();
-            res.GetCustomerDTO = FakeData.GetCustomer();
-            res.GetEmployeeDTO = FakeData.GetEmployee();
-            res.GetProjectDTO = FakeData.GetProject();
-            res.GetStationDTO = FakeData.GetStation();
-            res.GetAccountDTO = FakeData.GetListAccountIdentifier(_hostingEnvironment);
+            }
+
+
             return res;
         }
 
@@ -311,6 +347,20 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+        [Route("create-inward-details")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Create(InwardDetailCommands inwardDetailCommands)
+        {
+            var data = await _mediat.Send(new CreateInwardDetailCommand() { InwardDetailCommands = inwardDetailCommands });
+            var result = new ResultMessageResponse()
+            {
+                success = data
+            };
+            return Ok(result);
+        }
+
 
         [Route("delete")]
         [HttpPost]
@@ -319,6 +369,20 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
             var data = await _mediat.Send(new DeleteUnitCommand() { Id = listIds });
+            var result = new ResultMessageResponse()
+            {
+                success = data
+            };
+            return Ok(result);
+        }
+
+        [Route("delete-details-inward")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> DeleteInwarDetalis(IEnumerable<string> listIds)
+        {
+            var data = await _mediat.Send(new DeleteInwardDetailCommand() { Id = listIds });
             var result = new ResultMessageResponse()
             {
                 success = data
