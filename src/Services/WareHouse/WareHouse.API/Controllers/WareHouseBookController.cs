@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Aspose.Cells;
 using WareHouse.API.Application.Queries.GetFisrt;
+using WareHouse.API.Application.Querie.CheckCode;
 
 namespace WareHouse.API.Controllers
 {
@@ -77,6 +78,15 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetUnitByIdAsync(string IdItem)
         {
+            if(string.IsNullOrEmpty(IdItem))
+            {
+                var resError = new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Chưa nhập Id của đơn vị !"
+                };
+                return Ok(resError);
+            }
             var data = await _mediat.Send(new GetWareHouseUnitByIdItemCommand() { IdItem = IdItem });
             var result = new ResultMessageResponse()
             {
@@ -87,11 +97,27 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+
+        [Route("check-ui-quantity")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CheckUiQuantity([FromQuery]CheckUIQuantityCommands checkUIQuantityCommands)
+        {
+            var data = await _mediat.Send(new CheckUIQuantityCommand(){ItemId=checkUIQuantityCommands.ItemId,WareHouseId=checkUIQuantityCommands.WareHouseId});
+            var result = new ResultMessageResponse()
+            {
+                data = data,
+                success = data >= 0,
+            };
+            return Ok(result);
+        }
+
         #endregion
 
         #region CUD
 
-        #endregion
+        #region inward-details
         [Route("create-inward-details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -273,6 +299,26 @@ namespace WareHouse.API.Controllers
         }
 
 
+        [Route("create-inward-details")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Create(InwardDetailCommands inwardDetailCommands)
+        {
+            var data = await _mediat.Send(new CreateInwardDetailCommand() { InwardDetailCommands = inwardDetailCommands });
+            var result = new ResultMessageResponse()
+            {
+                success = data
+            };
+            return Ok(result);
+        }
+
+        #endregion
+
+
+
+
+        #region  outward-details
 
         [Route("create-outward-details")]
         [HttpGet]
@@ -288,7 +334,7 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
-        private async Task<OutwardDetailDTO> GetDataToDrop(OutwardDetailDTO res)
+        private async Task<OutwardDetailDTO> GetDataToDrop(OutwardDetailDTO res, bool details = false)
         {
             var getUnit = new GetDropDownUnitCommand()
             {
@@ -305,26 +351,178 @@ namespace WareHouse.API.Controllers
                 CacheKey = string.Format(WareHouseItemCacheName.WareHouseItemCacheNameDropDown, true)
             };
             var dataWareHouseItem = await _mediat.Send(getWareHouseItem);
+            if (details)
+            {
+                res.WareHouseItemDTO = dataWareHouseItem.Where(x => x.Id == res.ItemId);
+                res.UnitDTO = dataUnit.Where(x => x.Id == res.UnitId);
+                res.GetAccountDTO = FakeData.GetListAccountIdentifier(_hostingEnvironment).Where(x => x.Id.Equals(res.AccountMore) || x.Id.Equals(res.AccountYes));
+            }
+            else
+            {
+                res.WareHouseItemDTO = dataWareHouseItem;
+                res.UnitDTO = dataUnit;
+                res.GetDepartmentDTO = FakeData.GetDepartment();
+                res.GetCustomerDTO = FakeData.GetCustomer();
+                res.GetEmployeeDTO = FakeData.GetEmployee();
+                res.GetProjectDTO = FakeData.GetProject();
+                res.GetStationDTO = FakeData.GetStation();
+                res.GetAccountDTO = FakeData.GetListAccountIdentifier(_hostingEnvironment);
 
-            res.WareHouseItemDTO = dataWareHouseItem;
-            res.UnitDTO = dataUnit;
-            res.GetDepartmentDTO = FakeData.GetDepartment();
-            res.GetCustomerDTO = FakeData.GetCustomer();
-            res.GetEmployeeDTO = FakeData.GetEmployee();
-            res.GetProjectDTO = FakeData.GetProject();
-            res.GetStationDTO = FakeData.GetStation();
-            res.GetAccountDTO = FakeData.GetListAccountIdentifier(_hostingEnvironment);
+            }
+
             return res;
         }
 
+        [Route("edit-outward-details")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> EditOutwardDetails(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new ArgumentException($"'{nameof(id)}' cannot be null or empty.", nameof(id));
+            }
+            var res = await _mediat.Send(new OutwardDetailsGetFirstCommand() { Id = id });
+            if (res != null)
+                await GetDataToDrop(res);
+            var result = new ResultMessageResponse()
+            {
+                data = res
+            };
+            return Ok(result);
+        }
 
-        [Route("edit")]
+
+
+        [Route("details-outward-details")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> DetailsOutwardDetails(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                var result1 = new ResultMessageResponse()
+                {
+                    message = "Id is null or empty"
+                };
+                return Ok(result1);
+            }
+            var res = await _mediat.Send(new OutwardDetailsGetFirstCommand() { Id = id });
+            if (res != null)
+                await GetDataToDrop(res, true);
+            var result = new ResultMessageResponse()
+            {
+                data = res
+            };
+            return Ok(result);
+        }
+
+
+        [Route("edit-outward-details")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Edit(UnitCommands unitCommands)
+        public async Task<IActionResult> EditOutwardDetails(OutwardDetailCommands outwardDetailCommands)
         {
-            var data = await _mediat.Send(new UpdateUnitCommand() { UnitCommands = unitCommands });
+            if (outwardDetailCommands is null)
+            {
+                throw new ArgumentNullException(nameof(outwardDetailCommands));
+            }
+
+            var res = await _mediat.Send(new UpdateOutwardDetailCommand() { OutwardDetailCommands = outwardDetailCommands });
+            if (res)
+            {
+                var listEntity = await _mediat.Send(new GetSerialByIdInwardDetailsCommand() { Id = outwardDetailCommands.Id });
+                if (listEntity.Count() == 0 && outwardDetailCommands.SerialWareHouses != null)
+                {
+                    await _mediat.Send(new CreateSerialWareHouseCommand() { SerialWareHouseCommands = outwardDetailCommands.SerialWareHouses });
+                }
+                else if (listEntity.Count() > 0 && outwardDetailCommands.SerialWareHouses == null)
+                {
+                    var listIds = new List<string>();
+                    foreach (var item in outwardDetailCommands.SerialWareHouses)
+                    {
+                        listIds.Add(item.Id);
+                        await _mediat.Send(new DeleteSerialWareHouseCommand() { Ids = listIds });
+
+                    }
+
+                }
+                else if (listEntity.Count() > 0 && outwardDetailCommands.SerialWareHouses != null)
+                {
+
+                    var listIds = new List<string>();
+                    foreach (var item in listEntity)
+                    {
+                        var check = true;
+                        foreach (var item2 in outwardDetailCommands.SerialWareHouses)
+                        {
+                            if (item.Id.Equals(item2.Id))
+                            {
+                                check = false;
+                                break;
+                            }
+                        }
+                        if (check)
+                            listIds.Add(item.Id);
+                    }
+                    if (listIds.Count > 0)
+                        await _mediat.Send(new DeleteSerialWareHouseCommand() { Ids = listIds });
+
+                    //add
+                    var listApps = new List<SerialWareHouseCommands>();
+                    foreach (var item in outwardDetailCommands.SerialWareHouses)
+                    {
+                        var check = true;
+                        foreach (var item2 in listEntity)
+                        {
+                            if (item.Id.Equals(item2.Id))
+                            {
+                                check = false;
+                                break;
+                            }
+                        }
+                        if (check)
+                            listApps.Add(item);
+                    }
+                    if (listApps.Count > 0)
+                        await _mediat.Send(new CreateSerialWareHouseCommand() { SerialWareHouseCommands = listApps });
+                }
+            }
+            var result = new ResultMessageResponse()
+            {
+                success = res
+            };
+            return Ok(result);
+        }
+        [Route("create-outward-details")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Create(OutwardDetailCommands outwardDetailCommands)
+        {
+            var data = await _mediat.Send(new CreateOutwardDetailCommand() { OutwardDetailCommands = outwardDetailCommands });
+            var result = new ResultMessageResponse()
+            {
+                success = data
+            };
+            return Ok(result);
+        }
+        #endregion
+
+
+
+        #region delete
+
+        [Route("delete-inward")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> DeleteInward(IEnumerable<string> listIds)
+        {
+            var data = await _mediat.Send(new DeleteOutwardCommand() { Id = listIds });
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -333,42 +531,13 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [Route("create")]
+        [Route("delete-outward")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Create(UnitCommands unitCommands)
+        public async Task<IActionResult> DeleteOutward(IEnumerable<string> listIds)
         {
-            var data = await _mediat.Send(new CreateUnitCommand() { UnitCommands = unitCommands });
-            var result = new ResultMessageResponse()
-            {
-                success = data
-            };
-            return Ok(result);
-        }
-
-        [Route("create-inward-details")]
-        [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Create(InwardDetailCommands inwardDetailCommands)
-        {
-            var data = await _mediat.Send(new CreateInwardDetailCommand() { InwardDetailCommands = inwardDetailCommands });
-            var result = new ResultMessageResponse()
-            {
-                success = data
-            };
-            return Ok(result);
-        }
-
-
-        [Route("delete")]
-        [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Delete(IEnumerable<string> listIds)
-        {
-            var data = await _mediat.Send(new DeleteUnitCommand() { Id = listIds });
+            var data = await _mediat.Send(new DeleteInwardCommand() { Id = listIds });
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -389,5 +558,28 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+
+
+        [Route("delete-details-outward")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> DeleteOutwarDetalis(IEnumerable<string> listIds)
+        {
+            var data = await _mediat.Send(new DeleteOutwardDetailCommand() { Id = listIds });
+            var result = new ResultMessageResponse()
+            {
+                success = data
+            };
+            return Ok(result);
+        }
+        #endregion
+
+
+
+        #endregion
+
+
+
     }
 }

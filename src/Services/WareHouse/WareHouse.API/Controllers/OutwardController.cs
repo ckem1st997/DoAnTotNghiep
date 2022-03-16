@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Cache.CacheName;
@@ -18,7 +19,7 @@ using WareHouse.API.Controllers.BaseController;
 
 namespace WareHouse.API.Controllers
 {
-    public class OutwardController : BaseControllerWareHouse
+  public class OutwardController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
         private readonly ICacheExtension _cacheExtension;
@@ -33,6 +34,32 @@ namespace WareHouse.API.Controllers
         #region CUD
 
         #endregion
+
+        [Route("details")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Details(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                var resError = new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Chưa nhập Id của phiếu !"
+                };
+                return Ok(resError);
+            }
+            var data = await _mediat.Send(new OutwardGetFirstCommand() { Id = id });
+            await GetDataToDrop(data, true);
+
+            var result = new ResultMessageResponse()
+            {
+                data = data,
+                success = data != null
+            };
+            return Ok(result);
+        }
 
         [Route("edit")]
         [HttpGet]
@@ -50,6 +77,8 @@ namespace WareHouse.API.Controllers
                 return Ok(resError);
             }
             var data = await _mediat.Send(new OutwardGetFirstCommand() { Id = id });
+            await GetDataToDrop(data);
+
             var result = new ResultMessageResponse()
             {
                 data = data,
@@ -58,22 +87,21 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Edit(OutwardCommands outwardCommands)
+        public async Task<IActionResult> Edit(OutwardCommands OutwardCommands)
         {
-            outwardCommands.ModifiedDate = DateTime.Now;
-            foreach (var item in outwardCommands.OutwardDetails)
+            OutwardCommands.ModifiedDate = DateTime.Now;
+            foreach (var item in OutwardCommands.OutwardDetails)
             {
                 item.Amount = item.Uiquantity * item.Uiprice;
                 int convertRate = await _mediat.Send(new GetConvertRateByIdItemCommand() { IdItem = item.ItemId, IdUnit = item.UnitId });
                 item.Quantity = convertRate * item.Uiquantity;
                 item.Price = item.Amount;
             }
-            var data = await _mediat.Send(new UpdateOutwardCommand() { OutwardCommands=outwardCommands });
+            var data = await _mediat.Send(new UpdateOutwardCommand() { OutwardCommands = OutwardCommands });
             var result = new ResultMessageResponse()
             {
                 success = data
@@ -98,19 +126,27 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
-        private async Task<OutwardDTO> GetDataToDrop(OutwardDTO res)
+        private async Task<OutwardDTO> GetDataToDrop(OutwardDTO res, bool details = false)
         {
-
-            var getWareHouseItemCategory = new GetDropDownWareHouseCommand()
+            var getWareHouse = new GetDropDownWareHouseCommand()
             {
                 Active = true,
                 BypassCache = false,
                 CacheKey = string.Format(WareHouseItemCategoryCacheName.WareHouseItemCategoryDropDown, true)
             };
-            var dataWareHouseItemCategory = await _mediat.Send(getWareHouseItemCategory);
-            res.WareHouseDTO = dataWareHouseItemCategory;
-            res.GetCreateBy = FakeData.GetCreateBy();
-            res.GetModifiedBy = FakeData.GetCreateBy();
+            var dataWareHouse = await _mediat.Send(getWareHouse);
+
+            if (details)
+            {
+                res.WareHouseDTO = dataWareHouse.Where(x => x.Id.Equals(res.WareHouseId));
+                res.GetCreateBy = FakeData.GetCreateBy().Where(x => x.Id.Equals(res.CreatedBy));
+            }
+            else
+            {
+                res.WareHouseDTO = dataWareHouse;
+                res.GetCreateBy = FakeData.GetCreateBy();
+            }
+
             return res;
         }
 
@@ -118,18 +154,18 @@ namespace WareHouse.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Create(OutwardCommands outwardCommands)
+        public async Task<IActionResult> Create(OutwardCommands OutwardCommands)
         {
-            outwardCommands.CreatedDate = DateTime.Now;
-            outwardCommands.ModifiedDate = DateTime.Now;
-            foreach (var item in outwardCommands.OutwardDetails)
+            OutwardCommands.CreatedDate = DateTime.Now;
+            OutwardCommands.ModifiedDate = DateTime.Now;
+            foreach (var item in OutwardCommands.OutwardDetails)
             {
                 item.Amount = item.Uiquantity * item.Uiprice;
                 int convertRate = await _mediat.Send(new GetConvertRateByIdItemCommand() { IdItem = item.ItemId, IdUnit = item.UnitId });
                 item.Quantity = convertRate * item.Uiquantity;
                 item.Price = item.Amount;
             }
-            var data = await _mediat.Send(new CreateOutwardCommand() { OutwardCommands = outwardCommands });
+            var data = await _mediat.Send(new CreateOutwardCommand() { OutwardCommands = OutwardCommands });
             var result = new ResultMessageResponse()
             {
                 success = data

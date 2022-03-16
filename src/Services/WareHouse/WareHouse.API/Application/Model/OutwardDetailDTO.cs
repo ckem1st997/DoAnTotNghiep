@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace WareHouse.API.Application.Model
 {
-    public partial class OutwardDetailDTO: BaseModel
+    public partial class OutwardDetailDTO : BaseModel
     {
         public OutwardDetailDTO()
         {
@@ -30,6 +30,9 @@ namespace WareHouse.API.Application.Model
         public string ProjectName { get; set; }
         public string CustomerId { get; set; }
         public string CustomerName { get; set; }
+        public string AccountMore { get; set; }
+
+        public string AccountYes { get; set; }
 
         public virtual WareHouseItemDTO Item { get; set; }
         public virtual OutwardDTO Outward { get; set; }

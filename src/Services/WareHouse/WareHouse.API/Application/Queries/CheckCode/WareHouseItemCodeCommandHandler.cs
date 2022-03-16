@@ -18,7 +18,6 @@ namespace WareHouse.API.Application.Querie.CheckCode
     public class WareHouseItemCodeCommandHandler : IRequestHandler<WareHouseItemCodeCommand, bool>
     {
         private readonly IDapper _repository;
-
         public WareHouseItemCodeCommandHandler(IDapper repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));

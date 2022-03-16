@@ -24,7 +24,6 @@ namespace WareHouse.API.Application.Querie.CheckCode
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
-
         public async Task<bool> Handle(WareHouseItemUnitCheckExitsCommand request,
             CancellationToken cancellationToken)
         {

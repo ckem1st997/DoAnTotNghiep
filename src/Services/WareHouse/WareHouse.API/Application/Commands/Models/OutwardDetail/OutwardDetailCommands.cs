@@ -1,6 +1,8 @@
-﻿namespace WareHouse.API.Application.Commands.Models
+﻿using System.Collections.Generic;
+
+namespace WareHouse.API.Application.Commands.Models
 {
-    public partial class OutwardDetailCommands: BaseCommands
+    public partial class OutwardDetailCommands : BaseCommands
     {
         public string OutwardId { get; set; }
         public string ItemId { get; set; }
@@ -20,5 +22,12 @@
         public string ProjectName { get; set; }
         public string CustomerId { get; set; }
         public string CustomerName { get; set; }
+        public string AccountMore { get; set; }
+
+        public string AccountYes { get; set; }
+
+        public string Status { get; set; }
+
+        public virtual IEnumerable<SerialWareHouseCommands> SerialWareHouses { get; set; }
     }
 }
