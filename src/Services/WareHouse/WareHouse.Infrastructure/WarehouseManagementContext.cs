@@ -81,7 +81,7 @@ namespace WareHouse.Infrastructure
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.LogTo(Console.WriteLine);
+            => optionsBuilder.LogTo(Console.WriteLine).EnableSensitiveDataLogging();
 
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {

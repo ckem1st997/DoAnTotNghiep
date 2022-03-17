@@ -138,7 +138,7 @@ namespace WareHouse.API.Controllers
 
             if (details)
             {
-                res.WareHouseDTO = dataWareHouse.Where(x => x.Id.Equals(res.WareHouseId));
+                res.WareHouseDTO = dataWareHouse.Where(x => x.Id.Equals(res.WareHouseId) || x.Id.Equals(res.ToWareHouseId));
                 res.GetCreateBy = FakeData.GetCreateBy().Where(x => x.Id.Equals(res.CreatedBy));
             }
             else

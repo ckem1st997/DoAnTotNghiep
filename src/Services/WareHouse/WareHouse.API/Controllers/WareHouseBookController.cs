@@ -434,7 +434,7 @@ namespace WareHouse.API.Controllers
             var res = await _mediat.Send(new UpdateOutwardDetailCommand() { OutwardDetailCommands = outwardDetailCommands });
             if (res)
             {
-                var listEntity = await _mediat.Send(new GetSerialByIdInwardDetailsCommand() { Id = outwardDetailCommands.Id });
+                var listEntity = await _mediat.Send(new GetSerialByIdOutwardDetailsCommand() { Id = outwardDetailCommands.Id });
                 if (listEntity.Count() == 0 && outwardDetailCommands.SerialWareHouses != null)
                 {
                     await _mediat.Send(new CreateSerialWareHouseCommand() { SerialWareHouseCommands = outwardDetailCommands.SerialWareHouses });

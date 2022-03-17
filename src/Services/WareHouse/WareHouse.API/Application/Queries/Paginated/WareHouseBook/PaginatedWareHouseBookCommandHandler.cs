@@ -28,7 +28,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
         public DateTime? FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }
-        
+
         public string WareHouseId { get; set; }
 
     }
@@ -89,7 +89,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
                 sb.Append(" (d1.Reason like @key or d1.VoucherCode like @key) and ");
                 sbCount.Append(" (d1.Reason like @key or d1.VoucherCode like @key) and ");
             }
-            
+
             //get list id Chidren
             var departmentIds = new List<string>();
             if (!string.IsNullOrEmpty(request.WareHouseId))
@@ -118,7 +118,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
                 departmentIds.Add(request.WareHouseId);
             }
 
-            
+
             if (request.WareHouseId.HasValue() && departmentIds.Count() > 0)
             {
                 sb.Append(" d1.WareHouseId in @WareHouseId and ");
@@ -132,11 +132,14 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
             }
 
             sb.Append("    ");
-            sb.Append(" d1.OnDelete=0 order by d1.VoucherDate desc ");
+            sb.Append(" d1.OnDelete=0  ");
+            sb.Append(" group by d1.Id,d1.WareHouseID,d1.CreatedBy,d1.Deliver,d1.Reason,d1.Type,d1.VoucherCode,d1.VoucherDate,d1.ModifiedBy,d1.Receiver,d1.OnDelete,WareHouse.Name ");
+            sb.Append("  order by d1.VoucherDate desc  ");
             sb.Append("OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
 
             sbCount.Append("    ");
             sbCount.Append(" d1.OnDelete=0 ");
+            sbCount.Append(" group by d1.Id,d1.WareHouseID,d1.CreatedBy,d1.Deliver,d1.Reason,d1.Type,d1.VoucherCode,d1.VoucherDate,d1.ModifiedBy,d1.Receiver,d1.OnDelete ");
             sbCount.Append(" ) t   ");
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@key", '%' + request.KeySearch + '%');
