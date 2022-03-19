@@ -94,7 +94,6 @@ namespace WareHouse.API.Application.Queries.Paginated
                 sb.Append("  WareHouseLimit.WareHouseId in @WareHouseId and ");
                 sbCount.Append("  WareHouseLimit.WareHouseId in @WareHouseId and ");
             }
-
             sb.Append("  WareHouseLimit.OnDelete=0 ");
             sbCount.Append("  WareHouseLimit.OnDelete=0 ");
             //
