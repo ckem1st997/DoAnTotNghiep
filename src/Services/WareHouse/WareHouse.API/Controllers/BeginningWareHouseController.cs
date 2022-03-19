@@ -18,8 +18,6 @@ using WareHouse.API.Application.Queries.Paginated;
 using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Querie.CheckCode;
-using WareHouse.API.Application.Queries.GetAll;
-using WareHouse.API.Application.Queries.GetAll.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.GetAll.WareHouses;
 using WareHouse.API.Application.Queries.GetAll.WareHouseItem;
 

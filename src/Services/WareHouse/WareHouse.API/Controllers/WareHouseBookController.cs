@@ -78,7 +78,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetUnitByIdAsync(string IdItem)
         {
-            if(string.IsNullOrEmpty(IdItem))
+            if (string.IsNullOrEmpty(IdItem))
             {
                 var resError = new ResultMessageResponse()
                 {
@@ -102,9 +102,9 @@ namespace WareHouse.API.Controllers
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CheckUiQuantity([FromQuery]CheckUIQuantityCommands checkUIQuantityCommands)
+        public async Task<IActionResult> CheckUiQuantity([FromQuery] CheckUIQuantityCommands checkUIQuantityCommands)
         {
-            var data = await _mediat.Send(new CheckUIQuantityCommand(){ItemId=checkUIQuantityCommands.ItemId,WareHouseId=checkUIQuantityCommands.WareHouseId});
+            var data = await _mediat.Send(new CheckUIQuantityCommand() { ItemId = checkUIQuantityCommands.ItemId, WareHouseId = checkUIQuantityCommands.WareHouseId });
             var result = new ResultMessageResponse()
             {
                 data = data,
@@ -515,6 +515,51 @@ namespace WareHouse.API.Controllers
 
 
         #region delete
+
+
+        [Route("delete")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Delete(WareHouseBookDelete wareHouseBookDelete)
+        {
+            if (wareHouseBookDelete.idsIn is null && wareHouseBookDelete.idsOut is null)
+            {
+                var rese = new ResultMessageResponse()
+                {
+                    message = "Bạn chưa chọn phiếu nhập hoặc phiếu xuất nào !",
+                    success = false
+                };
+                return Ok(rese);
+            }
+            var dataIn = true;
+            var dataOut = true;
+            var dataRes = true;
+            var mes = "Xoá thành công !";
+            if (wareHouseBookDelete.idsIn != null)
+                dataIn = await _mediat.Send(new DeleteInwardCommand() { Id = wareHouseBookDelete.idsIn });
+            if (wareHouseBookDelete.idsOut != null)
+                dataOut = await _mediat.Send(new DeleteOutwardCommand() { Id = wareHouseBookDelete.idsOut });
+            if (!dataIn && !dataOut)
+            {
+                dataRes = false;
+                mes = "Có lỗi xảy ra, xin vui lòng thử lại !";
+            }
+            else if (dataIn && !dataOut)
+            {
+                mes = "Xoá thất bại phiếu xuất !";
+            }
+            else if (!dataIn && dataOut)
+            {
+                mes = "Xoá thất bại phiếu nhập !";
+            }
+            var result = new ResultMessageResponse()
+            {
+                success = dataRes,
+                message = mes
+            };
+            return Ok(result);
+        }
 
         [Route("delete-inward")]
         [HttpPost]
