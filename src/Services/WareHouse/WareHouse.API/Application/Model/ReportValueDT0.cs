@@ -7,6 +7,8 @@ namespace WareHouse.API.Application.Model
 {
     public class ReportValueModel : BaseModel
     {
+        public DateTime VoucherDate { get; set; }
+
         public string VoucherCodeExport { get; set; }
         public string VoucherCodeImport { get; set; }
         public string UserId { get; set; }

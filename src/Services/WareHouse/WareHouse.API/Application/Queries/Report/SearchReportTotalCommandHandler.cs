@@ -86,6 +86,7 @@ namespace WareHouse.API.Application.Queries.Report
             sb.Append("SELECT ");
             sb.Append("  whi.Code as WareHouseItemCode, ");
             sb.Append("  whi.Name as WareHouseItemName, ");
+            sb.Append("  whl.VoucherDate , ");
             sb.Append("  (SELECT ");
             sb.Append("      CASE WHEN SUM(whl.Quantity) IS NULL THEN 0 ELSE SUM(whl.Quantity) END ");
             sb.Append("    FROM vWareHouseLedger whl ");
@@ -97,7 +98,7 @@ namespace WareHouse.API.Application.Queries.Report
             sb.Append("    FROM Inward i ");
             sb.Append("      INNER JOIN InwardDetail Id ");
             sb.Append("        ON i.Id = Id.InwardId ");
-            sb.Append("    WHERE i.VoucherDate BETWEEN @pFrom AND @pTo ");
+            sb.Append("    WHERE i.VoucherDate BETWEEN @pFrom AND @pTo and i.Ondelete=0 and Id.OnDelete=0 ");
             sb.Append("    AND i.WareHouseId   in @pWareHouseId ");
             if (!string.IsNullOrEmpty(request.WareHouseItemId))
                 sb.Append("    AND Id.ItemId = @pWareHouseItemId ");
@@ -107,7 +108,7 @@ namespace WareHouse.API.Application.Queries.Report
             sb.Append("    FROM Outward o ");
             sb.Append("      INNER JOIN OutwardDetail od ");
             sb.Append("        ON o.Id = od.OutwardId ");
-            sb.Append("    WHERE o.VoucherDate BETWEEN @pFrom AND @pTo ");
+            sb.Append("    WHERE o.VoucherDate BETWEEN @pFrom AND @pTo  and o.Ondelete=0 and od.OnDelete=0  ");
             sb.Append("    AND o.WareHouseId   in @pWareHouseId ");
             if (!string.IsNullOrEmpty(request.WareHouseItemId))
                 sb.Append("    AND od.ItemId = @pWareHouseItemId ");
@@ -122,7 +123,7 @@ namespace WareHouse.API.Application.Queries.Report
             sb.Append("    FROM Inward i ");
             sb.Append("      INNER JOIN InwardDetail Id ");
             sb.Append("        ON i.Id = Id.InwardId ");
-            sb.Append("    WHERE i.VoucherDate BETWEEN @pFrom AND @pTo ");
+            sb.Append("    WHERE i.VoucherDate BETWEEN @pFrom AND @pTo  and i.Ondelete=0 and Id.OnDelete=0 ");
             sb.Append("    AND i.WareHouseId   in @pWareHouseId ");
             if (!string.IsNullOrEmpty(request.WareHouseItemId))
                 sb.Append("    AND Id.ItemId = @pWareHouseItemId ");
@@ -131,7 +132,7 @@ namespace WareHouse.API.Application.Queries.Report
             sb.Append("    FROM Outward o ");
             sb.Append("      INNER JOIN OutwardDetail od ");
             sb.Append("        ON o.Id = od.OutwardId ");
-            sb.Append("    WHERE o.VoucherDate BETWEEN @pFrom  AND @pTo ");
+            sb.Append("    WHERE o.VoucherDate BETWEEN @pFrom  AND @pTo and o.Ondelete=0 and od.OnDelete=0 ");
             sb.Append("    AND o.WareHouseId   in @pWareHouseId ");
             if (!string.IsNullOrEmpty(request.WareHouseItemId))
                 sb.Append("    AND od.ItemId = @pWareHouseItemId ");
@@ -140,12 +141,12 @@ namespace WareHouse.API.Application.Queries.Report
             sb.Append("FROM WareHouseItem whi ");
             sb.Append("  INNER JOIN Unit u ");
             sb.Append("    ON whi.UnitId = u.Id INNER JOIN vWareHouseLedger whl ON whi.Id = whl.ItemId  ");
-            sb.Append("  WHERE whl.WareHouseId  in @pWareHouseId ");
+            sb.Append("  WHERE whl.WareHouseId  in @pWareHouseId  and whi.OnDelete=0 and u.OnDelete=0 ");
             if (!string.IsNullOrEmpty(request.WareHouseItemId))
                 sb.Append(" and whi.Id = @pWareHouseItemId ");
             sb.Append("GROUP BY whi.Id, ");
             sb.Append("         whi.Name, ");
-            sb.Append("         u.UnitName,whi.Code ");
+            sb.Append("         u.UnitName,whi.Code,whl.VoucherDate  ");
             sb.Append("ORDER BY whi.Name ");
             if (!request.Excel)
                 sb.Append(" OFFSET @p2 ROWS FETCH NEXT @p3 ROWS ONLY");
@@ -155,6 +156,7 @@ namespace WareHouse.API.Application.Queries.Report
 
             StringBuilder sbCount = new StringBuilder();
 
+
             sbCount.Append("SELECT COUNT(*) FROM ( ");
             sbCount.Append("SELECT ");
             sbCount.Append("  whi.Code as WareHouseItemCode ");
@@ -163,9 +165,9 @@ namespace WareHouse.API.Application.Queries.Report
             sbCount.Append("    ON whi.UnitId = u.Id INNER JOIN vWareHouseLedger whl ON whi.Id = whl.ItemId  ");
             sbCount.Append("  WHERE whl.WareHouseId  in @pWareHouseId ");
             if (!string.IsNullOrEmpty(request.WareHouseItemId))
-                sbCount.Append("and whi.Id = @pWareHouseItemId ");
+                sbCount.Append("and whi.Id = @pWareHouseItemId and whi.OnDelete=0 and u.OnDelete=0  ");
             sbCount.Append("GROUP BY whi.Id, ");
-            sbCount.Append("         whi.Name,whi.Code ");
+            sbCount.Append("   whi.Code ");
             sbCount.Append("              ) t   ");
             sbCount.Append("  ");
 
@@ -182,6 +184,6 @@ namespace WareHouse.API.Application.Queries.Report
             return _list;
         }
 
-       
+
     }
 }

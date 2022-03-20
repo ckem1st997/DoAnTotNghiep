@@ -87,7 +87,6 @@ namespace WareHouse.API.Application.Queries.Paginated
                         CommandType.Text);
                 departmentIds.Add(request.WareHouseId);
             }
-
             //
             if (!string.IsNullOrEmpty(request.WareHouseId) && departmentIds.Count() > 0)
             {
