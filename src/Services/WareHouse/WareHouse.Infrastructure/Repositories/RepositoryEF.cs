@@ -98,7 +98,6 @@ namespace WareHouse.Infrastructure.Repositories
             return await query.AsNoTracking().ToListAsync();
         }
 
-
         public virtual async Task<T> AddAsync(T entity)
         {
             if (entity is null)
