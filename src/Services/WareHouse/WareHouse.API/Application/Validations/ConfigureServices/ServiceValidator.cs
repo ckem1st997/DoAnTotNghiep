@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Commands.Models;
 using WareHouse.API.Application.Queries.BaseModel;
+using WareHouse.API.Application.Queries.DashBoard;
 using WareHouse.API.Application.Queries.Report;
 using WareHouse.API.Application.Validations;
 using WareHouse.API.Application.Validations.BaseValidator;
@@ -34,7 +35,11 @@ namespace WareHouse.API.Application.Validations.ConfigureServices
             services.AddTransient<IValidator<OutwardCommands>, OutwardCommandValidator>();
             services.AddTransient<IValidator<OutwardDetailCommands>, OutwardDetailsCommandValidator>();
             services.AddTransient<IValidator<CheckUIQuantityCommands>, CheckUIQuantityCommandValidator>();
-             services.AddTransient<IValidator<SearchReportDetailsCommand>, SearchReportDetailsCommandValidator>();
+            services.AddTransient<IValidator<SearchReportDetailsCommand>, SearchReportDetailsCommandValidator>();
+            services.AddTransient<IValidator<SearchReportTotalCommand>, SearchReportTotalCommandValidator>();
+            services.AddTransient<IValidator<DashBoardSelectTopInwardCommand>, DashBoardSelectTopInwardCommandValidator>();
+
+
         }
     }
 }
