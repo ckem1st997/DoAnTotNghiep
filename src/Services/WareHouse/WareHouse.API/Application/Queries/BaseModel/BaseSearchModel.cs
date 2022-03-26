@@ -15,11 +15,11 @@ namespace WareHouse.API.Application.Queries.BaseModel
         
         [DataMember]
        // [Range(typeof(int), "1", "1000")]
-        public int Skip { get; set; }
+        public int Skip { get; set; }=0;
 
 
         [DataMember]
      //   [Range(typeof(int), "1", "1000")]
-        public int Take { get; set; }
+        public int Take { get; set; }=1000;
     }
 }

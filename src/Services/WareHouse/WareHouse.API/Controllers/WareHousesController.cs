@@ -20,6 +20,7 @@ using WareHouse.API.Application.Queries.Paginated.WareHouses;
 using WareHouse.API.Controllers.BaseController;
 using WareHouse.API.Application.Querie.CheckCode;
 
+
 namespace WareHouse.API.Controllers
 {
     public class WareHousesController : BaseControllerWareHouse

@@ -81,7 +81,6 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

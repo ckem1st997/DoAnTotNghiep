@@ -37,7 +37,6 @@ namespace WareHouse.API.Controllers
         }
 
         #region R
-
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]

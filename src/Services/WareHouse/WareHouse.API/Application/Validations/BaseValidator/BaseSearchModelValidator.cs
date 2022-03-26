@@ -8,12 +8,9 @@ namespace WareHouse.API.Application.Validations.BaseValidator
     {
         public BaseSearchModelValidator()
         {
-            //     RuleFor(order => order.PageIndex).GreaterThan(1).LessThan(1000)
-            //         .WithMessage(ValidatorString.GetMessageToMin(1));
-            //     RuleFor(order => order.PageIndex).LessThan(1000).WithMessage(ValidatorString.GetMessageToMin(1000));
-            //     RuleFor(order => order.PageNumber).GreaterThan(10).WithMessage(ValidatorString.GetMessageToMax(1));
-            //     RuleFor(order => order.PageNumber).LessThan(1000).WithMessage(ValidatorString.GetMessageToMin(1000));
-            //
+                RuleFor(order => order.Skip).GreaterThanOrEqualTo(0).LessThan(1000)
+                    .WithMessage(ValidatorString.GetMessageToMin(1));
+                RuleFor(order => order.Take).GreaterThan(0).LessThan(1000).WithMessage(ValidatorString.GetMessageToMin(1000));              
         }
     }
 }

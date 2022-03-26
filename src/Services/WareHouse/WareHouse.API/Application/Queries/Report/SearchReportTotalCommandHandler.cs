@@ -16,7 +16,7 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Queries.Report
 {
-    public class SearchReportTotalCommand : BaseSearchModel, IRequest<IPaginatedList<ReportValueModel>>
+    public class SearchReportTotalCommand : BaseSearchModel, IRequest<IPaginatedList<ReportValueTotalDT0>>
     {
         public string WareHouseItemId { get; set; }
         public string WareHouseId { get; set; }
@@ -24,27 +24,23 @@ namespace WareHouse.API.Application.Queries.Report
 
         public DateTime? ToDate { get; set; }
 
-        public string Proposer { get; set; }
-
-        public string DepartmentId { get; set; }
-
         public string ProjectId { get; set; }
         public bool Excel { get; set; }
     }
 
     public class SearchReportTotalCommandHandler : IRequestHandler<SearchReportTotalCommand,
-        IPaginatedList<ReportValueModel>>
+        IPaginatedList<ReportValueTotalDT0>>
     {
         private readonly IDapper _repository;
-        private readonly IPaginatedList<ReportValueModel> _list;
+        private readonly IPaginatedList<ReportValueTotalDT0> _list;
 
-        public SearchReportTotalCommandHandler(IDapper repository, IPaginatedList<ReportValueModel> list)
+        public SearchReportTotalCommandHandler(IDapper repository, IPaginatedList<ReportValueTotalDT0> list)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _list = list ?? throw new ArgumentNullException(nameof(list));
         }
 
-        public async Task<IPaginatedList<ReportValueModel>> Handle(SearchReportTotalCommand request,
+        public async Task<IPaginatedList<ReportValueTotalDT0>> Handle(SearchReportTotalCommand request,
             CancellationToken cancellationToken)
         {
             if (request == null)
@@ -86,7 +82,6 @@ namespace WareHouse.API.Application.Queries.Report
             sb.Append("SELECT ");
             sb.Append("  whi.Code as WareHouseItemCode, ");
             sb.Append("  whi.Name as WareHouseItemName, ");
-            sb.Append("  whl.VoucherDate , ");
             sb.Append("  (SELECT ");
             sb.Append("      CASE WHEN SUM(whl.Quantity) IS NULL THEN 0 ELSE SUM(whl.Quantity) END ");
             sb.Append("    FROM vWareHouseLedger whl ");
@@ -146,7 +141,7 @@ namespace WareHouse.API.Application.Queries.Report
                 sb.Append(" and whi.Id = @pWareHouseItemId ");
             sb.Append("GROUP BY whi.Id, ");
             sb.Append("         whi.Name, ");
-            sb.Append("         u.UnitName,whi.Code,whl.VoucherDate  ");
+            sb.Append("         u.UnitName,whi.Code ");
             sb.Append("ORDER BY whi.Name ");
             if (!request.Excel)
                 sb.Append(" OFFSET @p2 ROWS FETCH NEXT @p3 ROWS ONLY");
@@ -179,7 +174,7 @@ namespace WareHouse.API.Application.Queries.Report
             parameter.Add("@pFrom", ExtensionFull.GetDateToSqlRaw(request.FromDate));
             parameter.Add("@pTo", ExtensionFull.GetDateToSqlRaw(request.ToDate));
             Console.WriteLine(sb.ToString());
-            _list.Result = await _repository.GetList<ReportValueModel>(sb.ToString(), parameter, commandType: CommandType.Text);
+            _list.Result = await _repository.GetList<ReportValueTotalDT0>(sb.ToString(), parameter, commandType: CommandType.Text);
             _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, commandType: CommandType.Text);
             return _list;
         }

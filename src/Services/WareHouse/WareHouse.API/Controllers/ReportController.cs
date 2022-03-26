@@ -46,6 +46,26 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+        [Route("get-report-details")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetReportDetals([FromQuery] SearchReportDetailsCommand searchReportTotalCommand)
+        {
+            var data = await _mediat.Send(searchReportTotalCommand);
+            foreach (var item in data.Result)
+            {
+                item.Balance = item.Beginning + item.Import - item.Export;
+            }
+            var result = new ResultMessageResponse()
+            {
+                data = data.Result,
+                success = true,
+                totalCount = data.totalCount
+            };
+            return Ok(result);
+        }
+
         #endregion
 
         #region CUD
