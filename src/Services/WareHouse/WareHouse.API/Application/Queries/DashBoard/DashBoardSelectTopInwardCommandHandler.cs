@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using MediatR;
+using WareHouse.API.Application.Commands.Models;
 using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
@@ -16,14 +17,8 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Queries.DashBoard
 {
-    public class DashBoardSelectTopInwardCommand : IRequest<IPaginatedList<DashBoardSelectTopInAndOut>>
+    public class DashBoardSelectTopInwardCommand :BaseDashboardCommands, IRequest<IPaginatedList<DashBoardSelectTopInAndOut>>
     {
-        public DateTime? searchByDay { get; set; }
-        public int searchByMounth { get; set; }
-        public int searchByYear { get; set; }
-        public string order { get; set; }
-
-        public SelectTopWareHouseBook? selectTopWareHouseBook { get; set; }
     }
 
     public class DashBoardSelectTopInwardCommandHandler : IRequestHandler<DashBoardSelectTopInwardCommand,

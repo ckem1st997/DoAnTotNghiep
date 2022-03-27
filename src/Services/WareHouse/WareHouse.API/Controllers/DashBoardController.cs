@@ -38,9 +38,16 @@ namespace WareHouse.API.Controllers
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> IndexAsync([FromQuery] DashBoardSelectTopInwardCommand dashBoardSelectTopInward)
+        public async Task<IActionResult> IndexAsync([FromQuery] BaseDashboardCommands baseDashboardCommands)
         {
-            var data = await _mediat.Send(dashBoardSelectTopInward);        
+            var data = await _mediat.Send(new DashBoardSelectTopInwardCommand()
+            {
+                searchByDay = baseDashboardCommands.searchByDay,
+                searchByMounth = baseDashboardCommands.searchByMounth,
+                searchByYear = baseDashboardCommands.searchByYear,
+                selectTopWareHouseBook = baseDashboardCommands.selectTopWareHouseBook,
+                order = baseDashboardCommands.order
+            });
             var result = new ResultMessageResponse()
             {
                 data = data.Result,
@@ -55,43 +62,16 @@ namespace WareHouse.API.Controllers
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> SelectTopOutward([FromQuery] DashBoardSelectTopOutwardCommand dashBoardSelectTopOutward)
+        public async Task<IActionResult> SelectTopOutward([FromQuery] BaseDashboardCommands baseDashboardCommands)
         {
-            var data = await _mediat.Send(dashBoardSelectTopOutward);
-            if (dashBoardSelectTopOutward.selectTopWareHouseBook == SelectTopWareHouseBook.Count)
+            var data = await _mediat.Send(new DashBoardSelectTopOutwardCommand()
             {
-                if (dashBoardSelectTopOutward.order == "asc")
-                {
-                    data.Result = data.Result.OrderBy(x => x.Count);
-                }
-                else if (dashBoardSelectTopOutward.order == "desc")
-                {
-                    data.Result = data.Result.OrderByDescending(x => x.Count);
-                }
-            }
-
-            else if (dashBoardSelectTopOutward.selectTopWareHouseBook == SelectTopWareHouseBook.SumPrice)
-            {
-                if (dashBoardSelectTopOutward.order == "asc")
-                {
-                    data.Result = data.Result.OrderBy(x => x.SumPrice);
-                }
-                else if (dashBoardSelectTopOutward.order == "desc")
-                {
-                    data.Result = data.Result.OrderByDescending(x => x.SumPrice);
-                }
-            }
-            else if (dashBoardSelectTopOutward.selectTopWareHouseBook == SelectTopWareHouseBook.SumQuantity)
-            {
-                if (dashBoardSelectTopOutward.order == "asc")
-                {
-                    data.Result = data.Result.OrderBy(x => x.SumQuantity);
-                }
-                else if (dashBoardSelectTopOutward.order == "desc")
-                {
-                    data.Result = data.Result.OrderByDescending(x => x.SumQuantity);
-                }
-            }
+                searchByDay = baseDashboardCommands.searchByDay,
+                searchByMounth = baseDashboardCommands.searchByMounth,
+                searchByYear = baseDashboardCommands.searchByYear,
+                selectTopWareHouseBook = baseDashboardCommands.selectTopWareHouseBook,
+                order = baseDashboardCommands.order
+            });
             var result = new ResultMessageResponse()
             {
                 data = data.Result,
@@ -106,43 +86,16 @@ namespace WareHouse.API.Controllers
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> SelectTopOutAndIn([FromQuery] DashBoardSelectTopTotalOutAndInCommand dashBoardSelectTopTotalOutAndIn)
+        public async Task<IActionResult> SelectTopOutAndIn([FromQuery] BaseDashboardCommands baseDashboardCommands)
         {
-            var data = await _mediat.Send(dashBoardSelectTopTotalOutAndIn);
-            if (dashBoardSelectTopTotalOutAndIn.selectTopWareHouseBook == SelectTopWareHouseBook.Count)
+            var data = await _mediat.Send(new DashBoardSelectTopTotalOutAndInCommand()
             {
-                if (dashBoardSelectTopTotalOutAndIn.order == "asc")
-                {
-                    data.Result = data.Result.OrderBy(x => x.Count);
-                }
-                else if (dashBoardSelectTopTotalOutAndIn.order == "desc")
-                {
-                    data.Result = data.Result.OrderByDescending(x => x.Count);
-                }
-            }
-
-            else if (dashBoardSelectTopTotalOutAndIn.selectTopWareHouseBook == SelectTopWareHouseBook.SumPrice)
-            {
-                if (dashBoardSelectTopTotalOutAndIn.order == "asc")
-                {
-                    data.Result = data.Result.OrderBy(x => x.SumPrice);
-                }
-                else if (dashBoardSelectTopTotalOutAndIn.order == "desc")
-                {
-                    data.Result = data.Result.OrderByDescending(x => x.SumPrice);
-                }
-            }
-            else if (dashBoardSelectTopTotalOutAndIn.selectTopWareHouseBook == SelectTopWareHouseBook.SumQuantity)
-            {
-                if (dashBoardSelectTopTotalOutAndIn.order == "asc")
-                {
-                    data.Result = data.Result.OrderBy(x => x.SumQuantity);
-                }
-                else if (dashBoardSelectTopTotalOutAndIn.order == "desc")
-                {
-                    data.Result = data.Result.OrderByDescending(x => x.SumQuantity);
-                }
-            }
+                searchByDay = baseDashboardCommands.searchByDay,
+                searchByMounth = baseDashboardCommands.searchByMounth,
+                searchByYear = baseDashboardCommands.searchByYear,
+                selectTopWareHouseBook = baseDashboardCommands.selectTopWareHouseBook,
+                order = baseDashboardCommands.order
+            });
             var result = new ResultMessageResponse()
             {
                 data = data.Result,
@@ -152,6 +105,40 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+
+
+        [Route("get-select-top-item-beginning-order-by")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> DashBoardSelectTopItemBeginning([FromQuery] DashBoardSelectTopItemBeginningCommand orderBy)
+        {
+            var data = await _mediat.Send(orderBy);
+            var result = new ResultMessageResponse()
+            {
+                data = data.Result,
+                success = true,
+                totalCount = data.totalCount
+            };
+            return Ok(result);
+        }
+
+
+        [Route("get-select-top-warehouse-beginning-order-by")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> DashBoardSelectTopWHBeginning([FromQuery] DashBoardSelectTopWareHouseBeginningCommand orderBy)
+        {
+            var data = await _mediat.Send(orderBy);
+            var result = new ResultMessageResponse()
+            {
+                data = data.Result,
+                success = true,
+                totalCount = data.totalCount
+            };
+            return Ok(result);
+        }
         #endregion
 
         #region CUD

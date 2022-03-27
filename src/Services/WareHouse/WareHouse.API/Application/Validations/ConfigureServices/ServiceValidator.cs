@@ -37,8 +37,9 @@ namespace WareHouse.API.Application.Validations.ConfigureServices
             services.AddTransient<IValidator<CheckUIQuantityCommands>, CheckUIQuantityCommandValidator>();
             services.AddTransient<IValidator<SearchReportDetailsCommand>, SearchReportDetailsCommandValidator>();
             services.AddTransient<IValidator<SearchReportTotalCommand>, SearchReportTotalCommandValidator>();
-            services.AddTransient<IValidator<DashBoardSelectTopInwardCommand>, DashBoardSelectTopInwardCommandValidator>();
-
+            services.AddTransient<IValidator<BaseDashboardCommands>, DashBoardSelectTopInAndOutCommandValidator>();
+            services.AddTransient<IValidator<DashBoardSelectTopItemBeginningCommand>, DashBoardSelectTopItemBeginningCommandValidator>();
+            services.AddTransient<IValidator<DashBoardSelectTopWareHouseBeginningCommand>, DashBoardSelectTopWareHouseCommandValidator>();
 
         }
     }

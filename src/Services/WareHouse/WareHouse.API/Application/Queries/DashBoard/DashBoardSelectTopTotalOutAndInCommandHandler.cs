@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using MediatR;
+using WareHouse.API.Application.Commands.Models;
 using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
@@ -16,14 +17,8 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Queries.DashBoard
 {
-    public class DashBoardSelectTopTotalOutAndInCommand : IRequest<IPaginatedList<DashBoardSelectTopInAndOut>>
+    public class DashBoardSelectTopTotalOutAndInCommand : BaseDashboardCommands, IRequest<IPaginatedList<DashBoardSelectTopInAndOut>>
     {
-        public DateTime? searchByDay { get; set; }
-        public int searchByMounth { get; set; }
-        public int searchByYear { get; set; }
-        public string order { get; set; }
-
-        public SelectTopWareHouseBook selectTopWareHouseBook { get; set; }
     }
 
     public class DashBoardSelectTopTotalOutAndInCommandHandler : IRequestHandler<DashBoardSelectTopTotalOutAndInCommand,
@@ -75,7 +70,16 @@ namespace WareHouse.API.Application.Queries.DashBoard
                 sb.Append("and YEAR(Outward.VoucherDate)=@searchByYear ");
             sb.Append("group by WareHouseItem.Name,WareHouseItem.Code,WareHouseItem.Id,Unit.UnitName) d1 ");
             sb.Append("group by d1.Name,d1.Code,d1.Id,d1.UnitName ");
-
+            if (request.selectTopWareHouseBook.Equals(SelectTopWareHouseBook.Count))
+                sb.Append("order by sum(d1.Count)  ");
+            else if (request.selectTopWareHouseBook.Equals(SelectTopWareHouseBook.SumQuantity))
+                sb.Append("order by sum(d1.SumQuantity)  ");
+            else if (request.selectTopWareHouseBook.Equals(SelectTopWareHouseBook.SumPrice))
+                sb.Append("order by sum(d1.SumPrice)  ");
+            if (request.order == "desc")
+                sb.Append("desc ");
+            else if (request.order == "asc")
+                sb.Append("asc ");
 
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@searchByDay", request.searchByDay);
