@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using MediatR;
+using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;
@@ -21,6 +22,8 @@ namespace WareHouse.API.Application.Queries.DashBoard
         public int searchByMounth { get; set; }
         public int searchByYear { get; set; }
         public string order { get; set; }
+
+        public SelectTopWareHouseBook selectTopWareHouseBook { get; set; }
     }
 
     public class DashBoardSelectTopInwardCommandHandler : IRequestHandler<DashBoardSelectTopInwardCommand,
@@ -44,7 +47,7 @@ namespace WareHouse.API.Application.Queries.DashBoard
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append("select top 10 count(InwardDetail.ItemId) as Count,WareHouseItem.Name,WareHouseItem.Code,WareHouseItem.Id,sum(InwardDetail.Quantity) as SumQuantity,Unit.UnitName,SUM(Price)as SumPrice ");
+            sb.Append("select top 5 count(InwardDetail.ItemId) as Count,WareHouseItem.Name,WareHouseItem.Code,WareHouseItem.Id,sum(InwardDetail.Quantity) as SumQuantity,Unit.UnitName,SUM(Price)as SumPrice ");
             sb.Append("from Inward inner join InwardDetail on Inward.Id=InwardDetail.InwardId  ");
             sb.Append("inner join WareHouseItem on InwardDetail.ItemId=WareHouseItem.Id ");
             sb.Append("inner join Unit on WareHouseItem.UnitId=Unit.Id ");
