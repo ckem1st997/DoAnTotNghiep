@@ -23,7 +23,7 @@ namespace WareHouse.API.Application.Queries.DashBoard
         public int searchByYear { get; set; }
         public string order { get; set; }
 
-        public SelectTopWareHouseBook selectTopWareHouseBook { get; set; }
+        public SelectTopWareHouseBook? selectTopWareHouseBook { get; set; }
     }
 
     public class DashBoardSelectTopInwardCommandHandler : IRequestHandler<DashBoardSelectTopInwardCommand,
@@ -45,29 +45,18 @@ namespace WareHouse.API.Application.Queries.DashBoard
                 return null;
             // BuildMyString.com generated code. Please enjoy your string responsibly.
 
-            StringBuilder sb = new StringBuilder();
-
-            sb.Append("select top 5 count(InwardDetail.ItemId) as Count,WareHouseItem.Name,WareHouseItem.Code,WareHouseItem.Id,sum(InwardDetail.Quantity) as SumQuantity,Unit.UnitName,SUM(Price)as SumPrice ");
-            sb.Append("from Inward inner join InwardDetail on Inward.Id=InwardDetail.InwardId  ");
-            sb.Append("inner join WareHouseItem on InwardDetail.ItemId=WareHouseItem.Id ");
-            sb.Append("inner join Unit on WareHouseItem.UnitId=Unit.Id ");
-            sb.Append("where Inward.OnDelete=0 and InwardDetail.OnDelete=0 and WareHouseItem.OnDelete=0 and Unit.OnDelete=0 ");
-            if (request.searchByDay.HasValue)
-                sb.Append("and Inward.VoucherDate=cast(@searchByDay as date) ");
-            if (request.searchByMounth > 0 && request.searchByMounth <= 12)
-                sb.Append("and MONTH(Inward.VoucherDate)=@searchByMounth ");
-            if (request.searchByYear > 1999 && request.searchByYear <= 2050)
-                sb.Append("and YEAR(Inward.VoucherDate)=@searchByYear ");
-            sb.Append("group by WareHouseItem.Name,WareHouseItem.Code,WareHouseItem.Id,Unit.UnitName ");
-            //   sb.Append("order by count(InwardDetail.ItemId) desc ");
+            StringBuilder sb = SelectGenSqlToDashboard.SelectTopInward(request);
 
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@searchByDay", request.searchByDay);
             parameter.Add("@searchByMounth", request.searchByMounth);
             parameter.Add("@searchByYear", request.searchByYear);
+            parameter.Add("@soft", request.order);
             _list.Result = await _repository.GetList<DashBoardSelectTopInAndOut>(sb.ToString(), parameter, CommandType.Text);
             _list.totalCount = _list.Result.Count();
             return _list;
         }
+
+
     }
 }

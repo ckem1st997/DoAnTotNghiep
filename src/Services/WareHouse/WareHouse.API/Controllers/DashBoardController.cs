@@ -40,41 +40,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> IndexAsync([FromQuery] DashBoardSelectTopInwardCommand dashBoardSelectTopInward)
         {
-            var data = await _mediat.Send(dashBoardSelectTopInward);
-            if (dashBoardSelectTopInward.selectTopWareHouseBook == SelectTopWareHouseBook.Count)
-            {
-                if (dashBoardSelectTopInward.order == "asc")
-                {
-                    data.Result = data.Result.OrderBy(x => x.Count);
-                }
-                else if (dashBoardSelectTopInward.order == "desc")
-                {
-                    data.Result = data.Result.OrderByDescending(x => x.Count);
-                }
-            }
-
-            else if (dashBoardSelectTopInward.selectTopWareHouseBook == SelectTopWareHouseBook.SumPrice)
-            {
-                if (dashBoardSelectTopInward.order == "asc")
-                {
-                    data.Result = data.Result.OrderBy(x => x.SumPrice);
-                }
-                else if (dashBoardSelectTopInward.order == "desc")
-                {
-                    data.Result = data.Result.OrderByDescending(x => x.SumPrice);
-                }
-            }
-            else if (dashBoardSelectTopInward.selectTopWareHouseBook == SelectTopWareHouseBook.SumQuantity)
-            {
-                if (dashBoardSelectTopInward.order == "asc")
-                {
-                    data.Result = data.Result.OrderBy(x => x.SumQuantity);
-                }
-                else if (dashBoardSelectTopInward.order == "desc")
-                {
-                    data.Result = data.Result.OrderByDescending(x => x.SumQuantity);
-                }
-            }
+            var data = await _mediat.Send(dashBoardSelectTopInward);        
             var result = new ResultMessageResponse()
             {
                 data = data.Result,
