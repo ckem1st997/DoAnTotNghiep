@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Report.API.Application.Queries.GetAll.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,6 +67,23 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+
+        [Route("get-report-treeview")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetReportTreeView()
+        {
+            var data = await _mediat.Send(new ReportGetTreeViewCommand());
+           
+            var result = new ResultMessageResponse()
+            {
+                data = data,
+                success = true,
+                totalCount = data.Count()
+            };
+            return Ok(result);
+        }
         #endregion
 
         #region CUD
