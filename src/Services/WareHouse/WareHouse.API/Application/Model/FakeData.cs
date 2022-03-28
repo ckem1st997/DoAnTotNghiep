@@ -8,6 +8,7 @@ using System.IO;
 
 namespace WareHouse.API.Application.Model
 {
+    
     public static class FakeData
     {
         public static IEnumerable<BaseSelectDTO> GetDepartment()

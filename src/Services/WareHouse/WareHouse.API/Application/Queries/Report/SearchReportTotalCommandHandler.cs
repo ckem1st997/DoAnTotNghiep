@@ -173,7 +173,6 @@ namespace WareHouse.API.Application.Queries.Report
             parameter.Add("@pWareHouseItemId", request.WareHouseItemId);
             parameter.Add("@pFrom", ExtensionFull.GetDateToSqlRaw(request.FromDate));
             parameter.Add("@pTo", ExtensionFull.GetDateToSqlRaw(request.ToDate));
-            Console.WriteLine(sb.ToString());
             _list.Result = await _repository.GetList<ReportValueTotalDT0>(sb.ToString(), parameter, commandType: CommandType.Text);
             _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, commandType: CommandType.Text);
             return _list;
