@@ -68,7 +68,7 @@ namespace WareHouse.API.Controllers
             {
                 data = data,
                 success = data != null,
-                totalCount= data.Inward.Sum(x => x.Count) + data.Outward.Sum(x => x.Count)
+                totalCount = data.Inward.Sum(x => x.Count) + data.Outward.Sum(x => x.Count)
             };
             return Ok(result);
         }
@@ -84,7 +84,24 @@ namespace WareHouse.API.Controllers
             {
                 data = data,
                 success = data != null,
-                totalCount=data.Inward.Sum(x=>x.Count)+ data.Outward.Sum(x => x.Count)
+                totalCount = data.Inward.Sum(x => x.Count) + data.Outward.Sum(x => x.Count)
+            };
+            return Ok(result);
+        }
+
+
+        [Route("get-select-chart-by-index")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> SearchChartByIndex()
+        {
+            var data = await _mediat.Send(new SelectTopDashBoardCommand());
+            var result = new ResultMessageResponse()
+            {
+                data = data,
+                success = data != null,
+                totalCount = 0
             };
             return Ok(result);
         }
