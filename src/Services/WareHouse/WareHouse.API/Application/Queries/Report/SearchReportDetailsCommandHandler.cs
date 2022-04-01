@@ -129,7 +129,7 @@ namespace WareHouse.API.Application.Queries.Report
             if (!string.IsNullOrEmpty(request.KeySearch))
                 sb.Append("and (d1.DepartmentName like @key or d1.EmployeeName like @key or d1.Description like @key or d1.ProjectName like @key) ");
             sb.Append("group by d1.VoucherDate,d1.Quantity,d1.Beginning,d1.Import,d1.Export,WareHouseItem.Code,WareHouseItem.Name,d1.VoucherCode,Unit.UnitName,d1.Reason,d1.EmployeeName,d1.DepartmentName,d1.ProjectName,d1.Description ");
-            sb.Append(" order by d1.VoucherDate ");
+            sb.Append(" order by d1.VoucherDate");
             if (!request.Excel)
                 sb.Append(" OFFSET @p2 ROWS FETCH NEXT @p3 ROWS ONLY");
 

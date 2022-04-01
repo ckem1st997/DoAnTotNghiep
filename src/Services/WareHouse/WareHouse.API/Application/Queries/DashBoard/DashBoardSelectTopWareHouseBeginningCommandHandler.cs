@@ -44,7 +44,7 @@ namespace WareHouse.API.Application.Queries.DashBoard
             StringBuilder sb = new StringBuilder();
 
             sb.Append("select d1.WareHouseId,d1.Name,sum(d1.Balance) as SumBalance from ");
-            sb.Append("(SELECT top 5 whl.WareHouseId,WareHouse.Name,     ");
+            sb.Append("(SELECT whl.WareHouseId,WareHouse.Name,     ");
             sb.Append("  ");
             sb.Append("(SELECT       CASE WHEN SUM(whl.Quantity) IS NULL THEN 0 ELSE SUM(whl.Quantity) END     ");
             sb.Append("FROM vWareHouseLedger whl     WHERE   whl.ItemId = whi.Id   ) +  ");

@@ -40,6 +40,8 @@ namespace WareHouse.API.Application.Validations.ConfigureServices
             services.AddTransient<IValidator<BaseDashboardCommands>, DashBoardSelectTopInAndOutCommandValidator>();
             services.AddTransient<IValidator<DashBoardSelectTopItemBeginningCommand>, DashBoardSelectTopItemBeginningCommandValidator>();
             services.AddTransient<IValidator<DashBoardSelectTopWareHouseBeginningCommand>, DashBoardSelectTopWareHouseCommandValidator>();
+            services.AddTransient<IValidator<DashBoardChartInAndOutCountByDayCommand>, DashBoardChartInAndOutCountByDayCommandValidator>();
+            services.AddTransient<IValidator<DashBoardChartInAndOutCountByMouthCommand>, DashBoardChartInAndOutCountByMounthCommandValidator>();
 
         }
     }

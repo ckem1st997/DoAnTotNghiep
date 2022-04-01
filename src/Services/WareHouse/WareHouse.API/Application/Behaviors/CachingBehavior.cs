@@ -48,7 +48,7 @@ namespace WareHouse.API.Application.Behaviors
             async Task<TResponse> GetResponseAndAddToCache()
             {
                 response = await next();
-                var slidingExpiration = request.SlidingExpiration ?? TimeSpan.FromHours(_settings.SlidingExpiration);
+                var slidingExpiration = request.SlidingExpiration ?? TimeSpan.FromDays(_settings.SlidingExpiration);
                 var options = new DistributedCacheEntryOptions
                 {
                     SlidingExpiration = slidingExpiration

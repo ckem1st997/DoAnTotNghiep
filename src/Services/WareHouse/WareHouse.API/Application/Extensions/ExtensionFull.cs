@@ -10,5 +10,10 @@ namespace WareHouse.API.Application.Extensions
         {
             return "" + date.Value.Year + "-" + date.Value.Month + "-" + date.Value.Day + "  00:00:00  ";
         }
+
+        public static string GetDateToSqlRaw(int Year, int Mouth, int Day)
+        {
+            return "" +Year+ "-" + Mouth + "-" + Day + "";
+        }
     }
 }

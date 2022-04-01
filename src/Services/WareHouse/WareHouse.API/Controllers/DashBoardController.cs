@@ -57,6 +57,38 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+        [Route("get-select-chart-by-mouth")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> SearchChartByMouth([FromQuery] DashBoardChartInAndOutCountByDayCommand dashBoardChartInAndOut)
+        {
+            var data = await _mediat.Send(dashBoardChartInAndOut);
+            var result = new ResultMessageResponse()
+            {
+                data = data,
+                success = data != null,
+                totalCount= data.Inward.Sum(x => x.Count) + data.Outward.Sum(x => x.Count)
+            };
+            return Ok(result);
+        }
+
+        [Route("get-select-chart-by-year")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> SearchChartByYear([FromQuery] DashBoardChartInAndOutCountByMouthCommand dashBoardChartInAndOut)
+        {
+            var data = await _mediat.Send(dashBoardChartInAndOut);
+            var result = new ResultMessageResponse()
+            {
+                data = data,
+                success = data != null,
+                totalCount=data.Inward.Sum(x=>x.Count)+ data.Outward.Sum(x => x.Count)
+            };
+            return Ok(result);
+        }
+
 
         [Route("get-select-top-outward-order-by")]
         [HttpGet]

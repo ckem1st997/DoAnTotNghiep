@@ -67,6 +67,7 @@ namespace WareHouse.API.Application.Queries.DashBoard
             parameter.Add("@searchByDay", request.searchByDay);
             parameter.Add("@searchByMounth", request.searchByMounth);
             parameter.Add("@searchByYear", request.searchByYear);
+            Console.Write(sb.ToString());
             _list.Result = await _repository.GetList<DashBoardSelectTopInAndOut>(sb.ToString(), parameter, CommandType.Text);
             _list.totalCount = _list.Result.Count();
             return _list;
