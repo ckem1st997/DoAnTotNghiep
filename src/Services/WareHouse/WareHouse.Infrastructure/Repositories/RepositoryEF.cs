@@ -122,12 +122,12 @@ namespace WareHouse.Infrastructure.Repositories
 
         public virtual async Task<T> GetFirstAsync(string id)
         {
-            return await _dbSet.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            return await _dbSet.FirstOrDefaultAsync(x => x.Id.Equals(id) && !x.OnDelete);
         }
 
         public virtual async Task<T> GetFirstAsyncAsNoTracking(string id)
         {
-            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id.Equals(id));
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id.Equals(id) && !x.OnDelete);
         }
 
         public virtual async Task<IEnumerable<T>> ListAllAsync()

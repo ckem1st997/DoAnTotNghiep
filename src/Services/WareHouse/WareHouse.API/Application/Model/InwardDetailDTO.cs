@@ -13,6 +13,9 @@ namespace WareHouse.API.Application.Model
         }
         public string InwardId { get; set; }
         public string ItemId { get; set; }
+        public string ItemName { get; set; }
+        public string Code { get; set; }
+        public string UnitName { get; set; }
         public string UnitId { get; set; }
         public decimal Uiquantity { get; set; }
         public decimal Uiprice { get; set; }
