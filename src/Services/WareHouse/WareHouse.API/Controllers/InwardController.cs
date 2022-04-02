@@ -31,7 +31,39 @@ namespace WareHouse.API.Controllers
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
         }
-        #region R      
+        #region R    
+
+        /// <summary>
+        /// Kiểm tra vật tư tồn tại trong kho
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <param name="warehouseId"></param>
+        /// <returns></returns>
+        [Route("check-item-exist")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CheckItemExist(string itemId, string warehouseId)
+        {
+            if (string.IsNullOrEmpty(itemId) || string.IsNullOrEmpty(warehouseId))
+            {
+                return Ok(new ResultMessageResponse
+                {
+                    success = false,
+                    message = "Bạn chưa chọn vật tư hoặc kho !"
+                });
+            }
+
+            var data = await _mediat.Send(new CheckItemAndWareHouseItemByOutWardCommand() {ItemId=itemId,WareHouseId=warehouseId });
+
+            return Ok(new ResultMessageResponse
+            {
+                data = data,
+                success = data
+            });
+        }
+
+
         #endregion
 
         #region CUD

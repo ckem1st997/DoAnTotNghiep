@@ -108,7 +108,7 @@ namespace WareHouse.API.Controllers
             var result = new ResultMessageResponse()
             {
                 data = data,
-                success = data >= 0,
+                success = true,
             };
             return Ok(result);
         }
