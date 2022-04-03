@@ -153,16 +153,69 @@ namespace WareHouse.API.Application.Queries.Report
 
 
             sbCount.Append("SELECT COUNT(*) FROM ( ");
-            sbCount.Append("SELECT ");
-            sbCount.Append("  whi.Code as WareHouseItemCode ");
+                       sbCount.Append("SELECT ");
+            sbCount.Append("  whi.Code as WareHouseItemCode, ");
+            sbCount.Append("  whi.Name as WareHouseItemName, ");
+            sbCount.Append("  (SELECT ");
+            sbCount.Append("      CASE WHEN SUM(whl.Quantity) IS NULL THEN 0 ELSE SUM(whl.Quantity) END ");
+            sbCount.Append("    FROM vWareHouseLedger whl ");
+            sbCount.Append("    WHERE whl.WareHouseId   in @pWareHouseId ");
+            sbCount.Append("    AND whl.ItemId = whi.Id ");
+            sbCount.Append("    AND whl.VoucherDate < @pFrom) AS Beginning, ");
+            sbCount.Append("  (SELECT ");
+            sbCount.Append("      CASE WHEN SUM(Id.Quantity) IS NULL THEN 0 ELSE SUM(Id.Quantity) END ");
+            sbCount.Append("    FROM Inward i ");
+            sbCount.Append("      INNER JOIN InwardDetail Id ");
+            sbCount.Append("        ON i.Id = Id.InwardId ");
+            sbCount.Append("    WHERE i.VoucherDate BETWEEN @pFrom AND @pTo and i.Ondelete=0 and Id.OnDelete=0 ");
+            sbCount.Append("    AND i.WareHouseId   in @pWareHouseId ");
+            if (!string.IsNullOrEmpty(request.WareHouseItemId))
+                sbCount.Append("    AND Id.ItemId = @pWareHouseItemId ");
+            sbCount.Append("    AND Id.ItemId = whi.Id) AS Import, ");
+            sbCount.Append("  (SELECT ");
+            sbCount.Append("      CASE WHEN SUM(od.Quantity) IS NULL THEN 0 ELSE SUM(od.Quantity) END ");
+            sbCount.Append("    FROM Outward o ");
+            sbCount.Append("      INNER JOIN OutwardDetail od ");
+            sbCount.Append("        ON o.Id = od.OutwardId ");
+            sbCount.Append("    WHERE o.VoucherDate BETWEEN @pFrom AND @pTo  and o.Ondelete=0 and od.OnDelete=0  ");
+            sbCount.Append("    AND o.WareHouseId   in @pWareHouseId ");
+            if (!string.IsNullOrEmpty(request.WareHouseItemId))
+                sbCount.Append("    AND od.ItemId = @pWareHouseItemId ");
+            sbCount.Append("    AND od.ItemId = whi.Id) AS Export, ");
+            sbCount.Append("  (SELECT ");
+            sbCount.Append("      CASE WHEN SUM(whl.Quantity) IS NULL THEN 0 ELSE SUM(whl.Quantity) END ");
+            sbCount.Append("    FROM vWareHouseLedger whl ");
+            sbCount.Append("    WHERE whl.WareHouseId   in @pWareHouseId ");
+            sbCount.Append("    AND whl.ItemId = whi.Id ");
+            sbCount.Append("    AND whl.VoucherDate < @pFrom) + (SELECT ");
+            sbCount.Append("      CASE WHEN SUM(Id.Quantity) IS NULL THEN 0 ELSE SUM(Id.Quantity) END ");
+            sbCount.Append("    FROM Inward i ");
+            sbCount.Append("      INNER JOIN InwardDetail Id ");
+            sbCount.Append("        ON i.Id = Id.InwardId ");
+            sbCount.Append("    WHERE i.VoucherDate BETWEEN @pFrom AND @pTo  and i.Ondelete=0 and Id.OnDelete=0 ");
+            sbCount.Append("    AND i.WareHouseId   in @pWareHouseId ");
+            if (!string.IsNullOrEmpty(request.WareHouseItemId))
+                sbCount.Append("    AND Id.ItemId = @pWareHouseItemId ");
+            sbCount.Append("    AND Id.ItemId = whi.Id) - (SELECT ");
+            sbCount.Append("      CASE WHEN SUM(od.Quantity) IS NULL THEN 0 ELSE SUM(od.Quantity) END ");
+            sbCount.Append("    FROM Outward o ");
+            sbCount.Append("      INNER JOIN OutwardDetail od ");
+            sbCount.Append("        ON o.Id = od.OutwardId ");
+            sbCount.Append("    WHERE o.VoucherDate BETWEEN @pFrom  AND @pTo and o.Ondelete=0 and od.OnDelete=0 ");
+            sbCount.Append("    AND o.WareHouseId   in @pWareHouseId ");
+            if (!string.IsNullOrEmpty(request.WareHouseItemId))
+                sbCount.Append("    AND od.ItemId = @pWareHouseItemId ");
+            sbCount.Append("    AND od.ItemId = whi.Id) AS Balance, ");
+            sbCount.Append("  u.UnitName ");
             sbCount.Append("FROM WareHouseItem whi ");
             sbCount.Append("  INNER JOIN Unit u ");
             sbCount.Append("    ON whi.UnitId = u.Id INNER JOIN vWareHouseLedger whl ON whi.Id = whl.ItemId  ");
-            sbCount.Append("  WHERE whl.WareHouseId  in @pWareHouseId ");
+            sbCount.Append("  WHERE whl.WareHouseId  in @pWareHouseId  and whi.OnDelete=0 and u.OnDelete=0 ");
             if (!string.IsNullOrEmpty(request.WareHouseItemId))
-                sbCount.Append("and whi.Id = @pWareHouseItemId and whi.OnDelete=0 and u.OnDelete=0  ");
+                sbCount.Append(" and whi.Id = @pWareHouseItemId ");
             sbCount.Append("GROUP BY whi.Id, ");
-            sbCount.Append("   whi.Code ");
+            sbCount.Append("         whi.Name, ");
+            sbCount.Append("         u.UnitName,whi.Code ");
             sbCount.Append("              ) t   ");
             sbCount.Append("  ");
 

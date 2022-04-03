@@ -17,6 +17,7 @@ using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.GetFisrt;
 using WareHouse.API.Application.Queries.Paginated.Unit;
+using WareHouse.API.Application.Queries.Report;
 using WareHouse.API.Controllers.BaseController;
 
 namespace WareHouse.API.Controllers
@@ -60,10 +61,7 @@ namespace WareHouse.API.Controllers
             }
             // var res= await _mediat.Send(paginatedList); OutwardGetFirstExcelCommand
             var res = await _mediat.Send(new OutwardGetFirstExcelCommand() { Id = id });
-            var entity = res;
-            var result = res.OutwardDetails;
-
-            if (entity is null || result is null)
+            if (res is null || res.OutwardDetails is null)
             {
                 return Ok(new ResultMessageResponse()
                 {
@@ -73,6 +71,9 @@ namespace WareHouse.API.Controllers
                     message = "Không tồn tại mã phiếu xuất !"
                 });
             }
+            var entity = res;
+            var result = res.OutwardDetails;
+
 
             #endregion
             var exportDate = DateTime.Now;
@@ -199,11 +200,8 @@ namespace WareHouse.API.Controllers
                 });
             }
             // var res= await _mediat.Send(paginatedList); OutwardGetFirstExcelCommand
-            var res = await _mediat.Send(new OutwardGetFirstExcelCommand() { Id = id });
-            var entity = res;
-            var result = res.OutwardDetails;
-
-            if (entity is null || result is null)
+            var res = await _mediat.Send(new InwardGetFirstExcelCommand() { Id = id });
+            if (res is null || res.InwardDetails is null)
             {
                 return Ok(new ResultMessageResponse()
                 {
@@ -213,6 +211,10 @@ namespace WareHouse.API.Controllers
                     message = "Không tồn tại mã phiếu xuất !"
                 });
             }
+            var entity = res;
+            var result = res.InwardDetails;
+
+
 
             #endregion
             var exportDate = DateTime.Now;
@@ -319,6 +321,201 @@ namespace WareHouse.API.Controllers
 
 
         }
+
+
+
+
+
+
+
+        /// <summary>
+        /// Xuất báo cáo excel
+        /// </summary>
+        /// <param name="searchModel"></param>
+        /// <returns></returns>
+
+        [Route("export-report-total")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetExcelReportTotal([FromQuery] SearchReportTotalCommand searchModel)
+        {
+
+            if (searchModel is null || !searchModel.Excel)
+            {
+                return Ok(new ResultMessageResponse()
+                {
+                    data = null,
+                    success = true,
+                    code = new StatusCodeResult((int)HttpStatusCode.BadRequest).ToString(),
+                    message = "Bạn chưa nhập tham số yêu cầu !"
+                });
+            }
+            var res = await _mediat.Send(searchModel);
+            if (res is null || res.Result is null)
+            {
+                return Ok(new ResultMessageResponse()
+                {
+                    data = null,
+                    success = true,
+                    code = new StatusCodeResult((int)HttpStatusCode.NotFound).ToString(),
+                    message = "Không tồn tại báo cáo phù hợp !"
+                });
+            }
+            var data = res.Result;
+            if (data.Count() > 0)
+            {
+                var stt = 1;
+                var models = new List<ReportExcelTotalModelDTO>();
+
+                foreach (var e in data)
+                {
+                    var m = new ReportExcelTotalModelDTO
+                    {
+                        STT = stt,
+                        WareHouseItemCode = e.WareHouseItemCode,
+                        WareHouseItemName = e.WareHouseItemName,
+                        UnitName = e.UnitName,
+                        Beginning = e.Beginning,
+                        Import = e.Import,
+                        Export = e.Export,
+                        Balance = e.Balance
+                    };
+                    stt++;
+                    models.Add(m);
+                }
+
+                var ds = new DataSet();
+                var dtInfo = new DataTable("Info");
+                dtInfo.Columns.Add("Title", typeof(string));
+                var infoRow = dtInfo.NewRow();
+                infoRow["Title"] = "Báo cáo tổng hợp";
+                dtInfo.Rows.Add(infoRow);
+                ds.Tables.Add(dtInfo);
+
+                var dtDataName = "Data";
+                var dtData = models.ToDataTable();
+                dtData.TableName = dtDataName;
+                ds.Tables.Add(dtData);
+                var tmpPath = Path.Combine(_hostingEnvironment.WebRootPath, "Templates", "Reports", "ReportTotal_vi.xlsx");
+                var wb = new Workbook(tmpPath);
+                var wd = new WorkbookDesigner(wb);
+                wd.SetDataSource(dataSet: ds);
+                wd.Process();
+                wd.Workbook.CalculateFormula();
+
+                var dstStream = new MemoryStream();
+                wb.Save(dstStream, Aspose.Cells.SaveFormat.Xlsx);
+                dstStream.Seek(0, SeekOrigin.Begin);
+
+                dstStream.Position = 0;
+                var date = DateTime.Now;
+                return File(dstStream, "application/vnd.ms-excel", "bc_tonghop_" + date.Year + "-" + date.Month + "-" + date.Day + ".xlsx");
+            }
+            return null;
+        }
+
+
+
+
+
+        /// <summary>
+        /// Xuất báo cáo excel
+        /// </summary>
+        /// <param name="searchModel"></param>
+        /// <returns></returns>
+
+        [Route("export-report-details")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetExcelReportDetails([FromQuery] SearchReportDetailsCommand searchModel)
+        {
+
+            if (searchModel is null || !searchModel.Excel)
+            {
+                return Ok(new ResultMessageResponse()
+                {
+                    data = null,
+                    success = true,
+                    code = new StatusCodeResult((int)HttpStatusCode.BadRequest).ToString(),
+                    message = "Bạn chưa nhập tham số yêu cầu !"
+                });
+            }
+            var res = await _mediat.Send(searchModel);
+            if (res is null || res.Result is null)
+            {
+                return Ok(new ResultMessageResponse()
+                {
+                    data = null,
+                    success = true,
+                    code = new StatusCodeResult((int)HttpStatusCode.NotFound).ToString(),
+                    message = "Không tồn tại báo cáo phù hợp !"
+                });
+            }
+            var data = res.Result;
+            if (data.Count() > 0)
+            {
+                var stt = 1;
+                var models = new List<ReportExcelDetailModelDTO>();
+
+                foreach (var e in data)
+                {
+                    var m = new ReportExcelDetailModelDTO
+                    {
+                        STT = stt,
+                        WareHouseItemCode = e.Code,
+                        WareHouseItemName = e.Name,
+                        VoucherCode = e.VoucherCode,
+                        UnitName = e.UnitName,
+                        Beginning = e.Beginning,
+                        Import = e.Import,
+                        Export = e.Export,
+                        Balance = e.Beginning+e.Import-e.Export,
+                        Purpose = e.Description,
+                        DepartmentName = e.DepartmentName,
+                        ProjectName = e.ProjectName,
+                        Description = e.Description,
+                        Moment = e.VoucherDate.ToString(),
+                        Reason=e.Reason,
+                        EmployeeName=e.EmployeeName
+                    };
+                    stt++;
+                    models.Add(m);
+                }
+                var ds = new DataSet();
+                var dtInfo = new DataTable("Info");
+                dtInfo.Columns.Add("Title", typeof(string));
+                var infoRow = dtInfo.NewRow();
+                infoRow["Title"] = "Báo cáo thẻ kho";
+                dtInfo.Rows.Add(infoRow);
+                ds.Tables.Add(dtInfo);
+
+                var dtDataName = "Data";
+                var dtData = models.ToDataTable();
+                dtData.TableName = dtDataName;
+                ds.Tables.Add(dtData);
+                var tmpPath = Path.Combine(_hostingEnvironment.WebRootPath, "Templates", "Reports", "ReportDetail_vi.xlsx");
+                var wb = new Workbook(tmpPath);
+                var wd = new WorkbookDesigner(wb);
+                wd.SetDataSource(dataSet: ds);
+                wd.Process();
+                wd.Workbook.CalculateFormula();
+
+                var dstStream = new MemoryStream();
+                wb.Save(dstStream, Aspose.Cells.SaveFormat.Xlsx);
+                dstStream.Seek(0, SeekOrigin.Begin);
+
+                dstStream.Position = 0;
+                var date = DateTime.Now;
+                return File(dstStream, "application/vnd.ms-excel", "bc_thekho_" + date.Year + "-" + date.Month + "-" + date.Day + ".xlsx");
+            }
+            return null;
+        }
+
+
+
+
 
         private static string FormatNumbe(decimal item)
         {
