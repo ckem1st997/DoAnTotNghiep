@@ -19,28 +19,12 @@ services:
     volumes:
       - doan-sqlserver:/data/db
 
-  mongodb:
-    image: mongo
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-    volumes:
-      - doan-mongodb:/data/db
-
   redis:
     image: redis:alpine
     ports:
       - "6379:6379"
     volumes:
       - doan-redis:/data/db
-
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    ports:
-      - "15672:15672"
-      - "5672:5672"
 
   warehouse-api:
     image: ${REGISTRY:-doantotnghiep}/warehouse.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -68,7 +52,6 @@ services:
       dockerfile: src/Services/Asset/Asset.API/Dockerfile
     depends_on:
       - redis
-      - rabbitmq
       - sqlserver
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -85,8 +68,6 @@ volumes:
   doan-sqlserver:
     external: false
   doan-redis:
-    external: false
-  doan-mongodb:
     external: false
 
  
