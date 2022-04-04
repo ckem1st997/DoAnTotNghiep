@@ -17,6 +17,12 @@ using WareHouse.API.Application.Behaviors.ConfigureServices;
 using WareHouse.API.Application.Cache;
 using WareHouse.API.Application.Validations.ConfigureServices;
 using WareHouse.API.ConfigureServices.CustomConfiguration;
+using Grpc.Net.Client.Web;
+using GrpcGetDataToMaster;
+using System.Net;
+using System.Net.Http;
+using System.Reflection;
+using WareHouse.API.Filters;
 
 namespace WareHouse.API
 {
@@ -45,18 +51,18 @@ namespace WareHouse.API
                 x.DefaultApiVersion = new ApiVersion(1, 0);
                 x.AssumeDefaultVersionWhenUnspecified = true;
                 x.ReportApiVersions = true;
-            //    x.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
+                //    x.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
             });
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder => builder
-                    .WithOrigins("http://localhost:4200","http://localhost:55671")
+                    .WithOrigins("http://localhost:4200", "http://localhost:55671")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials());
             });
-            
-            
+
+
             // send log to seq by Microsoft.Extensions.Logging
             services.AddLogging(loggingBuilder =>
             {
@@ -65,6 +71,15 @@ namespace WareHouse.API
 
                 loggingBuilder.AddSeq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl, apiKey: "0QEfAbE4THZTcUu6I7bQ");
             });
+
+            services.AddTransient<GrpcExceptionInterceptor>();
+
+            services.AddGrpcClient<GrpcGetData.GrpcGetDataClient>(o =>
+           {
+               o.Address = new Uri("https://localhost:5001");
+               // o.Address = new Uri("https://apiproducts97.azurewebsites.net");
+           }).AddInterceptor<GrpcExceptionInterceptor>().ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(new HttpClientHandler()));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

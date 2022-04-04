@@ -1,3 +1,4 @@
+using GrpcGetDataToMaster;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Net;
@@ -11,10 +12,16 @@ namespace WareHouse.API.Controllers
 {
     public class GetDataGPRCController : BaseControllerWareHouse
     {
-        public GetDataGPRCController()
-        {
+        private readonly GrpcGetData.GrpcGetDataClient _client;
 
+        public GetDataGPRCController(GrpcGetData.GrpcGetDataClient client)
+        {
+            _client = client;
         }
+
+
+
+
 
         [Route("get-list-account")]
         [HttpGet]
@@ -24,7 +31,7 @@ namespace WareHouse.API.Controllers
         {
             var result = new ResultMessageResponse()
             {
-                data = FakeData.GetCreateBy(),
+                data = _client.GetCreateBy(new Params()),
                 success = true,
                 totalCount = FakeData.GetCreateBy().Count()
             };

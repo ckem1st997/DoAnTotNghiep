@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Master.Filters;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Master.Extension;
 
 namespace Master.ConfigureServices.CustomConfiguration
 {
@@ -28,7 +29,7 @@ namespace Master.ConfigureServices.CustomConfiguration
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
                 options.Filters.Add(typeof(CustomValidationAttribute));
             })
-             //   .AddApplicationPart(typeof(WareHousesController).Assembly)
+                //   .AddApplicationPart(typeof(WareHousesController).Assembly)
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.WriteIndented = true;
@@ -54,10 +55,10 @@ namespace Master.ConfigureServices.CustomConfiguration
             },
                        ServiceLifetime.Scoped  //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
                    );
-          //  services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
-          //  services.AddScoped<IDapper, Dapperr>();
+            //  services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
+            services.AddScoped<IDapper, Dapperr>();
             services.AddMediatR(Assembly.GetExecutingAssembly());
-         //   services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
+            //   services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
         }
 
 
