@@ -1,0 +1,5 @@
+build:
+  docker:
+    web: src\Services\WareHouse\WareHouse.API\Dockerfile
+run:
+  web: bundle exec puma -C config/puma.rb
