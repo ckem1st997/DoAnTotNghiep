@@ -18,12 +18,12 @@ services:
     volumes:
       - doan-sqlserver:/data/db
 
-  redis:
-    image: redis:alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - doan-redis:/data/db
+  # redis:
+  #   image: redis:alpine
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - doan-redis:/data/db
 
   warehouse-api:
     image: ${REGISTRY:-doantotnghiep}/warehouse.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -31,8 +31,7 @@ services:
       context: .
       dockerfile: src/Services/WareHouse/WareHouse.API/Dockerfile
     depends_on:
-      - redis
-      - rabbitmq
+      # - redis
       - sqlserver
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -50,7 +49,7 @@ services:
       context: .
       dockerfile: src/Services/Asset/Asset.API/Dockerfile
     depends_on:
-      - redis
+      # - redis
       - sqlserver
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -66,7 +65,7 @@ services:
 volumes:
   doan-sqlserver:
     external: false
-  doan-redis:
-    external: false
+  # doan-redis:
+  #   external: false
 
  
