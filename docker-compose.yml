@@ -8,7 +8,6 @@ services:
       - ACCEPT_EULA=Y
     ports:
         - "5341:80"
-
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2019-latest 
     environment:
