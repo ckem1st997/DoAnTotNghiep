@@ -1,3 +1,5 @@
+using GrpcGetDataToMaster;
+using Master.ConfigureServices.CustomConfiguration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,9 +30,19 @@ namespace Master
         {
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
+            services.AddCustomConfiguration(Configuration);
+            services.AddApiVersioning(x =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Master", Version = "v1" });
+                // setup ApiVersion v1 
+                x.DefaultApiVersion = new ApiVersion(1, 0);
+                x.AssumeDefaultVersionWhenUnspecified = true;
+                x.ReportApiVersions = true;
+                //    x.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
+            });
+            services.AddGrpc(options =>
+            {
+                options.EnableDetailedErrors = true;
+
             });
         }
 
@@ -50,11 +62,12 @@ namespace Master
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseGrpcWeb();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGrpcService<GrpcGetDataToMasterService>().EnableGrpcWeb();
                 endpoints.MapControllers();
             });
         }
