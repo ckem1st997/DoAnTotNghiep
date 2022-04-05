@@ -1,4 +1,5 @@
 ﻿using Infrastructure;
+using Master.Application.Authentication;
 using Master.Application.Message;
 using Master.Controllers.BaseController;
 using Master.Models;
@@ -60,8 +61,7 @@ namespace Master.Controllers
             });
         }
 
-
-        [Authorize]
+        [CheckRole(LevelCheck.CREATE)]
         [Route("get-user-login")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

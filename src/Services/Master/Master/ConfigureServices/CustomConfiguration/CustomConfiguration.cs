@@ -59,10 +59,13 @@ namespace Master.ConfigureServices.CustomConfiguration
             //  services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
             services.AddScoped<IDapper, Dapperr>();
             services.AddScoped<IUserService, UserService>();
+            //var serviceProvider = services.BuildServiceProvider();
+            //var service = serviceProvider.GetService<IUserService>();
+
+
             services.AddMediatR(Assembly.GetExecutingAssembly());
             //   services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
         }
-
 
         //public static ILoggingBuilder UseSerilog(this ILoggingBuilder builder, IConfiguration configuration)
         //{

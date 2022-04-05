@@ -24,10 +24,7 @@ namespace Master.Application.Authentication
             }
             var validRole = false;
             if (requirement.AllowedRoles == null || !requirement.AllowedRoles.Any())
-            {
-
                 validRole = true;
-            }
             else
             {
                 var claims = context.User.Claims;
@@ -41,14 +38,10 @@ namespace Master.Application.Authentication
             }
 
             if (validRole)
-            {
                 context.Succeed(requirement);
 
-            }
             else
-            {
                 context.Fail();
-            }
             return Task.CompletedTask;
         }
     }

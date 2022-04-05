@@ -1,6 +1,9 @@
 using GrpcGetDataToMaster;
 using Master.Application.Authentication;
 using Master.ConfigureServices.CustomConfiguration;
+using Master.Extension;
+using Master.Models;
+using Master.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -82,7 +85,6 @@ namespace Master
             services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-
         }
 
 
@@ -97,19 +99,19 @@ namespace Master
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BasicAuth v1"));
             }
-
             app.UseHttpsRedirection();
           
             app.UseRouting();
             app.UseGrpcWeb();
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<GrpcGetDataToMasterService>().EnableGrpcWeb();
                 endpoints.MapControllers();
             });
         }
+
+
     }
 }
