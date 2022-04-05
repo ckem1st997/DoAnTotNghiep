@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -79,6 +80,7 @@ namespace Master
                 };
             });
             services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
         }

@@ -9,7 +9,6 @@ namespace Infrastructure
     public class BaseEntity
     {
         public string Id { get; set; }
-        public bool Delete { get; set; }
-
+        public bool OnDelete { get; set; }
     }
 }

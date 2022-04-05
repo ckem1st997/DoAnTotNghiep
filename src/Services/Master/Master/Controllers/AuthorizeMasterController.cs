@@ -1,4 +1,5 @@
-﻿using Master.Application.Message;
+﻿using Infrastructure;
+using Master.Application.Message;
 using Master.Controllers.BaseController;
 using Master.Models;
 using Master.Service;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Master.Controllers
 {
-    // [Authorize(Roles = "User")]
+    [Authorize(Roles = "User")]
 
     public class AuthorizeMasterController : BaseControllerMaster
     {
@@ -21,12 +22,78 @@ namespace Master.Controllers
             _userService = userService;
         }
 
-        [Route("register")]
+        [Route("update")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Register(UserMasterModel model)
+        {
+            var map = new UserMaster()
+            {
+                UserName = model.UserName,
+                Create = model.Create,
+                Edit = model.Edit,
+                Delete = model.Delelte,
+                Id = model.Id,
+                InActive = model.InActive,
+                Read = model.Read,
+                RoleNumber = model.RoleNumber,
+                Role = model.Role,
+                WarehouseId = model.WarehouseId,
+            };
+            var user = _userService.GetUserById(model.Id);
+            if (user!=null)
+            {
+                map.Password = user.Password;
+                map.OnDelete = user.OnDelete;
+                var res = await _userService.UpdateUser(map);
+                var result = new ResultMessageResponse()
+                {
+                    success = res,
+                };
+                return Ok(result);
+            }
+            return Ok(new ResultMessageResponse()
+            {
+                success = false,
+                message = "UserName không tồn tại !"
+            });
+        }
+
+
+        [Authorize]
+        [Route("get-user-login")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        [ProducesResponseType((int)HttpStatusCode.Forbidden)]
+        public IActionResult GetUserLogin()
+        {
+            var res = _userService.User;
+
+            if (res is null)
+                return Unauthorized(new ResultMessageResponse()
+                {
+                    data = null,
+                    message = "Bạn chưa đặp nhập !",
+                    httpStatusCode = (int)HttpStatusCode.Unauthorized,
+                });
+            return Ok(new ResultMessageResponse()
+            {
+                data = _userService.User
+            });
+        }
+
+
+
+
+
+
+        [AllowAnonymous]
+        [Route("register")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             var map = new RegisterModel()
@@ -52,7 +119,7 @@ namespace Master.Controllers
         }
 
 
-
+        [AllowAnonymous]
         [Route("login")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

@@ -1,7 +1,9 @@
 ﻿using Infrastructure;
 using Master.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -19,12 +21,15 @@ namespace Master.Service
     {
         private readonly MasterdataContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContext;
 
+        public UserMaster User => GetUser();
 
-        public UserService(MasterdataContext context, IConfiguration configuration)
+        public UserService(MasterdataContext context, IConfiguration configuration, IHttpContextAccessor httpContext)
         {
             _context = context;
             _configuration = configuration;
+            _httpContext = httpContext;
         }
 
 
@@ -36,7 +41,7 @@ namespace Master.Service
             }
             if (ValidateAdmin(model.Username, model.Password))
             {
-                var user = _context.UserMasters.FirstOrDefault(x => x.UserName.Equals(model.Username) && x.InActive == true && !x.OnDelete);
+                var user = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.UserName.Equals(model.Username) && x.InActive == true && !x.OnDelete);
                 var authClaims = new List<Claim>
                             {
                                 new Claim(ClaimTypes.Name, user.UserName),
@@ -67,7 +72,7 @@ namespace Master.Service
         }
         private bool ValidateAdmin(string username, string password)
         {
-            var admin = _context.UserMasters.FirstOrDefault(x => x.UserName.Equals(username) && x.InActive == true && !x.OnDelete);
+            var admin = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.UserName.Equals(username) && x.InActive == true && !x.OnDelete);
             return admin != null && new PasswordHasher<UserMaster>().VerifyHashedPassword(new UserMaster(), admin.Password, password) == PasswordVerificationResult.Success;
         }
         public async Task<bool> Register(RegisterModel model)
@@ -105,7 +110,7 @@ namespace Master.Service
             {
                 throw new ArgumentException($"'{nameof(name)}' cannot be null or empty.", nameof(name));
             }
-            var res = _context.UserMasters.FirstOrDefault(x => x.UserName.Equals(name) && x.OnDelete == false);
+            var res = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.UserName.Equals(name) && x.OnDelete == false);
             return res == null;
         }
 
@@ -116,7 +121,27 @@ namespace Master.Service
                 throw new ArgumentException($"'{nameof(id)}' cannot be null or empty.", nameof(id));
             }
 
-            return _context.UserMasters.FirstOrDefault(x => x.Id.Equals(id) && x.OnDelete == false);
+            return _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.Id.Equals(id) && x.OnDelete == false);
+        }
+
+        public async Task<bool> UpdateUser(UserMaster user)
+        {
+            if (user is null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            _context.UserMasters.Update(user);
+            var res = await _context.SaveChangesAsync();
+            return res > 0;
+        }
+
+    
+        private UserMaster GetUser()
+        {
+            var id = _httpContext.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
+            if (id is null)
+                return null;
+            return _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.Id.Equals(id.Value) && x.OnDelete == false);
         }
     }
 }
