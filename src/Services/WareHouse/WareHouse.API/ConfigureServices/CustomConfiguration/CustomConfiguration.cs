@@ -19,6 +19,8 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using WareHouse.API.Application.Model;
+
 namespace WareHouse.API.ConfigureServices.CustomConfiguration
 {
     public static class CustomConfiguration
@@ -59,6 +61,7 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
                    );
             services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
             services.AddScoped<IDapper, Dapperr>();
+            services.AddScoped<IFakeData, FakeData>();
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
         }

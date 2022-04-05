@@ -29,12 +29,14 @@ namespace WareHouse.API.Controllers
     public class WareHouseBookController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
+        private readonly IFakeData _ifakeData;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public WareHouseBookController(IWebHostEnvironment hostEnvironment, IMediator mediat, ICacheExtension cacheExtension)
+        public WareHouseBookController(IFakeData ifakeData,IWebHostEnvironment hostEnvironment, IMediator mediat, ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _hostingEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
+            _ifakeData = ifakeData ?? throw new ArgumentNullException(nameof(ifakeData));
         }
         #region R
         [Route("get-list")]
@@ -279,18 +281,18 @@ namespace WareHouse.API.Controllers
             {
                 res.WareHouseItemDTO = dataWareHouseItem.Where(x => x.Id == res.ItemId);
                 res.UnitDTO = dataUnit.Where(x => x.Id == res.UnitId);
-                res.GetAccountDTO = FakeData.GetListAccountIdentifier(_hostingEnvironment).Where(x => x.Id.Equals(res.AccountMore) || x.Id.Equals(res.AccountYes));
+                res.GetAccountDTO = _ifakeData.GetListAccountIdentifier(_hostingEnvironment).Where(x => x.Id.Equals(res.AccountMore) || x.Id.Equals(res.AccountYes));
             }
             else
             {
                 res.WareHouseItemDTO = dataWareHouseItem;
                 res.UnitDTO = dataUnit;
-                res.GetDepartmentDTO = FakeData.GetDepartment();
-                res.GetCustomerDTO = FakeData.GetCustomer();
-                res.GetEmployeeDTO = FakeData.GetEmployee();
-                res.GetProjectDTO = FakeData.GetProject();
-                res.GetStationDTO = FakeData.GetStation();
-                res.GetAccountDTO = FakeData.GetListAccountIdentifier(_hostingEnvironment);
+                res.GetDepartmentDTO = _ifakeData.GetDepartment();
+                res.GetCustomerDTO = _ifakeData.GetCustomer();
+                res.GetEmployeeDTO = _ifakeData.GetEmployee();
+                res.GetProjectDTO = _ifakeData.GetProject();
+                res.GetStationDTO = _ifakeData.GetStation();
+                res.GetAccountDTO = _ifakeData.GetListAccountIdentifier(_hostingEnvironment);
 
             }
 
@@ -355,18 +357,18 @@ namespace WareHouse.API.Controllers
             {
                 res.WareHouseItemDTO = dataWareHouseItem.Where(x => x.Id == res.ItemId);
                 res.UnitDTO = dataUnit.Where(x => x.Id == res.UnitId);
-                res.GetAccountDTO = FakeData.GetListAccountIdentifier(_hostingEnvironment).Where(x => x.Id.Equals(res.AccountMore) || x.Id.Equals(res.AccountYes));
+                res.GetAccountDTO = _ifakeData.GetListAccountIdentifier(_hostingEnvironment).Where(x => x.Id.Equals(res.AccountMore) || x.Id.Equals(res.AccountYes));
             }
             else
             {
                 res.WareHouseItemDTO = dataWareHouseItem;
                 res.UnitDTO = dataUnit;
-                res.GetDepartmentDTO = FakeData.GetDepartment();
-                res.GetCustomerDTO = FakeData.GetCustomer();
-                res.GetEmployeeDTO = FakeData.GetEmployee();
-                res.GetProjectDTO = FakeData.GetProject();
-                res.GetStationDTO = FakeData.GetStation();
-                res.GetAccountDTO = FakeData.GetListAccountIdentifier(_hostingEnvironment);
+                res.GetDepartmentDTO = _ifakeData.GetDepartment();
+                res.GetCustomerDTO = _ifakeData.GetCustomer();
+                res.GetEmployeeDTO = _ifakeData.GetEmployee();
+                res.GetProjectDTO = _ifakeData.GetProject();
+                res.GetStationDTO = _ifakeData.GetStation();
+                res.GetAccountDTO = _ifakeData.GetListAccountIdentifier(_hostingEnvironment);
 
             }
 

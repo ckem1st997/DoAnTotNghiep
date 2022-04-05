@@ -1,4 +1,5 @@
 ﻿using Aspose.Cells;
+using GrpcGetDataToMaster;
 using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,31 @@ using System.IO;
 
 namespace WareHouse.API.Application.Model
 {
-    
-    public static class FakeData
+    public interface IFakeData
     {
-        public static IEnumerable<BaseSelectDTO> GetDepartment()
+        public IEnumerable<BaseSelectDTO> GetDepartment();
+        
+        public IEnumerable<BaseSelectDTO> GetEmployee();
+        public IEnumerable<BaseSelectDTO> GetStation();
+        public IEnumerable<BaseSelectDTO> GetProject();
+        
+        public IEnumerable<BaseSelectDTO> GetCustomer();
+        public IEnumerable<BaseSelectDTO> GetCreateBy();
+        public List<BaseSelectDTO> GetListAccountIdentifier(IWebHostEnvironment _hostingEnvironment);
+    }
+
+    
+    
+    public class FakeData: IFakeData
+    {
+        private readonly GrpcGetData.GrpcGetDataClient _client;
+        public FakeData(GrpcGetData.GrpcGetDataClient client)
+        {
+            _client = client;
+        }
+
+
+        public IEnumerable<BaseSelectDTO> GetDepartment()
         {
             var data = new List<BaseSelectDTO>();
             for (int i = 0; i < 10; i++)
@@ -25,7 +47,7 @@ namespace WareHouse.API.Application.Model
             return data;
         }
 
-        public static IEnumerable<BaseSelectDTO> GetEmployee()
+        public IEnumerable<BaseSelectDTO> GetEmployee()
         {
             var data = new List<BaseSelectDTO>();
             for (int i = 0; i < 10; i++)
@@ -39,7 +61,7 @@ namespace WareHouse.API.Application.Model
             return data;
         }
 
-        public static IEnumerable<BaseSelectDTO> GetStation()
+        public IEnumerable<BaseSelectDTO> GetStation()
         {
             var data = new List<BaseSelectDTO>();
             for (int i = 0; i < 10; i++)
@@ -53,7 +75,7 @@ namespace WareHouse.API.Application.Model
             return data;
         }
 
-        public static IEnumerable<BaseSelectDTO> GetProject()
+        public IEnumerable<BaseSelectDTO> GetProject()
         {
             var data = new List<BaseSelectDTO>();
             for (int i = 0; i < 10; i++)
@@ -67,7 +89,7 @@ namespace WareHouse.API.Application.Model
             return data;
         }
 
-        public static IEnumerable<BaseSelectDTO> GetCustomer()
+        public IEnumerable<BaseSelectDTO> GetCustomer()
         {
             var data = new List<BaseSelectDTO>();
             for (int i = 0; i < 10; i++)
@@ -81,7 +103,7 @@ namespace WareHouse.API.Application.Model
             return data;
         }
 
-         public static IEnumerable<BaseSelectDTO> GetCreateBy()
+        public IEnumerable<BaseSelectDTO> GetCreateBy()
         {
             var data = new List<BaseSelectDTO>();
             for (int i = 0; i < 10; i++)
@@ -95,7 +117,7 @@ namespace WareHouse.API.Application.Model
             return data;
         }
 
-        public static List<BaseSelectDTO> GetListAccountIdentifier(IWebHostEnvironment _hostingEnvironment)
+        public List<BaseSelectDTO> GetListAccountIdentifier(IWebHostEnvironment _hostingEnvironment)
         {
             var tmpPath = Path.Combine(_hostingEnvironment.WebRootPath, "Excel", "He_thong_tai_khoan kế toán.xlsx");
             Workbook wb = new Workbook(tmpPath);
@@ -128,4 +150,6 @@ namespace WareHouse.API.Application.Model
             return list;
         }
     }
+
+
 }

@@ -12,10 +12,12 @@ namespace WareHouse.API.Controllers
 {
     public class GetDataGPRCController : BaseControllerWareHouse
     {
+        private readonly IFakeData _ifakeData;
         private readonly GrpcGetData.GrpcGetDataClient _client;
 
-        public GetDataGPRCController(GrpcGetData.GrpcGetDataClient client)
+        public GetDataGPRCController(GrpcGetData.GrpcGetDataClient client,IFakeData ifakeData)
         {
+            _ifakeData = ifakeData;
             _client = client;
         }
 
@@ -29,11 +31,12 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetListAccount()
         {
+            var res = _ifakeData.GetCreateBy();
             var result = new ResultMessageResponse()
             {
-                data = _client.GetCreateBy(new Params()),
+                data = res,
                 success = true,
-                totalCount = FakeData.GetCreateBy().Count()
+                totalCount =res.Count() 
             };
             return Ok(result);
         }

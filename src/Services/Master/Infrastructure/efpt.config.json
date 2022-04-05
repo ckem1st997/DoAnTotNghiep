@@ -14,14 +14,14 @@
    "SelectedToBeGenerated": 0,
    "Tables": [
       {
-         "Name": "[dbo].[FakeDataMaster]",
+         "Name": "[dbo].[UserMaster]",
          "ObjectType": 0
       }
    ],
    "UiHint": "3ab570e0a026.MasterData",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": true,
-   "UseDbContextSplitting": false,
+   "UseDbContextSplitting": true,
    "UseFluentApiOnly": true,
    "UseHandleBars": false,
    "UseHierarchyId": false,
@@ -34,6 +34,6 @@
    "UseNoObjectFilter": false,
    "UseNodaTime": false,
    "UseNullableReferences": false,
-   "UseSchemaFolders": false,
+   "UseSchemaFolders": true,
    "UseSpatial": false
 }

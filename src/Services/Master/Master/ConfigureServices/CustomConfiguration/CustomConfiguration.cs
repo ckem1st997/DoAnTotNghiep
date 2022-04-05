@@ -16,6 +16,7 @@ using Master.Filters;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Master.Extension;
+using Master.Service;
 
 namespace Master.ConfigureServices.CustomConfiguration
 {
@@ -57,6 +58,7 @@ namespace Master.ConfigureServices.CustomConfiguration
                    );
             //  services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
             services.AddScoped<IDapper, Dapperr>();
+            services.AddScoped<IUserService, UserService>();
             services.AddMediatR(Assembly.GetExecutingAssembly());
             //   services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
         }

@@ -23,10 +23,13 @@ namespace WareHouse.API.Controllers
     {
         private readonly IMediator _mediat;
         private readonly ICacheExtension _cacheExtension;
-        public OutwardController(IMediator mediat, ICacheExtension cacheExtension)
+        private readonly IFakeData _ifakeData;
+
+        public OutwardController(IFakeData ifakeData,IMediator mediat, ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
+            _ifakeData = ifakeData ?? throw new ArgumentNullException(nameof(ifakeData));
         }
         #region R      
         #endregion
@@ -139,12 +142,12 @@ namespace WareHouse.API.Controllers
             if (details)
             {
                 res.WareHouseDTO = dataWareHouse.Where(x => x.Id.Equals(res.WareHouseId) || x.Id.Equals(res.ToWareHouseId));
-                res.GetCreateBy = FakeData.GetCreateBy().Where(x => x.Id.Equals(res.CreatedBy));
+                res.GetCreateBy = _ifakeData.GetCreateBy().Where(x => x.Id.Equals(res.CreatedBy));
             }
             else
             {
                 res.WareHouseDTO = dataWareHouse;
-                res.GetCreateBy = FakeData.GetCreateBy();
+                res.GetCreateBy = _ifakeData.GetCreateBy();
             }
 
             return res;
