@@ -98,5 +98,25 @@ namespace Master.Service
             var res = await _context.SaveChangesAsync();
             return res > 0;
         }
+
+        public bool CheckUser(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentException($"'{nameof(name)}' cannot be null or empty.", nameof(name));
+            }
+            var res = _context.UserMasters.FirstOrDefault(x => x.UserName.Equals(name) && x.OnDelete == false);
+            return res == null;
+        }
+
+        public UserMaster GetUserById(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new ArgumentException($"'{nameof(id)}' cannot be null or empty.", nameof(id));
+            }
+
+            return _context.UserMasters.FirstOrDefault(x => x.Id.Equals(id) && x.OnDelete == false);
+        }
     }
 }

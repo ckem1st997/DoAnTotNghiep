@@ -1,6 +1,8 @@
 using GrpcGetDataToMaster;
+using Master.Application.Authentication;
 using Master.ConfigureServices.CustomConfiguration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -76,6 +78,9 @@ namespace Master
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
                 };
             });
+            services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
+
+
         }
 
 
@@ -88,11 +93,11 @@ namespace Master
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Master v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BasicAuth v1"));
             }
 
             app.UseHttpsRedirection();
-
+          
             app.UseRouting();
             app.UseGrpcWeb();
             app.UseAuthentication();

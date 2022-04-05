@@ -2,12 +2,15 @@
 using Master.Controllers.BaseController;
 using Master.Models;
 using Master.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace Master.Controllers
 {
+    // [Authorize(Roles = "User")]
+
     public class AuthorizeMasterController : BaseControllerMaster
     {
         private readonly IUserService _userService;
@@ -18,11 +21,12 @@ namespace Master.Controllers
             _userService = userService;
         }
 
-
         [Route("register")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             var map = new RegisterModel()
@@ -31,30 +35,40 @@ namespace Master.Controllers
                 Password = model.Password,
                 Username = model.Username,
             };
-            var res = await _userService.Register(map);
-            var result = new ResultMessageResponse()
+            if (_userService.CheckUser(model.Username))
             {
-                success = res,
-            };
-            return Ok(result);
+                var res = await _userService.Register(map);
+                var result = new ResultMessageResponse()
+                {
+                    success = res,
+                };
+                return Ok(result);
+            }
+            return Ok(new ResultMessageResponse()
+            {
+                success = false,
+                message = "UserName đã tồn tại !"
+            });
         }
+
+
 
         [Route("login")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public IActionResult Login(LoginViewModel model)
         {
             var map = new LoginModel()
             {
                 Password = model.Password,
                 Username = model.Username,
-                Remember=model.Remember            
+                Remember = model.Remember
             };
             var res = _userService.GenerateJWT(map);
             var result = new ResultMessageResponse()
             {
-                data= res,
+                data = res,
                 success = !string.IsNullOrEmpty(res),
             };
             return Ok(result);
