@@ -137,6 +137,7 @@ namespace Master.Controllers
             {
                 data = res,
                 success = !string.IsNullOrEmpty(res),
+                message= string.IsNullOrEmpty(res)?"Tên tài khoản hoặc mật khẩu không chính xác !":null
             };
             return Ok(result);
         }

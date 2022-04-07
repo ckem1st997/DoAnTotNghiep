@@ -35,7 +35,7 @@ namespace Infrastructure
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.ApplyConfiguration(new Configurations.UserMasterConfiguration());
-            modelBuilder.Entity<UserMaster>().Ignore(e => e.Password);
+       //     modelBuilder.Entity<UserMaster>().Ignore(e => e.Password);
 
             OnModelCreatingPartial(modelBuilder);
         }

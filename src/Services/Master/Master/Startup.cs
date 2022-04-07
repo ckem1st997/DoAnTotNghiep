@@ -84,7 +84,13 @@ namespace Master
             });
             services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
+            services.AddCors(o => o.AddPolicy("AllowAll", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader()
+                       .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
+            }));
         }
 
 
@@ -100,7 +106,8 @@ namespace Master
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BasicAuth v1"));
             }
             app.UseHttpsRedirection();
-          
+            app.UseCors("AllowAll");
+
             app.UseRouting();
             app.UseGrpcWeb();
             app.UseAuthentication();

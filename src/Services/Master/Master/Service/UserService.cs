@@ -120,8 +120,9 @@ namespace Master.Service
             {
                 throw new ArgumentException($"'{nameof(id)}' cannot be null or empty.", nameof(id));
             }
-
-            return _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.Id.Equals(id) && x.OnDelete == false);
+            var res = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.Id.Equals(id) && x.OnDelete == false);
+            res.Password = "";
+            return res;
         }
 
         public async Task<bool> UpdateUser(UserMaster user)
@@ -141,7 +142,9 @@ namespace Master.Service
             var id = _httpContext.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
             if (id is null)
                 return null;
-            return _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.Id.Equals(id.Value) && x.OnDelete == false);
+            var res = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.Id.Equals(id.Value) && x.OnDelete == false);
+            res.Password = "";
+            return res;
         }
     }
 }
