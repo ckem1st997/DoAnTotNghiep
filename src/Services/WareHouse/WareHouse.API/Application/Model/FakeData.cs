@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 #nullable disable
 
@@ -11,14 +12,14 @@ namespace WareHouse.API.Application.Model
 {
     public interface IFakeData
     {
-        public IEnumerable<BaseSelectDTO> GetDepartment();
+        public Task<IEnumerable<BaseSelectDTO>> GetDepartment();
         
-        public IEnumerable<BaseSelectDTO> GetEmployee();
-        public IEnumerable<BaseSelectDTO> GetStation();
-        public IEnumerable<BaseSelectDTO> GetProject();
+        public Task<IEnumerable<BaseSelectDTO>> GetEmployee();
+        public Task<IEnumerable<BaseSelectDTO>> GetStation();
+        public Task<IEnumerable<BaseSelectDTO>> GetProject();
         
-        public IEnumerable<BaseSelectDTO> GetCustomer();
-        public IEnumerable<BaseSelectDTO> GetCreateBy();
+        public Task<IEnumerable<BaseSelectDTO>> GetCustomer();
+        public Task<IEnumerable<BaseSelectDTO>> GetCreateBy();
         public List<BaseSelectDTO> GetListAccountIdentifier(IWebHostEnvironment _hostingEnvironment);
     }
 
@@ -33,85 +34,92 @@ namespace WareHouse.API.Application.Model
         }
 
 
-        public IEnumerable<BaseSelectDTO> GetDepartment()
+        public async Task<IEnumerable<BaseSelectDTO>> GetDepartment()
         {
+
             var data = new List<BaseSelectDTO>();
-            for (int i = 0; i < 10; i++)
+            var list = await _client.GetDepartmentAsync(new Params());
+            foreach (var item in list.ListGetDepartment_)
             {
                 data.Add(new BaseSelectDTO()
                 {
-                    Id = i.ToString(),
-                    Name = $"Department {i}"
+                    Id = item.Id,
+                    Name =item.Name
                 });
             }
             return data;
         }
 
-        public IEnumerable<BaseSelectDTO> GetEmployee()
+        public async Task<IEnumerable<BaseSelectDTO>> GetEmployee()
         {
             var data = new List<BaseSelectDTO>();
-            for (int i = 0; i < 10; i++)
+            var list = await _client.GetEmployeeAsync(new Params());
+            foreach (var item in list.ListGetEmployee_)
             {
                 data.Add(new BaseSelectDTO()
                 {
-                    Id = i.ToString(),
-                    Name = $"Employee {i}"
+                    Id = item.Id,
+                    Name = item.Name
                 });
             }
             return data;
         }
 
-        public IEnumerable<BaseSelectDTO> GetStation()
+        public async Task<IEnumerable<BaseSelectDTO>> GetStation()
         {
             var data = new List<BaseSelectDTO>();
-            for (int i = 0; i < 10; i++)
+            var list = await _client.GetStationAsync(new Params());
+            foreach (var item in list.ListGetStation_)
             {
                 data.Add(new BaseSelectDTO()
                 {
-                    Id = i.ToString(),
-                    Name = $"Station {i}"
+                    Id = item.Id,
+                    Name = item.Name
                 });
             }
             return data;
         }
 
-        public IEnumerable<BaseSelectDTO> GetProject()
+        public async Task<IEnumerable<BaseSelectDTO>> GetProject()
         {
             var data = new List<BaseSelectDTO>();
-            for (int i = 0; i < 10; i++)
+            var list = await _client.GetProjectAsync(new Params());
+            foreach (var item in list.ListGetProject_)
             {
                 data.Add(new BaseSelectDTO()
                 {
-                    Id = i.ToString(),
-                    Name = $"Project {i}"
+                    Id = item.Id,
+                    Name = item.Name
                 });
             }
             return data;
         }
 
-        public IEnumerable<BaseSelectDTO> GetCustomer()
+        public async Task<IEnumerable<BaseSelectDTO>> GetCustomer()
         {
             var data = new List<BaseSelectDTO>();
-            for (int i = 0; i < 10; i++)
+            var list = await _client.GetCustomerAsync(new Params());
+            foreach (var item in list.ListGetCustomer_)
             {
                 data.Add(new BaseSelectDTO()
                 {
-                    Id = i.ToString(),
-                    Name = $"Customer {i}"
+                    Id = item.Id,
+                    Name = item.Name
                 });
             }
             return data;
         }
 
-        public IEnumerable<BaseSelectDTO> GetCreateBy()
+        public async Task<IEnumerable<BaseSelectDTO>> GetCreateBy()
         {
             var data = new List<BaseSelectDTO>();
-            for (int i = 0; i < 10; i++)
+            var list = await _client.GetCreateByAsync(new Params());
+            foreach (var item in list.ListCreateBy_)
             {
                 data.Add(new BaseSelectDTO()
                 {
-                    Id = i.ToString(),
-                    Name = $"CreateBy {i}"
+                    Id = item.Id,
+                    Name = item.Name
                 });
             }
             return data;

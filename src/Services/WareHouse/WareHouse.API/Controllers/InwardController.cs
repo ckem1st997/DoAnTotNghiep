@@ -187,13 +187,14 @@ namespace WareHouse.API.Controllers
             {
                 res.WareHouseDTO = dataWareHouse.Where(x => x.Id.Equals(res.WareHouseId));
                 res.VendorDTO = dataVendor.Where(x => x.Id.Equals(res.VendorId));
-                res.GetCreateBy = _ifakeData.GetCreateBy().Where(x => x.Id.Equals(res.CreatedBy));
+                var createBy = await _ifakeData.GetCreateBy();
+                res.GetCreateBy = createBy.Where(x => x.Id.Equals(res.CreatedBy));
             }
             else
             {
                 res.WareHouseDTO = dataWareHouse;
                 res.VendorDTO = dataVendor;
-                res.GetCreateBy = _ifakeData.GetCreateBy();
+                res.GetCreateBy =await _ifakeData.GetCreateBy();
             }
 
             return res;

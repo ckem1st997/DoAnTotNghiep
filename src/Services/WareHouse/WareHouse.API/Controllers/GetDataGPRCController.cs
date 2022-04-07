@@ -2,7 +2,7 @@ using GrpcGetDataToMaster;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Net;
-
+using System.Threading.Tasks;
 using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Controllers.BaseController;
@@ -29,9 +29,9 @@ namespace WareHouse.API.Controllers
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult GetListAccount()
+        public async Task<IActionResult> GetListAccount()
         {
-            var res = _ifakeData.GetCreateBy();
+            var res =await _ifakeData.GetCreateBy();
             var result = new ResultMessageResponse()
             {
                 data = res,

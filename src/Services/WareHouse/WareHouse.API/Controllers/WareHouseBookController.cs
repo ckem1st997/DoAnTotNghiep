@@ -287,11 +287,11 @@ namespace WareHouse.API.Controllers
             {
                 res.WareHouseItemDTO = dataWareHouseItem;
                 res.UnitDTO = dataUnit;
-                res.GetDepartmentDTO = _ifakeData.GetDepartment();
-                res.GetCustomerDTO = _ifakeData.GetCustomer();
-                res.GetEmployeeDTO = _ifakeData.GetEmployee();
-                res.GetProjectDTO = _ifakeData.GetProject();
-                res.GetStationDTO = _ifakeData.GetStation();
+                res.GetDepartmentDTO =await _ifakeData.GetDepartment();
+                res.GetCustomerDTO =await _ifakeData.GetCustomer();
+                res.GetEmployeeDTO =await _ifakeData.GetEmployee();
+                res.GetProjectDTO =await _ifakeData.GetProject();
+                res.GetStationDTO =await _ifakeData.GetStation();
                 res.GetAccountDTO = _ifakeData.GetListAccountIdentifier(_hostingEnvironment);
 
             }
@@ -363,11 +363,11 @@ namespace WareHouse.API.Controllers
             {
                 res.WareHouseItemDTO = dataWareHouseItem;
                 res.UnitDTO = dataUnit;
-                res.GetDepartmentDTO = _ifakeData.GetDepartment();
-                res.GetCustomerDTO = _ifakeData.GetCustomer();
-                res.GetEmployeeDTO = _ifakeData.GetEmployee();
-                res.GetProjectDTO = _ifakeData.GetProject();
-                res.GetStationDTO = _ifakeData.GetStation();
+                res.GetDepartmentDTO =await _ifakeData.GetDepartment();
+                res.GetCustomerDTO =await _ifakeData.GetCustomer();
+                res.GetEmployeeDTO =await _ifakeData.GetEmployee();
+                res.GetProjectDTO =await _ifakeData.GetProject();
+                res.GetStationDTO =await _ifakeData.GetStation();
                 res.GetAccountDTO = _ifakeData.GetListAccountIdentifier(_hostingEnvironment);
 
             }
