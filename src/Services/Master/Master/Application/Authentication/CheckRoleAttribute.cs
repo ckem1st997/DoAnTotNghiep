@@ -12,7 +12,7 @@ using System.Net;
 
 namespace Master.Application.Authentication
 {
-    //  [Authorize]
+    [Authorize]
     //  [ActivatorUtilitiesConstructor]
 
     public class CheckRoleAttribute : ActionFilterAttribute
@@ -36,44 +36,60 @@ namespace Master.Application.Authentication
             }
             // create instance of IUserService not contractor
             _userService = context.HttpContext.RequestServices.GetService<IUserService>();
-
             var checkRole = false;
-            var user = _userService.User;
-
-            var create = user.Create;
-            var update = user.Edit;
-            var delete = user.Delete;
-            var read = user.Read;
-
-            switch (LevelCheck)
+            if (_userService.User != null)
             {
-                case LevelCheck.CREATE:
-                    if (create)
-                        checkRole = true;
-                    break;
-                case LevelCheck.UPDATE:
-                    if (update)
-                        checkRole = true;
-                    break;
-                case LevelCheck.DELETE:
-                    if (delete)
-                        checkRole = true;
-                    break;
-                default:
-                    if (read)
-                        checkRole = true;
-                    break;
+                var user = _userService.User;
+
+                var create = user.Create;
+                var update = user.Edit;
+                var delete = user.Delete;
+                var read = user.Read;
+
+                switch (LevelCheck)
+                {
+                    case LevelCheck.CREATE:
+                        if (create)
+                            checkRole = true;
+                        break;
+                    case LevelCheck.UPDATE:
+                        if (update)
+                            checkRole = true;
+                        break;
+                    case LevelCheck.DELETE:
+                        if (delete)
+                            checkRole = true;
+                        break;
+                    default:
+                        if (read)
+                            checkRole = true;
+                        break;
+                }
             }
 
-            if (checkRole == false)
+
+            if (checkRole == false && _userService.User == null)
+            {
+                var res = new ResultMessageResponse()
+                {
+                    data = null,
+                    message = "Bạn chưa xác thực người dùng !",
+                    httpStatusCode = (int)HttpStatusCode.Unauthorized,
+                };
+                context.Result = new UnauthorizedObjectResult(res);
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                base.OnActionExecuting(context);
+            }
+            else
             {
                 var res = new ResultMessageResponse()
                 {
                     data = null,
                     message = "Bạn chưa có quyền !",
-                    httpStatusCode = (int)HttpStatusCode.Unauthorized,
+                    httpStatusCode = (int)HttpStatusCode.Forbidden,
                 };
-                context.Result = new UnauthorizedObjectResult(res);
+                context.Result = new ObjectResult(res);
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
             }
         }
     }

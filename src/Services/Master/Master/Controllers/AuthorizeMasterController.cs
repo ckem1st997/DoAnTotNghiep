@@ -121,6 +121,7 @@ namespace Master.Controllers
 
         [AllowAnonymous]
         [Route("login")]
+        [CheckRole(LevelCheck.CREATE)]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
