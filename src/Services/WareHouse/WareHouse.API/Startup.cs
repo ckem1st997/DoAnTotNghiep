@@ -23,6 +23,9 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using WareHouse.API.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace WareHouse.API
 {
@@ -53,15 +56,13 @@ namespace WareHouse.API
                 x.ReportApiVersions = true;
                 //    x.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
             });
-            services.AddCors(options =>
+            services.AddCors(o => o.AddPolicy("AllowAll", builder =>
             {
-                options.AddPolicy("CorsPolicy", builder => builder
-                    .WithOrigins("http://localhost:4200", "http://localhost:55671")
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
-            });
-
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader()
+                       .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
+            }));
 
             // send log to seq by Microsoft.Extensions.Logging
             services.AddLogging(loggingBuilder =>
@@ -79,7 +80,28 @@ namespace WareHouse.API
                o.Address = new Uri("https://localhost:5001");
                // o.Address = new Uri("https://apiproducts97.azurewebsites.net");
            }).AddInterceptor<GrpcExceptionInterceptor>().ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(new HttpClientHandler()));
+            // Adding Authentication  
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
 
+            // Adding Jwt Bearer  
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["JWT:ValidAudience"],
+                    ValidIssuer = Configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -95,8 +117,8 @@ namespace WareHouse.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseCors("CorsPolicy");
-
+            app.UseCors("AllowAll");
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
