@@ -29,7 +29,6 @@ using Master.Application.Authentication;
 
 namespace WareHouse.API.Controllers
 {
-    [Authorize(Roles = "User")]
     public class WareHouseBookController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;

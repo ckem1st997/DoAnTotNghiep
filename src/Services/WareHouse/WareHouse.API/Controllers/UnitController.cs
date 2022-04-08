@@ -18,7 +18,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WareHouse.API.Controllers
 {
-    [Authorize]
 
     public class UnitController : BaseControllerWareHouse
     {
