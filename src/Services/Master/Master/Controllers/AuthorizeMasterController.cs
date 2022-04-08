@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 namespace Master.Controllers
 {
     [Authorize(Roles = "User")]
-
     public class AuthorizeMasterController : BaseControllerMaster
     {
         private readonly IUserService _userService;
@@ -121,7 +120,6 @@ namespace Master.Controllers
 
         [AllowAnonymous]
         [Route("login")]
-        [CheckRole(LevelCheck.CREATE)]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
