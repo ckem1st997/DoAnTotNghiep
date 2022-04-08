@@ -14,9 +14,12 @@ using WareHouse.API.Application.Queries.GetAll.Unit;
 using WareHouse.API.Application.Queries.Paginated.Unit;
 using WareHouse.API.Controllers.BaseController;
 using WareHouse.API.Application.Cache.CacheName;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WareHouse.API.Controllers
 {
+    [Authorize]
+
     public class UnitController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;

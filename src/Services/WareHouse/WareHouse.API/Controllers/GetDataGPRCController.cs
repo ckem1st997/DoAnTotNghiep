@@ -32,6 +32,7 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> GetListAccount()
         {
             var res =await _ifakeData.GetCreateBy();
+
             var result = new ResultMessageResponse()
             {
                 data = res,

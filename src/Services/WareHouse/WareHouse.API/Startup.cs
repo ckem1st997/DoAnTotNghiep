@@ -26,6 +26,8 @@ using WareHouse.API.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using WareHouse.API.Application.Authentication;
+using Grpc.Net.ClientFactory;
 
 namespace WareHouse.API
 {
@@ -79,7 +81,7 @@ namespace WareHouse.API
            {
                o.Address = new Uri("https://localhost:5001");
                // o.Address = new Uri("https://apiproducts97.azurewebsites.net");
-           }).AddInterceptor<GrpcExceptionInterceptor>().ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(new HttpClientHandler()));
+           }).AddInterceptor<GrpcExceptionInterceptor>(InterceptorScope.Client).ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(new HttpClientHandler()));
             // Adding Authentication  
             services.AddAuthentication(options =>
             {

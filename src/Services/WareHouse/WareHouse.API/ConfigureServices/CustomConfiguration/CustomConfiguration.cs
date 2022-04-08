@@ -20,6 +20,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using WareHouse.API.Application.Model;
+using WareHouse.API.Application.Authentication;
+using Microsoft.Identity.Web;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WareHouse.API.ConfigureServices.CustomConfiguration
 {
@@ -62,8 +67,11 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
             services.AddScoped<IDapper, Dapperr>();
             services.AddScoped<IFakeData, FakeData>();
+            services.AddScoped<IUserSevice, UserSevice>();
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
         }
 
 

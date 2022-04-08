@@ -23,9 +23,13 @@ using System.IO;
 using Aspose.Cells;
 using WareHouse.API.Application.Queries.GetFisrt;
 using WareHouse.API.Application.Querie.CheckCode;
+using Microsoft.AspNetCore.Authorization;
+using WareHouse.API.Application.Authentication;
+using Master.Application.Authentication;
 
 namespace WareHouse.API.Controllers
 {
+    [Authorize(Roles = "User")]
     public class WareHouseBookController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
@@ -39,6 +43,10 @@ namespace WareHouse.API.Controllers
             _ifakeData = ifakeData ?? throw new ArgumentNullException(nameof(ifakeData));
         }
         #region R
+
+
+
+        [CheckRole(LevelCheck.READ)]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]

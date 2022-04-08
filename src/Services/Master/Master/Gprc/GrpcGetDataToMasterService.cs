@@ -1,24 +1,50 @@
 ﻿using Grpc.Core;
 using Infrastructure;
 using Master.Extension;
+using Master.Service;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Web;
 using System.Threading.Tasks;
 
 namespace GrpcGetDataToMaster
 {
+    [Authorize]
     public class GrpcGetDataToMasterService : GrpcGetData.GrpcGetDataBase
     {
 
         private readonly MasterdataContext _masterdataContext;
-        private readonly IDapper _mediat;
         private readonly ILogger<GrpcGetDataToMasterService> _logger;
+        private readonly IUserService _userService;
 
-        public GrpcGetDataToMasterService(MasterdataContext masterdataContext, IDapper mediat, ILogger<GrpcGetDataToMasterService> logger)
+
+       
+        public GrpcGetDataToMasterService(IUserService userService,MasterdataContext masterdataContext, IDapper mediat, ILogger<GrpcGetDataToMasterService> logger)
         {
-            _mediat = mediat;
+            _userService = userService;
             _logger = logger;
             _masterdataContext = masterdataContext;
+        }
+
+
+
+        public override async Task<User> GetUser(Params request, ServerCallContext context)
+        {
+            var u = _userService.User;
+            var res = new User()
+            {
+                Create = u.Create,
+                Delete = u.Delete,
+                Edit = u.Edit,
+                Read = u.Read,
+                Role = u.Role,
+                UserName = u.UserName,
+                WarehouseId = u.WarehouseId,
+                Id = u.Id,
+                RoleNumber = u.RoleNumber,
+            };
+            return await Task.FromResult(res);
         }
 
         public override async Task<ListCreateBy> GetCreateBy(Params request, ServerCallContext context)
@@ -115,5 +141,9 @@ namespace GrpcGetDataToMaster
             return Task.FromResult(list);
         }
 
+        public override Task<User> GetUserById(BaseId request, ServerCallContext context)
+        {           
+            return base.GetUserById(request, context);
+        }
     }
 }

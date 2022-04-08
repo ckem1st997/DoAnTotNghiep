@@ -15,6 +15,25 @@ service GrpcGetData {
 	rpc GetStation(Params) returns (ListGetStation) {}
 	rpc GetProject(Params) returns (ListGetProject) {}
 	rpc GetCustomer(Params) returns (ListGetCustomer) {}
+    rpc GetUser(Params) returns (User) {}
+    rpc GetUserById(BaseId) returns (User) {}
+
+}
+message User{
+  string UserName =1;
+        string Password =2;
+        bool InActive =3;
+        string     Role =4;
+        int32  RoleNumber =5;
+        bool   Read =6;
+        bool  Create =7;
+        bool  Edit =8;
+        bool   Delete =9;
+        string    WarehouseId =10;
+        string Id=11;
+}
+message BaseId{
+    string id=1;
 }
 message Params {
  // string name =1;
