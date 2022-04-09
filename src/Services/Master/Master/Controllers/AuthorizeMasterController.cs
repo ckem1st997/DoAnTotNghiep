@@ -34,7 +34,7 @@ namespace Master.Controllers
             return Ok(new ResultMessageResponse()
             {
                 success = false,
-                data = list,
+                data = list.Result,
                 totalCount = list.totalCount
             });
         }
