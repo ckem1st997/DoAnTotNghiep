@@ -98,6 +98,58 @@ namespace Master.Controllers
             });
         }
 
+
+        [Route("role-edit")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> EditRoleAsync(UserMasterModel model)
+        {
+
+            var user = _userService.GetUserById(model.Id);
+            if (user == null)
+            {
+                var re = new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Tài khoản không tồn tại !"
+                };
+                return Ok(re);
+            }
+            var check = _userService.User;
+            if (check.RoleNumber < model.RoleNumber)
+            {
+                var res1 = new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Bạn không được phần quyền lớn hơn vai trò của bạn !"
+                };
+                return Ok(res1);
+            }
+            var res = new UserMaster()
+            {
+                Id = user.Id,
+                Role = model.Role,
+                Password = user.Password,
+                Create = model.Create,
+                Delete = model.Delete,
+                Edit = model.Edit,
+                InActive = model.InActive,
+                Read = model.Read,
+                RoleNumber = model.RoleNumber,
+                UserName = user.UserName,
+                WarehouseId = model.WarehouseId,
+                ListWarehouseId = model.ListWarehouseId
+            };
+            var result =await _userService.SetRoleToUser(res);
+            return Ok(new ResultMessageResponse()
+            {
+                success = result
+            });
+        }
+
+
+
         [Route("update")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
