@@ -100,7 +100,7 @@ namespace Master.Controllers
 
 
         [Route("role-edit")]
-        [HttpGet]
+        [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> EditRoleAsync(UserMasterModel model)
