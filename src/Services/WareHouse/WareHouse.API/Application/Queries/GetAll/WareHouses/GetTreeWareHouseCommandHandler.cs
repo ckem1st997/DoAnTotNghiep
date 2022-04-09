@@ -19,6 +19,7 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
     public class GetTreeWareHouseCommand : IRequest<IEnumerable<WareHousesTreeModel>>
     {
         public bool Active { get; set; }
+        public bool GetAll { get; set; } = false;
 
         public IEnumerable<WareHouseDTO> WareHouseDTOs { get; set; }
     }
@@ -30,7 +31,7 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
         private readonly IRepositoryEF<Domain.Entity.WareHouse> _rep;
         public readonly IUserSevice _context;
 
-        public GetTreeWareHouseCommandHandler(IUserSevice context,IDapper repository, IRepositoryEF<Domain.Entity.WareHouse> rep)
+        public GetTreeWareHouseCommandHandler(IUserSevice context, IDapper repository, IRepositoryEF<Domain.Entity.WareHouse> rep)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _rep = rep ?? throw new ArgumentNullException(nameof(rep));
@@ -42,18 +43,18 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
         {
             if (request == null)
                 return null;
-            return await GetWareHouseTree(2, request.Active,request.WareHouseDTOs);
+            return await GetWareHouseTree(2, request.Active, request.WareHouseDTOs, request.GetAll);
         }
 
         public virtual async Task<IList<WareHousesTreeModel>> GetWareHouseTree(int? expandLevel,
-            bool showHidden = false, IEnumerable<WareHouseDTO> WareHouseDTOs=null)
+            bool showHidden = false, IEnumerable<WareHouseDTO> WareHouseDTOs = null, bool GetAll = false)
         {
             expandLevel ??= 1;
             var qq = new Queue<WareHousesTreeModel>();
             var lstCheck = new List<WareHousesTreeModel>();
             var result = new List<WareHousesTreeModel>();
             var convertToRoot = new List<WareHousesTreeModel>();
-            var wareHouseModels = await GetOrganizationalUnits(showHidden, WareHouseDTOs);
+            var wareHouseModels = await GetOrganizationalUnits(showHidden, WareHouseDTOs, GetAll);
             foreach (var s in wareHouseModels)
             {
                 var tem = new WareHousesTreeModel
@@ -117,43 +118,49 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
         }
 
 
-        private async Task<IList<WareHouseDTO>> GetOrganizationalUnits(bool showHidden = false, IEnumerable<WareHouseDTO> WareHouseDTOs=null)
+        private async Task<IList<WareHouseDTO>> GetOrganizationalUnits(bool showHidden = false, IEnumerable<WareHouseDTO> WareHouseDTOs = null, bool GetAll = false)
         {
             //string sql = "select Id,ParentId,Code,Name,Path from WareHouse where Inactive =@active and OnDelete=0 ";
             //DynamicParameters parameter = new DynamicParameters();
             //parameter.Add("@active", showHidden ? 1 : 0);
             //var models = await _repository.GetAllAync<WareHouseDTO>(sql, parameter, CommandType.Text);
+            var wareHouses = WareHouseDTOs.ToList();
             //get list id Chidren
-            var user = await _context.GetUser();
-            var departmentIds = new List<string>();
-            if (user != null && !string.IsNullOrEmpty(user.WarehouseId))
+            if (!GetAll)
             {
-                StringBuilder GetListChidren = new StringBuilder();
-                GetListChidren.Append("with cte (Id, Name, ParentId) as ( ");
-                GetListChidren.Append("  select     wh.Id, ");
-                GetListChidren.Append("             wh.Name, ");
-                GetListChidren.Append("             wh.ParentId ");
-                GetListChidren.Append("  from       WareHouse wh ");
-                GetListChidren.Append("  where      wh.ParentId=@WareHouseId and  wh.OnDelete=0 ");
-                GetListChidren.Append("  union all ");
-                GetListChidren.Append("  SELECT     p.Id, ");
-                GetListChidren.Append("             p.Name, ");
-                GetListChidren.Append("             p.ParentId ");
-                GetListChidren.Append("  from       WareHouse  p  ");
-                GetListChidren.Append("  inner join cte ");
-                GetListChidren.Append("          on p.ParentId = cte.id where p.OnDelete=0 ");
-                GetListChidren.Append(") ");
-                GetListChidren.Append(" select cte.Id FROM cte GROUP BY cte.Id,cte.Name,cte.ParentId; ");
-                DynamicParameters parameterwh = new DynamicParameters();
-                parameterwh.Add("@WareHouseId", user.WarehouseId);
-                departmentIds =
-                    (List<string>)await _repository.GetList<string>(GetListChidren.ToString(), parameterwh,
-                        CommandType.Text);
+                var user = await _context.GetUser();
+                var departmentIds = new List<string>();
+                if (user != null && !string.IsNullOrEmpty(user.WarehouseId))
+                {
+                    StringBuilder GetListChidren = new StringBuilder();
+                    GetListChidren.Append("with cte (Id, Name, ParentId) as ( ");
+                    GetListChidren.Append("  select     wh.Id, ");
+                    GetListChidren.Append("             wh.Name, ");
+                    GetListChidren.Append("             wh.ParentId ");
+                    GetListChidren.Append("  from       WareHouse wh ");
+                    GetListChidren.Append("  where      wh.ParentId=@WareHouseId and  wh.OnDelete=0 ");
+                    GetListChidren.Append("  union all ");
+                    GetListChidren.Append("  SELECT     p.Id, ");
+                    GetListChidren.Append("             p.Name, ");
+                    GetListChidren.Append("             p.ParentId ");
+                    GetListChidren.Append("  from       WareHouse  p  ");
+                    GetListChidren.Append("  inner join cte ");
+                    GetListChidren.Append("          on p.ParentId = cte.id where p.OnDelete=0 ");
+                    GetListChidren.Append(") ");
+                    GetListChidren.Append(" select cte.Id FROM cte GROUP BY cte.Id,cte.Name,cte.ParentId; ");
+                    DynamicParameters parameterwh = new DynamicParameters();
+                    parameterwh.Add("@WareHouseId", user.WarehouseId);
+                    departmentIds =
+                        (List<string>)await _repository.GetList<string>(GetListChidren.ToString(), parameterwh,
+                            CommandType.Text);
+                }
+                departmentIds.Add(user.WarehouseId);
+                 wareHouses = WareHouseDTOs.Where(x => departmentIds.Contains(x.Id)).ToList();
+
             }
-            departmentIds.Add(user.WarehouseId);
+
 
             var res = new List<WareHouseDTO>();
-            var wareHouses = WareHouseDTOs.Where(x => departmentIds.Contains(x.Id)).ToList();
             if (wareHouses?.Count() > 0)
             {
                 foreach (var x in wareHouses)

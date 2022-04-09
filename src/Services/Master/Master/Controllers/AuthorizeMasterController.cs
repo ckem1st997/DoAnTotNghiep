@@ -47,7 +47,56 @@ namespace Master.Controllers
         #endregion
 
 
+        [Route("role-edit")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public IActionResult EditRole(string id)
+        {
 
+            var user = _userService.GetUserById(id);
+            if (user == null)
+            {
+                var result = new ResultMessageResponse()
+                {
+                    success = false,
+                    message="Tài khoản không tồn tại !"
+                };
+                return Ok(result);
+            }
+            var check = _userService.User;
+            if(check.RoleNumber<user.RoleNumber)
+            {
+                var result = new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Bạn không có quyền phân quyền tài khoản này !"
+                };
+                return Ok(result);
+            }
+            var res = new UserMasterModel()
+            {
+                Id = user.Id,
+                Role = user.Role,
+                Password = user.Password,
+                Create = user.Create,
+                Delete = user.Delete,
+                Edit = user.Edit,
+                InActive = user.InActive,
+                Read = user.Read,
+                RoleNumber = user.RoleNumber,
+                UserName = user.UserName,
+                WarehouseId = user.WarehouseId,
+                ListWarehouseId = user.ListWarehouseId,
+                RoleSelect= SelectListRole.Get()
+            };
+
+            return Ok(new ResultMessageResponse()
+            {
+                success = true,
+                data=res
+            });
+        }
 
         [Route("update")]
         [HttpPost]
@@ -60,7 +109,7 @@ namespace Master.Controllers
                 UserName = model.UserName,
                 Create = model.Create,
                 Edit = model.Edit,
-                Delete = model.Delelte,
+                Delete = model.Delete,
                 Id = model.Id,
                 InActive = model.InActive,
                 Read = model.Read,

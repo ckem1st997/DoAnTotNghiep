@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Master.Models
 {
@@ -14,7 +16,9 @@ namespace Master.Models
         public bool Read { get; set; }
         public bool Create { get; set; }
         public bool Edit { get; set; }
-        public bool Delelte { get; set; }
+        public bool Delete { get; set; }
         public string WarehouseId { get; set; }
+        public string ListWarehouseId { get; set; }
+        public IList<SelectListItem> RoleSelect { get; set; }
     }
 }
