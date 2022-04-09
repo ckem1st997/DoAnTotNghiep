@@ -1,4 +1,5 @@
-﻿using Master.Controllers.BaseController;
+﻿using Master.Application.Message;
+using Master.Controllers.BaseController;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -12,7 +13,11 @@ namespace Master.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Role()
         {
-            return Ok();
+            return Ok(new ResultMessageResponse()
+            {
+                success = true,
+                message = "This is API to check Authzire !"
+            });
         }
     }
 }

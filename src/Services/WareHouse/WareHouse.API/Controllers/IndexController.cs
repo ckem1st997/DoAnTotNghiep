@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using WareHouse.API.Application.Message;
 using WareHouse.API.Controllers.BaseController;
 
 namespace WareHouse.API.Controllers
@@ -12,7 +13,11 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Role()
         {
-            return Ok();
+            return Ok(new ResultMessageResponse()
+            {
+                success = true,
+                message = "This is API to check Authzire !"
+            });
         }
     }
 }
