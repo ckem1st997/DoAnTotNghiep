@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Cache;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;
@@ -14,15 +16,11 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Queries.GetAll.WareHouses
 {
-    public class GetTreeWareHouseCommand : IRequest<IEnumerable<WareHousesTreeModel>>, ICacheableMediatrQuery
+    public class GetTreeWareHouseCommand : IRequest<IEnumerable<WareHousesTreeModel>>
     {
         public bool Active { get; set; }
-        [BindNever]
-        public bool BypassCache { get; set; }
-        [BindNever]
-        public string CacheKey { get; set; }
-        [BindNever]
-        public TimeSpan? SlidingExpiration { get; set; }
+
+        public IEnumerable<WareHouseDTO> WareHouseDTOs { get; set; }
     }
 
     public class
@@ -30,11 +28,13 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
     {
         private readonly IDapper _repository;
         private readonly IRepositoryEF<Domain.Entity.WareHouse> _rep;
+        public readonly IUserSevice _context;
 
-        public GetTreeWareHouseCommandHandler(IDapper repository, IRepositoryEF<Domain.Entity.WareHouse> rep)
+        public GetTreeWareHouseCommandHandler(IUserSevice context,IDapper repository, IRepositoryEF<Domain.Entity.WareHouse> rep)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _rep = rep ?? throw new ArgumentNullException(nameof(rep));
+            _context = context;
         }
 
         public async Task<IEnumerable<WareHousesTreeModel>> Handle(GetTreeWareHouseCommand request,
@@ -42,18 +42,18 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
         {
             if (request == null)
                 return null;
-            return await GetWareHouseTree(2, request.Active);
+            return await GetWareHouseTree(2, request.Active,request.WareHouseDTOs);
         }
 
         public virtual async Task<IList<WareHousesTreeModel>> GetWareHouseTree(int? expandLevel,
-            bool showHidden = false)
+            bool showHidden = false, IEnumerable<WareHouseDTO> WareHouseDTOs=null)
         {
             expandLevel ??= 1;
             var qq = new Queue<WareHousesTreeModel>();
             var lstCheck = new List<WareHousesTreeModel>();
             var result = new List<WareHousesTreeModel>();
             var convertToRoot = new List<WareHousesTreeModel>();
-            var wareHouseModels = await GetOrganizationalUnits(showHidden);
+            var wareHouseModels = await GetOrganizationalUnits(showHidden, WareHouseDTOs);
             foreach (var s in wareHouseModels)
             {
                 var tem = new WareHousesTreeModel
@@ -117,14 +117,43 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
         }
 
 
-        private async Task<IList<WareHouseDTO>> GetOrganizationalUnits(bool showHidden = false)
+        private async Task<IList<WareHouseDTO>> GetOrganizationalUnits(bool showHidden = false, IEnumerable<WareHouseDTO> WareHouseDTOs=null)
         {
-            string sql = "select Id,ParentId,Code,Name,Path from WareHouse where Inactive =@active and OnDelete=0 ";
-            DynamicParameters parameter = new DynamicParameters();
-            parameter.Add("@active", showHidden ? 1 : 0);
-            var models = await _repository.GetAllAync<WareHouseDTO>(sql, parameter, CommandType.Text);
+            //string sql = "select Id,ParentId,Code,Name,Path from WareHouse where Inactive =@active and OnDelete=0 ";
+            //DynamicParameters parameter = new DynamicParameters();
+            //parameter.Add("@active", showHidden ? 1 : 0);
+            //var models = await _repository.GetAllAync<WareHouseDTO>(sql, parameter, CommandType.Text);
+            //get list id Chidren
+            var user = await _context.GetUser();
+            var departmentIds = new List<string>();
+            if (user != null && !string.IsNullOrEmpty(user.WarehouseId))
+            {
+                StringBuilder GetListChidren = new StringBuilder();
+                GetListChidren.Append("with cte (Id, Name, ParentId) as ( ");
+                GetListChidren.Append("  select     wh.Id, ");
+                GetListChidren.Append("             wh.Name, ");
+                GetListChidren.Append("             wh.ParentId ");
+                GetListChidren.Append("  from       WareHouse wh ");
+                GetListChidren.Append("  where      wh.ParentId=@WareHouseId and  wh.OnDelete=0 ");
+                GetListChidren.Append("  union all ");
+                GetListChidren.Append("  SELECT     p.Id, ");
+                GetListChidren.Append("             p.Name, ");
+                GetListChidren.Append("             p.ParentId ");
+                GetListChidren.Append("  from       WareHouse  p  ");
+                GetListChidren.Append("  inner join cte ");
+                GetListChidren.Append("          on p.ParentId = cte.id where p.OnDelete=0 ");
+                GetListChidren.Append(") ");
+                GetListChidren.Append(" select cte.Id FROM cte GROUP BY cte.Id,cte.Name,cte.ParentId; ");
+                DynamicParameters parameterwh = new DynamicParameters();
+                parameterwh.Add("@WareHouseId", user.WarehouseId);
+                departmentIds =
+                    (List<string>)await _repository.GetList<string>(GetListChidren.ToString(), parameterwh,
+                        CommandType.Text);
+            }
+            departmentIds.Add(user.WarehouseId);
+
             var res = new List<WareHouseDTO>();
-            var wareHouses = models.ToList();
+            var wareHouses = WareHouseDTOs.Where(x => departmentIds.Contains(x.Id)).ToList();
             if (wareHouses?.Count() > 0)
             {
                 foreach (var x in wareHouses)

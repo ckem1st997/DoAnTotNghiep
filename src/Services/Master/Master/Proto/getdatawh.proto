@@ -10,6 +10,7 @@ package WareHouseApi;
 //Service Gprc
 service GrpcGetDataWareHouse {
     rpc GetListWarehouseById(BaseId) returns (ListStringWareHouseId) {}
+    rpc GetListWarehouse(BaseId) returns (ListStringWareHouseId) {}
 
 }
 message ListStringWareHouseId{

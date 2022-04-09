@@ -90,8 +90,13 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetTreeViewAsync([FromQuery] GetTreeWareHouseCommand paginatedList)
         {
-            paginatedList.CacheKey = string.Format(WareHouseCacheName.WareHouseTreeView, paginatedList.Active);
-            paginatedList.BypassCache = false;
+            var list = await _mediat.Send(new GetAllWareHouseCommand()
+            {
+                Active = paginatedList.Active,
+                BypassCache = false,
+                CacheKey= string.Format(WareHouseCacheName.WareHouseGetAll, paginatedList.Active)
+            });
+            paginatedList.WareHouseDTOs = list;
             var data = await _mediat.Send(paginatedList);
             var result = new ResultMessageResponse()
             {
