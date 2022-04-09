@@ -9,6 +9,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Serilog;
 using Serilog.Formatting.Json;
+using System.Runtime.InteropServices;
+using Autofac.Extensions.DependencyInjection;
+using System.Net;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+
 namespace WareHouse.API
 {
     public class Program
@@ -23,13 +28,33 @@ namespace WareHouse.API
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-        
-        
+                 Host.CreateDefaultBuilder(args)
+                         .ConfigureLogging(logging =>
+                         {
+                             logging.AddFilter("Grpc", LogLevel.Debug);
+                         })
+                  .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                     .ConfigureWebHostDefaults(webBuilder =>
+                     {
+                         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                         {
+                             webBuilder.ConfigureKestrel(options =>
+                             {
+                                 options.Listen(IPAddress.Any, 5005, listenOptions =>
+                                 {
+                                     listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+                                 });
+
+                                 options.Listen(IPAddress.Any, 5006, listenOptions =>
+                                 {
+                                     listenOptions.Protocols = HttpProtocols.Http2;
+                                 });
+                             });
+                         }
+                         webBuilder.UseStartup<Startup>();
+                     });
+
+
         static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         {
 

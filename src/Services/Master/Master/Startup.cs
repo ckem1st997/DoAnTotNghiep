@@ -1,4 +1,7 @@
+using Grpc.Net.Client.Web;
+using Grpc.Net.ClientFactory;
 using GrpcGetDataToMaster;
+using GrpcGetDataToWareHouse;
 using Master.Application.Authentication;
 using Master.ConfigureServices.CustomConfiguration;
 using Master.Extension;
@@ -21,6 +24,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -49,11 +53,18 @@ namespace Master
                 x.ReportApiVersions = true;
                 //    x.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
             });
+            services.AddTransient<GrpcExceptionInterceptor>();
             services.AddGrpc(options =>
             {
                 options.EnableDetailedErrors = true;
 
             });
+            services.AddGrpcClient<GrpcGetDataWareHouse.GrpcGetDataWareHouseClient>(o =>
+            {
+                o.Address = new Uri("https://localhost:5005");
+                // o.Address = new Uri("https://apiproducts97.azurewebsites.net");
+            }).AddInterceptor<GrpcExceptionInterceptor>(InterceptorScope.Client).ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(new HttpClientHandler()));
+
             services.Configure<PasswordHasherOptions>(option =>
             {
                 option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;

@@ -28,6 +28,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WareHouse.API.Application.Authentication;
 using Grpc.Net.ClientFactory;
+using GrpcGetDataToWareHouse;
 
 namespace WareHouse.API
 {
@@ -76,7 +77,11 @@ namespace WareHouse.API
             });
 
             services.AddTransient<GrpcExceptionInterceptor>();
+            services.AddGrpc(options =>
+            {
+                options.EnableDetailedErrors = true;
 
+            });
             services.AddGrpcClient<GrpcGetData.GrpcGetDataClient>(o =>
            {
                o.Address = new Uri("https://localhost:5001");
@@ -119,12 +124,14 @@ namespace WareHouse.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseGrpcWeb();
             app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGrpcService<GrpcGetDataWareHouseService>().EnableGrpcWeb();
                 endpoints.MapControllers();
             });
         }

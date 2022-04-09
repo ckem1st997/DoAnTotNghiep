@@ -6,9 +6,13 @@
     <DockerfileContext>..\..\..\..</DockerfileContext>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Proto\getdatawh.proto" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Aspose.Cells" Version="22.2.0" />
     <PackageReference Include="Aspose.Words" Version="22.4.0" />
     <PackageReference Include="Autofac" Version="6.3.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="FastMember" Version="1.5.0" />
@@ -48,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Application\Cache\" />
-    <Folder Include="Application\Grpc\" />
     <Folder Include="Application\HealthChecks\" />
     <Folder Include="Application\IntegrationEvents\" />
   </ItemGroup>
@@ -57,6 +60,7 @@
     <ProjectReference Include="..\WareHouse.Infrastructure\WareHouse.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
+	  <Protobuf Include="Proto\getdatawh.proto" GrpcServices="Server" Generator="MSBuild:Compile" />
 	  <Protobuf Include="Proto\getdata.proto" GrpcServices="Client" />
   </ItemGroup>
 </Project>

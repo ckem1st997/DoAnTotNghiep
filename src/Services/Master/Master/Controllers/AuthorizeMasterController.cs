@@ -21,6 +21,34 @@ namespace Master.Controllers
             _userService = userService;
         }
 
+
+        #region R
+        [AllowAnonymous]
+        [Route("get-list")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetLisst([FromQuery] SearchModel search)
+        {
+            var list = await _userService.GetListUserAsync(search.Pages, search.Number, search.Id, search.Key);
+            return Ok(new ResultMessageResponse()
+            {
+                success = false,
+                data = list,
+                totalCount = list.totalCount
+            });
+        }
+
+
+
+
+
+
+        #endregion
+
+
+
+
         [Route("update")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -41,7 +69,7 @@ namespace Master.Controllers
                 WarehouseId = model.WarehouseId,
             };
             var user = _userService.GetUserById(model.Id);
-            if (user!=null)
+            if (user != null)
             {
                 map.Password = user.Password;
                 map.OnDelete = user.OnDelete;
@@ -59,7 +87,7 @@ namespace Master.Controllers
             });
         }
 
-        [CheckRole(LevelCheck.CREATE)]
+        //   [CheckRole(LevelCheck.CREATE)]
         [Route("get-user-login")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -135,7 +163,7 @@ namespace Master.Controllers
             {
                 data = res,
                 success = !string.IsNullOrEmpty(res),
-                message= string.IsNullOrEmpty(res)?"Tên tài khoản hoặc mật khẩu không chính xác !":null
+                message = string.IsNullOrEmpty(res) ? "Tên tài khoản hoặc mật khẩu không chính xác !" : null
             };
             return Ok(result);
         }

@@ -26,6 +26,7 @@
 		<PackageReference Include="Abp" Version="7.1.0" />
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
 		<PackageReference Include="Dapper" Version="2.0.123" />
+		<PackageReference Include="Grpc.Net.Client.Web" Version="2.44.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.15" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.11" />
 
@@ -48,6 +49,9 @@
 
 	<ItemGroup>
 		<Protobuf Include="Proto\getdata.proto" GrpcServices="Server" Generator="MSBuild:Compile" />
+		<Protobuf Include="Proto\getdatawh.proto" GrpcServices="Client">
+		</Protobuf>
+
 	</ItemGroup>
 
 	<ItemGroup>
