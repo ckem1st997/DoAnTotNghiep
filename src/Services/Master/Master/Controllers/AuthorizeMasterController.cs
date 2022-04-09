@@ -141,7 +141,8 @@ namespace Master.Controllers
                 WarehouseId = model.WarehouseId,
                 ListWarehouseId = model.ListWarehouseId
             };
-            var result =await _userService.SetRoleToUser(res);
+            //  var result =await _userService.SetRoleToUser(res);
+            var result = true;
             return Ok(new ResultMessageResponse()
             {
                 success = result
