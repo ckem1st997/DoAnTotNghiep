@@ -23,7 +23,7 @@ namespace Master.Controllers
 
 
         #region R
-        [AllowAnonymous]
+    //    [AllowAnonymous]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]

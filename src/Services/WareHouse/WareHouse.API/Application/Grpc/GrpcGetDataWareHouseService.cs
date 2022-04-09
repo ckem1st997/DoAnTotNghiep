@@ -12,13 +12,13 @@ using WareHouse.Domain.IRepositories;
 
 namespace GrpcGetDataToWareHouse
 {
-  //  [Authorize]
+    [Authorize]
     public class GrpcGetDataWareHouseService : GrpcGetDataWareHouse.GrpcGetDataWareHouseBase
     {
 
         private readonly IDapper _dapper;
-        private readonly ILogger<GrpcGetDataWareHouseService> _logger;    
-        public GrpcGetDataWareHouseService( IDapper dapper, ILogger<GrpcGetDataWareHouseService> logger)
+        private readonly ILogger<GrpcGetDataWareHouseService> _logger;
+        public GrpcGetDataWareHouseService(IDapper dapper, ILogger<GrpcGetDataWareHouseService> logger)
         {
             _logger = logger;
             _dapper = dapper;
@@ -56,11 +56,11 @@ namespace GrpcGetDataToWareHouse
 
             }
             var result = new ListStringWareHouseId();
-            if(departmentIds !=null && departmentIds.Count>0)
-            foreach (var item in departmentIds)
-            {
-                result.IdWareHouseList = result.IdWareHouseList + "," + item;
-            }
+            if (departmentIds != null && departmentIds.Count > 0)
+                foreach (var item in departmentIds)
+                {
+                    result.IdWareHouseList = result.IdWareHouseList + "," + item;
+                }
             return result;
         }
     }

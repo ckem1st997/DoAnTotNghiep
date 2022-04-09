@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Master.Service
 {
-    //  [Authorize]
+    [Authorize]
     public class UserService : IUserService
     {
         private readonly MasterdataContext _context;
