@@ -31,6 +31,7 @@ message User{
         bool   Delete =9;
         string    WarehouseId =10;
         string Id=11;
+        string  ListWarehouseId=12;
 }
 message BaseId{
     string id=1;

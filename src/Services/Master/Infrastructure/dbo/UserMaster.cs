@@ -17,5 +17,6 @@ namespace Infrastructure
         public bool Edit { get; set; }
         public bool Delete { get; set; }
         public string WarehouseId { get; set; }
+        public string ListWarehouseId { get; set; }
     }
 }

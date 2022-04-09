@@ -28,6 +28,8 @@ namespace WareHouse.API.Application.Authentication
                 Read=res.Read,
                 Role=res.Role,
                 RoleNumber=res.RoleNumber,
+                WarehouseId=res.WarehouseId,
+                ListWarehouseId=res.ListWarehouseId
             };
             return user;
         }

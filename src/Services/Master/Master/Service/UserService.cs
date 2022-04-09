@@ -29,7 +29,7 @@ namespace Master.Service
 
         public UserMaster User => GetUser();
 
-        public UserService(GrpcGetDataWareHouse.GrpcGetDataWareHouseClient client,IPaginatedList<UserMaster> list,MasterdataContext context, IConfiguration configuration, IHttpContextAccessor httpContext)
+        public UserService(GrpcGetDataWareHouse.GrpcGetDataWareHouseClient client, IPaginatedList<UserMaster> list, MasterdataContext context, IConfiguration configuration, IHttpContextAccessor httpContext)
         {
             _context = context;
             _configuration = configuration;
@@ -102,7 +102,8 @@ namespace Master.Service
                 Read = true,
                 RoleNumber = 1,
                 UserName = model.Username,
-                WarehouseId = ""
+                WarehouseId = "",
+                ListWarehouseId = ""
 
             };
             await _context.UserMasters.AddAsync(resCreate);
@@ -156,35 +157,53 @@ namespace Master.Service
         public async Task<IPaginatedList<UserMaster>> GetListUserAsync(int pages, int number, string wareHouseId, string keyWords)
         {
             var query = from u in _context.UserMasters
-                        where u.OnDelete==false
+                        where u.OnDelete == false
                         select new UserMaster()
                         {
-                            Id=u.Id,
-                            Create=u.Create,
-                            Edit=u.Edit,
-                            Delete=u.Delete,
-                            UserName=u.UserName,
-                            InActive=u.InActive,
-                            Role=u.Role,
-                            RoleNumber=u.RoleNumber,
-                            Read=u.Read,
-                            WarehouseId=u.WarehouseId,
-                            Password=""
+                            Id = u.Id,
+                            Create = u.Create,
+                            Edit = u.Edit,
+                            Delete = u.Delete,
+                            UserName = u.UserName,
+                            InActive = u.InActive,
+                            Role = u.Role,
+                            RoleNumber = u.RoleNumber,
+                            Read = u.Read,
+                            WarehouseId = u.WarehouseId,
+                            Password = "",
+                            ListWarehouseId = u.ListWarehouseId
                         };
             if (!string.IsNullOrEmpty(keyWords))
                 query = from u in query
                         where u.UserName.Contains(keyWords) || u.Role.Contains(keyWords)
                         select u;
-            if(!string.IsNullOrEmpty(wareHouseId))
+            if (!string.IsNullOrEmpty(wareHouseId))
             {
-                var listId = await _client.GetListWarehouseByIdAsync(new BaseId() { IdWareHouse=wareHouseId});
+                var listId = await _client.GetListWarehouseByIdAsync(new BaseId() { IdWareHouse = wareHouseId });
                 query = from u in query
                         where listId.IdWareHouseList.Contains(u.WarehouseId)
                         select u;
-            }    
+            }
             _list.Result = query.Skip(pages * number).Take(number);
-            _list.totalCount =await query.CountAsync();
+            _list.totalCount = await query.CountAsync();
             return _list;
+        }
+
+        public async Task<bool> SetRoleToUser(UserMaster model)
+        {
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+            if (!string.IsNullOrEmpty(model.WarehouseId))
+            {
+                var listId = await _client.GetListWarehouseByIdAsync(new BaseId() { IdWareHouse = model.WarehouseId });
+                model.ListWarehouseId = listId.IdWareHouseList;
+            }
+            model.OnDelete = false;
+            _context.UserMasters.Update(model);
+            var res = await _context.SaveChangesAsync();
+            return res > 0;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace WareHouse.API.Application.Model
 {
-    public class UserGrpc:BaseModel
+    public class UserGrpc : BaseModel
     {
         public string UserName { get; set; }
         public string Password { get; set; }
@@ -12,5 +12,6 @@
         public bool Edit { get; set; }
         public bool Delete { get; set; }
         public string WarehouseId { get; set; }
-    }
+        public string ListWarehouseId  {get; set; }
+}
 }
