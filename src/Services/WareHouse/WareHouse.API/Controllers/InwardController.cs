@@ -19,6 +19,7 @@ using WareHouse.API.Application.Queries.GetAll;
 using WareHouse.API.Application.Queries.GetAll.WareHouses;
 using WareHouse.API.Application.Querie.CheckCode;
 using WareHouse.API.Application.Queries.GetFisrt;
+using WareHouse.API.Application.Authentication;
 
 namespace WareHouse.API.Controllers
 {
@@ -27,12 +28,15 @@ namespace WareHouse.API.Controllers
         private readonly IMediator _mediat;
         private readonly ICacheExtension _cacheExtension;
         private readonly IFakeData _ifakeData;
+        private readonly IUserSevice _userSevice;
 
-        public InwardController(IFakeData ifakeData,IMediator mediat, ICacheExtension cacheExtension)
+
+        public InwardController(IUserSevice userSevice, IFakeData ifakeData,IMediator mediat, ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
             _ifakeData = ifakeData ?? throw new ArgumentNullException(nameof(ifakeData));
+            _userSevice = userSevice;
         }
         #region R    
 
@@ -89,7 +93,20 @@ namespace WareHouse.API.Controllers
                 return Ok(resError);
             }
             var data = await _mediat.Send(new InwardGetFirstCommand() { Id = id });
-            await GetDataToDrop(data, true);
+            if(data !=null)
+            {
+                if (!string.IsNullOrEmpty(data.WareHouseId))
+                {
+                    var check = await _userSevice.CheckWareHouseIdByUser(data.WareHouseId);
+                    if (!check)
+                        return Ok(new ResultMessageResponse()
+                        {
+                            success = false,
+                            message = "Bạnn không có quyền truy cập vào kho này !"
+                        }); ;
+                }
+                await GetDataToDrop(data, true);
+            }
 
             var result = new ResultMessageResponse()
             {

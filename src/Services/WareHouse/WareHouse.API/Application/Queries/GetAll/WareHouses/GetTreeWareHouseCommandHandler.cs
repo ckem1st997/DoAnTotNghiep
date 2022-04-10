@@ -129,8 +129,26 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
             if (!GetAll)
             {
                 var user = await _context.GetUser();
+
+                if (!string.IsNullOrEmpty(user.WarehouseId))
+                {
+                    var split = user.WarehouseId.Split(',');
+                    if (split.Length > 0)
+                    {
+                        var ress = "";
+                        for (int i = 0; i < split.Length; i++)
+                        {
+                            if (i == split.Length - 1)
+                                ress = ress + "'" + split[i] + "'";
+                            else
+                                ress = ress + "'" + split[i] + "'" + ",";
+                        }
+                        user.WarehouseId = ress;
+
+                    }
+                }
                 var departmentIds = new List<string>();
-                if (user != null && !string.IsNullOrEmpty(user.WarehouseId))
+                if (user != null && !string.IsNullOrEmpty(user.WarehouseId) && user.RoleNumber<3)
                 {
                     StringBuilder GetListChidren = new StringBuilder();
                     GetListChidren.Append("with cte (Id, Name, ParentId) as ( ");
@@ -138,24 +156,24 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
                     GetListChidren.Append("             wh.Name, ");
                     GetListChidren.Append("             wh.ParentId ");
                     GetListChidren.Append("  from       WareHouse wh ");
-                    GetListChidren.Append("  where      wh.ParentId=@WareHouseId and  wh.OnDelete=0 ");
+                    GetListChidren.Append("  where       ( wh.ParentId in (" + user.WarehouseId + ") or  wh.Id in (" + user.WarehouseId + ") ) and  wh.OnDelete=0 ");
                     GetListChidren.Append("  union all ");
                     GetListChidren.Append("  SELECT     p.Id, ");
                     GetListChidren.Append("             p.Name, ");
                     GetListChidren.Append("             p.ParentId ");
                     GetListChidren.Append("  from       WareHouse  p  ");
                     GetListChidren.Append("  inner join cte ");
-                    GetListChidren.Append("          on p.ParentId = cte.id where p.OnDelete=0 ");
+                    GetListChidren.Append("          on p.Id = cte.ParentId where p.OnDelete=0 ");
                     GetListChidren.Append(") ");
                     GetListChidren.Append(" select cte.Id FROM cte GROUP BY cte.Id,cte.Name,cte.ParentId; ");
                     DynamicParameters parameterwh = new DynamicParameters();
-                    parameterwh.Add("@WareHouseId", user.WarehouseId);
+                    Console.WriteLine(GetListChidren.ToString());
                     departmentIds =
-                        (List<string>)await _repository.GetList<string>(GetListChidren.ToString(), parameterwh,
+                        (List<string>)await _repository.GetList<string>(GetListChidren.ToString(), null,
                             CommandType.Text);
+                    wareHouses = WareHouseDTOs.Where(x => departmentIds.Contains(x.Id)).ToList();
+
                 }
-                departmentIds.Add(user.WarehouseId);
-                 wareHouses = WareHouseDTOs.Where(x => departmentIds.Contains(x.Id)).ToList();
 
             }
 

@@ -195,15 +195,16 @@ namespace Master.Service
             {
                 throw new ArgumentNullException(nameof(model));
             }
-            if (!string.IsNullOrEmpty(model.WarehouseId))
+            var user = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.Id.Equals(model.Id) && x.OnDelete == false);
+            if (user == null)
+                return false;
+            if (!string.IsNullOrEmpty(model.WarehouseId) && !user.WarehouseId.Equals(model.WarehouseId))
             {
                 var listId = await _client.GetListWarehouseByIdAsync(new BaseId() { IdWareHouse = model.WarehouseId });
                 model.ListWarehouseId = listId.IdWareHouseList;
                 model.WarehouseId = listId.IdWareHouseList;
             }
-            var user=_context.UserMasters.AsNoTracking().FirstOrDefault(x => x.Id.Equals(model.Id) && x.OnDelete == false);
-            if (user == null)
-                return false;
+
             model.Password = user.Password;
             model.UserName = user.UserName;
             model.OnDelete = false;

@@ -62,7 +62,7 @@ namespace GrpcGetDataToWareHouse
                 GetListChidren.Append("             p.ParentId ");
                 GetListChidren.Append("  from       WareHouse  p  ");
                 GetListChidren.Append("  inner join cte ");
-                GetListChidren.Append("          on p.ParentId = cte.id where p.OnDelete=0 ");
+                GetListChidren.Append("          on  p.ParentId = cte.id where p.OnDelete=0 ");
                 GetListChidren.Append(") ");
                 GetListChidren.Append(" select cte.Id FROM cte GROUP BY cte.Id,cte.Name,cte.ParentId; ");
 

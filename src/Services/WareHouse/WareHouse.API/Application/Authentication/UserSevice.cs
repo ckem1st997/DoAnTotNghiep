@@ -14,6 +14,12 @@ namespace WareHouse.API.Application.Authentication
             _client = client;
         }
 
+        public async Task<bool> CheckWareHouseIdByUser(string idWareHouse)
+        {
+            var user =await _client.GetUserAsync(new Params());
+            return user.WarehouseId.Contains(idWareHouse);
+        }
+
         public async Task<UserGrpc> GetUser()
         {
             var res =await _client.GetUserAsync(new Params());

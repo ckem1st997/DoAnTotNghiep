@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Commands.Create;
 using WareHouse.API.Application.Commands.Delete;
@@ -19,17 +20,19 @@ using WareHouse.API.Controllers.BaseController;
 
 namespace WareHouse.API.Controllers
 {
-  public class OutwardController : BaseControllerWareHouse
+    public class OutwardController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
         private readonly ICacheExtension _cacheExtension;
         private readonly IFakeData _ifakeData;
+        private readonly IUserSevice _userSevice;
 
-        public OutwardController(IFakeData ifakeData,IMediator mediat, ICacheExtension cacheExtension)
+        public OutwardController(IUserSevice userSevice, IFakeData ifakeData, IMediator mediat, ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
             _ifakeData = ifakeData ?? throw new ArgumentNullException(nameof(ifakeData));
+            _userSevice = userSevice;
         }
         #region R      
         #endregion
@@ -54,7 +57,20 @@ namespace WareHouse.API.Controllers
                 return Ok(resError);
             }
             var data = await _mediat.Send(new OutwardGetFirstCommand() { Id = id });
-            await GetDataToDrop(data, true);
+            if (data != null)
+            {
+                if (!string.IsNullOrEmpty(data.WareHouseId))
+                {
+                    var check = await _userSevice.CheckWareHouseIdByUser(data.WareHouseId);
+                    if (!check)
+                        return Ok(new ResultMessageResponse()
+                        {
+                            success = false,
+                            message = "Bạn không có quyền truy cập vào kho này !"
+                        }); ;
+                }
+                await GetDataToDrop(data, true);
+            }
 
             var result = new ResultMessageResponse()
             {
@@ -148,7 +164,7 @@ namespace WareHouse.API.Controllers
             else
             {
                 res.WareHouseDTO = dataWareHouse;
-                res.GetCreateBy =await _ifakeData.GetCreateBy();
+                res.GetCreateBy = await _ifakeData.GetCreateBy();
             }
 
             return res;

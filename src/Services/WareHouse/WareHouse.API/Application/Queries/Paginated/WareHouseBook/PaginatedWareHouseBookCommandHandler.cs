@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Dapper;
 using MediatR;
 using StackExchange.Profiling.Internal;
+using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;
@@ -38,11 +39,14 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
     {
         private readonly IDapper _repository;
         private readonly IPaginatedList<WareHouseBookDTO> _list;
+        public readonly IUserSevice _context;
 
-        public PaginatedWareHouseBookCommandHandler(IDapper repository, IPaginatedList<WareHouseBookDTO> list)
+
+        public PaginatedWareHouseBookCommandHandler(IUserSevice context,IDapper repository, IPaginatedList<WareHouseBookDTO> list)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _list = list ?? throw new ArgumentNullException(nameof(list));
+            _context = context;
         }
 
         public async Task<IPaginatedList<WareHouseBookDTO>> Handle(PaginatedWareHouseBookCommand request,
@@ -89,7 +93,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
                 sb.Append(" (d1.Reason like @key or d1.VoucherCode like @key) and ");
                 sbCount.Append(" (d1.Reason like @key or d1.VoucherCode like @key) and ");
             }
-
+            var user=await _context.GetUser();
             //get list id Chidren
             var departmentIds = new List<string>();
             if (!string.IsNullOrEmpty(request.WareHouseId))
@@ -116,10 +120,12 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
                     (List<string>)await _repository.GetList<string>(GetListChidren.ToString(), parameterwh,
                         CommandType.Text);
                 departmentIds.Add(request.WareHouseId);
+                if (user.RoleNumber < 3)
+                    departmentIds = departmentIds.Where(x => user.WarehouseId.Contains(x)).ToList();
             }
 
 
-            if (request.WareHouseId.HasValue() && departmentIds.Count() > 0)
+            if (request.WareHouseId.HasValue() && departmentIds.Count() > 0 )
             {
                 sb.Append(" d1.WareHouseId in @WareHouseId and ");
                 sbCount.Append(" d1.WareHouseId in @WareHouseId and ");

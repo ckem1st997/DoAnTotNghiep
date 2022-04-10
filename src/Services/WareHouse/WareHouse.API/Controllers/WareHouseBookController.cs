@@ -34,12 +34,14 @@ namespace WareHouse.API.Controllers
         private readonly IMediator _mediat;
         private readonly IFakeData _ifakeData;
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly IUserSevice _userSevice;
 
-        public WareHouseBookController(IFakeData ifakeData,IWebHostEnvironment hostEnvironment, IMediator mediat, ICacheExtension cacheExtension)
+        public WareHouseBookController(IUserSevice userSevice, IFakeData ifakeData, IWebHostEnvironment hostEnvironment, IMediator mediat, ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _hostingEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
             _ifakeData = ifakeData ?? throw new ArgumentNullException(nameof(ifakeData));
+            _userSevice = userSevice;
         }
         #region R
 
@@ -52,6 +54,17 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> IndexAsync([FromQuery] PaginatedWareHouseBookCommand paginatedList)
         {
+            if (!string.IsNullOrEmpty(paginatedList.WareHouseId))
+            {
+                var check = await _userSevice.CheckWareHouseIdByUser(paginatedList.WareHouseId);
+                if (!check)
+                    return Ok(new ResultMessageResponse()
+                    {
+                        success = false,
+                        message = "Bạnn không có quyền truy cập vào kho này !"
+                    }); ;
+            }
+
             var data = await _mediat.Send(paginatedList);
             var result = new ResultMessageResponse()
             {
@@ -294,11 +307,11 @@ namespace WareHouse.API.Controllers
             {
                 res.WareHouseItemDTO = dataWareHouseItem;
                 res.UnitDTO = dataUnit;
-                res.GetDepartmentDTO =await _ifakeData.GetDepartment();
-                res.GetCustomerDTO =await _ifakeData.GetCustomer();
-                res.GetEmployeeDTO =await _ifakeData.GetEmployee();
-                res.GetProjectDTO =await _ifakeData.GetProject();
-                res.GetStationDTO =await _ifakeData.GetStation();
+                res.GetDepartmentDTO = await _ifakeData.GetDepartment();
+                res.GetCustomerDTO = await _ifakeData.GetCustomer();
+                res.GetEmployeeDTO = await _ifakeData.GetEmployee();
+                res.GetProjectDTO = await _ifakeData.GetProject();
+                res.GetStationDTO = await _ifakeData.GetStation();
                 res.GetAccountDTO = _ifakeData.GetListAccountIdentifier(_hostingEnvironment);
 
             }
@@ -370,11 +383,11 @@ namespace WareHouse.API.Controllers
             {
                 res.WareHouseItemDTO = dataWareHouseItem;
                 res.UnitDTO = dataUnit;
-                res.GetDepartmentDTO =await _ifakeData.GetDepartment();
-                res.GetCustomerDTO =await _ifakeData.GetCustomer();
-                res.GetEmployeeDTO =await _ifakeData.GetEmployee();
-                res.GetProjectDTO =await _ifakeData.GetProject();
-                res.GetStationDTO =await _ifakeData.GetStation();
+                res.GetDepartmentDTO = await _ifakeData.GetDepartment();
+                res.GetCustomerDTO = await _ifakeData.GetCustomer();
+                res.GetEmployeeDTO = await _ifakeData.GetEmployee();
+                res.GetProjectDTO = await _ifakeData.GetProject();
+                res.GetStationDTO = await _ifakeData.GetStation();
                 res.GetAccountDTO = _ifakeData.GetListAccountIdentifier(_hostingEnvironment);
 
             }
