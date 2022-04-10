@@ -31,7 +31,8 @@ namespace Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
-            entity.Property(e => e.WarehouseId).HasMaxLength(250);
+            //entity.Property(e => e.WarehouseId).HasMaxLength(int.MaxValue);
+            //entity.Property(e => e.ListWarehouseId).HasMaxLength(250);
 
             OnConfigurePartial(entity);
         }

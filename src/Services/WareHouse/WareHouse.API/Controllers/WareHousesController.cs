@@ -84,6 +84,28 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+
+        [Route("get-all")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetAll()
+        {
+            var list = await _mediat.Send(new GetAllWareHouseCommand()
+            {
+                Active = true,
+                BypassCache = false,
+                CacheKey = string.Format(WareHouseCacheName.WareHouseGetAll, true)
+            });
+            var data = await _mediat.Send(list);
+            var result = new ResultMessageResponse()
+            {
+                data = data
+            };
+            return Ok(result);
+        }
+
+
         [Route("get-tree-view")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]

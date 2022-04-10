@@ -128,7 +128,7 @@ namespace Master.Service
                 throw new ArgumentException($"'{nameof(id)}' cannot be null or empty.", nameof(id));
             }
             var res = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.Id.Equals(id) && x.OnDelete == false);
-            res.Password = "";
+           // res.Password = "";
             return res;
         }
 
@@ -195,11 +195,16 @@ namespace Master.Service
             {
                 throw new ArgumentNullException(nameof(model));
             }
-            if (!string.IsNullOrEmpty(model.WarehouseId))
-            {
-                var listId = await _client.GetListWarehouseByIdAsync(new BaseId() { IdWareHouse = model.WarehouseId });
-                model.ListWarehouseId = listId.IdWareHouseList;
-            }
+            //if (!string.IsNullOrEmpty(model.WarehouseId))
+            //{
+            //    var listId = await _client.GetListWarehouseByIdAsync(new BaseId() { IdWareHouse = model.WarehouseId });
+            //    model.ListWarehouseId = listId.IdWareHouseList;
+            //}
+            var user=_context.UserMasters.AsNoTracking().FirstOrDefault(x => x.Id.Equals(model.Id) && x.OnDelete == false);
+            if (user == null)
+                return false;
+            model.Password = user.Password;
+            model.UserName = user.UserName;
             model.OnDelete = false;
             _context.UserMasters.Update(model);
             var res = await _context.SaveChangesAsync();

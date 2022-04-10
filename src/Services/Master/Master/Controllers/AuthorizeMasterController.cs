@@ -23,7 +23,7 @@ namespace Master.Controllers
 
 
         #region R
-    //    [AllowAnonymous]
+        //    [AllowAnonymous]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -33,7 +33,6 @@ namespace Master.Controllers
             var list = await _userService.GetListUserAsync(search.Pages, search.Number, search.Id, search.Key);
             return Ok(new ResultMessageResponse()
             {
-                success = false,
                 data = list.Result,
                 totalCount = list.totalCount
             });
@@ -60,12 +59,12 @@ namespace Master.Controllers
                 var result = new ResultMessageResponse()
                 {
                     success = false,
-                    message="Tài khoản không tồn tại !"
+                    message = "Tài khoản không tồn tại !"
                 };
                 return Ok(result);
             }
             var check = _userService.User;
-            if(check.RoleNumber<user.RoleNumber)
+            if (check.RoleNumber < user.RoleNumber)
             {
                 var result = new ResultMessageResponse()
                 {
@@ -88,13 +87,13 @@ namespace Master.Controllers
                 UserName = user.UserName,
                 WarehouseId = user.WarehouseId,
                 ListWarehouseId = user.ListWarehouseId,
-                RoleSelect= SelectListRole.Get()
+                RoleSelect = SelectListRole.Get()
             };
 
             return Ok(new ResultMessageResponse()
             {
                 success = true,
-                data=res
+                data = res
             });
         }
 
@@ -106,8 +105,8 @@ namespace Master.Controllers
         public async Task<IActionResult> EditRoleAsync(UserMasterModel model)
         {
 
-            var user = _userService.GetUserById(model.Id);
-            if (user == null)
+            var user = _userService.CheckUser(model.UserName);
+            if (user)
             {
                 var re = new ResultMessageResponse()
                 {
@@ -128,21 +127,21 @@ namespace Master.Controllers
             }
             var res = new UserMaster()
             {
-                Id = user.Id,
+                Id = model.Id,
                 Role = model.Role,
-                Password = user.Password,
+                Password = model.Password,
                 Create = model.Create,
                 Delete = model.Delete,
                 Edit = model.Edit,
                 InActive = model.InActive,
                 Read = model.Read,
                 RoleNumber = model.RoleNumber,
-                UserName = user.UserName,
+                UserName = model.UserName,
                 WarehouseId = model.WarehouseId,
                 ListWarehouseId = model.ListWarehouseId
             };
-            //  var result =await _userService.SetRoleToUser(res);
-            var result = true;
+            var result = await _userService.SetRoleToUser(res);
+            // var result = true;
             return Ok(new ResultMessageResponse()
             {
                 success = result
