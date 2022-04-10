@@ -81,7 +81,12 @@ namespace WareHouse.Infrastructure
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.LogTo(Console.WriteLine).EnableSensitiveDataLogging();
+        {
+            //string databasePath = $"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}WHSqliteDatabase.db";
+            //optionsBuilder.UseSqlite($"Data Source={databasePath}");
+            optionsBuilder.LogTo(Console.WriteLine).EnableSensitiveDataLogging();
+
+        }
 
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
