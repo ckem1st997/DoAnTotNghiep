@@ -97,10 +97,9 @@ namespace WareHouse.API.Controllers
                 BypassCache = false,
                 CacheKey = string.Format(WareHouseCacheName.WareHouseGetAll, true)
             });
-            var data = await _mediat.Send(list);
             var result = new ResultMessageResponse()
             {
-                data = data
+                data = list
             };
             return Ok(result);
         }

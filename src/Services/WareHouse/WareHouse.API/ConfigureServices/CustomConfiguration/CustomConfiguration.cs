@@ -55,19 +55,13 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             });
             services.AddDbContext<WarehouseManagementContext>(options =>
             {
-                if (!configuration["Sqlite:using"].Equals("true"))
-                    options.UseSqlServer(configuration.GetConnectionString("WarehouseManagementContext"),
-                        sqlServerOptionsAction: sqlOptions =>
-                        {
-                            sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-                            sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                        });
-                else
-                    options.UseSqlite(configuration.GetConnectionString("WarehouseManagementContextLite"),
-                        sqliteOptionsAction: sqlOptions =>
-                        {
-                            sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-                        });
+                options.UseSqlServer(configuration.GetConnectionString("WarehouseManagementContext"),
+                    sqlServerOptionsAction: sqlOptions =>
+                    {
+                        sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+                        sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                    });
+
             },
                        ServiceLifetime.Scoped  //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
                    );
