@@ -63,11 +63,11 @@ namespace WareHouse.API.Controllers
                 {
                     var check = await _userSevice.CheckWareHouseIdByUser(data.WareHouseId);
                     if (!check)
-                        return Ok(new ResultMessageResponse()
+                        return Unauthorized(new ResultMessageResponse()
                         {
                             success = false,
                             message = "Bạn không có quyền truy cập vào kho này !"
-                        }); ;
+                        });
                 }
                 await GetDataToDrop(data, true);
             }
