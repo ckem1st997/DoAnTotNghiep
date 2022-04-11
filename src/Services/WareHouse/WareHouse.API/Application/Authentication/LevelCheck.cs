@@ -1,7 +1,7 @@
-﻿namespace Master.Application.Authentication
+﻿namespace WareHouse.API.Application.Authentication
 {
     public enum LevelCheck
     {
-        READ, CREATE, UPDATE, DELETE
+        READ, CREATE, UPDATE, DELETE, WAREHOUSE
     }
 }

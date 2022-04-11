@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Commands.Create;
 using WareHouse.API.Application.Commands.Delete;
@@ -30,7 +31,11 @@ namespace WareHouse.API.Controllers
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
         }
+
         #region R
+
+        [CheckRole(LevelCheck.READ)]
+
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -46,6 +51,9 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+
+
+        [CheckRole(LevelCheck.READ)]
 
         [Route("get-drop-tree")]
         [HttpGet]
@@ -69,6 +77,7 @@ namespace WareHouse.API.Controllers
         #endregion
 
         #region CUD
+        [CheckRole(LevelCheck.UPDATE)]
 
         [Route("edit")]
         [HttpPost]
@@ -83,6 +92,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+        [CheckRole(LevelCheck.CREATE)]
 
         [Route("create")]
         [HttpPost]
@@ -112,6 +122,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+        [CheckRole(LevelCheck.DELETE)]
 
         [Route("delete")]
         [HttpPost]

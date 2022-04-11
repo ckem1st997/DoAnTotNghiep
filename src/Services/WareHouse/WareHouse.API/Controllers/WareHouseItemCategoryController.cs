@@ -22,6 +22,7 @@ using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Querie.CheckCode;
 using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
 using WareHouse.API.Application.Queries.GetFisrt;
+using WareHouse.API.Application.Authentication;
 
 namespace WareHouse.API.Controllers
 {
@@ -37,6 +38,9 @@ namespace WareHouse.API.Controllers
 
 
         #region R
+
+
+        [CheckRole(LevelCheck.READ)]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -53,7 +57,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-
+        [CheckRole(LevelCheck.READ)]
         [Route("get-drop-tree")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -74,6 +78,8 @@ namespace WareHouse.API.Controllers
         #endregion
 
         #region CUD
+
+        [CheckRole(LevelCheck.UPDATE)]
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -108,7 +114,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-
+        [CheckRole(LevelCheck.CREATE)]
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -138,7 +144,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-
+        [CheckRole(LevelCheck.DELETE)]
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

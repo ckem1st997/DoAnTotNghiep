@@ -1,4 +1,4 @@
-﻿using Master.Application.Authentication;
+﻿
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -59,6 +59,10 @@ namespace WareHouse.API.Application.Authentication
                         if (delete)
                             checkRole = true;
                         break;
+                    case LevelCheck.WAREHOUSE:
+                        if (!string.IsNullOrEmpty(user.WarehouseId) && user.RoleNumber < 3 || user.RoleNumber == 3)
+                            checkRole = true;
+                        break;
                     default:
                         if (read)
                             checkRole = true;
@@ -84,7 +88,7 @@ namespace WareHouse.API.Application.Authentication
                 var res = new ResultMessageResponse()
                 {
                     data = null,
-                    message = "Bạn chưa có quyền !",
+                    message = "Bạn chưa có quyền thực hiện thao tác hoặc truy cập kho !",
                     httpStatusCode = (int)HttpStatusCode.Forbidden,
                 };
                 context.Result = new ObjectResult(res);

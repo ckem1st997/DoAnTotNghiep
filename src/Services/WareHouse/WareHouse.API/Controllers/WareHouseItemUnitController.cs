@@ -25,6 +25,7 @@ using WareHouse.API.Application.Queries.GetAll.WareHouseItemCategory;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
 using WareHouse.API.Application.Queries.Paginated.WareHouseItemUnit;
+using WareHouse.API.Application.Authentication;
 
 namespace WareHouse.API.Controllers
 {
@@ -36,6 +37,8 @@ namespace WareHouse.API.Controllers
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
         }
         #region R
+
+        [CheckRole(LevelCheck.CREATE)]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -67,6 +70,8 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+
+        [CheckRole(LevelCheck.READ)]
         [Route("check-item-unit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -101,7 +106,7 @@ namespace WareHouse.API.Controllers
         #endregion
         #region CD
 
-
+        [CheckRole(LevelCheck.CREATE)]
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -116,7 +121,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-
+        [CheckRole(LevelCheck.DELETE)]
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

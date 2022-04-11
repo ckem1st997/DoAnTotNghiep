@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Controllers.BaseController;
@@ -10,6 +11,9 @@ using WareHouse.API.Controllers.BaseController;
 
 namespace WareHouse.API.Controllers
 {
+
+    [CheckRole(LevelCheck.READ)]
+
     public class GetDataGPRCController : BaseControllerWareHouse
     {
         private readonly IFakeData _ifakeData;

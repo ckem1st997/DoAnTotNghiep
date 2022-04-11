@@ -19,7 +19,7 @@ using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
 using WareHouse.API.Application.Queries.Paginated.WareHouses;
 using WareHouse.API.Controllers.BaseController;
 using WareHouse.API.Application.Querie.CheckCode;
-
+using WareHouse.API.Application.Authentication;
 
 namespace WareHouse.API.Controllers
 {
@@ -35,6 +35,8 @@ namespace WareHouse.API.Controllers
         }
 
         #region R
+
+        [CheckRole(LevelCheck.READ)]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -51,6 +53,8 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+
+        [CheckRole(LevelCheck.READ)]
         [Route("get-by-id")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -66,6 +70,8 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+
+        [CheckRole(LevelCheck.READ)]
         [Route("get-drop-tree")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -84,7 +90,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-
+        [CheckRole(LevelCheck.READ)]
         [Route("get-all")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -104,7 +110,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-
+        [CheckRole(LevelCheck.READ)]
         [Route("get-tree-view")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -134,7 +140,7 @@ namespace WareHouse.API.Controllers
 
         #region CUD
 
-
+        [CheckRole(LevelCheck.UPDATE)]
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -167,6 +173,9 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+
+
+        [CheckRole(LevelCheck.CREATE)]
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -195,7 +204,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-
+        [CheckRole(LevelCheck.DELETE)]
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

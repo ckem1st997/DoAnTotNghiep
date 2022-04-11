@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Commands.Create;
 using WareHouse.API.Application.Commands.Delete;
@@ -21,6 +22,7 @@ using WareHouse.API.Controllers.BaseController;
 
 namespace WareHouse.API.Controllers
 {
+    [CheckRole(LevelCheck.READ)]
     public class ReportController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;

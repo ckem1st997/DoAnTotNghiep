@@ -15,6 +15,7 @@ using WareHouse.API.Application.Queries.Paginated.Unit;
 using WareHouse.API.Controllers.BaseController;
 using WareHouse.API.Application.Cache.CacheName;
 using Microsoft.AspNetCore.Authorization;
+using WareHouse.API.Application.Authentication;
 
 namespace WareHouse.API.Controllers
 {
@@ -29,11 +30,9 @@ namespace WareHouse.API.Controllers
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
         }
         #region R
-        #endregion
 
-        #region CUD
+        [CheckRole(LevelCheck.READ)]
 
-        #endregion
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -49,6 +48,11 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+
+
+
+        [CheckRole(LevelCheck.READ)]
+
         [Route("get-drop-tree")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -67,6 +71,18 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+        #endregion
+
+        #region CUD
+
+
+
+
+
+
+
+        [CheckRole(LevelCheck.UPDATE)]
+
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -82,6 +98,9 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+
+
+        [CheckRole(LevelCheck.CREATE)]
 
         [Route("create")]
         [HttpPost]
@@ -99,6 +118,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+        [CheckRole(LevelCheck.DELETE)]
 
         [Route("delete")]
         [HttpPost]
@@ -115,5 +135,6 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+        #endregion
     }
 }

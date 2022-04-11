@@ -46,6 +46,9 @@ namespace WareHouse.API.Controllers
         /// <param name="itemId"></param>
         /// <param name="warehouseId"></param>
         /// <returns></returns>
+        /// 
+
+        [CheckRole(LevelCheck.READ)]
         [Route("check-item-exist")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -75,8 +78,9 @@ namespace WareHouse.API.Controllers
 
         #region CUD
 
-        #endregion
 
+
+        [CheckRole(LevelCheck.READ)]
         [Route("details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -116,6 +120,9 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+
+        [CheckRole(LevelCheck.UPDATE)]
+
         [Route("edit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -142,6 +149,10 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+
+
+        [CheckRole(LevelCheck.UPDATE)]
+
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -163,6 +174,10 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+
+
+
+        [CheckRole(LevelCheck.CREATE)]
 
         [Route("create")]
         [HttpGet]
@@ -217,6 +232,9 @@ namespace WareHouse.API.Controllers
             return res;
         }
 
+
+        [CheckRole(LevelCheck.CREATE)]
+
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -241,6 +259,7 @@ namespace WareHouse.API.Controllers
         }
 
 
+        [CheckRole(LevelCheck.DELETE)]
 
         [Route("delete")]
         [HttpPost]
@@ -255,5 +274,7 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+        #endregion
+
     }
 }

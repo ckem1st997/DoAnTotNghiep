@@ -24,6 +24,7 @@ using WareHouse.API.Application.Queries.GetAll.WareHouses;
 using WareHouse.API.Application.Queries.GetAll.WareHouseItem;
 using WareHouse.API.Application.Queries.GetFisrt;
 using WareHouse.Domain.Entity;
+using WareHouse.API.Application.Authentication;
 
 namespace WareHouse.API.Controllers
 {
@@ -37,6 +38,8 @@ namespace WareHouse.API.Controllers
         }
 
         #region R
+
+        [CheckRole(LevelCheck.READ)]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -57,6 +60,8 @@ namespace WareHouse.API.Controllers
 
         #region CUD
 
+
+        [CheckRole(LevelCheck.CREATE)]
         [Route("create")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -76,8 +81,8 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-        
-        
+
+        [CheckRole(LevelCheck.UPDATE)]
         [Route("edit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -139,7 +144,7 @@ namespace WareHouse.API.Controllers
             return res;
         }
 
-
+        [CheckRole(LevelCheck.UPDATE)]
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -174,7 +179,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-
+        [CheckRole(LevelCheck.CREATE)]
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -202,7 +207,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-
+        [CheckRole(LevelCheck.DELETE)]
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
