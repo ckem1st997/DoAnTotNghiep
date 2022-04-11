@@ -71,7 +71,7 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             services.AddScoped<IUserSevice, UserSevice>();
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
         }
 

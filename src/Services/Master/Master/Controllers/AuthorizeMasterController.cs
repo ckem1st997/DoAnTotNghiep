@@ -23,6 +23,9 @@ namespace Master.Controllers
 
 
         #region R
+
+
+        [CheckRole(LevelCheck.READ)]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -44,7 +47,7 @@ namespace Master.Controllers
 
         #endregion
 
-
+        [CheckRole(LevelCheck.UPDATE)]
         [Route("role-edit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -96,7 +99,7 @@ namespace Master.Controllers
             });
         }
 
-
+        [CheckRole(LevelCheck.UPDATE)]
         [Route("role-edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -148,7 +151,7 @@ namespace Master.Controllers
         }
 
 
-
+        [CheckRole(LevelCheck.UPDATE)]
         [Route("update")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -187,7 +190,7 @@ namespace Master.Controllers
             });
         }
 
-        //   [CheckRole(LevelCheck.CREATE)]
+        [CheckRole(LevelCheck.READ)]
         [Route("get-user-login")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

@@ -83,7 +83,7 @@ namespace Master.Application.Authentication
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 base.OnActionExecuting(context);
             }
-            else
+            else if (checkRole == false)
             {
                 var res = new ResultMessageResponse()
                 {
@@ -93,6 +93,8 @@ namespace Master.Application.Authentication
                 };
                 context.Result = new ObjectResult(res);
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                base.OnActionExecuting(context);
+
             }
         }
     }

@@ -44,6 +44,8 @@ namespace WareHouse.API.Application.Authentication
                 var update = user.Edit;
                 var delete = user.Delete;
                 var read = user.Read;
+                var wh = user.WarehouseId;
+                var roleNumber = user.RoleNumber;
 
                 switch (LevelCheck)
                 {
@@ -60,7 +62,7 @@ namespace WareHouse.API.Application.Authentication
                             checkRole = true;
                         break;
                     case LevelCheck.WAREHOUSE:
-                        if (!string.IsNullOrEmpty(user.WarehouseId) && user.RoleNumber < 3 || user.RoleNumber == 3)
+                        if (!string.IsNullOrEmpty(wh) && user.RoleNumber < 3 || roleNumber == 3)
                             checkRole = true;
                         break;
                     default:
@@ -83,7 +85,7 @@ namespace WareHouse.API.Application.Authentication
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 base.OnActionExecuting(context);
             }
-            else
+            else if (checkRole == false)
             {
                 var res = new ResultMessageResponse()
                 {
@@ -93,6 +95,8 @@ namespace WareHouse.API.Application.Authentication
                 };
                 context.Result = new ObjectResult(res);
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                base.OnActionExecuting(context);
+
             }
         }
     }
