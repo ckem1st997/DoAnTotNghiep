@@ -37,6 +37,7 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             {
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
                 options.Filters.Add(typeof(CustomValidationAttribute));
+               // options.Filters.Add(typeof(CheckRoleAttribute));
             })
                 .AddApplicationPart(typeof(WareHousesController).Assembly)
                 .AddJsonOptions(options =>
@@ -73,6 +74,7 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
+          //  services.AddScoped<CheckRoleAttribute>();
         }
 
 

@@ -38,7 +38,7 @@ namespace WareHouse.API.Application.Authentication
             var checkRole = false;
             if (_userService.GetUser() != null)
             {
-                var user =await _userService.GetUser();
+                var user = await _userService.GetUser();
 
                 var create = user.Create;
                 var update = user.Edit;
@@ -81,9 +81,11 @@ namespace WareHouse.API.Application.Authentication
                     message = "Bạn chưa xác thực người dùng !",
                     httpStatusCode = (int)HttpStatusCode.Unauthorized,
                 };
-                context.Result = new UnauthorizedObjectResult(res);
-                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                base.OnActionExecuting(context);
+                //  context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                var result = new UnauthorizedObjectResult(res);
+                result.StatusCode = (int)HttpStatusCode.Unauthorized;
+                context.Result = result;
+
             }
             else if (checkRole == false)
             {
@@ -93,11 +95,13 @@ namespace WareHouse.API.Application.Authentication
                     message = "Bạn chưa có quyền thực hiện thao tác hoặc truy cập kho !",
                     httpStatusCode = (int)HttpStatusCode.Forbidden,
                 };
-                context.Result = new ObjectResult(res);
-                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                base.OnActionExecuting(context);
+                //  context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                var result = new ObjectResult(res);
+                result.StatusCode = (int)HttpStatusCode.Forbidden;
+                context.Result = result;
 
             }
+            base.OnActionExecuting(context);
         }
     }
 }
