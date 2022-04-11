@@ -14,5 +14,8 @@ namespace WareHouse.API.Application.Model
         public string ParentId { get; set; }
         public string Path { get; set; }
         public bool Inactive { get; set; }
+
+        public virtual IEnumerable<WareHouseDTO> WareHouseDTOs { get; set; }
+
     }
 }

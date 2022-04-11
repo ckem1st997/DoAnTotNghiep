@@ -57,7 +57,7 @@ namespace WareHouse.API.Controllers
 
         #region CUD
 
-        [CheckRole(LevelCheck.READ)]
+        [CheckRole(LevelCheck.CREATE)]
         [Route("create")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]

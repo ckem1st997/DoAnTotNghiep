@@ -79,6 +79,48 @@ namespace WareHouse.API.Controllers
         #endregion
 
         #region CUD
+
+
+
+
+
+        [CheckRole(LevelCheck.READ)]
+        [Route("details")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Details(string id)
+        {
+            if (id is null)
+            {
+                var resu = new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Chưa chọn mã !"
+                };
+                return Ok(resu);
+            }
+
+            var command = new WareHouseItemFirstCommand()
+            {
+                Id = id
+            };
+            var res = await _mediat.Send(command);
+            await GetDataToDrop(res);
+            var search = new PaginatedWareHouseItemUnitCommand()
+            {
+                KeySearch = id
+            };
+            var data = await _mediat.Send(search);
+            res.WareHouseItemUnits = (ICollection<WareHouseItemUnitDTO>)data.Result;
+            var result = new ResultMessageResponse()
+            {
+                data = res
+            };
+            return Ok(result);
+        }
+
+
         [CheckRole(LevelCheck.UPDATE)]
         [Route("edit")]
         [HttpPost]

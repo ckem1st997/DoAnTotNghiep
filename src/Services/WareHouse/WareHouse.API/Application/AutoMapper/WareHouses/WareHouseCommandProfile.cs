@@ -33,13 +33,20 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
                 .ForMember(x => x.Inwards, opt => opt.Ignore())
                 .ForMember(x => x.OnDelete, opt => opt.Ignore())
                 .ForMember(x => x.WareHouseLimits, opt => opt.Ignore());
-            CreateMap<Domain.Entity.WareHouse, WareHouseDTO>();
+            CreateMap<Domain.Entity.WareHouse, WareHouseDTO>()
+                   .ForMember(x => x.WareHouseDTOs, opt => opt.Ignore());
 
+
+            CreateMap<Vendor, VendorDTO>();
+            CreateMap<VendorDTO, Vendor>();
             CreateMap<VendorCommands, Domain.Entity.Vendor>()
                 .ForMember(x => x.WareHouseItems, opt => opt.Ignore())
                 .ForMember(x => x.Inwards, opt => opt.Ignore())
                 .ForMember(x => x.OnDelete, opt => opt.Ignore())
                 .ForMember(x => x.DomainEvents, opt => opt.Ignore());
+
+            CreateMap<Unit, UnitDTO>();
+            CreateMap<UnitDTO, Unit>();
             CreateMap<UnitCommands, Domain.Entity.Unit>()
                 .ForMember(x => x.WareHouseItems, opt => opt.Ignore())
                 .ForMember(x => x.WareHouseLimits, opt => opt.Ignore())
@@ -52,6 +59,9 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
                 .ForMember(x => x.DomainEvents, opt => opt.Ignore());
             //   CreateMap<Domain.Entity.WareHouse, WareHouseCommands>();
 
+
+            CreateMap<WareHouseItemCategory, WareHouseItemCategoryDTO>();
+            CreateMap<WareHouseItemCategoryDTO, WareHouseItemCategory>();
             CreateMap<WareHouseItemCategoryCommands, Domain.Entity.WareHouseItemCategory>()
                 .ForMember(x => x.DomainEvents, opt => opt.Ignore())
                 .ForMember(x => x.OnDelete, opt => opt.Ignore())

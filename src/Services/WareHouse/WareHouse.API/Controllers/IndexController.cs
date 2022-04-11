@@ -7,6 +7,10 @@ namespace WareHouse.API.Controllers
 {
     public class IndexController : BaseControllerWareHouse
     {
+        public IndexController()
+        {
+
+        }
         [Route("role")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]

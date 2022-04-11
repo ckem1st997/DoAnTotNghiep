@@ -23,6 +23,7 @@ using WareHouse.API.Application.Querie.CheckCode;
 using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
 using WareHouse.API.Application.Queries.GetFisrt;
 using WareHouse.API.Application.Authentication;
+using WareHouse.API.Application.Model;
 
 namespace WareHouse.API.Controllers
 {
@@ -78,6 +79,109 @@ namespace WareHouse.API.Controllers
         #endregion
 
         #region CUD
+        [CheckRole(LevelCheck.READ)]
+        [Route("details")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Details(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                var resError = new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Chưa nhập Id của loại vật tư !"
+                };
+                return Ok(resError);
+            }
+            var commandCheck = new WareHouseItemCategoryFirstCommand()
+            {
+                Id = id
+            };
+            var resc = await _mediat.Send(commandCheck);
+            if (resc is null)
+                return Ok(new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Không tồn tại !"
+                });
+
+            var result = new ResultMessageResponse()
+            {
+                data = resc,
+                success = resc != null
+            };
+            return Ok(result);
+        }
+
+
+        [CheckRole(LevelCheck.CREATE)]
+        [Route("create")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public IActionResult Create()
+        {
+            var mode = new WareHouseItemCategoryDTO()
+            {
+                Id = Guid.NewGuid().ToString()
+            };
+            var result = new ResultMessageResponse()
+            {
+                data = mode,
+                success = mode != null
+            };
+            return Ok(result);
+        }
+
+        [CheckRole(LevelCheck.UPDATE)]
+        [Route("edit")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> EditAsync(string Id)
+        {
+            if (string.IsNullOrEmpty(Id))
+            {
+                var resError = new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Chưa nhập Id của loại vật tư !"
+                };
+                return Ok(resError);
+            }
+            var commandCheck = new WareHouseItemCategoryFirstCommand()
+            {
+                Id = Id
+            };
+            var data = await _mediat.Send(commandCheck);
+            if (data != null)
+                await GetDataToDrop(data);
+            var result = new ResultMessageResponse()
+            {
+                data = data,
+                success = data != null
+            };
+            return Ok(result);
+        }
+
+
+
+
+        private async Task<WareHouseItemCategoryDTO> GetDataToDrop(WareHouseItemCategoryDTO res)
+        {
+
+            var command = new GetDropDownWareHouseItemCategoryCommand();
+            command.CacheKey = string.Format(WareHouseItemCategoryCacheName.WareHouseItemCategoryDropDown, command.Active);
+            command.BypassCache = false;
+            var data = await _mediat.Send(command);
+            res.WareHouseItems = (ICollection<WareHouseItemDTO>)data;
+            return res;
+        }
+
+
+
 
         [CheckRole(LevelCheck.UPDATE)]
         [Route("edit")]

@@ -20,6 +20,7 @@ using WareHouse.API.Application.Queries.Paginated.WareHouses;
 using WareHouse.API.Controllers.BaseController;
 using WareHouse.API.Application.Querie.CheckCode;
 using WareHouse.API.Application.Authentication;
+using WareHouse.API.Application.Model;
 
 namespace WareHouse.API.Controllers
 {
@@ -121,7 +122,7 @@ namespace WareHouse.API.Controllers
             {
                 Active = paginatedList.Active,
                 BypassCache = false,
-                CacheKey= string.Format(WareHouseCacheName.WareHouseGetAll, paginatedList.Active)
+                CacheKey = string.Format(WareHouseCacheName.WareHouseGetAll, paginatedList.Active)
             });
             paginatedList.WareHouseDTOs = list;
             var data = await _mediat.Send(paginatedList);
@@ -139,6 +140,110 @@ namespace WareHouse.API.Controllers
         #endregion
 
         #region CUD
+
+        [CheckRole(LevelCheck.READ)]
+        [Route("details")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Details(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                var resError = new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Chưa nhập Id của kho !"
+                };
+                return Ok(resError);
+            }
+            var commandCheck = new WareHouseGetFirstCommand()
+            {
+                Id = id
+            };
+            var resc = await _mediat.Send(commandCheck);
+            if (resc is null)
+                return Ok(new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Không tồn tại !"
+                });
+
+            var result = new ResultMessageResponse()
+            {
+                data = resc,
+                success = resc != null
+            };
+            return Ok(result);
+        }
+
+
+        [CheckRole(LevelCheck.CREATE)]
+        [Route("create")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CreateAsync()
+        {
+            var mode = new WareHouseDTO()
+            {
+                Id = Guid.NewGuid().ToString()
+            };
+            await GetDataToDrop(mode);
+            var result = new ResultMessageResponse()
+            {
+                data = mode,
+                success = mode != null
+            };
+            return Ok(result);
+        }
+
+        [CheckRole(LevelCheck.UPDATE)]
+        [Route("edit")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> EditAsync(string Id)
+        {
+            if (string.IsNullOrEmpty(Id))
+            {
+                var resError = new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Chưa nhập Id của kho !"
+                };
+                return Ok(resError);
+            }
+            var commandCheck = new WareHouseGetFirstCommand()
+            {
+                Id = Id
+            };
+            var data = await _mediat.Send(commandCheck);
+            
+            await GetDataToDrop(data);
+            var result = new ResultMessageResponse()
+            {
+                data = data,
+                success = data != null
+            };
+            return Ok(result);
+        }
+
+
+
+        private async Task<WareHouseDTO> GetDataToDrop(WareHouseDTO res)
+        {         
+            var getWareHouse = new GetDropDownWareHouseCommand()
+            {
+                Active = true,
+                BypassCache = false,
+                CacheKey = string.Format(WareHouseItemCategoryCacheName.WareHouseItemCategoryDropDown, true)
+            };
+            var dataWareHouse = await _mediat.Send(getWareHouse);
+            return res;
+        }
+
+
 
         [CheckRole(LevelCheck.UPDATE)]
         [Route("edit")]

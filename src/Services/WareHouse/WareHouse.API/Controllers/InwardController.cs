@@ -31,7 +31,7 @@ namespace WareHouse.API.Controllers
         private readonly IUserSevice _userSevice;
 
 
-        public InwardController(IUserSevice userSevice, IFakeData ifakeData,IMediator mediat, ICacheExtension cacheExtension)
+        public InwardController(IUserSevice userSevice, IFakeData ifakeData, IMediator mediat, ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
@@ -63,8 +63,17 @@ namespace WareHouse.API.Controllers
                     message = "Bạn chưa chọn vật tư hoặc kho !"
                 });
             }
-
-            var data = await _mediat.Send(new CheckItemAndWareHouseItemByOutWardCommand() {ItemId=itemId,WareHouseId=warehouseId });
+            if (!string.IsNullOrEmpty(warehouseId))
+            {
+                var check = await _userSevice.CheckWareHouseIdByUser(warehouseId);
+                if (!check)
+                    return Unauthorized(new ResultMessageResponse()
+                    {
+                        success = false,
+                        message = "Bạn không có quyền truy cập vào kho này !"
+                    });
+            }
+            var data = await _mediat.Send(new CheckItemAndWareHouseItemByOutWardCommand() { ItemId = itemId, WareHouseId = warehouseId });
 
             return Ok(new ResultMessageResponse
             {
@@ -97,7 +106,7 @@ namespace WareHouse.API.Controllers
                 return Ok(resError);
             }
             var data = await _mediat.Send(new InwardGetFirstCommand() { Id = id });
-            if(data !=null)
+            if (data != null)
             {
                 if (!string.IsNullOrEmpty(data.WareHouseId))
                 {
@@ -122,7 +131,6 @@ namespace WareHouse.API.Controllers
 
 
         [CheckRole(LevelCheck.UPDATE)]
-
         [Route("edit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -139,8 +147,20 @@ namespace WareHouse.API.Controllers
                 return Ok(resError);
             }
             var data = await _mediat.Send(new InwardGetFirstCommand() { Id = id });
-            await GetDataToDrop(data);
-
+            if (data != null)
+            {
+                if (!string.IsNullOrEmpty(data.WareHouseId))
+                {
+                    var check = await _userSevice.CheckWareHouseIdByUser(data.WareHouseId);
+                    if (!check)
+                        return Ok(new ResultMessageResponse()
+                        {
+                            success = false,
+                            message = "Bạnn không có quyền truy cập vào kho này !"
+                        }); ;
+                }
+                await GetDataToDrop(data);
+            }
             var result = new ResultMessageResponse()
             {
                 data = data,
@@ -152,13 +172,22 @@ namespace WareHouse.API.Controllers
 
 
         [CheckRole(LevelCheck.UPDATE)]
-
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Edit(InwardCommands inwardCommands)
         {
+            if (!string.IsNullOrEmpty(inwardCommands.WareHouseId))
+            {
+                var check = await _userSevice.CheckWareHouseIdByUser(inwardCommands.WareHouseId);
+                if (!check)
+                    return Ok(new ResultMessageResponse()
+                    {
+                        success = false,
+                        message = "Bạn không có quyền truy cập vào kho này !"
+                    }); ;
+            }
             inwardCommands.ModifiedDate = DateTime.Now;
             foreach (var item in inwardCommands.InwardDetails)
             {
@@ -178,13 +207,22 @@ namespace WareHouse.API.Controllers
 
 
         [CheckRole(LevelCheck.CREATE)]
-
         [Route("create")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(string idWareHouse)
         {
+            if (!string.IsNullOrEmpty(idWareHouse))
+            {
+                var check = await _userSevice.CheckWareHouseIdByUser(idWareHouse);
+                if (!check)
+                    return Ok(new ResultMessageResponse()
+                    {
+                        success = false,
+                        message = "Bạn không có quyền truy cập vào kho này !"
+                    }); ;
+            }
             var modelCreate = new InwardDTO();
             modelCreate.Voucher = new Random().Next(1, 999999999).ToString();
             modelCreate.WareHouseId = idWareHouse;
@@ -226,7 +264,7 @@ namespace WareHouse.API.Controllers
             {
                 res.WareHouseDTO = dataWareHouse;
                 res.VendorDTO = dataVendor;
-                res.GetCreateBy =await _ifakeData.GetCreateBy();
+                res.GetCreateBy = await _ifakeData.GetCreateBy();
             }
 
             return res;
@@ -234,13 +272,22 @@ namespace WareHouse.API.Controllers
 
 
         [CheckRole(LevelCheck.CREATE)]
-
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(InwardCommands inwardCommands)
         {
+            if (!string.IsNullOrEmpty(inwardCommands.WareHouseId))
+            {
+                var check = await _userSevice.CheckWareHouseIdByUser(inwardCommands.WareHouseId);
+                if (!check)
+                    return Ok(new ResultMessageResponse()
+                    {
+                        success = false,
+                        message = "Bạn không có quyền truy cập vào kho này !"
+                    }); ;
+            }
             inwardCommands.CreatedDate = DateTime.Now;
             inwardCommands.ModifiedDate = DateTime.Now;
             foreach (var item in inwardCommands.InwardDetails)
@@ -260,7 +307,6 @@ namespace WareHouse.API.Controllers
 
 
         [CheckRole(LevelCheck.DELETE)]
-
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

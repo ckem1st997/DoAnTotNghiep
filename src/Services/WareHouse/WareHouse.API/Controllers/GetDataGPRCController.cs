@@ -26,9 +26,6 @@ namespace WareHouse.API.Controllers
         }
 
 
-
-
-
         [Route("get-list-account")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
