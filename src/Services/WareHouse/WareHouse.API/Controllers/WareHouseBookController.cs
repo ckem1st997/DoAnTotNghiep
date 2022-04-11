@@ -359,7 +359,6 @@ namespace WareHouse.API.Controllers
 
         #region  outward-details
         [CheckRole(LevelCheck.CREATE)]
-
         [Route("create-outward-details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
