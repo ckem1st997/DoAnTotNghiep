@@ -168,7 +168,7 @@ namespace WareHouse.API.Controllers
                     success = false,
                     message = "Không tồn tại !"
                 });
-
+            await GetDataToDrop(resc);
             var result = new ResultMessageResponse()
             {
                 data = resc,
@@ -219,7 +219,7 @@ namespace WareHouse.API.Controllers
                 Id = Id
             };
             var data = await _mediat.Send(commandCheck);
-            
+
             await GetDataToDrop(data);
             var result = new ResultMessageResponse()
             {
@@ -232,7 +232,7 @@ namespace WareHouse.API.Controllers
 
 
         private async Task<WareHouseDTO> GetDataToDrop(WareHouseDTO res)
-        {         
+        {
             var getWareHouse = new GetDropDownWareHouseCommand()
             {
                 Active = true,
@@ -240,6 +240,7 @@ namespace WareHouse.API.Controllers
                 CacheKey = string.Format(WareHouseItemCategoryCacheName.WareHouseItemCategoryDropDown, true)
             };
             var dataWareHouse = await _mediat.Send(getWareHouse);
+            res.WareHouseDTOs = dataWareHouse;
             return res;
         }
 
