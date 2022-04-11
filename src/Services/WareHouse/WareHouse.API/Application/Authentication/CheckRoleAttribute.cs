@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using WareHouse.API.Application.Message;
 
 namespace WareHouse.API.Application.Authentication
@@ -28,6 +29,12 @@ namespace WareHouse.API.Application.Authentication
 
         }
         public override async void OnActionExecuting(ActionExecutingContext context)
+        {
+
+            base.OnActionExecuting(context);
+        }
+
+        public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             if (context is null)
             {
@@ -81,10 +88,11 @@ namespace WareHouse.API.Application.Authentication
                     message = "Bạn chưa xác thực người dùng !",
                     httpStatusCode = (int)HttpStatusCode.Unauthorized,
                 };
-                //  context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 var result = new UnauthorizedObjectResult(res);
                 result.StatusCode = (int)HttpStatusCode.Unauthorized;
                 context.Result = result;
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+
 
             }
             else if (checkRole == false)
@@ -95,13 +103,14 @@ namespace WareHouse.API.Application.Authentication
                     message = "Bạn chưa có quyền thực hiện thao tác hoặc truy cập kho !",
                     httpStatusCode = (int)HttpStatusCode.Forbidden,
                 };
-                //  context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                 var result = new ObjectResult(res);
                 result.StatusCode = (int)HttpStatusCode.Forbidden;
                 context.Result = result;
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
 
             }
-            base.OnActionExecuting(context);
+            //     await next();
+            await base.OnActionExecutionAsync(context, next);
         }
     }
 }

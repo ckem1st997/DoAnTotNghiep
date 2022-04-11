@@ -13,8 +13,6 @@ using System.Net;
 namespace Master.Application.Authentication
 {
     [Authorize]
-    //  [ActivatorUtilitiesConstructor]
-
     public class CheckRoleAttribute : ActionFilterAttribute
     {
         private IUserService _userService;
@@ -81,7 +79,6 @@ namespace Master.Application.Authentication
                 };
                 context.Result = new UnauthorizedObjectResult(res);
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                base.OnActionExecuting(context);
             }
             else if (checkRole == false)
             {
@@ -92,10 +89,9 @@ namespace Master.Application.Authentication
                     httpStatusCode = (int)HttpStatusCode.Forbidden,
                 };
                 context.Result = new ObjectResult(res);
-                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                base.OnActionExecuting(context);
-
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;             
             }
+            base.OnActionExecuting(context);
         }
     }
 }
