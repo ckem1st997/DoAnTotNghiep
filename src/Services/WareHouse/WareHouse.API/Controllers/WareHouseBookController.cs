@@ -60,7 +60,7 @@ namespace WareHouse.API.Controllers
                     return Ok(new ResultMessageResponse()
                     {
                         success = false,
-                        message = "Bạnn không có quyền truy cập vào kho này !"
+                        message = "Bạn không có quyền truy cập vào kho này !"
                     }); ;
             }
 
@@ -145,8 +145,26 @@ namespace WareHouse.API.Controllers
 
         #region inward-details
 
-        [CheckRole(LevelCheck.CREATE)]
+        [CheckRole(LevelCheck.READ)]
+        [Route("get-data-to-warehouse-book")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetData()
+        {
+            var res = new GetDataWareHouseBookBaseDTO();
+            await GetDataToDrop(res);
+            var result = new ResultMessageResponse()
+            {
+                data = res,
+                success=res !=null
+            };
+            return Ok(result);
+        }
 
+
+
+        [CheckRole(LevelCheck.CREATE)]
         [Route("create-inward-details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -293,6 +311,37 @@ namespace WareHouse.API.Controllers
             };
             return Ok(result);
         }
+
+        private async Task<GetDataWareHouseBookBaseDTO> GetDataToDrop(GetDataWareHouseBookBaseDTO res, bool details = false)
+        {
+            var getUnit = new GetDropDownUnitCommand()
+            {
+                Active = true,
+                BypassCache = false,
+                CacheKey = string.Format(UnitCacheName.UnitCacheNameDropDown, true)
+            };
+            var dataUnit = await _mediat.Send(getUnit);
+
+            var getWareHouseItem = new GetDopDownWareHouseItemCommand()
+            {
+                Active = true,
+                BypassCache = false,
+                CacheKey = string.Format(WareHouseItemCacheName.WareHouseItemCacheNameDropDown, true)
+            };
+            var dataWareHouseItem = await _mediat.Send(getWareHouseItem);
+            res.WareHouseItemDTO = dataWareHouseItem;
+            res.UnitDTO = dataUnit;
+            res.GetDepartmentDTO = await _ifakeData.GetDepartment();
+            res.GetCustomerDTO = await _ifakeData.GetCustomer();
+            res.GetEmployeeDTO = await _ifakeData.GetEmployee();
+            res.GetProjectDTO = await _ifakeData.GetProject();
+            res.GetStationDTO = await _ifakeData.GetStation();
+            res.GetAccountDTO = _ifakeData.GetListAccountIdentifier(_hostingEnvironment);
+
+            return res;
+        }
+
+
 
         private async Task<InwardDetailDTO> GetDataToDrop(InwardDetailDTO res, bool details = false)
         {

@@ -106,7 +106,8 @@ namespace WareHouse.API.Controllers
                     success = false,
                     message = "Không tồn tại !"
                 });
-
+            if (resc != null)
+                await GetDataToDrop(resc);
             var result = new ResultMessageResponse()
             {
                 data = resc,
@@ -176,7 +177,7 @@ namespace WareHouse.API.Controllers
             command.CacheKey = string.Format(WareHouseItemCategoryCacheName.WareHouseItemCategoryDropDown, command.Active);
             command.BypassCache = false;
             var data = await _mediat.Send(command);
-            res.WareHouseItems = (ICollection<WareHouseItemDTO>)data;
+            res.InverseParent = (ICollection<WareHouseItemCategoryDTO>)data;
             return res;
         }
 

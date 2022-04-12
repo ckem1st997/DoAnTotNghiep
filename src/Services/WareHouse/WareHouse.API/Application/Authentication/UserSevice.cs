@@ -17,6 +17,8 @@ namespace WareHouse.API.Application.Authentication
         public async Task<bool> CheckWareHouseIdByUser(string idWareHouse)
         {
             var user =await _client.GetUserAsync(new Params());
+            if (user.RoleNumber == 3)
+                return true;
             return user.WarehouseId.Contains(idWareHouse);
         }
 

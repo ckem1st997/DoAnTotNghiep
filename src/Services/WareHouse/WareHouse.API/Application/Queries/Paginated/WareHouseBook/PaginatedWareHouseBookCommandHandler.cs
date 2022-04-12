@@ -42,7 +42,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
         public readonly IUserSevice _context;
 
 
-        public PaginatedWareHouseBookCommandHandler(IUserSevice context,IDapper repository, IPaginatedList<WareHouseBookDTO> list)
+        public PaginatedWareHouseBookCommandHandler(IUserSevice context, IDapper repository, IPaginatedList<WareHouseBookDTO> list)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _list = list ?? throw new ArgumentNullException(nameof(list));
@@ -93,7 +93,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
                 sb.Append(" (d1.Reason like @key or d1.VoucherCode like @key) and ");
                 sbCount.Append(" (d1.Reason like @key or d1.VoucherCode like @key) and ");
             }
-            var user=await _context.GetUser();
+            var user = await _context.GetUser();
             //get list id Chidren
             var departmentIds = new List<string>();
             if (!string.IsNullOrEmpty(request.WareHouseId))
@@ -125,7 +125,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
             }
 
 
-            if (request.WareHouseId.HasValue() && departmentIds.Count() > 0 )
+            if (request.WareHouseId.HasValue() && departmentIds.Count() > 0 || user.RoleNumber < 3)
             {
                 sb.Append(" d1.WareHouseId in @WareHouseId and ");
                 sbCount.Append(" d1.WareHouseId in @WareHouseId and ");
@@ -150,7 +150,23 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@key", '%' + request.KeySearch + '%');
             parameter.Add("@type", request.TypeWareHouseBook);
-            parameter.Add("@WareHouseId", departmentIds);
+            if (!request.WareHouseId.HasValue() && user.RoleNumber < 3)
+            {
+                var list = new List<string>();
+                var split = user.WarehouseId.Split(',');
+                if (split.Length > 0)
+                {
+                    for (int i = 0; i < split.Length; i++)
+                    {
+                        list.Add(split[i]);
+                    }
+                }
+                parameter.Add("@WareHouseId", list);
+
+            }
+            else
+                parameter.Add("@WareHouseId", departmentIds);
+
             parameter.Add("@fromDate", request.FromDate);
             parameter.Add("@toDate", request.ToDate);
             parameter.Add("@skip", request.Skip);

@@ -7,6 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using MediatR;
+using StackExchange.Profiling.Internal;
+using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;
@@ -25,11 +27,13 @@ namespace WareHouse.API.Application.Queries.Paginated
     {
         private readonly IDapper _repository;
         private readonly IPaginatedList<BeginningWareHouseDTO> _list;
+        public readonly IUserSevice _context;
 
-        public PaginatedBeginningWareHouseCommandHandler(IDapper repository, IPaginatedList<BeginningWareHouseDTO> list)
+        public PaginatedBeginningWareHouseCommandHandler(IUserSevice context, IDapper repository, IPaginatedList<BeginningWareHouseDTO> list)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _list = list ?? throw new ArgumentNullException(nameof(list));
+            _context = context;
         }
 
         public async Task<IPaginatedList<BeginningWareHouseDTO>> Handle(PaginatedBeginningWareHouseCommand request,
@@ -59,6 +63,7 @@ namespace WareHouse.API.Application.Queries.Paginated
                 sb.Append("  (WareHouse.Name like @key or WareHouseItem.Name like @key) and ");
                 sbCount.Append("  (WareHouse.Name like @key or WareHouseItem.Name like @key) and ");
             }
+            var user = await _context.GetUser();
 
             //get list id Chidren
             var departmentIds = new List<string>();
@@ -86,10 +91,12 @@ namespace WareHouse.API.Application.Queries.Paginated
                     (List<string>)await _repository.GetList<string>(GetListChidren.ToString(), parameterwh,
                         CommandType.Text);
                 departmentIds.Add(request.WareHouseId);
+                if (user.RoleNumber < 3)
+                    departmentIds = departmentIds.Where(x => user.WarehouseId.Contains(x)).ToList();
             }
 
             //
-            if (!string.IsNullOrEmpty(request.WareHouseId) && departmentIds.Count() > 0)
+            if (!string.IsNullOrEmpty(request.WareHouseId) && departmentIds.Count() > 0 || user.RoleNumber < 3)
             {
                 sb.Append("  BeginningWareHouse.WareHouseId in @WareHouseId and ");
                 sbCount.Append("  BeginningWareHouse.WareHouseId in @WareHouseId and ");
@@ -102,7 +109,22 @@ namespace WareHouse.API.Application.Queries.Paginated
             sb.Append(" order by UnitName OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@key", '%' + request.KeySearch + '%');
-            parameter.Add("@WareHouseId", departmentIds);
+            if (!request.WareHouseId.HasValue() && user.RoleNumber < 3)
+            {
+                var list = new List<string>();
+                var split = user.WarehouseId.Split(',');
+                if (split.Length > 0)
+                {
+                    for (int i = 0; i < split.Length; i++)
+                    {
+                        list.Add(split[i]);
+                    }
+                }
+                parameter.Add("@WareHouseId", list);
+
+            }
+            else
+                parameter.Add("@WareHouseId", departmentIds);
             parameter.Add("@skip", request.Skip);
             parameter.Add("@take", request.Take);
             _list.Result = await _repository.GetList<BeginningWareHouseDTO>(sb.ToString(), parameter, CommandType.Text);
