@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.Message;
 
 namespace WareHouse.API.Application.Authentication
@@ -41,7 +42,8 @@ namespace WareHouse.API.Application.Authentication
                 throw new ArgumentNullException(nameof(context));
             }
             // create instance of IUserService not contractor
-            _userService = context.HttpContext.RequestServices.GetService<IUserSevice>();
+            // _userService = context.HttpContext.RequestServices.GetService<IUserSevice>();
+            _userService = GetServiceByInterface<IUserSevice>.GetService();
             var checkRole = false;
             if (_userService.GetUser() != null)
             {

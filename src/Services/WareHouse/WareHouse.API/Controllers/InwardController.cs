@@ -249,7 +249,7 @@ namespace WareHouse.API.Controllers
             {
                 Active = true,
                 BypassCache = false,
-                CacheKey = string.Format(WareHouseItemCategoryCacheName.WareHouseItemCategoryDropDown, true)
+                CacheKey = string.Format(WareHouseCacheName.WareHouseDropDown, true)
             };
             var dataWareHouse = await _mediat.Send(getWareHouse);
 
