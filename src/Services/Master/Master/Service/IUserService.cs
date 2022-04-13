@@ -17,6 +17,7 @@ namespace Master.Service
         public bool CheckUser(string name);
         public Task<bool> UpdateUser(UserMaster model);
         public Task<bool> SetRoleToUser(UserMaster model);
+        public Task<bool> CheckActiveUser(string userName);
         public UserMaster GetUserById(string id);
         public Task<IPaginatedList<UserMaster>> GetListUserAsync(int pages, int number, string wareHouseId, string keyWords);
     }

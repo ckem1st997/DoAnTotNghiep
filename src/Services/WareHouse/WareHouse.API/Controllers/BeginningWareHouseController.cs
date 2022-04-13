@@ -25,6 +25,7 @@ using WareHouse.API.Application.Authentication;
 
 namespace WareHouse.API.Controllers
 {
+    [CheckRole(LevelCheck.WAREHOUSE)]
     public class BeginningWareHouseController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;

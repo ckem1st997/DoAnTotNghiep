@@ -253,7 +253,7 @@ namespace Master.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult Login(LoginViewModel model)
+        public async Task<IActionResult> LoginAsync(LoginViewModel model)
         {
             var map = new LoginModel()
             {
@@ -261,6 +261,18 @@ namespace Master.Controllers
                 Username = model.Username,
                 Remember = model.Remember
             };
+            if (_userService.CheckUser(model.Username))
+                return Ok(new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Tài khoản không tồn tại !"
+                });
+            if (!(await _userService.CheckActiveUser(model.Username)))
+                return Ok(new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Tài khoản chưa được kích hoạt !"
+                });
             var res = _userService.GenerateJWT(map);
             var result = new ResultMessageResponse()
             {

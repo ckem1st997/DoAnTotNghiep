@@ -97,7 +97,7 @@ namespace Master.Service
                 Create = false,
                 Delete = false,
                 Edit = false,
-                InActive = true,
+                InActive = false,
                 OnDelete = false,
                 Read = true,
                 RoleNumber = 1,
@@ -149,7 +149,7 @@ namespace Master.Service
             var id = _httpContext.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
             if (id is null)
                 return null;
-            var res = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.Id.Equals(id.Value) && x.OnDelete == false);
+            var res = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.Id.Equals(id.Value) && x.OnDelete == false && x.InActive==true);
             res.Password = "";
             return res;
         }
@@ -207,10 +207,19 @@ namespace Master.Service
 
             model.Password = user.Password;
             model.UserName = user.UserName;
+            model.Role = SelectListRole.Get().FirstOrDefault(x => x.Value.Equals(model.RoleNumber.ToString())).Text;
             model.OnDelete = false;
             _context.UserMasters.Update(model);
             var res = await _context.SaveChangesAsync();
             return res > 0;
+        }
+
+        public async Task<bool> CheckActiveUser(string userName)
+        {
+           if(string.IsNullOrEmpty(userName))
+                throw new ArgumentNullException(nameof(userName));
+            var user = await _context.UserMasters.FirstOrDefaultAsync(x=>x.UserName.Equals(userName) && x.OnDelete==false);
+            return user.InActive;
         }
     }
 }

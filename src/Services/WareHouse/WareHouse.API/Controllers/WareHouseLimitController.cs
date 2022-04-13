@@ -28,6 +28,7 @@ using WareHouse.API.Application.Authentication;
 
 namespace WareHouse.API.Controllers
 {
+    [CheckRole(LevelCheck.WAREHOUSE)]
     public class WareHouseLimitController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
@@ -38,7 +39,6 @@ namespace WareHouse.API.Controllers
         }
 
         #region R
-
         [CheckRole(LevelCheck.READ)]
         [Route("get-list")]
         [HttpGet]

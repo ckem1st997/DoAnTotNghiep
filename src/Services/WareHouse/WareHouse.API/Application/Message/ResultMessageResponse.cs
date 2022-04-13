@@ -33,6 +33,7 @@ namespace WareHouse.API.Application.Message
             this.success = true;
             this.httpStatusCode = 200;
             this.errors = new Dictionary<string, IEnumerable<string>>();
+            this.isRedirect = false;
         }
 
         public ResultMessageResponse(ResultMessageResponse obj)

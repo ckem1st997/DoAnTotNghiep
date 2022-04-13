@@ -54,6 +54,9 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
             var lstCheck = new List<WareHousesTreeModel>();
             var result = new List<WareHousesTreeModel>();
             var convertToRoot = new List<WareHousesTreeModel>();
+            var user = await _context.GetUser();
+            if (string.IsNullOrEmpty(user.WarehouseId) && user.RoleNumber < 3)
+                return new List<WareHousesTreeModel>();
             var wareHouseModels = await GetOrganizationalUnits(showHidden, WareHouseDTOs, GetAll);
             foreach (var s in wareHouseModels)
             {
@@ -148,7 +151,7 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
                     }
                 }
                 var departmentIds = new List<string>();
-                if (user != null && !string.IsNullOrEmpty(user.WarehouseId) && user.RoleNumber<3)
+                if (user != null && !string.IsNullOrEmpty(user.WarehouseId) && user.RoleNumber < 3)
                 {
                     StringBuilder GetListChidren = new StringBuilder();
                     GetListChidren.Append("with cte (Id, Name, ParentId) as ( ");

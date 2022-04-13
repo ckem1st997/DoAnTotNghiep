@@ -42,10 +42,14 @@ namespace WareHouse.API.Application.Authentication
                 throw new ArgumentNullException(nameof(context));
             }
             // create instance of IUserService not contractor
-            // _userService = context.HttpContext.RequestServices.GetService<IUserSevice>();
+
             _userService = GetServiceByInterface<IUserSevice>.GetService();
+            if (_userService == null)
+                _userService = context.HttpContext.RequestServices.GetService<IUserSevice>();
             var checkRole = false;
-            if (_userService.GetUser() != null)
+            int Redirect = 1;
+            bool isRedirect = false;
+            if (_userService != null)
             {
                 var user = await _userService.GetUser();
 
@@ -55,7 +59,6 @@ namespace WareHouse.API.Application.Authentication
                 var read = user.Read;
                 var wh = user.WarehouseId;
                 var roleNumber = user.RoleNumber;
-
                 switch (LevelCheck)
                 {
                     case LevelCheck.CREATE:
@@ -72,7 +75,11 @@ namespace WareHouse.API.Application.Authentication
                         break;
                     case LevelCheck.WAREHOUSE:
                         if (!string.IsNullOrEmpty(wh) && user.RoleNumber < 3 || roleNumber == 3)
+                        {
+                            Redirect = 0;
                             checkRole = true;
+                            isRedirect = true;
+                        }
                         break;
                     default:
                         if (read)
@@ -82,7 +89,7 @@ namespace WareHouse.API.Application.Authentication
             }
 
 
-            if (checkRole == false && _userService.GetUser() == null)
+            if (_userService == null || checkRole == false && _userService.GetUser() == null)
             {
                 var res = new ResultMessageResponse()
                 {
@@ -94,22 +101,19 @@ namespace WareHouse.API.Application.Authentication
                 result.StatusCode = (int)HttpStatusCode.Unauthorized;
                 context.Result = result;
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-
-
             }
             else if (checkRole == false)
             {
                 var res = new ResultMessageResponse()
                 {
                     data = null,
-                    message = "Bạn chưa có quyền thực hiện thao tác hoặc truy cập kho !",
+                    message = Redirect > 0 ? "Bạn không có quyền truy cập kho !" : "Bạn chưa có quyền thực hiện thao tác này !",
                     httpStatusCode = (int)HttpStatusCode.Forbidden,
+                    isRedirect = isRedirect
                 };
                 var result = new ObjectResult(res);
-                result.StatusCode = (int)HttpStatusCode.Forbidden;
                 context.Result = result;
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-
             }
             //     await next();
             await base.OnActionExecutionAsync(context, next);
