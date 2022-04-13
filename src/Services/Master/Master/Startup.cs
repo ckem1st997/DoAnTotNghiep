@@ -7,6 +7,7 @@ using Master.ConfigureServices.CustomConfiguration;
 using Master.Extension;
 using Master.Models;
 using Master.Service;
+using Master.SignalRHubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -92,6 +93,23 @@ namespace Master
                     ValidIssuer = Configuration["JWT:ValidIssuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
                 };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        // If the request is for our hub...
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/connect")))
+                        {
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
             services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -102,6 +120,7 @@ namespace Master
                        .AllowAnyHeader()
                        .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
             }));
+            services.AddSignalR();
         }
 
 
@@ -127,6 +146,7 @@ namespace Master
             {
                 endpoints.MapGrpcService<GrpcGetDataToMasterService>().EnableGrpcWeb();
                 endpoints.MapControllers();
+                endpoints.MapHub<ConnectRealTimeHub>("/connect");
             });
         }
 
