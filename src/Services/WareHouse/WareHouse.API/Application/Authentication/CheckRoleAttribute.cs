@@ -49,6 +49,7 @@ namespace WareHouse.API.Application.Authentication
             var checkRole = false;
             int Redirect = 1;
             bool isRedirect = false;
+            var mes403 = "Bạn chưa có quyền thực hiện thao tác này !";
             if (_userService != null)
             {
                 var user = await _userService.GetUser();
@@ -78,8 +79,9 @@ namespace WareHouse.API.Application.Authentication
                         {
                             Redirect = 0;
                             checkRole = true;
-                            isRedirect = true;
                         }
+                        mes403 = "Bạn không có quyền truy cập kho !";
+                        isRedirect = true;
                         break;
                     default:
                         if (read)
@@ -107,7 +109,7 @@ namespace WareHouse.API.Application.Authentication
                 var res = new ResultMessageResponse()
                 {
                     data = null,
-                    message = Redirect > 0 ? "Bạn không có quyền truy cập kho !" : "Bạn chưa có quyền thực hiện thao tác này !",
+                    message = mes403,
                     httpStatusCode = (int)HttpStatusCode.Forbidden,
                     isRedirect = isRedirect
                 };
