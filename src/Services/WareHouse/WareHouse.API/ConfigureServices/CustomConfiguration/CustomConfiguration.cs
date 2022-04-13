@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using WareHouse.API.Application.Extensions;
+using WareHouse.API.Application.SignalRService;
 
 namespace WareHouse.API.ConfigureServices.CustomConfiguration
 {
@@ -71,6 +72,7 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             services.AddScoped<IDapper, Dapperr>();
             services.AddScoped<IFakeData, FakeData>();
             services.AddScoped<IUserSevice, UserSevice>();
+            services.AddScoped<ISignalRService, SignalRService>();
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

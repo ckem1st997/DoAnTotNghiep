@@ -29,11 +29,6 @@ namespace WareHouse.API.Application.Authentication
             this.LevelCheck = level;
 
         }
-        public override async void OnActionExecuting(ActionExecutingContext context)
-        {
-
-            base.OnActionExecuting(context);
-        }
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
@@ -47,7 +42,6 @@ namespace WareHouse.API.Application.Authentication
             if (_userService == null)
                 _userService = context.HttpContext.RequestServices.GetService<IUserSevice>();
             var checkRole = false;
-            int Redirect = 1;
             bool isRedirect = false;
             var mes403 = "Bạn chưa có quyền thực hiện thao tác này !";
             if (_userService != null)
@@ -76,10 +70,7 @@ namespace WareHouse.API.Application.Authentication
                         break;
                     case LevelCheck.WAREHOUSE:
                         if (!string.IsNullOrEmpty(wh) && user.RoleNumber < 3 || roleNumber == 3)
-                        {
-                            Redirect = 0;
                             checkRole = true;
-                        }
                         mes403 = "Bạn không có quyền truy cập kho !";
                         isRedirect = true;
                         break;

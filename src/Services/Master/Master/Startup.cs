@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -116,11 +117,18 @@ namespace Master
             services.AddCors(o => o.AddPolicy("AllowAll", builder =>
             {
                 builder.AllowAnyOrigin()
+                .WithOrigins("http://localhost:4200")
                        .AllowAnyMethod()
                        .AllowAnyHeader()
+                       .SetIsOriginAllowed(host => true)
+                       .AllowCredentials()
                        .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
             }));
-            services.AddSignalR();
+            services.AddSignalR(options =>
+            {
+                // Global filters will run first
+                options.AddFilter<CustomFilter>();
+            });
         }
 
 
@@ -146,7 +154,7 @@ namespace Master
             {
                 endpoints.MapGrpcService<GrpcGetDataToMasterService>().EnableGrpcWeb();
                 endpoints.MapControllers();
-                endpoints.MapHub<ConnectRealTimeHub>("/connect");
+                endpoints.MapHub<ConnectRealTimeHub>("/signalr");
             });
         }
 

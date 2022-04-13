@@ -2,10 +2,13 @@
 using Infrastructure;
 using Master.Extension;
 using Master.Service;
+using Master.SignalRHubs;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web;
+using System;
 using System.Threading.Tasks;
 
 namespace GrpcGetDataToMaster
@@ -13,20 +16,26 @@ namespace GrpcGetDataToMaster
     [Authorize]
     public class GrpcGetDataToMasterService : GrpcGetData.GrpcGetDataBase
     {
-
+        private readonly IHubContext<ConnectRealTimeHub, IHubSendCliend> _hubContext;
         private readonly MasterdataContext _masterdataContext;
         private readonly ILogger<GrpcGetDataToMasterService> _logger;
         private readonly IUserService _userService;
 
 
        
-        public GrpcGetDataToMasterService(IUserService userService,MasterdataContext masterdataContext, IDapper mediat, ILogger<GrpcGetDataToMasterService> logger)
+        public GrpcGetDataToMasterService(IHubContext<ConnectRealTimeHub, IHubSendCliend> hubContext,IUserService userService,MasterdataContext masterdataContext, IDapper mediat, ILogger<GrpcGetDataToMasterService> logger)
         {
             _userService = userService;
             _logger = logger;
             _masterdataContext = masterdataContext;
+            _hubContext = hubContext;
         }
+        public override async Task<BaseId> CallChangeByWareHouseBook(BaseWareHouseBook request, ServerCallContext context)
+        {
+            await _hubContext.Clients.All.SendMessageToCLient(Guid.NewGuid().ToString()+"; đây là id của phiếu nhập nha !", "test");
 
+            return new BaseId { Id = request.Id+request.Type };
+        }
 
 
         public override async Task<User> GetUser(Params request, ServerCallContext context)

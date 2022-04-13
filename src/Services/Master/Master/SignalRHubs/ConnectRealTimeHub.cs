@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Master.SignalRHubs
 {
-    public class ConnectRealTimeHub : Hub<IHubSentClient>
+    public class ConnectRealTimeHub : Hub<IHubSendCliend>
     {
-       
+        //public async Task SendMessage(string user, string message)
+        //{
+        //    await Clients.All.SendMessageToCLient(user, message);
+        //}
     }
 }

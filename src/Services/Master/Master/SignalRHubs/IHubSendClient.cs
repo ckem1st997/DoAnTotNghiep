@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Master.SignalRHubs
 {
-    public interface IHubSentClient
+    public interface IHubSendCliend
     {
-        Task BroadcastMessage();
+        Task SendMessageToCLient(string user, string name);
     }
 }

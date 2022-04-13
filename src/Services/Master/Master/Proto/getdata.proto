@@ -17,6 +17,7 @@ service GrpcGetData {
 	rpc GetCustomer(Params) returns (ListGetCustomer) {}
     rpc GetUser(Params) returns (User) {}
     rpc GetUserById(BaseId) returns (User) {}
+    rpc CallChangeByWareHouseBook(BaseWareHouseBook) returns (BaseId) {}
 
 }
 message User{
@@ -35,6 +36,11 @@ message User{
 }
 message BaseId{
     string id=1;
+}
+message BaseWareHouseBook{
+    string id=1;
+	    string type=2;
+
 }
 message Params {
  // string name =1;

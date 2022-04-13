@@ -20,6 +20,7 @@ using WareHouse.API.Application.Queries.GetAll.WareHouses;
 using WareHouse.API.Application.Querie.CheckCode;
 using WareHouse.API.Application.Queries.GetFisrt;
 using WareHouse.API.Application.Authentication;
+using WareHouse.API.Application.SignalRService;
 
 namespace WareHouse.API.Controllers
 {
@@ -29,14 +30,16 @@ namespace WareHouse.API.Controllers
         private readonly ICacheExtension _cacheExtension;
         private readonly IFakeData _ifakeData;
         private readonly IUserSevice _userSevice;
+        private readonly ISignalRService _signalRService;
 
-
-        public InwardController(IUserSevice userSevice, IFakeData ifakeData, IMediator mediat, ICacheExtension cacheExtension)
+        public InwardController(ISignalRService signalRService,IUserSevice userSevice, IFakeData ifakeData, IMediator mediat, ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
             _ifakeData = ifakeData ?? throw new ArgumentNullException(nameof(ifakeData));
             _userSevice = userSevice;
+            _signalRService = signalRService;
+
         }
         #region R    
 
@@ -178,6 +181,8 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Edit(InwardCommands inwardCommands)
         {
+            await _signalRService.SignalRChangByWareHouseBook(inwardCommands.Id, TypeWareHouseBook.Inward);
+
             if (!string.IsNullOrEmpty(inwardCommands.WareHouseId))
             {
                 var check = await _userSevice.CheckWareHouseIdByUser(inwardCommands.WareHouseId);
