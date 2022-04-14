@@ -13,22 +13,22 @@ namespace Master.Controllers
 {
     public class RealTimeController : BaseControllerMaster
     {
-        private readonly IHubContext<ConnectRealTimeHub, IHubSendCliend> _hubContext;
-        public RealTimeController(IHubContext<ConnectRealTimeHub, IHubSendCliend> hubContext)
-        {
-            _hubContext = hubContext;
-        }
+        //private readonly IHubContext<ConnectRealTimeHub, IHubSendCliend> _hubContext;
+        //public RealTimeController(IHubContext<ConnectRealTimeHub, IHubSendCliend> hubContext)
+        //{
+        //    _hubContext = hubContext;
+        //}
 
 
-        [AllowAnonymous]
-        [Route("connect")]
-        [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> IndexAsync(string iii)
-        {
-            await _hubContext.Clients.All.SendMessageToCLient(iii, "test");
-            return Ok();
-        }
+        //[AllowAnonymous]
+        //[Route("connect")]
+        //[HttpGet]
+        //[ProducesResponseType((int)HttpStatusCode.OK)]
+        //[ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        //public async Task<IActionResult> IndexAsync(string iii)
+        //{
+        // //   await _hubContext.Clients.All.SendMessageToCLient(iii, "test");
+        //    return Ok();
+        //}
     }
 }

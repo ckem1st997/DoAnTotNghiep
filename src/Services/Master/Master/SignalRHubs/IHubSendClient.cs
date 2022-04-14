@@ -8,6 +8,7 @@ namespace Master.SignalRHubs
 {
     public interface IHubSendCliend
     {
-        Task SendMessageToCLient(string user, string name);
+        Task SendMessageToCLient(object user, string name);
+        Task WareHouseBookTrachkingToCLient(object user, string name);
     }
 }

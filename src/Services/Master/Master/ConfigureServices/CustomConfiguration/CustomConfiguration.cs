@@ -20,6 +20,7 @@ using Master.Service;
 using Master.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Master.SignalRHubs;
 
 namespace Master.ConfigureServices.CustomConfiguration
 {
@@ -62,6 +63,7 @@ namespace Master.ConfigureServices.CustomConfiguration
             //  services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
             services.AddScoped<IDapper, Dapperr>();
             services.AddScoped<IUserService, UserService>();
+         //   services.AddScoped<IConnectRealTimeHub, ConnectRealTimeHub>();
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

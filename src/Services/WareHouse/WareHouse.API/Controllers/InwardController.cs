@@ -181,7 +181,6 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Edit(InwardCommands inwardCommands)
         {
-            await _signalRService.SignalRChangByWareHouseBook(inwardCommands.Id, TypeWareHouseBook.Inward);
 
             if (!string.IsNullOrEmpty(inwardCommands.WareHouseId))
             {
@@ -202,6 +201,9 @@ namespace WareHouse.API.Controllers
                 item.Price = item.Amount;
             }
             var data = await _mediat.Send(new UpdateInwardCommand() { InwardCommands = inwardCommands });
+            //if(data)
+            //    await _signalRService.SignalRChangByWareHouseBook(inwardCommands.Id);
+
             var result = new ResultMessageResponse()
             {
                 success = data

@@ -4,6 +4,6 @@ namespace WareHouse.API.Application.SignalRService
 {
     public interface ISignalRService
     {
-        public Task<bool> SignalRChangByWareHouseBook(string id, string type);
+        public Task<string> SignalRChangByWareHouseBook(string id);
     }
 }
