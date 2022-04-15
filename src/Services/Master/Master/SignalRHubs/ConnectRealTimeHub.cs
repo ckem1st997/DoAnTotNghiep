@@ -34,7 +34,7 @@ namespace Master.SignalRHubs
             {
                 data = id,
                 success = _userService != null,
-                message = _userService != null ? "Dữ liệu được cập nhật, sau khi " + _userService.User.UserName + " chỉnh sửa !" : "Không tìm thấy dữ liệu"
+                message = _userService != null ? "Dữ liệu cập nhật, sau khi " + _userService.User.UserName + " chỉnh sửa !" : "Không tìm thấy dữ liệu"
             };
             await Clients.Others.SendAsync("WareHouseBookTrachkingToCLient", res, _userService.User.Id);
         }
@@ -47,7 +47,7 @@ namespace Master.SignalRHubs
             {
                 data = type,
                 success = _userService != null,
-                message = _userService != null ? "Dữ liệu được cập nhật, sau khi " + _userService.User.UserName + " tạo mới phiếu " + type + "!" : "Không tìm thấy dữ liệu"
+                message = _userService != null ? "Dữ liệu cập nhật, sau khi " + _userService.User.UserName + " tạo mới phiếu " + type + "!" : "Không tìm thấy dữ liệu"
             };
             await Clients.Others.SendAsync("CreateWareHouseBookTrachkingToCLient", res, _userService.User.Id);
         }
