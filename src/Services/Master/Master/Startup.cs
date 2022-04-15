@@ -103,7 +103,7 @@ namespace Master
                         // If the request is for our hub...
                         var path = context.HttpContext.Request.Path;
                         if (!string.IsNullOrEmpty(accessToken) &&
-                            (path.StartsWithSegments("/connect")))
+                            (path.StartsWithSegments("/signalr")))
                         {
                             // Read the token out of the query string
                             context.Token = accessToken;
@@ -156,6 +156,7 @@ namespace Master
                 endpoints.MapControllers();
                 endpoints.MapHub<ConnectRealTimeHub>("/signalr");
             });
+           
         }
 
 

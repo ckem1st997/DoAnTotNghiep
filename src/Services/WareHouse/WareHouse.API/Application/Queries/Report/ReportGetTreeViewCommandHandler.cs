@@ -36,7 +36,7 @@ namespace Report.API.Application.Queries.GetAll.Reports
             {
                 children = new List<ReportTreeView>(),
                 folder = false,
-                key = "report-total",
+                key = "wh/report-total",
                 Code = "",
                 Name = "Báo cáo tổng hợp"
             };
@@ -45,7 +45,7 @@ namespace Report.API.Application.Queries.GetAll.Reports
             {
                 children = new List<ReportTreeView>(),
                 folder = false,
-                key = "report-details",
+                key = "wh/report-details",
                 Code = "",
                 Name = "Báo cáo chi tiết"
             };
