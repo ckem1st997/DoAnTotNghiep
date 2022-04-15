@@ -52,6 +52,19 @@ namespace Master.SignalRHubs
             await Clients.Others.SendAsync("CreateWareHouseBookTrachkingToCLient", res, _userService.User.Id);
         }
 
+
+        public async Task DeleteWareHouseBookTrachking(string type,string id)
+        {
+            GetUserByService();
+            var res = new ResultMessageResponse()
+            {
+                data = id,
+                success = _userService != null,
+                message = _userService != null ? "Dữ liệu cập nhật, sau khi " + _userService.User.UserName + " xoá phiếu " + type + "!" : "Không tìm thấy dữ liệu"
+            };
+            await Clients.Others.SendAsync("DeleteWareHouseBookTrachkingToCLient", res, _userService.User.Id);
+        }
+
         public string getConnectId()
         {
             return Context.ConnectionId;
