@@ -18,13 +18,18 @@ namespace Master.SignalRHubs
 
         public ConnectRealTimeHub()
         {
-            //  if (_userService == null)
-            //     _userService = GetServiceByInterface<IUserService>.GetService();
+
+        }
+
+        private void GetUserByService()
+        {
+            if (_userService == null)
+                _userService = Context.GetHttpContext().RequestServices.GetService<IUserService>();
         }
 
         public async Task WareHouseBookTrachking(string id)
         {
-            _userService = Context.GetHttpContext().RequestServices.GetService<IUserService>();
+            GetUserByService();
             var res = new ResultMessageResponse()
             {
                 data = id,
@@ -37,7 +42,7 @@ namespace Master.SignalRHubs
 
         public async Task CreateWareHouseBookTrachking(string type)
         {
-
+            GetUserByService();
             var res = new ResultMessageResponse()
             {
                 data = type,
