@@ -65,6 +65,17 @@ namespace Master.SignalRHubs
             await Clients.Others.SendAsync("DeleteWareHouseBookTrachkingToCLient", res, _userService.User.Id);
         }
 
+        public async Task HistoryTrachking()
+        {
+            GetUserByService();
+            var res = new ResultMessageResponse()
+            {
+                data=_userService.User.Id,
+                success = _userService != null
+            };
+            await Clients.All.SendAsync("HistoryTrachkingToCLient", res, _userService.User.Id);
+        }
+
         public string getConnectId()
         {
             return Context.ConnectionId;

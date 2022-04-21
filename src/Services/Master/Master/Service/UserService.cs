@@ -221,5 +221,16 @@ namespace Master.Service
             var user = await _context.UserMasters.FirstOrDefaultAsync(x=>x.UserName.Equals(userName) && x.OnDelete==false);
             return user.InActive;
         }
+
+        public UserMaster GetUserByUserName(string userName)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentException($"'{nameof(userName)}' cannot be null or empty.", nameof(userName));
+            }
+            var res = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.UserName.Equals(userName) && x.OnDelete == false);
+            // res.Password = "";
+            return res;
+        }
     }
 }

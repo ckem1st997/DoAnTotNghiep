@@ -201,15 +201,18 @@ namespace WareHouse.API.Controllers
                 item.Price = item.Amount;
             }
             var data = await _mediat.Send(new UpdateInwardCommand() { InwardCommands = inwardCommands });
+            var mes = false;
             if(data)
             {
                 var user =await _userSevice.GetUser();
-                await _userSevice.CreateHistory(user.UserName,"Chỉnh sửa","vừa chỉnh sửa phiếu nhập kho có mã "+inwardCommands.VoucherCode+"!",false,inwardCommands.Id);
+                mes =   await _userSevice.CreateHistory(user.UserName,"Chỉnh sửa","vừa chỉnh sửa phiếu nhập kho có mã "+inwardCommands.VoucherCode+"!",false,inwardCommands.Id);
+
             }
 
             var result = new ResultMessageResponse()
             {
-                success = data
+                success = data,
+                data = mes
             };
             return Ok(result);
         }
@@ -308,9 +311,18 @@ namespace WareHouse.API.Controllers
                 item.Price = item.Amount;
             }
             var data = await _mediat.Send(new CreateInwardCommand() { InwardCommands = inwardCommands });
+            var mes = false;
+            if (data)
+            {
+                var user = await _userSevice.GetUser();
+                mes = await _userSevice.CreateHistory(user.UserName, "Tạo", "vừa tạo mới phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!", false, inwardCommands.Id);
+
+            }
+
             var result = new ResultMessageResponse()
             {
-                success = data
+                success = data,
+                data = mes
             };
             return Ok(result);
         }
@@ -324,11 +336,20 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
             var data = await _mediat.Send(new DeleteInwardCommand() { Id = listIds });
+            var mes = false;
+            if (data)
+            {
+                var user = await _userSevice.GetUser();
+                mes = await _userSevice.CreateHistory(user.UserName, "Xóa", "vừa xóa phiếu nhập kho !", false, "");
+
+            }
+
             var result = new ResultMessageResponse()
             {
-                success = data
+                success = data,
+                data = mes
             };
-            return Ok(result);
+            return Ok(result);          
         }
         #endregion
 

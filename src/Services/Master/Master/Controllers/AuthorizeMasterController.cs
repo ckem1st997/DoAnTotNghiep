@@ -41,10 +41,6 @@ namespace Master.Controllers
         }
 
 
-
-
-
-
         #endregion
 
         [CheckRole(LevelCheck.UPDATE)]
@@ -274,9 +270,14 @@ namespace Master.Controllers
                     message = "Tài khoản chưa được kích hoạt !"
                 });
             var res = _userService.GenerateJWT(map);
+            var response = new ResponseLogin()
+            {
+                Jwt = res,
+                User = _userService.GetUserByUserName(model.Username),
+            };
             var result = new ResultMessageResponse()
             {
-                data = res,
+                data = response,
                 success = !string.IsNullOrEmpty(res),
                 message = string.IsNullOrEmpty(res) ? "Tên tài khoản hoặc mật khẩu không chính xác !" : null
             };

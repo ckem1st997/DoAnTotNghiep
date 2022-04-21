@@ -1,31 +1,41 @@
 ﻿using Infrastructure;
 using Master.Application.Authentication;
 using Master.Application.Message;
-using Master.Controllers.BaseController;
 using Master.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace Master.Controllers
 {
-    public class ListHistoryController : BaseControllerMaster
+    [Authorize]
+    [Route("api/v{v:apiVersion}/[controller]")]
+    [ApiController]
+    public class ApiPublicController : Controller
     {
-        private readonly MasterdataContext _context;
         private readonly IUserService _userService;
+        private readonly MasterdataContext _context;
 
-
-        public ListHistoryController(MasterdataContext context, IUserService userService)
+        public ApiPublicController(IUserService userService, MasterdataContext context)
         {
-            _context = context;
             _userService = userService;
+            _context = context;
         }
 
-
-        [Authorize(Roles = "User,Admin,Manager")]
-        [CheckRole(LevelCheck.READ)]
+        [Route("get-user")]
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public IActionResult GetUser()
+        {
+            var user = _userService.User;
+            return Ok(new ResultMessageResponse()
+            {
+                data = user,
+                success = user != null
+            });
+        }
         [Route("get-list-by-user")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
