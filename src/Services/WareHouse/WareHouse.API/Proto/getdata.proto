@@ -18,8 +18,20 @@ service GrpcGetData {
     rpc GetUser(Params) returns (User) {}
     rpc GetUserById(BaseId) returns (User) {}
     rpc CallChangeByWareHouseBook(BaseId) returns (BaseId) {}
-
+    // histoty
+    rpc CreateHistory(HistotyModel) returns (SaveChange) {}
+    rpc ActiveHistory(BaseId) returns (SaveChange) {}
 }
+
+message HistotyModel{
+      string userName =1;
+      string method  =2;
+      string body  =3;
+      bool  read =4;
+      string link  =5;
+}
+
+
 message User{
   string UserName =1;
         string Password =2;
@@ -33,6 +45,9 @@ message User{
         string    WarehouseId =10;
         string Id=11;
         string  ListWarehouseId=12;
+}
+message SaveChange{
+    bool check=1;
 }
 message BaseId{
     string id=1;

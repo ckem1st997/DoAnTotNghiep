@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GrpcGetDataToMaster
@@ -17,19 +18,49 @@ namespace GrpcGetDataToMaster
     [Authorize]
     public class GrpcGetDataToMasterService : GrpcGetData.GrpcGetDataBase
     {
-       
+
         private readonly MasterdataContext _masterdataContext;
         private readonly ILogger<GrpcGetDataToMasterService> _logger;
         private readonly IUserService _userService;
 
 
-       
-        public GrpcGetDataToMasterService(IUserService userService,MasterdataContext masterdataContext, IDapper mediat, ILogger<GrpcGetDataToMasterService> logger)
+
+        public GrpcGetDataToMasterService(IUserService userService, MasterdataContext masterdataContext, IDapper mediat, ILogger<GrpcGetDataToMasterService> logger)
         {
             _userService = userService;
             _logger = logger;
             _masterdataContext = masterdataContext;
         }
+
+
+        public override async Task<SaveChange> CreateHistory(HistotyModel request, ServerCallContext context)
+        {
+            var model = new HistoryNotication()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Body = request.Body,
+                CreateDate = DateTime.Now,
+                Link = request.Link,
+                Method = request.Method,
+                OnDelete = false,
+                Read = false,
+                UserName = request.UserName,
+            };
+            await _masterdataContext.AddAsync(model);
+            var res = await _masterdataContext.SaveChangesAsync();
+            return new SaveChange() { Check = res>0 };
+        }
+
+        public override async Task<SaveChange> ActiveHistory(BaseId request, ServerCallContext context)
+        {
+           var model=_masterdataContext.HistoryNotications.FirstOrDefault(x=>x.UserName.Equals(request.Id));
+            if (model == null)
+                await Task.FromResult(new SaveChange() { Check=false});
+            model.Read=true;
+            var res = await _masterdataContext.SaveChangesAsync();
+            return new SaveChange() { Check = res > 0 };
+        }
+
 
 
         public override async Task<User> GetUser(Params request, ServerCallContext context)
@@ -145,7 +176,7 @@ namespace GrpcGetDataToMaster
         }
 
         public override Task<User> GetUserById(BaseId request, ServerCallContext context)
-        {           
+        {
             return base.GetUserById(request, context);
         }
     }

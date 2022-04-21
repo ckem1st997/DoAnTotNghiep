@@ -151,6 +151,11 @@ namespace WareHouse.API.Controllers
                 item.Price = item.Amount;
             }
             var data = await _mediat.Send(new UpdateOutwardCommand() { OutwardCommands = OutwardCommands });
+            if (data)
+            {
+                var user = await _userSevice.GetUser();
+                await _userSevice.CreateHistory(user.UserName, "Chỉnh sửa", "vừa chỉnh sửa phiếu xuất kho có mã " + OutwardCommands.VoucherCode + "!", false, OutwardCommands.Id);
+            }
             var result = new ResultMessageResponse()
             {
                 success = data

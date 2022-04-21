@@ -201,8 +201,11 @@ namespace WareHouse.API.Controllers
                 item.Price = item.Amount;
             }
             var data = await _mediat.Send(new UpdateInwardCommand() { InwardCommands = inwardCommands });
-            //if(data)
-            //    await _signalRService.SignalRChangByWareHouseBook(inwardCommands.Id);
+            if(data)
+            {
+                var user =await _userSevice.GetUser();
+                await _userSevice.CreateHistory(user.UserName,"Chỉnh sửa","vừa chỉnh sửa phiếu nhập kho có mã "+inwardCommands.VoucherCode+"!",false,inwardCommands.Id);
+            }
 
             var result = new ResultMessageResponse()
             {

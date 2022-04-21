@@ -7,23 +7,19 @@ using System;
 
 namespace Infrastructure.Configurations
 {
-    public partial class UserMasterConfiguration : IEntityTypeConfiguration<UserMaster>
+    public partial class HistoryNoticationConfiguration : IEntityTypeConfiguration<HistoryNotication>
     {
-        public void Configure(EntityTypeBuilder<UserMaster> entity)
+        public void Configure(EntityTypeBuilder<HistoryNotication> entity)
         {
-            entity.ToTable("UserMaster");
+            entity.ToTable("HistoryNotication");
 
             entity.Property(e => e.Id).HasMaxLength(50);
 
-            entity.Property(e => e.InActive)
-                .IsRequired()
-                .HasDefaultValueSql("((1))");
+            entity.Property(e => e.Body).HasMaxLength(250);
 
-            entity.Property(e => e.Password)
-                .IsRequired()
-                .HasMaxLength(250);
+            entity.Property(e => e.Link).HasMaxLength(250);
 
-            entity.Property(e => e.Role)
+            entity.Property(e => e.Method)
                 .IsRequired()
                 .HasMaxLength(50);
 
@@ -34,6 +30,6 @@ namespace Infrastructure.Configurations
             OnConfigurePartial(entity);
         }
 
-        partial void OnConfigurePartial(EntityTypeBuilder<UserMaster> entity);
+        partial void OnConfigurePartial(EntityTypeBuilder<HistoryNotication> entity);
     }
 }

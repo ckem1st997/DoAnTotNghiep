@@ -15,5 +15,18 @@ namespace WareHouse.API.Application.Authentication
         /// <returns></returns>
         public Task<bool> CheckWareHouseIdByUser(string idWareHouse);
 
+        /// <summary>
+        /// Thêm mới lịch sử
+        /// </summary>
+        /// <param name="UserName"></param>
+        /// <param name="Method"></param>
+        /// <param name="Body"></param>
+        /// <param name="Read"></param>
+        /// <param name="Link"></param>
+        /// <returns></returns>
+        public Task<bool> CreateHistory(string UserName, string Method, string Body, bool Read, string Link);
+
+        public Task<bool> ActiveHistory(string UserName);
+
     }
 }
