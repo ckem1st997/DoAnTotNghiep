@@ -183,7 +183,6 @@ namespace WareHouse.API.Controllers
 
 
         [CheckRole(LevelCheck.UPDATE)]
-
         [Route("edit-inward-details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -207,7 +206,6 @@ namespace WareHouse.API.Controllers
 
 
         [CheckRole(LevelCheck.READ)]
-
         [Route("details-inward-details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -234,7 +232,6 @@ namespace WareHouse.API.Controllers
 
 
         [CheckRole(LevelCheck.UPDATE)]
-
         [Route("edit-inward-details")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -306,9 +303,19 @@ namespace WareHouse.API.Controllers
                         await _mediat.Send(new CreateSerialWareHouseCommand() { SerialWareHouseCommands = listApps });
                 }
             }
+            var mes = false;
+            if (res)
+            {
+                var user = await _userSevice.GetUser();
+                var data = await _mediat.Send(new InwardGetFirstCommand() { Id = inwardDetailCommands.InwardId });
+                mes = await _userSevice.CreateHistory(user.UserName, "Chỉnh sửa", "vừa chỉnh sửa vật tư trong phiếu nhập kho" + data.VoucherCode + "!", false, data.Id);
+
+            }
+
             var result = new ResultMessageResponse()
             {
-                success = res
+                success = res,
+                data = mes
             };
             return Ok(result);
         }
@@ -386,8 +393,6 @@ namespace WareHouse.API.Controllers
 
 
         [CheckRole(LevelCheck.CREATE)]
-
-
         [Route("create-inward-details")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -395,9 +400,19 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Create(InwardDetailCommands inwardDetailCommands)
         {
             var data = await _mediat.Send(new CreateInwardDetailCommand() { InwardDetailCommands = inwardDetailCommands });
+            var mes = false;
+            if (data)
+            {
+                var user = await _userSevice.GetUser();
+                var res = await _mediat.Send(new InwardGetFirstCommand() { Id = inwardDetailCommands.InwardId });
+                mes = await _userSevice.CreateHistory(user.UserName, "Tạo", "vừa tạo mới vật tư trong phiếu nhập kho" + res.VoucherCode + "!", false, res.Id);
+
+            }
+
             var result = new ResultMessageResponse()
             {
-                success = data
+                success = data,
+                data = mes
             };
             return Ok(result);
         }
@@ -464,7 +479,6 @@ namespace WareHouse.API.Controllers
 
 
         [CheckRole(LevelCheck.UPDATE)]
-
         [Route("edit-outward-details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -487,7 +501,6 @@ namespace WareHouse.API.Controllers
 
 
         [CheckRole(LevelCheck.READ)]
-
         [Route("details-outward-details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -515,7 +528,6 @@ namespace WareHouse.API.Controllers
 
 
         [CheckRole(LevelCheck.UPDATE)]
-
         [Route("edit-outward-details")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -587,9 +599,19 @@ namespace WareHouse.API.Controllers
                         await _mediat.Send(new CreateSerialWareHouseCommand() { SerialWareHouseCommands = listApps });
                 }
             }
+            var mes = false;
+            if (res)
+            {
+                var user = await _userSevice.GetUser();
+                var data = await _mediat.Send(new OutwardGetFirstCommand() { Id = outwardDetailCommands.OutwardId });
+                mes = await _userSevice.CreateHistory(user.UserName, "Chỉnh sửa", "vừa chỉnh sửa vật tư trong phiếu xuất kho" + data.VoucherCode + "!", false, data.Id);
+
+            }
+
             var result = new ResultMessageResponse()
             {
-                success = res
+                success = res,
+                data = mes
             };
             return Ok(result);
         }
@@ -604,9 +626,19 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Create(OutwardDetailCommands outwardDetailCommands)
         {
             var data = await _mediat.Send(new CreateOutwardDetailCommand() { OutwardDetailCommands = outwardDetailCommands });
+            var mes = false;
+            if (data)
+            {
+                var user = await _userSevice.GetUser();
+                var res = await _mediat.Send(new OutwardGetFirstCommand() { Id = outwardDetailCommands.OutwardId });
+                mes = await _userSevice.CreateHistory(user.UserName, "Tạo", "vừa tạo mới vật tư trong phiếu xuất kho" + res.VoucherCode + "!", false, res.Id);
+
+            }
+
             var result = new ResultMessageResponse()
             {
-                success = data
+                success = data,
+                data = mes
             };
             return Ok(result);
         }
@@ -653,10 +685,19 @@ namespace WareHouse.API.Controllers
             {
                 mes = "Xoá thất bại phiếu nhập !";
             }
+            var mes1 = false;
+            if (dataRes)
+            {
+                var user = await _userSevice.GetUser();
+                mes1 = await _userSevice.CreateHistory(user.UserName, "Xóa", "vừa xóa phiếu danh sách phiếu trong sổ kho !", false, "");
+
+            }
             var result = new ResultMessageResponse()
             {
                 success = dataRes,
-                message = mes
+                message = mes,
+                data = mes1
+
             };
             return Ok(result);
         }
@@ -670,11 +711,21 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> DeleteInward(IEnumerable<string> listIds)
         {
             var data = await _mediat.Send(new DeleteOutwardCommand() { Id = listIds });
+            var mes = false;
+            if (data)
+            {
+                var user = await _userSevice.GetUser();
+                mes = await _userSevice.CreateHistory(user.UserName, "Xóa", "vừa xóa phiếu nhập kho trong sổ kho !", false, "");
+
+            }
             var result = new ResultMessageResponse()
             {
-                success = data
+                success = data,
+                data = mes
+
             };
             return Ok(result);
+
         }
 
         [CheckRole(LevelCheck.DELETE)]
@@ -685,9 +736,18 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> DeleteOutward(IEnumerable<string> listIds)
         {
             var data = await _mediat.Send(new DeleteInwardCommand() { Id = listIds });
+            var mes = false;
+            if (data)
+            {
+                var user = await _userSevice.GetUser();
+                mes = await _userSevice.CreateHistory(user.UserName, "Xóa", "vừa xóa phiếu xuất kho trong sổ kho !", false, "");
+
+            }
             var result = new ResultMessageResponse()
             {
-                success = data
+                success = data,
+                data = mes
+
             };
             return Ok(result);
         }
@@ -701,9 +761,18 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> DeleteInwarDetalis(IEnumerable<string> listIds)
         {
             var data = await _mediat.Send(new DeleteInwardDetailCommand() { Id = listIds });
+            var mes = false;
+            if (data)
+            {
+                var user = await _userSevice.GetUser();
+                mes = await _userSevice.CreateHistory(user.UserName, "Xóa", "vừa xóa vật tư trong phiếu nhập kho !", false, "");
+
+            }
             var result = new ResultMessageResponse()
             {
-                success = data
+                success = data,
+                data = mes
+
             };
             return Ok(result);
         }
@@ -716,9 +785,18 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> DeleteOutwarDetalis(IEnumerable<string> listIds)
         {
             var data = await _mediat.Send(new DeleteOutwardDetailCommand() { Id = listIds });
+            var mes = false;
+            if (data)
+            {
+                var user = await _userSevice.GetUser();
+                mes = await _userSevice.CreateHistory(user.UserName, "Xóa", "vừa xóa vật tư trong phiếu xuất kho !", false, "");
+
+            }
             var result = new ResultMessageResponse()
             {
-                success = data
+                success = data,
+                data = mes
+
             };
             return Ok(result);
         }
