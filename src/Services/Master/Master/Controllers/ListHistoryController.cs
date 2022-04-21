@@ -33,7 +33,7 @@ namespace Master.Controllers
         public IActionResult GetlistbyUser()
         {
             var user = _userService.User;
-            var list = _context.HistoryNotications.Where(x => x.UserName.Equals(user.UserName) && x.OnDelete==false);
+            var list = _context.HistoryNotications.Where(x => x.UserName.Equals(user.UserName) && x.OnDelete==false).OrderByDescending(x=>x.CreateDate);
 
             return Ok(new ResultMessageResponse()
             {
