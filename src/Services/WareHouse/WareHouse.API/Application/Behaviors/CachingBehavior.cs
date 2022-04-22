@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -17,12 +18,14 @@ namespace WareHouse.API.Application.Behaviors
         private readonly IDistributedCache _cache;
         private readonly ILogger _logger;
         private readonly CacheSettings _settings;
+        private readonly IConfiguration _configuration;
 
-        public CachingBehavior(IDistributedCache cache, ILogger<TResponse> logger, IOptions<CacheSettings> settings)
+        public CachingBehavior(IConfiguration configuration,IDistributedCache cache, ILogger<TResponse> logger, IOptions<CacheSettings> settings)
         {
             _cache = cache;
             _logger = logger;
             _settings = settings.Value;
+            _configuration=configuration;
         }
 
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
@@ -30,7 +33,7 @@ namespace WareHouse.API.Application.Behaviors
         {
             TResponse response;
             // nếu không cache thì sẽ chạy đến request tiếp theo, ở đây là Handle Mediatr
-            if (request.BypassCache)
+            if (request.BypassCache || _configuration.GetValue<bool>("UsingRedis")==false)
                 return await next();
 
             // nếu data null thì chạy đến request tiếp theo để lấy data và gán vào cache

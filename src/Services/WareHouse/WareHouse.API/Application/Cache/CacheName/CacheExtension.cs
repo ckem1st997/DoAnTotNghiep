@@ -26,7 +26,7 @@ namespace WareHouse.API.Application.Cache.CacheName
                 ConnectionMultiplexer.Connect(
                     $"{_configuration.GetSection("Redis")["ConnectionString"]},allowAdmin=true");
             var keys = redis.GetServer("localhost", int.Parse(_configuration.GetSection("Redis")["Port"])).Keys();
-            listKeys.AddRange(keys.Select(key => (string) key).ToList());
+            listKeys.AddRange(keys.Select(key => (string)key).ToList());
             return listKeys;
         }
 
@@ -51,11 +51,15 @@ namespace WareHouse.API.Application.Cache.CacheName
         {
             if (contains == null)
                 throw new ArgumentNullException(nameof(contains));
-            var list = GetAllNameKeyByContains(contains);
-            foreach (var item in list)
+            if (_configuration.GetValue<bool>("UsingRedis") == true)
             {
-                await _cache.RemoveAsync(item);
+                var list = GetAllNameKeyByContains(contains);
+                foreach (var item in list)
+                {
+                    await _cache.RemoveAsync(item);
+                }
             }
+
         }
     }
 }

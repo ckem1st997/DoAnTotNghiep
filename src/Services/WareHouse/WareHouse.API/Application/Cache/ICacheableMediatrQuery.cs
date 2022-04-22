@@ -5,8 +5,8 @@ namespace WareHouse.API.Application.Cache
     public interface ICacheableMediatrQuery
     {
         /// <summary>
-        /// false: cache
-        /// true: no cache
+        /// false:get cache
+        /// true: no get cache
         /// </summary>
         bool BypassCache { get; }
         /// <summary>
