@@ -29,6 +29,7 @@ using System.Text;
 using WareHouse.API.Application.Authentication;
 using Grpc.Net.ClientFactory;
 using GrpcGetDataToWareHouse;
+using KafKa.Net;
 
 namespace WareHouse.API
 {
@@ -66,7 +67,7 @@ namespace WareHouse.API
                        .AllowAnyHeader()
                        .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
             }));
-
+            services.AddHostedService<RequestTimeConsumer>();
             // send log to seq by Microsoft.Extensions.Logging
             services.AddLogging(loggingBuilder =>
             {
