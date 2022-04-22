@@ -187,7 +187,9 @@ namespace WareHouse.API.Controllers
         {
             var mode = new WareHouseDTO()
             {
-                Id = Guid.NewGuid().ToString()
+                Id = Guid.NewGuid().ToString(),
+                Code = ExtensionFull.GetVoucherCode("WH")
+
             };
             await GetDataToDrop(mode);
             var result = new ResultMessageResponse()

@@ -25,6 +25,7 @@ using WareHouse.API.Application.Queries.GetFisrt;
 using WareHouse.API.Application.Querie.CheckCode;
 using Microsoft.AspNetCore.Authorization;
 using WareHouse.API.Application.Authentication;
+using WareHouse.API.Application.Extensions;
 
 namespace WareHouse.API.Controllers
 {
@@ -173,6 +174,7 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Create()
         {
             var res = new InwardDetailDTO();
+
             await GetDataToDrop(res);
             var result = new ResultMessageResponse()
             {

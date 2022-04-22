@@ -13,7 +13,12 @@ namespace WareHouse.API.Application.Extensions
 
         public static string GetDateToSqlRaw(int Year, int Mouth, int Day)
         {
-            return "" +Year+ "-" + Mouth + "-" + Day + "";
+            return "" + Year + "-" + Mouth + "-" + Day + "";
+        }
+        public static string GetVoucherCode(string name)
+        {
+            var date = DateTime.Now;
+            return name + date.Year.ToString() + date.Month.ToString() + date.Day.ToString() + date.Hour.ToString() + date.Minute.ToString() + date.Second.ToString() + date.Millisecond.ToString();
         }
     }
 }

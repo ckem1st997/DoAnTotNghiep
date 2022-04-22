@@ -132,6 +132,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
+
         [CheckRole(LevelCheck.UPDATE)]
         [Route("edit")]
         [HttpGet]

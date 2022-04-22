@@ -175,6 +175,8 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Create()
         {
             var res = new WareHouseItemDTO();
+            res.Code =ExtensionFull.GetVoucherCode("ITEM");
+
             await GetDataToDrop(res);
             var result = new ResultMessageResponse()
             {

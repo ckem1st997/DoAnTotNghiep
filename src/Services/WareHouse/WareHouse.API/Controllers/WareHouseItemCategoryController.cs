@@ -126,7 +126,9 @@ namespace WareHouse.API.Controllers
         {
             var mode = new WareHouseItemCategoryDTO()
             {
-                Id = Guid.NewGuid().ToString()
+                Id = Guid.NewGuid().ToString(),
+                Code = ExtensionFull.GetVoucherCode("WHI")
+
             };
             var result = new ResultMessageResponse()
             {

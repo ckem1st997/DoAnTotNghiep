@@ -11,6 +11,7 @@ using WareHouse.API.Application.Commands.Create;
 using WareHouse.API.Application.Commands.Delete;
 using WareHouse.API.Application.Commands.Models;
 using WareHouse.API.Application.Commands.Update;
+using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Querie.CheckCode;
@@ -187,8 +188,8 @@ namespace WareHouse.API.Controllers
                     });
             }
             var modelCreate = new OutwardDTO();
-            modelCreate.Voucher = new Random().Next(1, 999999999).ToString();
             modelCreate.WareHouseId = idWareHouse;
+            modelCreate.VoucherCode = ExtensionFull.GetVoucherCode("PX");
             await GetDataToDrop(modelCreate);
             var result = new ResultMessageResponse()
             {

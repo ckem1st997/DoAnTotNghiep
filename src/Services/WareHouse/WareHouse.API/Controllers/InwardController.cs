@@ -21,6 +21,7 @@ using WareHouse.API.Application.Querie.CheckCode;
 using WareHouse.API.Application.Queries.GetFisrt;
 using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.SignalRService;
+using WareHouse.API.Application.Extensions;
 
 namespace WareHouse.API.Controllers
 {
@@ -237,8 +238,8 @@ namespace WareHouse.API.Controllers
                     }); ;
             }
             var modelCreate = new InwardDTO();
-            modelCreate.Voucher = new Random().Next(1, 999999999).ToString();
             modelCreate.WareHouseId = idWareHouse;
+            modelCreate.VoucherCode = ExtensionFull.GetVoucherCode("PN");
             await GetDataToDrop(modelCreate);
             var result = new ResultMessageResponse()
             {
