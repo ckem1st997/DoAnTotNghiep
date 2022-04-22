@@ -67,7 +67,7 @@ namespace WareHouse.API
                        .AllowAnyHeader()
                        .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
             }));
-            services.AddHostedService<RequestTimeConsumer>();
+          //  services.AddHostedService<RequestTimeConsumer>();
             // send log to seq by Microsoft.Extensions.Logging
             services.AddLogging(loggingBuilder =>
             {
