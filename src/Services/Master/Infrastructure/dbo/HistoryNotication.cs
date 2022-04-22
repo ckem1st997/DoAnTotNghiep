@@ -13,5 +13,6 @@ namespace Infrastructure
         public DateTime CreateDate { get; set; }
         public bool Read { get; set; }
         public string Link { get; set; }
+        public string UserNameRead { get; set; }
     }
 }
