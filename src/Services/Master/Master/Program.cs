@@ -31,7 +31,7 @@ namespace Master
                     {
                         logging.AddFilter("Grpc", LogLevel.Debug);
                     })
-             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+            // .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))

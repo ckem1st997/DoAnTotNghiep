@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 using Microsoft.Extensions.Hosting;
 using System.Net;
+using System.Text.Json;
+using System.Text;
+using System.Collections.Generic;
 
 namespace KafKa.Net
 {
@@ -16,7 +19,7 @@ namespace KafKa.Net
     public class RequestTimeConsumer : BackgroundService
     {
         private readonly string topic;
-        private readonly IConsumer<string, long> kafkaConsumer;
+        private readonly IConsumer<string, byte[]> kafkaConsumer;
         private string Topic = "WareHouse-KafKa";
         public RequestTimeConsumer()
         {
@@ -25,15 +28,22 @@ namespace KafKa.Net
                 BootstrapServers = "localhost:9092",
                 GroupId = "warehouse",
                 AllowAutoCreateTopics = true,
-             //   SaslUsername = "admin",
-            //    SaslPassword = "admin",
                 AutoOffsetReset = AutoOffsetReset.Earliest,
-                //SecurityProtocol = SecurityProtocol.SaslSsl,
-                //SaslMechanism= SaslMechanism.Plain,
+                EnableAutoCommit = false,
+                StatisticsIntervalMs = 5000,
+                SessionTimeoutMs = 6000,
+                EnablePartitionEof = true,
+                // A good introduction to the CooperativeSticky assignor and incremental rebalancing:
+                // https://www.confluent.io/blog/cooperative-rebalancing-in-kafka-streams-consumer-ksqldb/
+             //   PartitionAssignmentStrategy = PartitionAssignmentStrategy.CooperativeSticky                
             };
             this.topic = Topic;
-            this.kafkaConsumer = new ConsumerBuilder<string, long>(consumerConfig).Build();
-            tets();
+            this.kafkaConsumer = new ConsumerBuilder<string, byte[]>(consumerConfig).Build();
+        }
+       public  class ttt
+        {
+            public string name { get; set; }
+            public string age { get; set; }
         }
         public void tets()
         {
@@ -43,17 +53,32 @@ namespace KafKa.Net
                 ClientId = Dns.GetHostName(),
             };
 
+           
+        //    for (int i = 0; i < 1; i++)
+         //   {
+                var model = new ttt
+                {
+                    name = "hợp",
+                    age = DateTime.Now.ToString()
+                };
+                using (var producer = new ProducerBuilder<string, byte[]>(config).Build())
+                {
+                    var body = JsonSerializer.SerializeToUtf8Bytes(model, model.GetType(), new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+                    producer.Produce(this.topic, new Message<string, byte[]> { Key = model.GetType().ToString(), Value = body });
 
-            using (var producer = new ProducerBuilder<string, string>(config).Build())
-            {
-                producer.Produce(this.topic, new Message<string, string> { Key="dsadsa",Value = "hello world" });
-
-                Console.WriteLine($"Wrote to offset: ");
-                producer.Flush(timeout: TimeSpan.FromSeconds(10));
-            }
+                    Console.WriteLine($"Wrote to offset: ");
+                    producer.Flush(timeout: TimeSpan.FromSeconds(10));
+                }
+          //  }
+          
         }
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            tets();
+
             new Thread(() => StartConsumerLoop(stoppingToken)).Start();
             Console.WriteLine("Connect");
 
@@ -70,19 +95,23 @@ namespace KafKa.Net
                 try
                 {
                     var cr = this.kafkaConsumer.Consume(cancellationToken);
-
-                    // Handle message...
-                    Console.WriteLine($"{cr.Message.Key}: {cr.Message.Value}ms");
+                    if(cr.Message !=null)
+                    {
+                        var message = Encoding.UTF8.GetString(cr.Value);
+                        Console.WriteLine($"{cr.Message.Key}: {cr.Message.Value}ms");
+                        Console.WriteLine(message);                     
+                    }
                 }
                 catch (OperationCanceledException)
                 {
+                  //  this.kafkaConsumer.Close();
                     break;
                 }
                 catch (ConsumeException e)
                 {
                     // Consumer errors should generally be ignored (or logged) unless fatal.
                     Console.WriteLine($"Consume error: {e.Error.Reason}");
-
+                  //  this.kafkaConsumer.Close();
                     if (e.Error.IsFatal)
                     {
                         // https://github.com/edenhill/librdkafka/blob/master/INTRODUCTION.md#fatal-consumer-errors
@@ -92,8 +121,11 @@ namespace KafKa.Net
                 catch (Exception e)
                 {
                     Console.WriteLine($"Unexpected error: {e}");
+                 //   this.kafkaConsumer.Close();
                     break;
+
                 }
+
             }
         }
 
@@ -104,5 +136,9 @@ namespace KafKa.Net
 
             base.Dispose();
         }
+
+
     }
+
+
 }
