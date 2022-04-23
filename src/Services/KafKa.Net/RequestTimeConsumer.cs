@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.Hosting;
-
+using System.Net;
 
 namespace KafKa.Net
 {
@@ -33,8 +33,25 @@ namespace KafKa.Net
             };
             this.topic = Topic;
             this.kafkaConsumer = new ConsumerBuilder<string, long>(consumerConfig).Build();
+            tets();
         }
+        public void tets()
+        {
+            var config = new ProducerConfig
+            {
+                BootstrapServers = "localhost:9092",
+                ClientId = Dns.GetHostName(),
+            };
 
+
+            using (var producer = new ProducerBuilder<string, string>(config).Build())
+            {
+                producer.Produce(this.topic, new Message<string, string> { Key="dsadsa",Value = "hello world" });
+
+                Console.WriteLine($"Wrote to offset: ");
+                producer.Flush(timeout: TimeSpan.FromSeconds(10));
+            }
+        }
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             new Thread(() => StartConsumerLoop(stoppingToken)).Start();
