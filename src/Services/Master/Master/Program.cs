@@ -40,7 +40,7 @@ namespace Master
                         {
                             options.Listen(IPAddress.Any, 5001, listenOptions =>
                             {
-                                listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
+                                listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
                             });
 
                             options.Listen(IPAddress.Any, 5000, listenOptions =>

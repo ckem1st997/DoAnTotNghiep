@@ -32,7 +32,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Master", "src\Services\Mast
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Services\Master\Infrastructure\Infrastructure.csproj", "{74BBD215-D4A0-4B50-98DE-44EF193CFEA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafKa.Net", "src\Services\KafKa.Net\KafKa.Net.csproj", "{E50F5C21-9A9C-49C3-BDF1-3587FA022BD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafKa.Net", "src\Services\KafKa.Net\KafKa.Net.csproj", "{E50F5C21-9A9C-49C3-BDF1-3587FA022BD5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

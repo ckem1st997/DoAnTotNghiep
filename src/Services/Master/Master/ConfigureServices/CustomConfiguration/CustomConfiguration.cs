@@ -39,8 +39,7 @@ namespace Master.ConfigureServices.CustomConfiguration
                 {
                     options.JsonSerializerOptions.WriteIndented = true;
                     //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0).AddNewtonsoftJson();
+                }).AddNewtonsoftJson();
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
