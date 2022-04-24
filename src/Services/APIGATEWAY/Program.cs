@@ -1,4 +1,5 @@
 
+using APIGATEWAY;
 using KafKa.Net;
 
 var configuration = GetConfiguration();
@@ -11,7 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHostedService<RequestTimeConsumer>();
-
+//builder.Services.AddApplication<EventBusKafkaModule>();
+builder.Services.AddSingleton<IKafKaConnection, KafKaConnection>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

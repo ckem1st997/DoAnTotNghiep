@@ -18,10 +18,11 @@ namespace KafKa.Net
     /// </summary>
     public class RequestTimeConsumer : BackgroundService
     {
+        private readonly IKafKaConnection _kafKaConnection;
         private readonly string topic;
         private readonly IConsumer<string, byte[]> kafkaConsumer;
         private string Topic = "WareHouse-KafKa";
-        public RequestTimeConsumer()
+        public RequestTimeConsumer(IKafKaConnection kafKaConnection)
         {
             var consumerConfig = new ConsumerConfig()
             {
@@ -39,50 +40,17 @@ namespace KafKa.Net
             };
             this.topic = Topic;
             this.kafkaConsumer = new ConsumerBuilder<string, byte[]>(consumerConfig).Build();
+            _kafKaConnection = kafKaConnection;
         }
        public  class ttt
         {
             public string name { get; set; }
             public string age { get; set; }
         }
-        public void tets()
-        {
-            var config = new ProducerConfig
-            {
-                BootstrapServers = "localhost:9092",
-                ClientId = Dns.GetHostName(),
-            };
-
-           
-        //    for (int i = 0; i < 1; i++)
-         //   {
-                var model = new ttt
-                {
-                    name = "hợp",
-                    age = DateTime.Now.ToString()
-                };
-                using (var producer = new ProducerBuilder<string, byte[]>(config).Build())
-                {
-                    var body = JsonSerializer.SerializeToUtf8Bytes(model, model.GetType(), new JsonSerializerOptions
-                    {
-                        WriteIndented = true
-                    });
-                    producer.Produce(this.topic, new Message<string, byte[]> { Key = model.GetType().ToString(), Value = body });
-
-                    Console.WriteLine($"Wrote to offset: ");
-                    producer.Flush(timeout: TimeSpan.FromSeconds(10));
-                }
-          //  }
-          
-        }
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            tets();
-
             new Thread(() => StartConsumerLoop(stoppingToken)).Start();
             Console.WriteLine("Connect");
-
-
             return Task.CompletedTask;
         }
 

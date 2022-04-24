@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Confluent.Kafka;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace KafKa.Net
 
         bool TryConnect();
 
-     //   IModel CreateModel();
+        IProducer<string, byte[]> ProducerConfig { get; }
+        IConsumer<string, byte[]> ConsumerConfig { get; }
     }
 }
