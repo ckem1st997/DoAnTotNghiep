@@ -29,14 +29,8 @@ namespace KafKa.Net
                 BootstrapServers = "localhost:9092",
                 GroupId = "warehouse",
                 AllowAutoCreateTopics = true,
-                AutoOffsetReset = AutoOffsetReset.Earliest,
-                EnableAutoCommit = false,
-                StatisticsIntervalMs = 5000,
-                SessionTimeoutMs = 6000,
-                EnablePartitionEof = true,
-                // A good introduction to the CooperativeSticky assignor and incremental rebalancing:
-                // https://www.confluent.io/blog/cooperative-rebalancing-in-kafka-streams-consumer-ksqldb/
-                //   PartitionAssignmentStrategy = PartitionAssignmentStrategy.CooperativeSticky                
+                EnableAutoCommit = true,
+                EnableAutoOffsetStore = false             
             };
             this.topic = Topic;
             this.kafkaConsumer = new ConsumerBuilder<string, byte[]>(consumerConfig).Build();
@@ -62,45 +56,23 @@ namespace KafKa.Net
                 try
                 {
                     var cr = this.kafkaConsumer.Consume(cancellationToken);
-                    // if (cr.Message != null)
-                    // {
-                    //     var message = Encoding.UTF8.GetString(cr.Value);
-                    //     Console.WriteLine($"{cr.Message.Key}: {cr.Message.Value}ms");
-                    //     Console.WriteLine(message);
-                    // }
-
-                    if (cr.IsPartitionEOF)
+                    if (cr.Message != null)
                     {
-                        Console.WriteLine(
-                            $"Reached end of topic {cr.Topic}, partition {cr.Partition}, offset {cr.Offset}.");
-
-                        continue;
+                        var message = Encoding.UTF8.GetString(cr.Value);
+                        Console.WriteLine(message);
                     }
 
-                    Console.WriteLine($"Received message at {cr.TopicPartitionOffset}: {cr.Message.Value}");
-
-                    // if (cr.Offset % commitPeriod == 0)
+                    kafkaConsumer.StoreOffset(cr);
+                  
+                    // try
                     // {
-                        // The Commit method sends a "commit offsets" request to the Kafka
-                        // cluster and synchronously waits for the response. This is very
-                        // slow compared to the rate at which the consumer is capable of
-                        // consuming messages. A high performance application will typically
-                        // commit offsets relatively infrequently and be designed handle
-                        // duplicate messages in the event of failure.
-                        try
-                        {
-                            this.kafkaConsumer.Commit(cr);
-                        }
-                        catch (KafkaException e)
-                        {
-                            Console.WriteLine($"Commit error: {e.Error.Reason}");
-                        }
-                  //  }
-                }
-                catch (OperationCanceledException)
-                {
-                    //  this.kafkaConsumer.Close();
-                    break;
+                    //     this.kafkaConsumer.Commit(cr);
+                    // }
+                    // catch (KafkaException e)
+                    // {
+                    //     Console.WriteLine($"Commit error: {e.Error.Reason}");
+                    // }
+                    //  }
                 }
                 catch (ConsumeException e)
                 {
@@ -109,17 +81,14 @@ namespace KafKa.Net
                     //  this.kafkaConsumer.Close();
                     if (e.Error.IsFatal)
                     {
-                        // https://github.com/edenhill/librdkafka/blob/master/INTRODUCTION.md#fatal-consumer-errors
                         break;
                     }
                 }
-                catch (Exception e)
+                finally
                 {
-                    Console.WriteLine($"Unexpected error: {e}");
-                    //   this.kafkaConsumer.Close();
-                    break;
-
+                     this.kafkaConsumer.Close();
                 }
+             
 
             }
         }
