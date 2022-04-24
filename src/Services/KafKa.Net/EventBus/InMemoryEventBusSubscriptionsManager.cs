@@ -9,6 +9,8 @@ namespace KafKa.Net
 {
     /// <summary>
     /// quản lý những sự kiện đăng ký của service, đảm bảo không bị xử lý nhầm sang sự kiện khác
+    /// tránh cho việc nhiều service cùng truy cập vào 1 topic
+    /// đảm bảo chỉ xử lí những event theo model mà service đăng ký trong program
     /// </summary>
     public partial class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManager
     {
