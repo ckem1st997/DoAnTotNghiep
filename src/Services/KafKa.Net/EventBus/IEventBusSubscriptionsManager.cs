@@ -9,7 +9,9 @@ using static KafKa.Net.InMemoryEventBusSubscriptionsManager;
 
 namespace KafKa.Net
 {
-    // quản trị sự kiện như thêm, xoá, sửa
+    /// <summary>
+    /// danh sách các model mà service sẽ nhận để xử lý, tránh trường hợp xử lý hết message mà kafka bắn về
+    /// </summary>
     public interface IEventBusSubscriptionsManager
     {
         bool IsEmpty { get; }
