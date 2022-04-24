@@ -9,6 +9,10 @@ using System.Net;
 using System.Text.Json;
 using System.Text;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
+using KafKa.Net.Kafka;
+using Autofac;
+using KafKa.Net.Abstractions;
 
 namespace KafKa.Net
 {
@@ -22,7 +26,13 @@ namespace KafKa.Net
         private readonly string topic;
         private readonly IConsumer<string, byte[]> kafkaConsumer;
         private string Topic = "WareHouse-KafKa";
-        public RequestTimeConsumer(IKafKaConnection kafKaConnection)
+        private readonly ILogger<EventKafKa> _logger;
+        private readonly IEventBusSubscriptionsManager _subsManager;
+        private readonly ILifetimeScope _autofac;
+        const string BROKER_NAME = "event_bus";
+        const string AUTOFAC_SCOPE_NAME = "event_bus";
+        public RequestTimeConsumer(IKafKaConnection kafKaConnection, ILogger<EventKafKa> logger,
+            ILifetimeScope autofac, IEventBusSubscriptionsManager subsManager)
         {
             var consumerConfig = new ConsumerConfig()
             {
@@ -33,8 +43,12 @@ namespace KafKa.Net
                 EnableAutoOffsetStore = false             
             };
             this.topic = Topic;
-            this.kafkaConsumer = new ConsumerBuilder<string, byte[]>(consumerConfig).Build();
+          //  this.kafkaConsumer = new ConsumerBuilder<string, byte[]>(consumerConfig).Build();
             _kafKaConnection = kafKaConnection;
+            this.kafkaConsumer = this._kafKaConnection.ConsumerConfig;
+            _autofac = autofac;
+            _subsManager = subsManager;
+            _logger = logger;
         }
         public class ttt
         {
@@ -44,11 +58,10 @@ namespace KafKa.Net
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             new Thread(() => StartConsumerLoop(stoppingToken)).Start();
-            Console.WriteLine("Connect");
             return Task.CompletedTask;
         }
 
-        private void StartConsumerLoop(CancellationToken cancellationToken)
+        private async void StartConsumerLoop(CancellationToken cancellationToken)
         {
             kafkaConsumer.Subscribe(this.topic);
             while (!cancellationToken.IsCancellationRequested)
@@ -60,6 +73,8 @@ namespace KafKa.Net
                     {
                         var message = Encoding.UTF8.GetString(cr.Value);
                         Console.WriteLine(message);
+                        await ProcessEvent(cr.Key, message);
+
                     }
 
                     kafkaConsumer.StoreOffset(cr);
@@ -86,10 +101,47 @@ namespace KafKa.Net
                 }
                 finally
                 {
-                     this.kafkaConsumer.Close();
-                }
-             
+                  //   this.kafkaConsumer.Close();
+                }            
+            }
+            this.kafkaConsumer.Close();
+        }
+        private async Task ProcessEvent(string eventName, string message)
+        {
+            _logger.LogTrace("Processing KafKa event: {EventName}", eventName);
 
+            if (_subsManager.HasSubscriptionsForEvent(eventName))
+            {
+                using (var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME))
+                {
+                    var subscriptions = _subsManager.GetHandlersForEvent(eventName);
+                    foreach (var subscription in subscriptions)
+                    {
+                        if (subscription.IsDynamic)
+                        {
+                            var handler = scope.ResolveOptional(subscription.HandlerType) as IDynamicIntegrationEventHandler;
+                            if (handler == null) continue;
+                            using dynamic eventData = JsonDocument.Parse(message);
+                            await Task.Yield();
+                            await handler.Handle(eventData);
+                        }
+                        else
+                        {
+                            var handler = scope.ResolveOptional(subscription.HandlerType);
+                            if (handler == null) continue;
+                            var eventType = _subsManager.GetEventTypeByName(eventName);
+                            var integrationEvent = JsonSerializer.Deserialize(message, eventType, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                            var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
+
+                            await Task.Yield();
+                            await (Task)concreteType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
+                        }
+                    }
+                }
+            }
+            else
+            {
+                _logger.LogWarning("No subscription for KafKa event: {EventName}", eventName);
             }
         }
 

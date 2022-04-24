@@ -1,10 +1,12 @@
 
 using APIGATEWAY;
+using Autofac.Extensions.DependencyInjection;
 using KafKa.Net;
+using KafKa.Net.Kafka;
 
 var configuration = GetConfiguration();
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -12,8 +14,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHostedService<RequestTimeConsumer>();
-//builder.Services.AddApplication<EventBusKafkaModule>();
 builder.Services.AddSingleton<IKafKaConnection, KafKaConnection>();
+builder.Services.AddEventBus(configuration);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -28,7 +31,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.ConfigureEventBus();
 app.Run();
 
 IConfiguration GetConfiguration()
