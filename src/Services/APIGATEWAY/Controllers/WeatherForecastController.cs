@@ -1,5 +1,7 @@
 ﻿using Confluent.Kafka;
 using KafKa.Net;
+using KafKa.Net.Abstractions;
+using KafKa.Net.IntegrationEvents.Events;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -16,11 +18,13 @@ namespace APIGATEWAY.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly IKafKaConnection _kafKaConnection;
+        private readonly IEventBus _eventBus;
 
-        public WeatherForecastController(IKafKaConnection kafKaConnection, ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(IEventBus eventBus,IKafKaConnection kafKaConnection, ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
             _kafKaConnection = kafKaConnection;
+            _eventBus = eventBus;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
@@ -34,34 +38,37 @@ namespace APIGATEWAY.Controllers
             })
             .ToArray();
         }
-        public class ttt
-        {
-            public string name { get; set; }
-            public string age { get; set; }
-        }
+       
         [HttpGet("test")]
         public IActionResult Test(string name)
         {
-            var model = new ttt
+            //var model = new ttt
+            //{
+            //    name = name,
+            //    age = DateTime.Now.ToString()
+            //};
+            //if (!_kafKaConnection.IsConnected)
+            //    _kafKaConnection.TryConnect();
+            //IProducer<string, byte[]>? producer = null;
+            //producer = _kafKaConnection.ProducerConfig;
+
+            //var body = JsonSerializer.SerializeToUtf8Bytes(model, model.GetType(), new JsonSerializerOptions
+            //{
+            //    WriteIndented = true
+            //});
+            //producer.Produce("WareHouse-KafKa", new Message<string, byte[]> { Key = model.GetType().ToString(), Value = body });
+
+            //Console.WriteLine($"Wrote to offset: ");
+            //producer.Flush(timeout: TimeSpan.FromSeconds(1));
+
+            //  return Ok(model);
+
+            var mode = new TestIntegrationEvent()
             {
-                name = name,
-                age = DateTime.Now.ToString()
+                Username = name
             };
-            if (!_kafKaConnection.IsConnected)
-                _kafKaConnection.TryConnect();
-            IProducer<string, byte[]>? producer = null;
-            producer = _kafKaConnection.ProducerConfig;
-
-            var body = JsonSerializer.SerializeToUtf8Bytes(model, model.GetType(), new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
-            producer.Produce("WareHouse-KafKa", new Message<string, byte[]> { Key = model.GetType().ToString(), Value = body });
-
-            Console.WriteLine($"Wrote to offset: ");
-            producer.Flush(timeout: TimeSpan.FromSeconds(1));
-
-            return Ok(model);
+            _eventBus.Publish(mode);
+            return Ok(mode);
         }
     }
 }

@@ -7,6 +7,9 @@ using System.Linq;
 
 namespace KafKa.Net
 {
+    /// <summary>
+    /// quản lý những sự kiện đăng ký của service, đảm bảo không bị xử lý nhầm sang sự kiện khác
+    /// </summary>
     public partial class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManager
     {
 

@@ -25,14 +25,14 @@ namespace KafKa.Net
         protected ConcurrentDictionary<string, Lazy<IConsumer<string, byte[]>>> Consumers { get; }
         protected ConcurrentDictionary<string, Lazy<IProducer<string, byte[]>>> Producers { get; }
 
-        private IConsumer<string, byte[]> kafkaConsumer;
-        private IProducer<string, byte[]> kafkaProducer;
+      //  private IConsumer<string, byte[]> kafkaConsumer;
+      //  private IProducer<string, byte[]> kafkaProducer;
         private readonly IConfiguration _configuration;
         bool _disposed;
 
         object sync_root = new object();
 
-        private string Topic { get; set; }
+        public string Topic { get; set; }
         private string GroupId { get; set; }
         private string BootstrapServers { get; set; }
         private string connectionName { get; set; }
@@ -54,7 +54,7 @@ namespace KafKa.Net
         private IProducer<string, byte[]> ProducerConfigMethod()
         {
 
-           
+
             return Producers.GetOrAdd(
                connectionName, connection => new Lazy<IProducer<string, byte[]>>(() =>
                {
@@ -73,7 +73,6 @@ namespace KafKa.Net
 
         private IConsumer<string, byte[]> ConsumerConfigMethod()
         {
-
             return Consumers.GetOrAdd(
                 connectionName, connection => new Lazy<IConsumer<string, byte[]>>(() =>
                 {
@@ -82,19 +81,13 @@ namespace KafKa.Net
                         BootstrapServers = BootstrapServers,
                         GroupId = GroupId,
                         AllowAutoCreateTopics = true,
-                        AutoOffsetReset = AutoOffsetReset.Earliest,
-                        EnableAutoCommit = false,
-                        StatisticsIntervalMs = 5000,
-                        SessionTimeoutMs = 6000,
-                        EnablePartitionEof = true,
+                        EnableAutoCommit = true,
+                        EnableAutoOffsetStore = false
                     };
 
                     return new ConsumerBuilder<string, byte[]>(consumerConfig).Build();
                 })
-            ).Value;            
-           
-            //this.kafkaConsumer = new ConsumerBuilder<string, byte[]>(consumerConfig).Build();
-            //return kafkaConsumer;
+            ).Value;
         }
 
         public bool IsConnected
@@ -137,24 +130,20 @@ namespace KafKa.Net
 
                 policy.Execute(() =>
                 {
-                    this.ProducerConfigMethod();
-                    this.ConsumerConfigMethod();
+                    if (ProducerConfig == null)
+                        this.ProducerConfigMethod();
+                    if (ConsumerConfig == null)
+                        this.ConsumerConfigMethod();
                 });
 
                 if (IsConnected)
                 {
-                //    _connection.ConnectionShutdown += OnConnectionShutdown;
-                //    _connection.CallbackException += OnCallbackException;
-                //    _connection.ConnectionBlocked += OnConnectionBlocked;
-
                     _logger.LogInformation("Kafka Client acquired a persistent connection to '{HostName}' and is subscribed to failure events", Dns.GetHostName());
-
                     return true;
                 }
                 else
                 {
                     _logger.LogCritical("FATAL ERROR: Kafka connections could not be created and opened");
-
                     return false;
                 }
             }
@@ -165,11 +154,11 @@ namespace KafKa.Net
             if (_disposed) return;
 
             _disposed = true;
-          
+
 
             if (!Consumers.Any())
             {
-              //  Logger.LogDebug($"Disposed consumer pool with no consumers in the pool.");
+                //  Logger.LogDebug($"Disposed consumer pool with no consumers in the pool.");
                 return;
             }
 
@@ -188,7 +177,6 @@ namespace KafKa.Net
             }
             if (!Producers.Any())
             {
-                //  Logger.LogDebug($"Disposed consumer pool with no consumers in the pool.");
                 return;
             }
 
@@ -209,6 +197,6 @@ namespace KafKa.Net
             Producers.Clear();
         }
 
-       
+
     }
 }
