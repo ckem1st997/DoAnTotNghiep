@@ -50,11 +50,6 @@ namespace KafKa.Net
             _subsManager = subsManager;
             _logger = logger;
         }
-        public class ttt
-        {
-            public string name { get; set; }
-            public string age { get; set; }
-        }
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             new Thread(() => StartConsumerLoop(stoppingToken)).Start();
