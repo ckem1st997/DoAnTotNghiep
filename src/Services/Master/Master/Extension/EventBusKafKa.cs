@@ -1,7 +1,10 @@
 ﻿using Autofac;
+using KafKa.Net;
 using KafKa.Net.Abstractions;
+using KafKa.Net.IntegrationEvents;
 using KafKa.Net.IntegrationEvents.EventHandling;
 using KafKa.Net.IntegrationEvents.Events;
+using KafKa.Net.Kafka;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KafKa.Net.Kafka
+namespace WareHouse.API.IntegrationEvents
 {
     public static class EventBusKafKa
     {
@@ -35,15 +38,12 @@ namespace KafKa.Net.Kafka
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
             // thêm xử lí event trong app
-         //   services.AddTransient<TestIntegrationEventHandler>();
-        }
+      }
 
 
-        //public static void ConfigureEventBus(this IApplicationBuilder app)
-        //{
-        //    var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-        //    // đăng ký xử lý
-        //    eventBus.Subscribe<TestIntegrationEvent, TestIntegrationEventHandler>();
-        //}
+        public static void ConfigureEventBus(this IApplicationBuilder app)
+        {
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+       }
     }
 }

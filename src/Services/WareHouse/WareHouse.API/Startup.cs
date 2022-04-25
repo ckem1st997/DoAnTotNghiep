@@ -29,6 +29,7 @@ using System.Text;
 using WareHouse.API.Application.Authentication;
 using Grpc.Net.ClientFactory;
 using GrpcGetDataToWareHouse;
+using WareHouse.API.IntegrationEvents;
 using KafKa.Net;
 
 namespace WareHouse.API
@@ -67,9 +68,7 @@ namespace WareHouse.API
                        .AllowAnyHeader()
                        .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
             }));
-            //     services.AddHostedService<RequestTimeConsumer>();
-          //  services.AddSingleton<IHostedService, RequestTimeConsumer>();
-            // send log to seq by Microsoft.Extensions.Logging
+
             services.AddLogging(loggingBuilder =>
             {
                 //   loggingBuilder.UseSerilog(Configuration);
@@ -84,6 +83,8 @@ namespace WareHouse.API
                 options.EnableDetailedErrors = true;
 
             });
+            services.AddSingleton<IKafKaConnection, KafKaConnection>();
+            services.AddEventBus(Configuration);
             services.AddGrpcClient<GrpcGetData.GrpcGetDataClient>(o =>
            {
                o.Address = new Uri("https://localhost:5001");
@@ -112,6 +113,8 @@ namespace WareHouse.API
                 };
             });
             services.AddHttpContextAccessor();
+            services.AddHostedService<RequestTimeConsumer>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -137,6 +140,7 @@ namespace WareHouse.API
                 endpoints.MapGrpcService<GrpcGetDataWareHouseService>().EnableGrpcWeb();
                 endpoints.MapControllers();
             });
+            app.ConfigureEventBus();
         }
     }
 }

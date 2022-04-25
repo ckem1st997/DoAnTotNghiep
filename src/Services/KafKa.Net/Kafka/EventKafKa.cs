@@ -24,20 +24,13 @@ namespace KafKa.Net.Kafka
         private readonly IKafKaConnection _persistentConnection;
         private readonly ILogger<EventKafKa> _logger;
         private readonly IEventBusSubscriptionsManager _subsManager;
-        private readonly ILifetimeScope _autofac;
-        private readonly int _retryCount;
-        private string _queueName;
-        private string _topicName;
+        private readonly string _topicName;
 
-        public EventKafKa(IConfiguration configuration, IKafKaConnection persistentConnection, ILogger<EventKafKa> logger,
-            ILifetimeScope autofac, IEventBusSubscriptionsManager subsManager, string queueName = null, int retryCount = 5)
+        public EventKafKa(IConfiguration configuration, IKafKaConnection persistentConnection, ILogger<EventKafKa> logger, IEventBusSubscriptionsManager subsManager, string queueName = null)
         {
             _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _subsManager = subsManager ?? new InMemoryEventBusSubscriptionsManager();
-            _queueName = queueName;
-            _autofac = autofac;
-            _retryCount = retryCount;
             _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
             _topicName = configuration["KafKaTopic"];
         }

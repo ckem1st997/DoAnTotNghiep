@@ -18,8 +18,6 @@ namespace KafKa.Net
 {
     public class KafKaConnection : IKafKaConnection
     {
-        private bool disposedValue;
-
         private readonly ILogger<KafKaConnection> _logger;
         private readonly int _retryCount;
         protected ConcurrentDictionary<string, Lazy<IConsumer<string, byte[]>>> Consumers { get; }
@@ -53,8 +51,6 @@ namespace KafKa.Net
 
         private IProducer<string, byte[]> ProducerConfigMethod()
         {
-
-
             return Producers.GetOrAdd(
                connectionName, connection => new Lazy<IProducer<string, byte[]>>(() =>
                {
@@ -170,8 +166,9 @@ namespace KafKa.Net
                     consumer.Value.Close();
                     consumer.Value.Dispose();
                 }
-                catch
+                catch(Exception ex)
                 {
+                    _logger.LogError(ex.Message.ToString());
                 }
 
             }
@@ -187,8 +184,9 @@ namespace KafKa.Net
                 {
                     consumer.Value.Dispose();
                 }
-                catch
+                catch (Exception ex)
                 {
+                    _logger.LogError(ex.Message.ToString());
                 }
 
             }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KafKa.Net.IntegrationEvents.Events
 {
-    public record TestIntegrationEvent : IntegrationEvent
+    public class TestIntegrationEvent : IntegrationEvent
     {
 
         public string Username { get; set; }

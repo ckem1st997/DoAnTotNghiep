@@ -1,6 +1,7 @@
 ﻿using Confluent.Kafka;
 using KafKa.Net;
 using KafKa.Net.Abstractions;
+using KafKa.Net.IntegrationEvents;
 using KafKa.Net.IntegrationEvents.Events;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -63,9 +64,9 @@ namespace APIGATEWAY.Controllers
 
             //  return Ok(model);
 
-            var mode = new TestIntegrationEvent()
+            var mode = new InwardIntegrationEvent()
             {
-                Username = name
+                User = name
             };
             _eventBus.Publish(mode);
             return Ok(mode);

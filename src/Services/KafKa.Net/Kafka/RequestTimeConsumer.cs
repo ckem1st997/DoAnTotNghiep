@@ -33,17 +33,8 @@ namespace KafKa.Net
         const string AUTOFAC_SCOPE_NAME = "event_bus";
         public RequestTimeConsumer(IKafKaConnection kafKaConnection, ILogger<EventKafKa> logger,
             ILifetimeScope autofac, IEventBusSubscriptionsManager subsManager)
-        {
-            var consumerConfig = new ConsumerConfig()
-            {
-                BootstrapServers = "localhost:9092",
-                GroupId = "warehouse",
-                AllowAutoCreateTopics = true,
-                EnableAutoCommit = true,
-                EnableAutoOffsetStore = false             
-            };
+        {        
             this.topic = Topic;
-          //  this.kafkaConsumer = new ConsumerBuilder<string, byte[]>(consumerConfig).Build();
             _kafKaConnection = kafKaConnection;
             this.kafkaConsumer = this._kafKaConnection.ConsumerConfig;
             _autofac = autofac;
@@ -56,6 +47,7 @@ namespace KafKa.Net
             return Task.CompletedTask;
         }
 
+        [Obsolete]
         private async void StartConsumerLoop(CancellationToken cancellationToken)
         {
             kafkaConsumer.Subscribe(this.topic);
@@ -67,37 +59,21 @@ namespace KafKa.Net
                     if (cr.Message != null)
                     {
                         var message = Encoding.UTF8.GetString(cr.Value);
-                        Console.WriteLine(message);
-                        await ProcessEvent(cr.Key, message);
+                       await ProcessEvent(cr.Key, message);
 
                     }
-
-                    kafkaConsumer.StoreOffset(cr);
-                  
-                    // try
-                    // {
-                    //     this.kafkaConsumer.Commit(cr);
-                    // }
-                    // catch (KafkaException e)
-                    // {
-                    //     Console.WriteLine($"Commit error: {e.Error.Reason}");
-                    // }
-                    //  }
+                    kafkaConsumer.StoreOffset(cr);              
                 }
                 catch (ConsumeException e)
                 {
                     // Consumer errors should generally be ignored (or logged) unless fatal.
                     Console.WriteLine($"Consume error: {e.Error.Reason}");
-                    //  this.kafkaConsumer.Close();
+                      this.kafkaConsumer.Close();
                     if (e.Error.IsFatal)
                     {
                         break;
                     }
-                }
-                finally
-                {
-                  //   this.kafkaConsumer.Close();
-                }            
+                }         
             }
             this.kafkaConsumer.Close();
         }
@@ -144,7 +120,6 @@ namespace KafKa.Net
         {
             this.kafkaConsumer.Close(); // Commit offsets and leave the group cleanly.
             this.kafkaConsumer.Dispose();
-
             base.Dispose();
         }
 

@@ -2,6 +2,8 @@ using Grpc.Net.Client.Web;
 using Grpc.Net.ClientFactory;
 using GrpcGetDataToMaster;
 using GrpcGetDataToWareHouse;
+using KafKa.Net;
+using KafKa.Net.Kafka;
 using Master.Application.Authentication;
 using Master.ConfigureServices.CustomConfiguration;
 using Master.Extension;
@@ -61,6 +63,8 @@ namespace Master
                 options.EnableDetailedErrors = true;
 
             });
+            services.AddSingleton<IKafKaConnection, KafKaConnection>();
+            services.AddEventBus(Configuration);
             services.AddGrpcClient<GrpcGetDataWareHouse.GrpcGetDataWareHouseClient>(o =>
             {
                 o.Address = new Uri("https://localhost:5005");
@@ -130,7 +134,8 @@ namespace Master
                 options.AddFilter<CustomFilter>();
             });
             // kafka pro by sage
-          
+            services.AddSingleton<IKafKaConnection, KafKaConnection>();
+            services.AddEventBus(Configuration);
         }
 
 
