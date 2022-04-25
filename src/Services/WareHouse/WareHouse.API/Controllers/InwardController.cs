@@ -238,8 +238,9 @@ namespace WareHouse.API.Controllers
                     }); ;
             }
             var modelCreate = new InwardDTO();
+            modelCreate.Id=Guid.NewGuid().ToString();
             modelCreate.WareHouseId = idWareHouse;
-            modelCreate.VoucherCode = ExtensionFull.GetVoucherCode("PN");
+            modelCreate.Voucher = ExtensionFull.GetVoucherCode("PN");
             await GetDataToDrop(modelCreate);
             var result = new ResultMessageResponse()
             {

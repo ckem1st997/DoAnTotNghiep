@@ -9,7 +9,6 @@ namespace KafKa.Net.IntegrationEvents
 {
     public class InwardIntegrationEvent : IntegrationEvent
     {
-        public string User { get; set; }
         public string Voucher { get; set; }
         public string VoucherCode { get; set; }
         public DateTime VoucherDate { get; set; }

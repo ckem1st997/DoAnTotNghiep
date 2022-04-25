@@ -188,8 +188,9 @@ namespace WareHouse.API.Controllers
                     });
             }
             var modelCreate = new OutwardDTO();
+            modelCreate.Id = Guid.NewGuid().ToString();
             modelCreate.WareHouseId = idWareHouse;
-            modelCreate.VoucherCode = ExtensionFull.GetVoucherCode("PX");
+            modelCreate.Voucher = ExtensionFull.GetVoucherCode("PX");
             await GetDataToDrop(modelCreate);
             var result = new ResultMessageResponse()
             {

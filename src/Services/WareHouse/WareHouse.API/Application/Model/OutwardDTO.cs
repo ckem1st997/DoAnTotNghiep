@@ -13,7 +13,7 @@ namespace WareHouse.API.Application.Model
         }
         public string Voucher { get; set; }
         public string VoucherCode { get; set; }
-        public DateTime VoucherDate { get; set; }
+        public DateTime VoucherDate { get; set; } = DateTime.Now;
         public string WareHouseId { get; set; }
         public string ToWareHouseId { get; set; }
         public string Deliver { get; set; }
@@ -22,7 +22,7 @@ namespace WareHouse.API.Application.Model
         public string ReasonDescription { get; set; }
         public string Description { get; set; }
         public string Reference { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
         public string CreatedBy { get; set; }
         public DateTime ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }

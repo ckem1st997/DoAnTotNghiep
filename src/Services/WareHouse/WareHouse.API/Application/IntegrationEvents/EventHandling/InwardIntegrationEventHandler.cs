@@ -3,6 +3,7 @@ using KafKa.Net.Abstractions;
 using KafKa.Net.IntegrationEvents;
 using KafKa.Net.IntegrationEvents.Events;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
 using System;
@@ -19,6 +20,7 @@ using WareHouse.API.Application.Validations.BeginningWareHouse;
 
 namespace WareHouse.API.IntegrationEvents.EventHandling
 {
+    // [Authorize]
     internal class InwardIntegrationEventHandler : IIntegrationEventHandler<InwardIntegrationEvent>
     {
         private readonly ILogger<InwardIntegrationEventHandler> _logger;
@@ -45,17 +47,9 @@ namespace WareHouse.API.IntegrationEvents.EventHandling
                 var validator = new InwardCommandValidator();
                 var result = validator.Validate(inwardCommands);
                 if (!result.IsValid)
-                    await _userSevice.CreateHistory(@event.User, "Tạo", "dữ liệu đầu vào chưa đúng !", false, inwardCommands.Id);
+                    _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at UserAPI - ({@IntegrationEvent}) dữ liệu đầu vào không đúng", @event.Id, @event);
                 else
                 {
-                    if (!string.IsNullOrEmpty(inwardCommands.WareHouseId))
-                    {
-                        var check = await _userSevice.CheckWareHouseIdByUser(inwardCommands.WareHouseId);
-                        if (!check)
-                        {
-                            await _userSevice.CreateHistory(@event.User, "Tạo", "không có quyền thực hiện chức năng này !", false, inwardCommands.Id);
-                        }
-                    }
                     inwardCommands.CreatedDate = DateTime.Now;
                     inwardCommands.ModifiedDate = DateTime.Now;
                     foreach (var item in inwardCommands.InwardDetails)
@@ -66,11 +60,12 @@ namespace WareHouse.API.IntegrationEvents.EventHandling
                         item.Price = item.Amount;
                     }
                     var data = await _mediat.Send(new CreateInwardCommand() { InwardCommands = inwardCommands });
-                    var mes = false;
                     if (data)
-                        mes = await _userSevice.CreateHistory(@event.User, "Tạo", "vừa tạo mới phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!", false, inwardCommands.Id);
+                        _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at UserAPI - ({@IntegrationEvent}) thành công", @event.Id, @event);
                     else
-                        mes = await _userSevice.CreateHistory(@event.User, "Tạo", "vừa tạo thất bại phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!", false, inwardCommands.Id);
+                        _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at UserAPI - ({@IntegrationEvent}) thất bại", @event.Id, @event);
+
+
 
                 }
 
