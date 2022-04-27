@@ -36,7 +36,7 @@ namespace KafKa.Net
         const string AUTOFAC_SCOPE_NAME = "event_bus";
         public RequestTimeConsumer(IKafKaConnection kafKaConnection, ILogger<EventKafKa> logger,
             ILifetimeScope autofac, IEventBusSubscriptionsManager subsManager)
-        {        
+        {
             this.topic = Topic;
             _kafKaConnection = kafKaConnection;
             this.kafkaConsumer = this._kafKaConnection.ConsumerConfig;
@@ -65,34 +65,29 @@ namespace KafKa.Net
         [Obsolete]
         private async Task StartConsumerLoop(CancellationToken cancellationToken)
         {
-            Console.WriteLine("Starting consumer loop...");
             kafkaConsumer.Subscribe(this.topic);
             while (!cancellationToken.IsCancellationRequested)
             {
-                Console.WriteLine("nhận");
-
                 try
                 {
                     var cr = this.kafkaConsumer.Consume(cancellationToken);
                     if (cr.Message != null)
                     {
                         var message = Encoding.UTF8.GetString(cr.Value);
-                       await ProcessEvent(cr.Key, message);
+                        await ProcessEvent(cr.Key, message);
 
                     }
-                //    kafkaConsumer.Commit(cr);
-                    kafkaConsumer.StoreOffset(cr);              
+                    kafkaConsumer.StoreOffset(cr);
                 }
                 catch (ConsumeException e)
                 {
-                    // Consumer errors should generally be ignored (or logged) unless fatal.
                     Console.WriteLine($"Consume error: {e.Error.Reason}");
-                      this.kafkaConsumer.Close();
+                    this.kafkaConsumer.Close();
                     if (e.Error.IsFatal)
                     {
                         break;
                     }
-                }         
+                }
             }
             this.kafkaConsumer.Close();
         }

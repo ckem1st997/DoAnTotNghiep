@@ -20,11 +20,9 @@ namespace KafKa.Net
     {
         private readonly ILogger<KafKaConnection> _logger;
         private readonly int _retryCount;
-        protected ConcurrentDictionary<string, Lazy<IConsumer<string, byte[]>>> Consumers { get; }
-        protected ConcurrentDictionary<string, Lazy<IProducer<string, byte[]>>> Producers { get; }
 
-      //  private IConsumer<string, byte[]> kafkaConsumer;
-      //  private IProducer<string, byte[]> kafkaProducer;
+        private IConsumer<string, byte[]> kafkaConsumer;
+        private IProducer<string, byte[]> kafkaProducer;
         private readonly IConfiguration _configuration;
         bool _disposed;
 
@@ -44,72 +42,48 @@ namespace KafKa.Net
             GroupId = _configuration["KafKaGroupId"];
             BootstrapServers = _configuration["KafKaBootstrapServers"];
             connectionName = _configuration["KafKaconnectionName"];
-            Consumers = new ConcurrentDictionary<string, Lazy<IConsumer<string, byte[]>>>();
-            Producers = new ConcurrentDictionary<string, Lazy<IProducer<string, byte[]>>>();
-
         }
 
         private IProducer<string, byte[]> ProducerConfigMethod()
         {
-            return Producers.GetOrAdd(
-               connectionName, connection => new Lazy<IProducer<string, byte[]>>(() =>
-               {
-                   var pConfig = new ProducerConfig()
-                   {
-                       BootstrapServers = BootstrapServers,
-                       ClientId = Dns.GetHostName(),
-
-                   };
-                   return new ProducerBuilder<string, byte[]>(pConfig).Build();
-               })
-           ).Value;
-            //this.kafkaProducer = new ProducerBuilder<string, byte[]>(pConfig).Build();
-            //return kafkaProducer;
+            var pConfig = new ProducerConfig()
+            {
+                BootstrapServers = BootstrapServers,
+                ClientId = Dns.GetHostName(),
+            };
+            kafkaProducer = new ProducerBuilder<string, byte[]>(pConfig).Build();
+            return kafkaProducer;
         }
 
         private IConsumer<string, byte[]> ConsumerConfigMethod()
         {
-            return Consumers.GetOrAdd(
-                connectionName, connection => new Lazy<IConsumer<string, byte[]>>(() =>
-                {
-                    var consumerConfig = new ConsumerConfig()
-                    {
-                        BootstrapServers = BootstrapServers,
-                        GroupId = GroupId,
-                        AllowAutoCreateTopics = true,
-                        EnableAutoCommit = true,
-                        EnableAutoOffsetStore = false,
-                        HeartbeatIntervalMs=1000
-                    };
-
-                    return new ConsumerBuilder<string, byte[]>(consumerConfig).Build();
-                })
-            ).Value;
+            var consumerConfig = new ConsumerConfig()
+            {
+                BootstrapServers = BootstrapServers,
+                GroupId = GroupId,
+                AllowAutoCreateTopics = true,
+                EnableAutoCommit = true,
+                EnableAutoOffsetStore = false,
+                HeartbeatIntervalMs = 1000
+            };
+            kafkaConsumer = new ConsumerBuilder<string, byte[]>(consumerConfig).Build();
+            return kafkaConsumer;
         }
 
         public bool IsConnected
         {
-            get
-            {
-                return ProducerConfig != null || ConsumerConfig != null && !_disposed;
-            }
+            get { return ProducerConfig != null || ConsumerConfig != null && !_disposed; }
         }
 
         public IProducer<string, byte[]> ProducerConfig
         {
-            get
-            {
-                return this.ProducerConfigMethod();
-            }
+            get { return this.kafkaProducer==null? this.ProducerConfigMethod():this.kafkaProducer; }
         }
 
 
         public IConsumer<string, byte[]> ConsumerConfig
         {
-            get
-            {
-                return this.ConsumerConfigMethod();
-            }
+            get { return this.kafkaProducer == null ? this.ConsumerConfigMethod():this.kafkaConsumer; }
         }
 
         public bool TryConnect()
@@ -119,11 +93,14 @@ namespace KafKa.Net
             {
                 var policy = RetryPolicy.Handle<SocketException>()
                     .Or<KafkaRetriableException>()
-                    .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
-                    {
-                        _logger.LogWarning(ex, "Kafka Client could not connect after {TimeOut}s ({ExceptionMessage})", $"{time.TotalSeconds:n1}", ex.Message);
-                    }
-                );
+                    .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                        (ex, time) =>
+                        {
+                            _logger.LogWarning(ex,
+                                "Kafka Client could not connect after {TimeOut}s ({ExceptionMessage})",
+                                $"{time.TotalSeconds:n1}", ex.Message);
+                        }
+                    );
 
                 policy.Execute(() =>
                 {
@@ -135,7 +112,9 @@ namespace KafKa.Net
 
                 if (IsConnected)
                 {
-                    _logger.LogInformation("Kafka Client acquired a persistent connection to '{HostName}' and is subscribed to failure events", Dns.GetHostName());
+                    _logger.LogInformation(
+                        "Kafka Client acquired a persistent connection to '{HostName}' and is subscribed to failure events",
+                        Dns.GetHostName());
                     return true;
                 }
                 else
@@ -151,51 +130,16 @@ namespace KafKa.Net
             if (_disposed) return;
 
             _disposed = true;
-
-
-            if (!Consumers.Any())
+          
+            try
             {
-                //  Logger.LogDebug($"Disposed consumer pool with no consumers in the pool.");
-                return;
+               this.kafkaConsumer.Close();
+                this.kafkaProducer.Flush();
             }
-
-            foreach (var consumer in Consumers.Values)
+            catch (Exception ex)
             {
-
-                try
-                {
-                    consumer.Value.Close();
-                    consumer.Value.Dispose();
-                }
-                catch(Exception ex)
-                {
-                    _logger.LogError(ex.Message.ToString());
-                }
-
+                _logger.LogError(ex.Message.ToString());
             }
-            if (!Producers.Any())
-            {
-                return;
-            }
-
-            foreach (var consumer in Producers.Values)
-            {
-
-                try
-                {
-                    consumer.Value.Dispose();
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex.Message.ToString());
-                }
-
-            }
-
-            Consumers.Clear();
-            Producers.Clear();
         }
-
-
     }
 }
