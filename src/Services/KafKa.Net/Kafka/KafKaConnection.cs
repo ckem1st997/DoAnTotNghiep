@@ -78,7 +78,8 @@ namespace KafKa.Net
                         GroupId = GroupId,
                         AllowAutoCreateTopics = true,
                         EnableAutoCommit = true,
-                        EnableAutoOffsetStore = false
+                        EnableAutoOffsetStore = false,
+                        HeartbeatIntervalMs=1000
                     };
 
                     return new ConsumerBuilder<string, byte[]>(consumerConfig).Build();

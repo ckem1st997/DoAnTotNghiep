@@ -13,6 +13,9 @@ using Microsoft.Extensions.Logging;
 using KafKa.Net.Kafka;
 using Autofac;
 using KafKa.Net.Abstractions;
+using Polly.Retry;
+using System.Net.Sockets;
+using Polly;
 
 namespace KafKa.Net
 {
@@ -43,16 +46,31 @@ namespace KafKa.Net
         }
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            new Thread(() => StartConsumerLoop(stoppingToken)).Start();
+            var policy = RetryPolicy.Handle<SocketException>()
+                   .Or<KafkaRetriableException>()
+                   .WaitAndRetry(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
+                   {
+                       _logger.LogWarning(ex, "Kafka Client could not connect after {TimeOut}s ({ExceptionMessage})", $"{time.TotalSeconds:n1}", ex.Message);
+                   }
+               );
+
+            policy.Execute(() =>
+            {
+                new Thread(() => StartConsumerLoop(stoppingToken)).Start();
+
+            });
             return Task.CompletedTask;
         }
 
         [Obsolete]
-        private async void StartConsumerLoop(CancellationToken cancellationToken)
+        private async Task StartConsumerLoop(CancellationToken cancellationToken)
         {
+            Console.WriteLine("Starting consumer loop...");
             kafkaConsumer.Subscribe(this.topic);
             while (!cancellationToken.IsCancellationRequested)
             {
+                Console.WriteLine("nhận");
+
                 try
                 {
                     var cr = this.kafkaConsumer.Consume(cancellationToken);
@@ -62,6 +80,7 @@ namespace KafKa.Net
                        await ProcessEvent(cr.Key, message);
 
                     }
+                //    kafkaConsumer.Commit(cr);
                     kafkaConsumer.StoreOffset(cr);              
                 }
                 catch (ConsumeException e)

@@ -15,9 +15,9 @@ using System.Threading.Tasks;
 
 namespace Master.Controllers
 {
-    [Authorize(Roles = "User,Admin,Manager")]
-    [CheckRole(LevelCheck.CREATE)]
-    [CheckRole(LevelCheck.WAREHOUSE)]
+   // [Authorize(Roles = "User,Admin,Manager")]
+   // [CheckRole(LevelCheck.CREATE)]
+   // [CheckRole(LevelCheck.WAREHOUSE)]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     public class CallKafKaController : ControllerBase
@@ -44,13 +44,13 @@ namespace Master.Controllers
         public IActionResult Test(InwardIntegrationEvent inward)
         {
             _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at MasterAPI - ({@IntegrationEvent})", inward.Id, typeof(InwardIntegrationEvent));
-            var user = _userService.User;
-            if (user.RoleNumber != 3 && !user.WarehouseId.Contains(inward.WareHouseId))
-                return Ok(new ResultMessageResponse()
-                {
-                    success = true,
-                    message = "Bạn không có quyền thao tác với kho này !"
-                });         
+            // var user = _userService.User;
+            // if (user.RoleNumber != 3 && !user.WarehouseId.Contains(inward.WareHouseId))
+            //     return Ok(new ResultMessageResponse()
+            //     {
+            //         success = true,
+            //         message = "Bạn không có quyền thao tác với kho này !"
+            //     });         
             _eventBus.Publish(inward);
             return Ok(new ResultMessageResponse()
             {

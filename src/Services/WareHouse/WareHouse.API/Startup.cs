@@ -47,7 +47,6 @@ namespace WareHouse.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddCustomConfiguration(Configuration);
             services.AddMapper();
             services.AddValidator();
@@ -64,9 +63,9 @@ namespace WareHouse.API
             services.AddCors(o => o.AddPolicy("AllowAll", builder =>
             {
                 builder.AllowAnyOrigin()
-                       .AllowAnyMethod()
-                       .AllowAnyHeader()
-                       .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
             }));
 
             services.AddLogging(loggingBuilder =>
@@ -74,47 +73,45 @@ namespace WareHouse.API
                 //   loggingBuilder.UseSerilog(Configuration);
                 var seqServerUrl = Configuration["Serilog:SeqServerUrl"];
 
-                loggingBuilder.AddSeq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl, apiKey: "0QEfAbE4THZTcUu6I7bQ");
+                loggingBuilder.AddSeq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl,
+                    apiKey: "0QEfAbE4THZTcUu6I7bQ");
             });
 
             services.AddTransient<GrpcExceptionInterceptor>();
-            services.AddGrpc(options =>
-            {
-                options.EnableDetailedErrors = true;
-
-            });
+            services.AddGrpc(options => { options.EnableDetailedErrors = true; });
             services.AddSingleton<IKafKaConnection, KafKaConnection>();
             services.AddEventBus(Configuration);
             services.AddGrpcClient<GrpcGetData.GrpcGetDataClient>(o =>
-           {
-               o.Address = new Uri("https://localhost:5001");
-               // o.Address = new Uri("https://apiproducts97.azurewebsites.net");
-           }).AddInterceptor<GrpcExceptionInterceptor>(InterceptorScope.Client).ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(new HttpClientHandler()));
+                {
+                    o.Address = new Uri("https://localhost:5001");
+                    // o.Address = new Uri("https://apiproducts97.azurewebsites.net");
+                }).AddInterceptor<GrpcExceptionInterceptor>(InterceptorScope.Client)
+                .ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(new HttpClientHandler()));
             // Adding Authentication  
             services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-
-            // Adding Jwt Bearer  
-            .AddJwtBearer(options =>
-            {
-                options.SaveToken = true;
-                options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidAudience = Configuration["JWT:ValidAudience"],
-                    ValidIssuer = Configuration["JWT:ValidIssuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
-                };
-            });
-            services.AddHttpContextAccessor();
-            services.AddHostedService<RequestTimeConsumer>();
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
 
+                // Adding Jwt Bearer  
+                .AddJwtBearer(options =>
+                {
+                    options.SaveToken = true;
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidAudience = Configuration["JWT:ValidAudience"],
+                        ValidIssuer = Configuration["JWT:ValidIssuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                    };
+                });
+            services.AddHttpContextAccessor();
+              services.AddHostedService<RequestTimeConsumer>();
+           // services.AddSingleton<IHostedService, RequestTimeConsumer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

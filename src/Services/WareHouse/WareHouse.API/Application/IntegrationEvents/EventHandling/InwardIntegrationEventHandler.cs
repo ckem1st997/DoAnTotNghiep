@@ -59,12 +59,12 @@ namespace WareHouse.API.IntegrationEvents.EventHandling
                         item.Quantity = convertRate * item.Uiquantity;
                         item.Price = item.Amount;
                     }
-                    var data = await _mediat.Send(new CreateInwardCommand() { InwardCommands = inwardCommands });
-                    if (data)
-                        _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at UserAPI - ({@IntegrationEvent}) thành công", @event.Id, @event);
-                    else
-                        _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at UserAPI - ({@IntegrationEvent}) thất bại", @event.Id, @event);
-
+                  //  var data = await _mediat.Send(new CreateInwardCommand() { InwardCommands = inwardCommands });
+                    // if (data)
+                    //     _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at UserAPI - ({@IntegrationEvent}) thành công", @event.Id, @event);
+                    // else
+                    //     _logger.LogInformation("----- Handling integration event: {IntegrationEventId} at UserAPI - ({@IntegrationEvent}) thất bại", @event.Id, @event);
+                    //
 
 
                 }
