@@ -79,8 +79,8 @@ namespace WareHouse.API
 
             services.AddTransient<GrpcExceptionInterceptor>();
             services.AddGrpc(options => { options.EnableDetailedErrors = true; });
-            services.AddSingleton<IKafKaConnection, KafKaConnection>();
-            services.AddEventBus(Configuration);
+        //    services.AddSingleton<IKafKaConnection, KafKaConnection>();
+            //  services.AddEventBus(Configuration);
             services.AddGrpcClient<GrpcGetData.GrpcGetDataClient>(o =>
                 {
                     o.Address = new Uri("https://localhost:5001");
@@ -110,8 +110,8 @@ namespace WareHouse.API
                     };
                 });
             services.AddHttpContextAccessor();
-              services.AddHostedService<RequestTimeConsumer>();
-           // services.AddSingleton<IHostedService, RequestTimeConsumer>();
+            //services.AddHostedService<RequestTimeConsumer>();
+            // services.AddSingleton<IHostedService, RequestTimeConsumer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -137,7 +137,7 @@ namespace WareHouse.API
                 endpoints.MapGrpcService<GrpcGetDataWareHouseService>().EnableGrpcWeb();
                 endpoints.MapControllers();
             });
-            app.ConfigureEventBus();
+         //   app.ConfigureEventBus();
         }
     }
 }

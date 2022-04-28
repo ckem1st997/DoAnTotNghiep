@@ -134,8 +134,8 @@ namespace Master
                 options.AddFilter<CustomFilter>();
             });
             // kafka pro by sage
-            services.AddSingleton<IKafKaConnection, KafKaConnection>();
-            services.AddEventBus(Configuration);
+        //    services.AddSingleton<IKafKaConnection, KafKaConnection>();
+         //   services.AddEventBus(Configuration);
         }
 
 

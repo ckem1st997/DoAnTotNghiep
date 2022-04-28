@@ -43,13 +43,14 @@ services:
     ports:
       - "5005:80"
       - "5006:81"
+
   master-api:
     image: ${REGISTRY:-doantotnghiep}/master:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: src/Services/Master/Master/Dockerfile
     depends_on:
-      # - redis
+      - redis
       - sqlserver
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
