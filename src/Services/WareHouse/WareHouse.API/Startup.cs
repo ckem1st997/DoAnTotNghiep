@@ -79,14 +79,20 @@ namespace WareHouse.API
 
             services.AddTransient<GrpcExceptionInterceptor>();
             services.AddGrpc(options => { options.EnableDetailedErrors = true; });
-        //    services.AddSingleton<IKafKaConnection, KafKaConnection>();
+            //    services.AddSingleton<IKafKaConnection, KafKaConnection>();
             //  services.AddEventBus(Configuration);
+            AppContext.SetSwitch(
+  "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            var httpHandler = new HttpClientHandler();
+            // Return `true` to allow certificates that are untrusted/invalid
+            httpHandler.ServerCertificateCustomValidationCallback =
+                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
             services.AddGrpcClient<GrpcGetData.GrpcGetDataClient>(o =>
                 {
-                    o.Address = new Uri("https://localhost:5001");
-                    // o.Address = new Uri("https://apiproducts97.azurewebsites.net");
+                    o.Address = new Uri("http://localhost:5000");
+                 //   o.Address = new Uri("http://host.docker.internal:5001");
                 }).AddInterceptor<GrpcExceptionInterceptor>(InterceptorScope.Client)
-                .ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(new HttpClientHandler()));
+                .ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(httpHandler));
             // Adding Authentication  
             services.AddAuthentication(options =>
                 {
@@ -124,7 +130,7 @@ namespace WareHouse.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WareHouse.API v1"));
             }
 
-            app.UseHttpsRedirection();
+         //   app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseGrpcWeb();

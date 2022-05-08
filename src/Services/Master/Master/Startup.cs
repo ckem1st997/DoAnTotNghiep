@@ -65,11 +65,19 @@ namespace Master
             });
             services.AddSingleton<IKafKaConnection, KafKaConnection>();
             services.AddEventBus(Configuration);
+
+            // call http to grpc
+            AppContext.SetSwitch(
+  "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            var httpHandler = new HttpClientHandler();
+            // Return `true` to allow certificates that are untrusted/invalid
+            httpHandler.ServerCertificateCustomValidationCallback =
+                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
             services.AddGrpcClient<GrpcGetDataWareHouse.GrpcGetDataWareHouseClient>(o =>
             {
-                o.Address = new Uri("https://localhost:5005");
-                // o.Address = new Uri("https://apiproducts97.azurewebsites.net");
-            }).AddInterceptor<GrpcExceptionInterceptor>(InterceptorScope.Client).ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(new HttpClientHandler()));
+                o.Address = new Uri("http://localhost:5006");
+                //  o.Address = new Uri("http://host.docker.internal:5005");
+            }).AddInterceptor<GrpcExceptionInterceptor>(InterceptorScope.Client).ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(httpHandler));
 
             services.Configure<PasswordHasherOptions>(option =>
             {
@@ -134,8 +142,8 @@ namespace Master
                 options.AddFilter<CustomFilter>();
             });
             // kafka pro by sage
-        //    services.AddSingleton<IKafKaConnection, KafKaConnection>();
-         //   services.AddEventBus(Configuration);
+            //    services.AddSingleton<IKafKaConnection, KafKaConnection>();
+            //   services.AddEventBus(Configuration);
         }
 
 
@@ -150,7 +158,7 @@ namespace Master
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BasicAuth v1"));
             }
-            app.UseHttpsRedirection();
+          //  app.UseHttpsRedirection();
             app.UseCors("AllowAll");
 
             app.UseRouting();
@@ -163,7 +171,7 @@ namespace Master
                 endpoints.MapControllers();
                 endpoints.MapHub<ConnectRealTimeHub>("/signalr");
             });
-           
+
         }
 
 

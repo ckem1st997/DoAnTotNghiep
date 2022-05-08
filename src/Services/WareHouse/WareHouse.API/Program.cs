@@ -36,21 +36,25 @@ namespace WareHouse.API
                   .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                      .ConfigureWebHostDefaults(webBuilder =>
                      {
-                         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                         {
+                         //webBuilder.ConfigureKestrel(options =>
+                         //{
+                         //    options.ConfigureEndpointDefaults(defaults =>defaults.Protocols = HttpProtocols.Http2);
+                         //});
+                      //   if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                      //   {
                              webBuilder.ConfigureKestrel(options =>
-                             {
+                             {             
                                  options.Listen(IPAddress.Any, 5005, listenOptions =>
-                                 {
-                                     listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
-                                 });
+                                     {
+                                         listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+                                     });
 
                                  options.Listen(IPAddress.Any, 5006, listenOptions =>
                                  {
                                      listenOptions.Protocols = HttpProtocols.Http2;
                                  });
                              });
-                         }
+                    //     }
                          webBuilder.UseStartup<Startup>();
                      });
 

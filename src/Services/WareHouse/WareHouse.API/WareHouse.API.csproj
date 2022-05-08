@@ -4,6 +4,7 @@
     <UserSecretsId>d1b20302-8cb9-4498-a3d4-14408ecc6173</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..\..</DockerfileContext>
+    <DockerComposeProjectPath>..\..\..\..\docker-compose1.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Proto\getdatawh.proto" />

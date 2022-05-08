@@ -58,7 +58,7 @@ services:
     ports:
       - "5433:1433"
     volumes:
-      - ./storage/sqlserver:/var/opt/mssql
+      - ./storage/sqlserver:/var/opt/mssql/data
 
   redis:
     image: redis:alpine
@@ -80,13 +80,13 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionString=${DOAN_WAREHOUSE_DB:-Server=sqldata;Database=WarehouseManagement;User Id=sa;Password=Aa!0977751021}
-      - PATH_BASE=/warehouse-api
-      - GRPC_PORT=81
-      - PORT=80
+      #- ConnectionString=${DOAN_WAREHOUSE_DB:-Server=sqldata;Database=WarehouseManagement;User Id=sa;Password=Aa!0977751021}
+      #- PATH_BASE=/warehouse-api
+      #- GRPC_PORT=81
+      #- PORT=80
     ports:
       - "5005:80"
-      - "5006:81"
+      - "5006:80"
 
   master-api:
     image: ${REGISTRY:-doantotnghiep}/master:${PLATFORM:-linux}-${TAG:-latest}
@@ -100,13 +100,13 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionString=${DOAN_WAREHOUSE_DB:-Server=sqldata;Database=MasterData;User Id=sa;Password=Aa!0977751021}
-      - PATH_BASE=/warehouse-api
+      #- ConnectionString=${DOAN_WAREHOUSE_DB:-Server=sqldata;Database=MasterData;User Id=sa;Password=Aa!0977751021}
+      #- PATH_BASE=/warehouse-api
       - GRPC_PORT=81
       - PORT=80
     ports:
       - "5001:80"
-      - "5000:81"
+      - "5000:80"
    
   kong-database:
     image: postgres:9.6

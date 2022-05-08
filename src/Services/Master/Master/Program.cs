@@ -31,11 +31,15 @@ namespace Master
                     {
                         logging.AddFilter("Grpc", LogLevel.Debug);
                     })
-            // .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                // .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                    {
+                    //webBuilder.ConfigureKestrel(options =>
+                    //{
+                    //    options.ConfigureEndpointDefaults(defaults => defaults.Protocols = HttpProtocols.Http2);
+                    //});
+                    //if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    //{
                         webBuilder.ConfigureKestrel(options =>
                         {
                             options.Listen(IPAddress.Any, 5001, listenOptions =>
@@ -46,9 +50,10 @@ namespace Master
                             options.Listen(IPAddress.Any, 5000, listenOptions =>
                             {
                                 listenOptions.Protocols = HttpProtocols.Http2;
+
                             });
                         });
-                    }
+                 //   }
                     webBuilder.UseStartup<Startup>();
                 });
 

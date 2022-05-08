@@ -48,6 +48,7 @@ namespace Master.ConfigureServices.CustomConfiguration
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DDD.API", Version = "v1" });
             });
+            Console.WriteLine(configuration.GetConnectionString("MasterdataContext"));
             services.AddDbContext<MasterdataContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("MasterdataContext"),
