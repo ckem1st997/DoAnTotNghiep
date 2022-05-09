@@ -80,7 +80,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:5005
-      #- ConnectionString=${DOAN_WAREHOUSE_DB:-Server=sqldata;Database=WarehouseManagement;User Id=sa;Password=Aa!0977751021}
+      #- ConnectionString=${WarehouseManagementContext:-Server=sqlserver;Initial Catalog=WarehouseManagement;Persist Security Info=True;User ID=sa;Password=Aa!0977751021;MultipleActiveResultSets = true}
       #- PATH_BASE=/warehouse-api
       #- GRPC_PORT=81
       #- PORT=80
@@ -100,8 +100,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:5001
-      #- ConnectionString=${DOAN_WAREHOUSE_DB:-Server=sqldata;Database=MasterData;User Id=sa;Password=Aa!0977751021}
+      #- ConnectionString=${MasterdataContext:-Server=sqlserver;Initial Catalog=MasterData;Persist Security Info=True;User ID=sa;Password=Aa!0977751021;MultipleActiveResultSets = true}
       #- PATH_BASE=/warehouse-api
+      #- Redis=${ConnectionString:-redis}
       - GRPC_PORT=81
       - PORT=80
     ports:

@@ -19,7 +19,7 @@ namespace WareHouse.API.Application.Cache
                 options.ConfigurationOptions = new ConfigurationOptions
                 {
                     Password = configuration.GetSection("Redis")["Password"],
-                    EndPoints = { configuration.GetSection("Redis")["ConnectionString"] }
+                    EndPoints = { configuration.GetValue<bool>("UsingDocker")? configuration.GetSection("Redis")["ConnectionStringDocker"] : configuration.GetSection("Redis")["ConnectionString"] }
                 };
             });
             services.Configure<CacheSettings>(configuration.GetSection("CacheSettings"));

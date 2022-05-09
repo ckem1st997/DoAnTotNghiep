@@ -51,7 +51,7 @@ namespace Master.ConfigureServices.CustomConfiguration
             Console.WriteLine(configuration.GetConnectionString("MasterdataContext"));
             services.AddDbContext<MasterdataContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("MasterdataContext"),
+                options.UseSqlServer(configuration.GetValue<bool>("UsingDocker") ? configuration.GetConnectionString("MasterdataContextDocker") : configuration.GetConnectionString("MasterdataContext"),
                     sqlServerOptionsAction: sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
@@ -63,7 +63,7 @@ namespace Master.ConfigureServices.CustomConfiguration
             //  services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
             services.AddScoped<IDapper, Dapperr>();
             services.AddScoped<IUserService, UserService>();
-         //   services.AddScoped<IConnectRealTimeHub, ConnectRealTimeHub>();
+            //   services.AddScoped<IConnectRealTimeHub, ConnectRealTimeHub>();
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

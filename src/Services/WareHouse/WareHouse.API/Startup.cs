@@ -89,8 +89,7 @@ namespace WareHouse.API
                 HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
             services.AddGrpcClient<GrpcGetData.GrpcGetDataClient>(o =>
                 {
-                  //  o.Address = new Uri("http://localhost:5000");
-                    o.Address = new Uri("http://host.docker.internal:5000");
+                   // o.Address =Configuration.GetValue<bool>("UsingDocker")? new Uri("http://host.docker.internal:5000"): new Uri("http://localhost:5000");
                 }).AddInterceptor<GrpcExceptionInterceptor>(InterceptorScope.Client)
                 .ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(httpHandler));
             // Adding Authentication  

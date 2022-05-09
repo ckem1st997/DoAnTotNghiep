@@ -75,8 +75,8 @@ namespace Master
                 HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
             services.AddGrpcClient<GrpcGetDataWareHouse.GrpcGetDataWareHouseClient>(o =>
             {
-               // o.Address = new Uri("http://localhost:5006");
-                 o.Address = new Uri("http://host.docker.internal:5006");
+                o.Address = Configuration.GetValue<bool>("UsingDocker") ? new Uri("http://host.docker.internal:5006") : new Uri("http://localhost:5006");
+
             }).AddInterceptor<GrpcExceptionInterceptor>(InterceptorScope.Client).ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(httpHandler));
 
             services.Configure<PasswordHasherOptions>(option =>
@@ -158,7 +158,7 @@ namespace Master
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BasicAuth v1"));
             }
-          //  app.UseHttpsRedirection();
+            //  app.UseHttpsRedirection();
             app.UseCors("AllowAll");
 
             app.UseRouting();

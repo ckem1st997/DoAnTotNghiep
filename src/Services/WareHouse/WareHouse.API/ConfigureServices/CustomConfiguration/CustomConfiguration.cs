@@ -57,7 +57,7 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             });
             services.AddDbContext<WarehouseManagementContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("WarehouseManagementContext"),
+                options.UseSqlServer(configuration.GetValue<bool>("UsingDocker")?configuration.GetConnectionString("WarehouseManagementContextDocker"): configuration.GetConnectionString("WarehouseManagementContext"),
                     sqlServerOptionsAction: sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
