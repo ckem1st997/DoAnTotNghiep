@@ -48,10 +48,11 @@ namespace Master.ConfigureServices.CustomConfiguration
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DDD.API", Version = "v1" });
             });
-            Console.WriteLine(configuration.GetConnectionString("MasterdataContext"));
+            var sqlConnect = configuration.GetValue<bool>("UsingDocker") ? configuration.GetConnectionString("MasterdataContextDocker") : configuration.GetConnectionString("MasterdataContext");
+            Console.WriteLine(sqlConnect);
             services.AddDbContext<MasterdataContext>(options =>
             {
-                options.UseSqlServer(configuration.GetValue<bool>("UsingDocker") ? configuration.GetConnectionString("MasterdataContextDocker") : configuration.GetConnectionString("MasterdataContext"),
+                options.UseSqlServer(sqlConnect,
                     sqlServerOptionsAction: sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);

@@ -55,9 +55,10 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WH.API", Version = "v1" });
             });
+            var sqlConnect = configuration.GetValue<bool>("UsingDocker") ? configuration.GetConnectionString("WarehouseManagementContextDocker") : configuration.GetConnectionString("WarehouseManagementContext");
             services.AddDbContext<WarehouseManagementContext>(options =>
             {
-                options.UseSqlServer(configuration.GetValue<bool>("UsingDocker")?configuration.GetConnectionString("WarehouseManagementContextDocker"): configuration.GetConnectionString("WarehouseManagementContext"),
+                options.UseSqlServer(sqlConnect,
                     sqlServerOptionsAction: sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
@@ -68,7 +69,12 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
                        ServiceLifetime.Scoped  //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
                    );
             services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
-            services.AddScoped<IDapper, Dapperr>();
+            services.AddScoped<IDapper, Dapperr>(sp =>
+            {
+                var config = sp.GetRequiredService<IConfiguration>();
+                return new Dapperr(config);
+
+            });
             services.AddScoped<IFakeData, FakeData>();
             services.AddScoped<IUserSevice, UserSevice>();
             services.AddScoped<ISignalRService, SignalRService>();

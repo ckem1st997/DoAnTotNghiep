@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,7 +22,7 @@ namespace Master
             var configuration = GetConfiguration();
 
             //Log.Logger = CreateSerilogLogger(configuration);
-            //Log.Information("Starting up");
+            Log.Information("Starting up");
             CreateHostBuilder(args).Build().Run();
         }
 

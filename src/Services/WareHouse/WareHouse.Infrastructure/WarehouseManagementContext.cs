@@ -18,7 +18,7 @@ namespace WareHouse.Infrastructure
     public class WarehouseManagementContext : DbContext, IUnitOfWork
     {
         public const string DEFAULT_SCHEMA = "WarehouseManagement";
-        public const string STRING_CONNECT = @"Data Source=localhost, 5433;Initial Catalog=WarehouseManagement;Persist Security Info=True;User ID=sa;Password=Aa!0977751021";
+        public const string STRING_CONNECT = @"Server=sqlserver;Initial Catalog=WarehouseManagement;Persist Security Info=True;User ID=sa;Password=Aa!0977751021;MultipleActiveResultSets = true";
         public virtual DbSet<Audit> Audits { get; set; }
         public virtual DbSet<AuditCouncil> AuditCouncils { get; set; }
         public virtual DbSet<AuditDetail> AuditDetails { get; set; }
