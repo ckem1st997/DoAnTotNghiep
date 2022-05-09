@@ -117,7 +117,7 @@ services:
         POSTGRES_DB: kong
         POSTGRES_PASSWORD: kong
     ports:
-        - "1000:5432"
+        - "5432:5432"
     volumes:
         - ./storage/kong-database:/var/lib/postgresql/data
     networks:
@@ -161,10 +161,10 @@ services:
         KONG_ADMIN_ERROR_LOG: /dev/stderr
         KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
     ports:
-        - "1001:8000"
-        - "1002:8443"
-        - "1003:8001"
-        - "1004:8444"
+        - "8000:8000"
+        - "8443:8443"
+        - "8001:8001"
+        - "8444:8444"
     
   konga-prepare:
       image: pantsel/konga
@@ -198,7 +198,7 @@ services:
           KONGA_HOOK_TIMEOUT: 120000
           NODE_ENV: production  
       ports:
-          - "1005:1337"
+          - "1337:1337"
       volumes:
           - ./storage/konga:/konga
 
