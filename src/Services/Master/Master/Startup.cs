@@ -129,7 +129,7 @@ namespace Master
             services.AddCors(o => o.AddPolicy("AllowAll", builder =>
             {
                 builder.AllowAnyOrigin()
-                .WithOrigins("http://localhost:4200")
+                .WithOrigins("http://localhost:4200,http://localhost:8000")
                        .AllowAnyMethod()
                        .AllowAnyHeader()
                        .SetIsOriginAllowed(host => true)
@@ -159,10 +159,10 @@ namespace Master
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BasicAuth v1"));
             }
             //  app.UseHttpsRedirection();
-            app.UseCors("AllowAll");
 
             app.UseRouting();
             app.UseGrpcWeb();
+            app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
