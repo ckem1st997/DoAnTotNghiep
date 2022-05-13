@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using Autofac.Extensions.DependencyInjection;
 using System.Net;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Serilog.Sinks.Elasticsearch;
 
 namespace WareHouse.API
 {
@@ -40,21 +41,21 @@ namespace WareHouse.API
                          //{
                          //    options.ConfigureEndpointDefaults(defaults =>defaults.Protocols = HttpProtocols.Http2);
                          //});
-                      //   if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                      //   {
-                             webBuilder.ConfigureKestrel(options =>
-                             {             
-                                 options.Listen(IPAddress.Any, 5005, listenOptions =>
-                                     {
-                                         listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
-                                     });
-
-                                 options.Listen(IPAddress.Any, 5006, listenOptions =>
+                         //   if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                         //   {
+                         webBuilder.ConfigureKestrel(options =>
+                         {
+                             options.Listen(IPAddress.Any, 5005, listenOptions =>
                                  {
-                                     listenOptions.Protocols = HttpProtocols.Http2;
+                                     listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
                                  });
+
+                             options.Listen(IPAddress.Any, 5006, listenOptions =>
+                             {
+                                 listenOptions.Protocols = HttpProtocols.Http2;
                              });
-                    //     }
+                         });
+                         //     }
                          webBuilder.UseStartup<Startup>();
                      });
 
@@ -66,13 +67,15 @@ namespace WareHouse.API
             var logstashUrl = configuration["Serilog:LogstashgUrl"];
             return new LoggerConfiguration()
                 .MinimumLevel.Verbose()
-                .Enrich.WithProperty("ApplicationContext", "Products")
+                .Enrich.WithProperty("ApplicationContext", "WareHouse")
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 //https://datalust.co/seq
                 .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl, apiKey: "0QEfAbE4THZTcUu6I7bQ")
-                //  .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:8080" : logstashUrl)
-                .ReadFrom.Configuration(configuration)
+               .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl))
+               {
+                   ModifyConnectionSettings = x => x.BasicAuthentication("elastic", "changeme"),
+               }).ReadFrom.Configuration(configuration)
                 .CreateLogger();
         }
 

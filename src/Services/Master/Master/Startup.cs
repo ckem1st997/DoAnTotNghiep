@@ -141,6 +141,14 @@ namespace Master
                 // Global filters will run first
                 options.AddFilter<CustomFilter>();
             });
+            services.AddLogging(loggingBuilder =>
+            {
+                //   loggingBuilder.UseSerilog(Configuration);
+                var seqServerUrl = Configuration["Serilog:SeqServerUrl"];
+
+                loggingBuilder.AddSeq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl,
+                    apiKey: "0QEfAbE4THZTcUu6I7bQ");
+            });
             // kafka pro by sage
             //    services.AddSingleton<IKafKaConnection, KafKaConnection>();
             //   services.AddEventBus(Configuration);
