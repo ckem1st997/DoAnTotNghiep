@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using WareHouse.API.Application.Cache;
+using WareHouse.API.Application.Cache.CacheName;
 
 namespace WareHouse.API.Application.Behaviors
 {
@@ -19,13 +20,15 @@ namespace WareHouse.API.Application.Behaviors
         private readonly ILogger _logger;
         private readonly CacheSettings _settings;
         private readonly IConfiguration _configuration;
+        private readonly ICacheExtension _cacheExtension;
 
-        public CachingBehavior(IConfiguration configuration,IDistributedCache cache, ILogger<TResponse> logger, IOptions<CacheSettings> settings)
+        public CachingBehavior(ICacheExtension cacheExtension, IConfiguration configuration, IDistributedCache cache, ILogger<TResponse> logger, IOptions<CacheSettings> settings)
         {
             _cache = cache;
             _logger = logger;
             _settings = settings.Value;
-            _configuration=configuration;
+            _configuration = configuration;
+            _cacheExtension = cacheExtension;
         }
 
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
@@ -33,9 +36,12 @@ namespace WareHouse.API.Application.Behaviors
         {
             TResponse response;
             // nếu không cache thì sẽ chạy đến request tiếp theo, ở đây là Handle Mediatr
-            if (request.BypassCache || _configuration.GetValue<bool>("UsingRedis")==false)
+            // nếu không connect được thì lấy data ở dưới db
+            if (request.BypassCache || !_cacheExtension.IsConnected)
+            {
+                _logger.LogInformation("Redis not connected !");
                 return await next();
-
+            }
             // nếu data null thì chạy đến request tiếp theo để lấy data và gán vào cache
             var cachedResponse = await _cache.GetAsync(request.CacheKey, cancellationToken);
             if (cachedResponse is not null)

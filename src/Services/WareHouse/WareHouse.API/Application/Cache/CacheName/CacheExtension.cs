@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 
 namespace WareHouse.API.Application.Cache.CacheName
@@ -11,29 +12,64 @@ namespace WareHouse.API.Application.Cache.CacheName
     public class CacheExtension : ICacheExtension
     {
         IConfiguration _configuration { get; set; }
+        private readonly ILogger<CacheExtension> _logger;
         private readonly IDistributedCache _cache;
-
-        public CacheExtension(IConfiguration configuration, IDistributedCache cache)
+        private readonly ConnectionMultiplexer _connectionMultiplexer;
+        public CacheExtension(IConfiguration configuration, IDistributedCache cache, ILogger<CacheExtension> logger)
         {
             _configuration = configuration;
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _connectionMultiplexer = GetConnectRedis();
         }
+
+        public bool IsConnected
+        {
+            get { return _connectionMultiplexer!=null&& _connectionMultiplexer.IsConnected; }
+        }
+
+
 
         public IEnumerable<string> GetAllNameKey()
         {
             List<string> listKeys = new List<string>();
-            using ConnectionMultiplexer redis =
-                ConnectionMultiplexer.Connect(
-                    $"{_configuration.GetSection("Redis")["ConnectionString"]},allowAdmin=true");
-            var keys = redis.GetServer("localhost", int.Parse(_configuration.GetSection("Redis")["Port"])).Keys();
-            listKeys.AddRange(keys.Select(key => (string)key).ToList());
+            if (IsConnected)
+            {
+                var keys = _connectionMultiplexer.GetServer(_connectionMultiplexer.GetEndPoints().FirstOrDefault()).Keys();
+                listKeys.AddRange(keys.Select(key => (string)key).ToList());
+            }
             return listKeys;
+        }
+
+
+        /// <summary>
+        /// connect to redis
+        /// </summary>
+        /// <returns></returns>
+        private ConnectionMultiplexer GetConnectRedis()
+        {
+            try
+            {
+                  var getConnectString = _configuration.GetValue<bool>("UsingDocker") ? _configuration.GetSection("Redis")["ConnectionStringDocker"] : _configuration.GetSection("Redis")["ConnectionString"];
+                //  var getConnectString = _configuration.GetSection("Redis")["ConnectionStringDocker"];
+                return ConnectionMultiplexer.Connect(
+        $"{getConnectString},allowAdmin=true");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Can not connect to Redis server !");
+                _logger.LogError(ex.Message);
+                return null;
+            }
+
         }
 
         public IEnumerable<string> GetAllNameKeyByContains(string contains)
         {
             if (contains == null)
                 throw new ArgumentNullException(nameof(contains));
+            if (GetAllNameKey() == null)
+                return new List<string>();
             var list = GetAllNameKey().Where(x => x.Contains(contains));
             return list;
         }
@@ -41,24 +77,24 @@ namespace WareHouse.API.Application.Cache.CacheName
         public async Task RemoveAllKeys()
         {
             var list = GetAllNameKey();
-            foreach (var item in list)
-            {
-                await _cache.RemoveAsync(item);
-            }
+            if (list != null)
+
+                foreach (var item in list)
+                {
+                    await _cache.RemoveAsync(item);
+                }
         }
 
         public async Task RemoveAllKeysBy(string contains)
         {
             if (contains == null)
                 throw new ArgumentNullException(nameof(contains));
-            if (_configuration.GetValue<bool>("UsingRedis") == true)
-            {
-                var list = GetAllNameKeyByContains(contains);
+            var list = GetAllNameKeyByContains(contains);
+            if (list != null)
                 foreach (var item in list)
                 {
                     await _cache.RemoveAsync(item);
                 }
-            }
 
         }
     }

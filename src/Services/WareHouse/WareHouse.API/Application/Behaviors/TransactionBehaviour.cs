@@ -35,9 +35,8 @@ namespace WareHouse.API.Application.Behaviors
                 {
                     return await next();
                 }
-
+                
                 var strategy = _dbContext.Database.CreateExecutionStrategy();
-
                 await strategy.ExecuteAsync(async () =>
                 {
                     Guid transactionId;

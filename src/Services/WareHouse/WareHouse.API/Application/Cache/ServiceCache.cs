@@ -13,18 +13,19 @@ namespace WareHouse.API.Application.Cache
             services.AddDistributedMemoryCache();
             // Register the RedisCache service
             //  services.AddMemoryCache();
+            var stringConnect = configuration.GetValue<bool>("UsingDocker") ? configuration.GetSection("Redis")["ConnectionStringDocker"] : configuration.GetSection("Redis")["ConnectionString"];
+            var connect = new ConfigurationOptions
+            {
+                Password = configuration.GetSection("Redis")["Password"],
+                EndPoints = { stringConnect }
+            };
             services.AddStackExchangeRedisCache(options =>
             {
                 // options.Configuration = configuration.GetSection("Redis")["ConnectionString"];
-                options.ConfigurationOptions = new ConfigurationOptions
-                {
-                    Password = configuration.GetSection("Redis")["Password"],
-                    EndPoints = { configuration.GetValue<bool>("UsingDocker")? configuration.GetSection("Redis")["ConnectionStringDocker"] : configuration.GetSection("Redis")["ConnectionString"] }
-                };
+                options.ConfigurationOptions = connect;
             });
             services.Configure<CacheSettings>(configuration.GetSection("CacheSettings"));
-            services.AddScoped<ICacheExtension,CacheExtension>();
-            //services.Add(ServiceDescriptor.Singleton<IDistributedCache, RedisCache>());
+            services.AddScoped<ICacheExtension, CacheExtension>();
         }
     }
 }

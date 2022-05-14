@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,12 +28,12 @@ namespace WareHouse.API.Filters
             this.logger = logger;
         }
 
+
         public void OnException(ExceptionContext context)
         {
             logger.LogError(new EventId(context.Exception.HResult),
                 context.Exception,
                 context.Exception.Message);
-
             if (context.Exception.GetType() == typeof(WareHouseDomainException))
             {
                 var problemDetails = new ValidationProblemDetails()
@@ -47,12 +48,29 @@ namespace WareHouse.API.Filters
                 context.Result = new BadRequestObjectResult(problemDetails);
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
+            else if (context.Exception.GetType() == typeof(RedisConnectionException))
+            {
+                logger.LogError("Redis not connected !");
+                logger.LogError(context.Exception.Message.ToString());
+                var problemDetails = new ValidationProblemDetails()
+                {
+                    Instance = context.HttpContext.Request.Path,
+                    Status = StatusCodes.Status400BadRequest,
+                    Detail = "Please refer to the errors property for additional details."
+                };
+
+                problemDetails.Errors.Add("RedisConnect", new string[] { context.Exception.Message.ToString() });
+
+                context.Result = new BadRequestObjectResult(problemDetails);
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
             else
             {
-                var jsonResult=new ResultMessageResponse{
-                    message="Có lỗi ngoài ý muốn xảy ra, xin vui lòng liên hệ bộ phận liên quan !",
-                    httpStatusCode=(int)HttpStatusCode.InternalServerError,
-                    success=false
+                var jsonResult = new ResultMessageResponse
+                {
+                    message = "Có lỗi ngoài ý muốn xảy ra, xin vui lòng liên hệ bộ phận liên quan !",
+                    httpStatusCode = (int)HttpStatusCode.InternalServerError,
+                    success = false
                 };
 
                 if (env.IsDevelopment())

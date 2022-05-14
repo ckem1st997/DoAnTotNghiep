@@ -33,5 +33,7 @@ namespace WareHouse.API.Application.Cache.CacheName
         /// <param name="contains">Remove by</param>
         /// <returns></returns>
         Task RemoveAllKeysBy(string contains);
+
+        public bool IsConnected { get; }
     }
 }

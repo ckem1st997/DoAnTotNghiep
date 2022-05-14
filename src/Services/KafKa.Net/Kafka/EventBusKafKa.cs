@@ -18,9 +18,6 @@ namespace KafKa.Net.Kafka
     {
         public static void AddEventBus(this IServiceCollection services, IConfiguration configuration)
         {
-
-
-
             services.AddSingleton<IEventBus, EventKafKa>(
                 sp =>
             {
