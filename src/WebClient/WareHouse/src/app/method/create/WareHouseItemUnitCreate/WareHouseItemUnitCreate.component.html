@@ -1,0 +1,30 @@
+<div mat-dialog-title>{{title}}</div>
+
+<div *ngIf="dt">
+  <form class="container" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group d-none">
+      <mat-label class="form-label">Id</mat-label>
+      <input type="hidden" formControlName="id" class="form-control" />
+      <input type="hidden" formControlName="itemId" class="form-control" />
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Đơn vị tính</mat-label>
+      <select formControlName="unitId" class="form-select col">
+        <option class="s-c option" *ngFor="let state of listDropDown.data" [ngValue]="state.id">
+          {{ state.unitName }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group row mb-1 ">
+      <mat-label class="form-label col-3 ">Tỉ lệ</mat-label>
+      <input type="number" formControlName="convertRate" class="form-control col" />
+    </div>
+    <div style="margin-top: 10px;float: right;">
+      <button type="submit" mat-button mat-raised-button cdkFocusInitial color="primary">Save</button>
+      <button style="margin-left: 20px;" mat-button type="button" mat-raised-button (click)="onNoClick()">Huỷ
+        bỏ</button>
+
+    </div>
+  </form>
+</div>

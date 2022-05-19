@@ -1,0 +1,155 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+section {
+  display: table;
+}
+
+.example-label {
+  display: table-cell;
+  font-size: 14px;
+  margin-left: 8px;
+  min-width: 120px;
+}
+
+.example-button-row {
+  display: table-cell;
+  width: 490px;
+}
+
+.example-button-row .mat-button-base {
+  margin: 8px 8px 8px 0;
+}
+
+.example-flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.example-button-container {
+  display: flex;
+  justify-content: center;
+  width: 120px;
+}
+.link-icon {
+  display: grid;
+  font-size: 12px;
+  color: #fff;
+  justify-items: center;
+  font-family: Tahoma, "Segoe UI", Tahoma, "Helvetica Neue", Helvetica, Arial,
+    "sans-serif";
+  overflow: hidden;
+  text-align: center;
+  font-size: 11px;
+  margin: 0;
+  white-space: nowrap;
+  line-height: 26px;
+  text-overflow: ellipsis;
+  width: 75px;
+  padding-top: 5px;
+  z-index: 1001;
+}
+.link-icon i{
+  height:20px;
+}
+.icon-link {
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  padding: 5px 0;
+  line-height: 20px;
+}
+.header-icon-link {
+  margin-right: 35px;
+}
+header div.d-flex.menu-left > a.link-icon.active{
+  background: rgba(255,255,255,.1) !important;
+  color: #fff !important;
+}
+.link-icon.header-a:hover{
+  background: rgba(255,255,255,.1) !important;
+  color: #fff !important;
+}
+.mat-menu-item {
+height: 28px;
+font-size: 12px;
+line-height: 25px;
+}
+.navbar .hor-menu {
+  margin: 0;
+  float: left;
+}
+.count-notication{
+  position: absolute;
+  background: red;
+  height: 18px;
+  width: 25px;
+  border-radius: 7px;
+  font-weight: 500;
+  top: 3px;
+  right: 10px;
+  z-index: 9;
+  padding-top: 3px;
+  font-size: .8125rem;
+    line-height: 1;
+}
+.notication-list{
+  position: absolute;
+  top: 68px;
+  width: 360px;
+  height: 50vh;
+  z-index: 99999;
+  background-color: antiquewhite;
+  right: 10px;
+  border-radius: 8px;
+overflow: auto;
+}
+.notication-title{
+  line-height: 1.1667;
+  font-weight: 500;
+  margin-top: 10px;
+}
+/* a.notication-a:hover .notication-list{
+background-color: aqua;
+} */
+.notication-icon{
+  font-size: 28px;
+}
+.margin-left-10{
+  margin-left: 10px;
+}
+.margin-left-18{
+  margin-left: 18px;
+}
+.notication-card{
+  display: flex;
+}
+.notication-list-card{
+  padding-left: 20px;
+}
+.notication-list-card-title{
+  font-weight: 500;
+}
+.notication-after .notication-card{
+  margin-top: 15px;
+}
+.notication-list-card-time{
+ color:hsl(214, 89%, 52%);
+ font-weight: 500;
+}
+.color-new{
+  color: darkorchid;
+}
+.color-create{
+  color: chocolate;
+}
+.color-update{
+  color: green;
+}
+.color-delete{
+  color: red;
+}

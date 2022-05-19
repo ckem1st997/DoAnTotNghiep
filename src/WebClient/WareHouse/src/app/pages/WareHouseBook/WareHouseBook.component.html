@@ -1,0 +1,145 @@
+<notifier-container></notifier-container>
+<div class=" d-flex justify-content-between" style="margin-top: 10px;">
+  <div class="breadcrumb">
+    <a class="breadcrumb__step breadcrumb__step--active"routerLink="/wh">Trang chủ</a>
+    <a class="breadcrumb__step" routerLink="/wh/warehouse-item">Vật tư</a>
+    <a class="breadcrumb__step" routerLink="/wh/warehouse">Kho</a>
+  </div>
+  <div class="">
+    <div class="">
+      <button style="margin:5px;" (click)="searchQueryDialog()" mat-raised-button color="primary">
+        <mat-icon class="mat-18">search</mat-icon>Tìm
+        kiếm
+      </button>
+      <button style="margin:5px;" mat-raised-button color="success" (click)="createInward()">
+        <mat-icon class="mat-18">add</mat-icon>Nhập kho
+      </button>
+      <button style="margin:5px;" mat-raised-button color="accent" (click)="createOutward()">
+        <mat-icon class="mat-18">logout</mat-icon>Xuất kho
+      </button>
+      <button style="margin:5px;" mat-raised-button color="warn" (click)="openDialogDeleteAll()">
+        <mat-icon class="mat-18">delete</mat-icon>Xóa (Đã chọn)
+      </button>
+    </div>
+  </div>
+</div>
+<div style="width: 100%; height: 80%;border-top: 1px solid #b49c9c;">
+  <as-split direction="horizontal">
+    <as-split-area [size]="15">
+      <div class="d-flex justify-content-center" style="    padding-right: 75px;">
+        <button mat-raised-button (click)="GetAll()">Tất cả</button>
+      </div>
+
+      <mat-tree id="treeview" [dataSource]="dataSourceTreee" [treeControl]="treeControl">
+        <!-- This is the tree node template for leaf nodes -->
+        <!-- This is the tree node template for leaf nodes -->
+        <mat-tree-node *matTreeNodeDef="let node">
+          <!-- use a disabled button to provide padding for tree leaf -->
+          <button mat-icon-button disabled (click)="GetActive(node)"></button>
+          <button mat-raised-button [id]="node.key" (click)="GetActive(node)">{{node.name}}</button>
+        </mat-tree-node>
+        <!-- This is the tree node template for expandable nodes -->
+        <mat-tree-node *matTreeNodeDef="let node;when: hasChild">
+          <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+            </mat-icon>
+          </button>
+          <button mat-raised-button [id]="node.key" (click)="GetActive(node)">{{node.name}}</button>
+        </mat-tree-node>
+      </mat-tree>
+    </as-split-area>
+    <as-split-area [size]="85">
+      <div id="viewcheck" [hidden]="!checkSizeWindows">
+
+        <div class="" style="overflow: auto;height: 77vh;">
+          <table cdk-table matSort (matSortChange)="announceSortChange($event)" class="" mat-table
+            [dataSource]="dataSource">
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                  [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                  [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                </mat-checkbox>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef> </th>
+              <td mat-cell *matCellDef="let element">
+                {{element.id}}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="type">
+              <th style="width:110px;text-align: center;" mat-header-cell *matHeaderCellDef>Loại phiếu</th>
+              <td style="text-align: center;" mat-cell *matCellDef="let element"> {{element.type}} </td>
+            </ng-container>
+            <ng-container matColumnDef="voucherCode">
+              <th style="width:110px;text-align: center;" mat-header-cell *matHeaderCellDef>Số chứng từ </th>
+              <td style="text-align: center;" mat-cell *matCellDef="let element"> {{element.voucherCode}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="voucherDate">
+              <th style="width:110px;text-align: center;" mat-header-cell *matHeaderCellDef> Ngày tạo</th>
+              <td style="text-align: center;" mat-cell *matCellDef="let element">
+                {{element.voucherDate.split('T')[0].split('-')[2]}}-{{element.voucherDate.split('T')[0].split('-')[1]}}-
+                {{element.voucherDate.split('T')[0].split('-')[0]}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="wareHouseName">
+              <th style="width:139px;text-align: center;" mat-header-cell *matHeaderCellDef>Kho </th>
+              <td style="text-align: center;" mat-cell *matCellDef="let element"> {{element.wareHouseName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="deliver">
+              <th style="width:129px;text-align: center;" mat-header-cell *matHeaderCellDef>Bên giao</th>
+              <td style="text-align: center;" mat-cell *matCellDef="let element"> {{element.deliver}} </td>
+            </ng-container>
+            <ng-container matColumnDef="receiver">
+              <th style="width:129px;text-align: center;" mat-header-cell *matHeaderCellDef>Bên nhận</th>
+              <td style="text-align: center;" mat-cell *matCellDef="let element"> {{element.receiver}} </td>
+            </ng-container>
+            <ng-container matColumnDef="reason">
+              <th style="width:279px;text-align: center;" mat-header-cell *matHeaderCellDef>Lí do</th>
+              <td style="text-align: center;" mat-cell *matCellDef="let element"> {{element.reason}} </td>
+            </ng-container>
+            <ng-container matColumnDef="createdBy">
+              <th style="width:129px;text-align: center;" mat-header-cell *matHeaderCellDef>Người tạo</th>
+              <td style="text-align: center;" mat-cell *matCellDef="let element"> {{getName(element.createdBy)}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="modifiedBy">
+              <th style="width:129px;text-align: center;" mat-header-cell *matHeaderCellDef>Người sửa</th>
+              <td style="text-align: center;" mat-cell *matCellDef="let element"> {{getName(element.modifiedBy)}} </td>
+            </ng-container>
+            <ng-container matColumnDef="method">
+              <th mat-header-cell *matHeaderCellDef> Chức năng </th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="success" (click)="openDetails(element)">
+                  <mat-icon class="mat-18">details</mat-icon>
+                </button>
+                <button mat-icon-button color="primary" (click)="openDialog(element)">
+                  <mat-icon class="mat-18">edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="openDialogDelelte(element)">
+                  <mat-icon class="mat-18">delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+        <mat-paginator style="height: 45px;" #paginator [length]="totalRows" [pageIndex]="currentPage"
+          [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)" showFirstLastButtons
+          aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+    </as-split-area>
+  </as-split>
+</div>

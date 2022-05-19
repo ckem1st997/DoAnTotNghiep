@@ -1,0 +1,117 @@
+<div mat-dialog-title>{{title}}</div>
+<div>
+  <form class="container" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group d-none">
+      <mat-label class="form-label">Id</mat-label>
+      <input type="text" formControlName="id" class="form-control" />
+    </div>
+    <div class="form-group d-none">
+      <mat-label class="form-label">outwardId</mat-label>
+      <input type="text" formControlName="outwardId" class="form-control" />
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Vật tư</mat-label>
+      <select (change)="changItem($event)" formControlName="itemId" class="form-select col" required>
+        <option class="s-c option" *ngFor="let state of dt.wareHouseItemDTO" [ngValue]="state.id">
+          {{ state.name }}
+        </option>
+      </select>
+
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Đơn vị tính</mat-label>
+      <select formControlName="unitId" class="form-select col">
+        <option class="s-c option" *ngFor="let state of dt.unitDTO" [ngValue]="state.id">
+          {{ state.unitName }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group row mb-1">
+      <mat-label class="form-label col-3">Số lượng</mat-label>
+      <input (keyup)="changAmount()"  type="number" formControlName="uiquantity" class="form-control col" aria-required="true"/>
+    </div>
+    <div class="form-group row mb-1">
+      <mat-label class="form-label col-3">Đơn giá</mat-label>
+      <input  type="number" formControlName="uiprice" class="form-control col" />
+    </div>
+    <div class="form-group row mb-1">
+      <mat-label class="form-label col-3">Thành tiền</mat-label>
+      <input type="number" formControlName="amount" class="form-control col" />
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Bộ phận</mat-label>
+      <select formControlName="departmentId" class="form-select col">
+        <option class="s-c option" *ngFor="let state of dt.getDepartmentDTO" [ngValue]="state.id">
+          {{ state.name }}
+        </option>
+      </select>
+
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Nhân viên</mat-label>
+      <select formControlName="employeeId" class="form-select col">
+        <option class="s-c option" *ngFor="let state of dt.getEmployeeDTO" [ngValue]="state.id">
+          {{ state.name }}
+        </option>
+      </select>
+
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Trạm</mat-label>
+      <select formControlName="stationId" class="form-select col">
+        <option class="s-c option" *ngFor="let state of dt.getStationDTO" [ngValue]="state.id">
+          {{ state.name }}
+        </option>
+      </select>
+
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Dự án</mat-label>
+      <select formControlName="projectId" class="form-select col">
+        <option class="s-c option" *ngFor="let state of dt.getProjectDTO" [ngValue]="state.id">
+          {{ state.name }}
+        </option>
+      </select>
+
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">CID</mat-label>
+      <select formControlName="customerId" class="form-select col">
+        <option class="s-c option" *ngFor="let state of dt.getCustomerDTO" [ngValue]="state.id">
+          {{ state.name }}
+        </option>
+      </select>
+
+    </div>
+    <!-- <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Tài khoản nợ</mat-label>
+      <select formControlName="accountMore" class="form-select col">
+        <option class="s-c option" *ngFor="let state of dt.getAccountDTO" [ngValue]="state.id">
+          {{ state.name }}
+        </option>
+      </select>
+
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Tài khoản có</mat-label>
+      <select formControlName="accountYes" class="form-select col">
+        <option class="s-c option" *ngFor="let state of dt.getAccountDTO" [ngValue]="state.id">
+          {{ state.name }}
+        </option>
+      </select>
+
+    </div> -->
+    <div class="form-group row">
+      <mat-label class="form-label col-3">Serial</mat-label>
+      <tag-input [ngModel]="serialWareHousesShow" style="padding-left: 0;" theme='bootstrap' class="col" formControlName="serialWareHouses" [identifyBy]="'id'" [displayBy]="'serial'" [maxItems]='5'>
+      </tag-input>
+    </div>
+
+    <div style="margin-top: 10px;float: right;">
+      <button type="submit" mat-button mat-raised-button cdkFocusInitial color="primary">Save</button>
+      <button style="margin-left: 20px;" mat-button type="button" mat-raised-button (click)="onNoClick()">Huỷ
+        bỏ</button>
+
+    </div>
+  </form>
+</div>

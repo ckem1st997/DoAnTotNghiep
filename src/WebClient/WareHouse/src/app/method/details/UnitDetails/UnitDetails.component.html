@@ -1,0 +1,24 @@
+<div mat-dialog-title>{{title}}</div>
+<div>
+  <form class="container" [formGroup]="form">
+    <div class="form-group d-none">
+      <mat-label class="form-label">Id</mat-label>
+      <input type="text" readonly formControlName="id" class="form-control" /> 
+    </div>
+    <div class="form-group row mb-1">
+      <mat-label class="form-label col-3">Tên</mat-label>
+      <input type="text" readonly formControlName="unitName" class="form-control col" /> 
+    </div>
+  
+    <div class="form-group row mb-1 ">
+      <mat-label class="form-label col-3 ">Trạng thái</mat-label>
+      <!-- <input type="checkbox" formControlName="inactive" class="form-check-input" />  -->
+      <mat-checkbox readonly style="padding-left: 0;" class="example-margin col"formControlName="inactive"></mat-checkbox>
+    </div>
+    <div  style="margin-top: 10px;float: right;">
+      <button style="margin-left: 20px;" mat-button type="button"  mat-raised-button  (click)="onNoClick()">Huỷ bỏ</button>
+     
+    </div>
+  </form>
+</div>
+

@@ -1,0 +1,55 @@
+table {
+    width: 100%;
+  }
+  table {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    min-width: 500px;
+  }
+  
+  th.mat-header-cell {
+    text-align: left;
+    max-width: 300px;
+  }
+  .mat-row:hover .mat-cell {
+    border-color: currentColor;
+  }
+  .mat-column-id{
+    display: none;
+  }
+  .mat-column-parentId{
+    display: none;
+  }
+  
+  .activeButtonTreeView{
+    background-color: aqua;;
+  }
+  .col-8 {
+    flex: 0 0 auto;
+    width: 66.66666667% !important;
+  }
+  .col-7 {
+  width: 58.33333333%;
+  }
+  input.form-control, select {
+  height: 23px !important;
+  font-size: 10.9px !important;
+  }
+  .form-label {
+  font-weight: 500;
+  }
+  
+  .example-table-container {
+  position: relative;
+  min-height: 200px;
+  max-height: 400px;
+  overflow: auto;
+  }
+  .example-viewport {
+  height: 100%;
+  }
+  table tr td{
+  height: 50px;
+  }
+  

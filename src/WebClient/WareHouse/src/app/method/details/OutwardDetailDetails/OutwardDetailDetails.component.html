@@ -1,0 +1,94 @@
+<div mat-dialog-title>{{title}}</div>
+<div>
+  <form class="container" [formGroup]="form" >
+    <div class="form-group d-none">
+      <mat-label class="form-label">Id</mat-label>
+      <input type="text" formControlName="id" class="form-control" />
+    </div>
+    <div class="form-group d-none">
+      <mat-label class="form-label">inwardId</mat-label>
+      <input type="text" formControlName="inwardId" class="form-control" />
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Vật tư</mat-label>
+      <select [attr.disabled]="true" formControlName="itemId" class="form-select col" required>
+        <option class="s-c option" *ngFor="let state of dt.wareHouseItemDTO" [ngValue]="state.id">
+          {{ state.name }}
+        </option>
+      </select>
+
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Đơn vị tính</mat-label>
+      <select [attr.disabled]="true" formControlName="unitId" class="form-select col">
+        <option class="s-c option" *ngFor="let state of dt.unitDTO" [ngValue]="state.id">
+          {{ state.unitName }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group row mb-1">
+      <mat-label class="form-label col-3">Số lượng</mat-label>
+      <input [attr.disabled]="true" type="number" formControlName="uiquantity" class="form-control col" aria-required="true"/>
+    </div>
+    <div class="form-group row mb-1">
+      <mat-label class="form-label col-3">Đơn giá</mat-label>
+      <input [attr.disabled]="true"  type="number" formControlName="uiprice" class="form-control col" />
+    </div>
+    <div class="form-group row mb-1">
+      <mat-label class="form-label col-3">Thành tiền</mat-label>
+      <input [attr.disabled]="true" type="text" formControlName="amount" class="form-control col" />
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Bộ phận</mat-label>
+      <input [attr.disabled]="true" type="text" formControlName="departmentName" class="form-control col" />
+
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Nhân viên</mat-label>
+      <input [attr.disabled]="true" type="text" formControlName="employeeName" class="form-control col" />
+
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Trạm</mat-label>
+      <input [attr.disabled]="true" type="text" formControlName="stationName" class="form-control col" />
+
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Dự án</mat-label>
+      <input [attr.disabled]="true" type="text" formControlName="projectName" class="form-control col" />
+
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">CID</mat-label>
+      <input [attr.disabled]="true" type="text" formControlName="customerName" class="form-control col" />
+
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Tài khoản nợ</mat-label>
+      <select [attr.disabled]="true" formControlName="accountMore" class="form-select col">
+        <option class="s-c option" *ngFor="let state of dt.getAccountDTO" [ngValue]="state.id">
+          {{ state.name }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Tài khoản có</mat-label>
+      <select [attr.disabled]="true" formControlName="accountYes" class="form-select col">
+        <option class="s-c option" *ngFor="let state of dt.getAccountDTO" [ngValue]="state.id">
+          {{ state.name }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group row">
+      <mat-label class="form-label col-3">Serial</mat-label>
+      <tag-input [attr.disabled]="true" [ngModel]="serialWareHousesShow" style="padding-left: 0;" theme='bootstrap' class="col" formControlName="serialWareHouses" [identifyBy]="'id'" [displayBy]="'serial'" [maxItems]='5'>
+      </tag-input>
+    </div>
+
+    <div style="margin-top: 10px;float: right;">
+      <button style="margin-left: 20px;" mat-button type="button" mat-raised-button (click)="onNoClick()">Huỷ
+        bỏ</button>
+
+    </div>
+  </form>
+</div>

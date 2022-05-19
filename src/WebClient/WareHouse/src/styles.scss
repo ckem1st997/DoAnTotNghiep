@@ -1,0 +1,247 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~angular-notifier/styles";
+@import '~@angular/cdk/overlay-prebuilt.css';
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.page-container {
+  height: 100%;
+}
+
+.page-container {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.page-container .page-content-wrapper .page-content .page-data {
+  position: relative;
+  height: 100%;
+  padding-top: 40px;
+}
+
+thead[role=rowgroup] {
+  position: sticky;
+  top: 0px;
+  z-index: 999;
+}
+
+.mat-paginator {
+  position: absolute;
+  bottom: 0;
+}
+
+.d-none-0 {
+  display: none;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+}
+
+/* Success syling */
+
+.mat-button.mat-success,
+.mat-stroked-button.mat-success {
+  color: #5cb85c;
+}
+
+.mat-button.mat-success:hover,
+.mat-stroked-button.mat-success:hover {
+  background-color: #f0fff3;
+}
+
+.mat-raised-button.mat-success,
+.mat-flat-button.mat-success,
+.mat-fab.mat-success,
+.mat-mini-fab.mat-success {
+  color: #f0fff3;
+  background-color: #5cb85c;
+}
+
+.mat-icon-button.mat-success {
+  color: #5cb85c;
+}
+
+input.form-control,
+select {
+  height: 28px !important;
+  font-size: 12.9px !important;
+}
+
+select {
+  padding-bottom: 0 !important;
+  padding-top: 0 !important;
+}
+
+.form-label {
+
+  font-size: 12px;
+}
+
+.dateselect .mat-form-field-appearance-fill .mat-form-field-flex {
+  padding: 0 !important;
+  background-color: white !important;
+}
+
+.dateselect .mat-form-field-wrapper {
+  padding-bottom: 0 !important;
+}
+
+.mat-raised-button {
+  line-height: 32px !important;
+  padding: 0px 7px !important;
+  font-size: 11px !important;
+}
+
+.mat-dialog-container {
+  padding: 10px !important;
+}
+
+.control-label .required,
+.form-group .required {
+  color: #e02222;
+  font-size: 12px;
+  padding-left: 2px;
+}
+
+//@debug
+:root {
+  --breadcrumb-theme-1: #e91e63;
+  --breadcrumb-theme-2: #fff;
+  --breadcrumb-theme-3: #d80d52;
+  --breadcrumb-theme-4: #c70041;
+}
+
+.breadcrumb {
+  text-align: center;
+  display: inline-block;
+  //   box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+  overflow: hidden;
+  border-radius: 5px;
+  margin-bottom: 0 !important;
+  margin-left: 5px;
+  counter-reset: flag;
+
+
+}
+
+.breadcrumb__step {
+  height: 38px;
+  text-decoration: none;
+  outline: none;
+  display: block;
+  float: left;
+  font-size: 12px;
+  line-height: 36px;
+  padding: 0 0 0 59px;
+  position: relative;
+  background: var(--breadcrumb-theme-2);
+  color: var(--breadcrumb-theme-1);
+  transition: background 0.5s;
+}
+
+.breadcrumb__step:first-child {
+  padding-left: 15px;
+  border-radius: 5px 0 0 5px;
+  width: 103px;
+}
+
+.breadcrumb__step:first-child::before {
+  left: 14px;
+}
+
+.breadcrumb__step:last-child {
+  border-radius: 0 5px 5px 0;
+  padding-right: 20px;
+}
+
+.breadcrumb__step:nth-child(2) {
+  width: 126px;
+}
+
+.breadcrumb__step:last-child::after {
+  content: none;
+}
+
+.breadcrumb__step::before {
+  content: counter(flag);
+  counter-increment: flag;
+  border-radius: 100%;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  margin: 8px 0;
+  position: absolute;
+  top: 0;
+  left: 30px;
+  font-weight: bold;
+  background: var(--breadcrumb-theme-2);
+  box-shadow: 0 0 0 1px var(--breadcrumb-theme-1);
+}
+
+.breadcrumb__step::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -16px;
+  width: 36px;
+  height: 36px;
+  transform: scale(0.707) rotate(45deg);
+  z-index: 1;
+  border-radius: 0 5px 0 50px;
+  background: var(--breadcrumb-theme-2);
+  transition: background 0.5s;
+  box-shadow: 2px -2px 0 2px var(--breadcrumb-theme-4);
+}
+
+.breadcrumb__step--active {
+  color: var(--breadcrumb-theme-2);
+  background: var(--breadcrumb-theme-1);
+}
+
+.breadcrumb__step--active::before {
+  color: var(--breadcrumb-theme-1);
+}
+
+.breadcrumb__step--active::after {
+  background: var(--breadcrumb-theme-1);
+}
+
+.breadcrumb__step:hover {
+  color: var(--breadcrumb-theme-2);
+  background: var(--breadcrumb-theme-3);
+}
+
+.breadcrumb__step:hover::before {
+  color: var(--breadcrumb-theme-1);
+}
+
+.breadcrumb__step:hover::after {
+  color: var(--breadcrumb-theme-1);
+  background: var(--breadcrumb-theme-3);
+}
+
+.hide-none-click {
+  opacity: 0;
+  z-index: -999;
+}

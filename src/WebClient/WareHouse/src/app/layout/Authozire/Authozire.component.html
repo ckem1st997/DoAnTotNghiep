@@ -1,0 +1,14 @@
+<notifier-container></notifier-container>
+<!-- <div
+	class="router-wrapper"
+	[@rotateCubeToLeft]="getState(o)"
+	>
+	<router-outlet #o="outlet">  </router-outlet>
+</div> -->
+<div *ngIf="loading" class="loading-container flex-content-center">
+    <mat-progress-bar
+      color="warn"
+      mode="indeterminate">
+    </mat-progress-bar>
+  </div>
+<router-outlet></router-outlet>

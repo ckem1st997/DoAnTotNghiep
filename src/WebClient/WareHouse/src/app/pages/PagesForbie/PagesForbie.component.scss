@@ -1,0 +1,143 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+body {
+  font-family: "Sancreek", cursive;
+}
+.container {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  background: #282820;
+  z-index: -1;
+}
+.message {
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  top: 150px;
+  width: 432px;
+  height: 324px;
+  margin: 0 auto;
+  border: 20px solid #b1811d;
+  background: #b1811d;
+  border-radius: 20px;
+  box-shadow: 0px 0px 0px 4px #471f05;
+  animation-delay: 1s;
+  animation-duration: 1.3s;
+}
+.message::before, .message::after {
+  content: "";
+  position: absolute;
+  bottom: 107%;
+  width: 50px;
+  height: 300px;
+  background: url(https://i.postimg.cc/0QbqNZYv/chain-4.png) repeat-y center;
+  z-index: -10;
+}
+.message::before {
+  left: 20px;
+}
+.message::after {
+  right: 20px;
+}
+.message-inner {
+  padding: 40px;
+  border-radius: 20px;
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  bottom: 2%;
+  left: 2%;
+  color: #291b03;
+  background: #825301;
+}
+.message-title {
+  font-size: 4em;
+  margin: 0 0 20px;
+}
+.message-subtitle {
+  font-size: 2em;
+  margin: 0;
+}
+.chain {
+  position: absolute;
+  top: 0;
+  height: 200%;
+  width: 50px;
+  background: url(https://i.postimg.cc/0QbqNZYv/chain-4.png) repeat-y center;
+  animation: chain 1.8s ease-in-out;
+}
+.chain.left {
+  left: 0;
+}
+.chain.right {
+  right: 0;
+}
+.cog {
+  position: absolute;
+  bottom: -50px;
+}
+.cog.left {
+  left: -50px;
+  animation: cog-spin-left 1.8s ease-in-out;
+}
+.cog.right {
+  right: -50px;
+  animation: cog-spin-right 1.8s ease-in-out;
+}
+.cog-outer {
+  fill: #955112;
+}
+.cog-inner {
+  fill: #633d03;
+}
+.rivet {
+  position: absolute;
+  background-color: #8f6002;
+  width: 3%;
+  border-radius: 100px;
+  padding-bottom: 3%;
+}
+.rivet.top-left {
+  top: -7px;
+  left: -7px;
+}
+.rivet.top-right {
+  top: -7px;
+  right: -7px;
+}
+.rivet.bottom-left {
+  bottom: -7px;
+  left: -7px;
+}
+.rivet.bottom-right {
+  bottom: -7px;
+  right: -7px;
+}
+@keyframes cog-spin-left {
+  from {
+    transform: rotate(0deg);
+ }
+  to {
+    transform: rotate(360deg);
+ }
+}
+@keyframes cog-spin-right {
+  from {
+    transform: rotate(0deg);
+ }
+  to {
+    transform: rotate(-360deg);
+ }
+}
+@keyframes chain {
+  from {
+    top: 0;
+ }
+  to {
+    top: -100%;
+ }
+}

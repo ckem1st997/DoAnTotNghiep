@@ -1,0 +1,11 @@
+<div mat-dialog-title>{{title}}</div>
+<div>
+  <form class="container" (ngSubmit)="onSubmit()">
+    <p>Bạn có thực sự muốn xoá ?</p>
+    <div style="margin-top: 10px;float: right;">
+      <button type="submit" mat-button mat-raised-button cdkFocusInitial color="primary">Save</button>
+      <button style="margin-left: 20px;" mat-button type="button" mat-raised-button (click)="onNoClick()">Huỷ
+        bỏ</button>
+    </div>
+  </form>
+</div>

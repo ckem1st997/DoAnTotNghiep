@@ -1,0 +1,100 @@
+<notifier-container></notifier-container>
+<div class=" d-flex justify-content-between" style="margin-top: 10px;">
+  <div class="breadcrumb">
+    <a class="breadcrumb__step breadcrumb__step--active"routerLink="/wh">Trang chủ</a>
+    <a class="breadcrumb__step" routerLink="/wh/warehouse-item">Vật tư</a>
+    <a class="breadcrumb__step" routerLink="/wh/warehouse">Kho</a>
+  </div>
+  <div class="">
+    <div class="">
+      <button style="margin:5px;" (click)="searchQueryDialog()" mat-raised-button color="primary">
+        <mat-icon class="mat-18">search</mat-icon>Tìm
+        kiếm
+      </button>
+      <button style="margin:5px;" mat-raised-button color="success" (click)="openDialogCreate()">
+        <mat-icon class="mat-18">add</mat-icon>Thêm mới
+      </button>
+      <button style="margin:5px;" mat-raised-button color="warn" (click)="openDialogDeleteAll()">
+        <mat-icon class="mat-18">delete</mat-icon>Xóa (Đã chọn)
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="viewcheck" [hidden]="!checkSizeWindows">
+
+  <div class="" style="border-top: 1px solid #b49c9c;overflow: auto;height: 77vh;">
+    <table cdk-table matSort (matSortChange)="announceSortChange($event)" class="" mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> Chọn </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.id}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="parentId">
+        <th mat-header-cell *matHeaderCellDef> Chọn </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.parentId}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Tên </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef> Mã </th>
+        <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+      </ng-container>
+      
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Mô tả </th>
+        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+      </ng-container>   
+      <ng-container matColumnDef="inactive">
+        <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox disabled="true" class="example-margin" [(ngModel)]="element.inactive"></mat-checkbox>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="method">
+        <th mat-header-cell *matHeaderCellDef> Chức năng </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="accent" (click)="openDialogDetals(element)">
+            <mat-icon class="mat-18">details</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="openDialog(element)">
+            <mat-icon class="mat-18">edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="openDialogDelelte(element)">
+            <mat-icon class="mat-18">delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  <mat-paginator style="height: 45px;width: 100%;" #paginator [length]="totalRows" [pageIndex]="currentPage"
+    [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="pageChanged($event)" showFirstLastButtons
+    aria-label="Select page of periodic elements">
+  </mat-paginator>
+</div>
+
+<div [hidden]="checkSizeWindows">
+  Màn hình của bạn chưa đủ yêu cầu !
+</div>

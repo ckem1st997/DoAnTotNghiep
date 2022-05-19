@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  warehouse:
+    image: warehouse
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 4200:80

@@ -1,0 +1,131 @@
+<div mat-dialog-title>{{title}}</div>
+<div *ngIf="dt">
+  <form class="container" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group d-none">
+      <mat-label class="form-label">Id</mat-label>
+      <input type="text" formControlName="id" class="form-control" />
+    </div>
+    <div class="form-group row mb-1">
+      <mat-label class="form-label col-3">Tên</mat-label>
+      <input type="text" formControlName="name" class="form-control col" />
+    </div>
+    <div class="form-group row mb-1">
+      <mat-label class="form-label col-3">Code</mat-label>
+      <input type="text" formControlName="code" class="form-control col" />
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Thuộc loại</mat-label>
+      <select formControlName="categoryId" class="form-select col">
+        <option class="s-c option" *ngFor="let state of dt.categoryDTO" [ngValue]="state.id">
+          {{ state.name }}
+        </option>
+      </select>
+
+    </div>
+
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Đơn vị tính</mat-label>
+      <select (change)="changUnit($event)" id="unitSelect" formControlName="unitId" class="form-select col">
+        <option class="s-c option" *ngFor="let state of dt.unitDTO" [value]="state.id" [ngValue]="state.id">
+          {{ state.unitName }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Nhà cung cấp</mat-label>
+      <select formControlName="vendorId" class="form-select col">
+        <option class="s-c option" *ngFor="let state of dt.vendorDTO" [ngValue]="state.id">
+          {{ state.name }}
+        </option>
+      </select>
+
+    </div>
+
+
+
+    <div class="form-group row mb-1">
+      <mat-label class="form-label col-3">Quốc gia</mat-label>
+      <input type="text" formControlName="country" class="form-control col"/>
+    </div>
+    <div class="form-group row mb-1">
+      <mat-label class="form-label col-3">Mô tả</mat-label>
+      <input type="text" formControlName="description" class="form-control col" />
+    </div>
+
+    <div class="form-group row mb-1 ">
+      <mat-label class="form-label col-3 ">Trạng thái</mat-label>
+      <mat-checkbox style="padding-left: 0;" class="example-margin col" formControlName="inactive"></mat-checkbox>
+    </div>
+    <div class="form-group row mb-1 ">
+      <div class="col-3" style="display: flex;align-items: center;background-color: #5cb85c;color: #fffefe;border-radius: 5px;height: 34px;" mat-icon-button color="accent" color="success" (click)="openCreateItemUnit(this.dt)">
+        <mat-icon class="mat-18">add</mat-icon>Thêm mới
+      </div>
+    </div>
+
+
+    <!-- table -->
+    <table mat-table [dataSource]="dataSourceItemUnit" class="mat-elevation-z8">
+
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>Id </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="itemId">
+        <th mat-header-cell *matHeaderCellDef> Item </th>
+        <td mat-cell *matCellDef="let element"> {{element.itemId}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="unitId">
+        <th mat-header-cell *matHeaderCellDef> Đơn vị tính </th>
+        <td mat-cell *matCellDef="let element"> {{element.unitId}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="unitName">
+        <th mat-header-cell *matHeaderCellDef> Đơn vị tính </th>
+        <td mat-cell *matCellDef="let element"> {{element.unitName}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="convertRate">
+        <th mat-header-cell *matHeaderCellDef> Tỉ lệ </th>
+        <td mat-cell *matCellDef="let element"> {{element.convertRate}} </td>
+      </ng-container>
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="note">
+        <th mat-header-cell *matHeaderCellDef> Chú thích </th>
+        <td mat-cell *matCellDef="let element"> {{getNote(element.unitName,element.convertRate)}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="method">
+        <th mat-header-cell *matHeaderCellDef> Chức năng </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- <a mat-icon-button color="accent" (click)="openItemUnit()">
+            <mat-icon class="mat-18">edit</mat-icon>
+          </a> -->
+          <a mat-icon-button color="warn" (click)="openDialogDelelteItemUnit(element)">
+            <mat-icon class="mat-18">delete</mat-icon>
+          </a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+
+    <div style="margin-top: 10px;float: right;">
+      <button type="submit" mat-button mat-raised-button cdkFocusInitial color="primary">Save</button>
+      <button style="margin-left: 20px;" mat-button type="button" mat-raised-button (click)="onNoClick()">Huỷ
+        bỏ</button>
+
+    </div>
+  </form>
+</div>

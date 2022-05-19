@@ -1,0 +1,43 @@
+// :host {
+//     display: block;
+//     width: 100vw;
+//     height: 100vh;
+//   }
+//   .router-wrapper {
+//     position: relative;
+//     overflow: hidden;
+//     width: 100vw;
+//     height: calc(100% - 47px);
+//     perspective: 1200px;
+//     transform-style: preserve-3d;
+//   }
+// @import 'variables';
+
+.loading-container {
+    display: flex;
+    position: fixed;
+    top: 100px;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+   // background-color: rgb(106 105 105 / 70%);
+    z-index: -99;
+  }
+  
+  .site-container {
+    font-size: 14px;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    height: 100vh;
+    background: #f1f1f1;
+    overflow: hidden;
+  
+    .site-header {
+      height: 64px;
+    }
+  
+    .site-content {
+      height: calc(100vh - 65px);
+      padding: 0 15px;
+      overflow: auto;
+    }
+  }

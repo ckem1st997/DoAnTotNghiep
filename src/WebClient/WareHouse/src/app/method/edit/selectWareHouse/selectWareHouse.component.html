@@ -1,0 +1,42 @@
+<div style="position: relative;height: 93%;" >
+  <div mat-dialog-title>{{title}}</div>
+  <div style="text-align:center">
+    <h1>
+      {{ title }}
+    </h1>
+  </div>
+  <div class="">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="checkall">
+          <mat-checkbox style="padding-left: 0; margin-top: 5px;margin-left: 5px;"  [(ngModel)]="masterSelected" name="list_name" value="m1"
+            (change)="checkUncheckAll()" ></mat-checkbox>
+          <strong style="margin-left: 5px;">Chọn tất cả</strong>
+        </div>
+
+        <div class="listcheck">
+          <div *ngFor="let item of checklist">
+            <mat-checkbox (change)="isAllSelected()" name="list_name" value="{{ item.value }}"
+              [(ngModel)]="item.selected" style="padding-left: 0; margin-top: 5px;margin-left: 5px;" class="example-margin col"></mat-checkbox>
+            {{ item.text }}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div>
+
+</div>
+<div class="w-100" style="    border-top: 1px solid rgb(170, 162, 162);margin-bottom: 5px;">
+  <button (click)="getall()" style="margin-left: 5px;margin-right: 5px;float: right;margin-top: 5px;" type="button"
+    mat-raised-button color="success">
+    <mat-icon class="mat-18">save</mat-icon>Save
+  </button>
+  <button (click)="onNoClick()" style="margin-left: 5px;margin-right: 5px;float: right;margin-top: 5px;" type="button"
+    mat-raised-button color="dark">
+    <mat-icon class="mat-18">cancel</mat-icon>Huỷ
+  </button>
+</div>

@@ -1,0 +1,25 @@
+.mat-column-id{
+    display: none;
+  }
+  .mat-column-itemId{
+    display: none;
+  }  
+  .mat-column-unitId{
+    display: none;
+  }
+  table {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    box-shadow: none;
+    overflow: auto;
+}
+input,select{
+    height: 28px !important;
+    font-size: 12.9px;
+}
+select{
+    padding-bottom: 0 !important;
+    padding-top: 0 !important;
+}
+

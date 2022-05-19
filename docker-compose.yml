@@ -2,19 +2,6 @@ version: '3.4'
 
 services:
 
-  nginx:
-    image: nginx
-    volumes:
-      - ./nginx:/etc/nginx/nginx
-    ports:
-      - "9995:9995"
-    environment:
-      - NGINX_PORT=9995
-
-
-
-
-
   zoo:
     image: zookeeper:3.4.9
     hostname: zoo
@@ -215,6 +202,16 @@ services:
           - "1337:1337"
       volumes:
           - ./storage/konga:/konga
+  angular:
+      image: warehouse
+      container_name: angular
+      build:
+        context: src/WebClient/WareHouse/
+        dockerfile: ./Dockerfile
+      environment:
+          NODE_ENV: production
+      ports:
+          - 4200:80
 
 networks:
     kong-net:

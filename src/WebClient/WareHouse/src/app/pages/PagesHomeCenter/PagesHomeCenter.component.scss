@@ -1,0 +1,22 @@
+.center {
+    color: #ffffff;
+    background-color: #494399;
+    height: 100%;
+    width: 100%;
+}
+.center .img{
+    max-width: 100%;
+}
+.center .title{
+    height: 15%;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 25px;
+}
+.center .center-container{
+    height: 70%;
+}
+.center .center-info{
+    display: flex;
+    justify-content: space-around;
+}

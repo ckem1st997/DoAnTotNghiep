@@ -1,0 +1,50 @@
+<div mat-dialog-title>{{title}}</div>
+<div>
+  <form class="container" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group d-none">
+      <mat-label class="form-label">Id</mat-label>
+      <input type="text" formControlName="id" class="form-control" />
+    </div>
+    <div class="form-group row mb-1">
+      <mat-label class="form-label col-3">Tài khoản:</mat-label>
+      <input type="text" readonly="true" formControlName="userName" class="form-control col" />
+    </div>
+    <div class="form-group row mb-1" style="position: relative;">
+      <mat-label class="form-label col-3">Quyền:</mat-label>
+      <select (change)="changItem($event)" formControlName="roleNumber" class="form-select col">
+        <option class="s-c option" *ngFor="let state of dt.roleSelect" [ngValue]="state.value">
+          {{ state.text }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group row mb-1">
+      <mat-label class="form-label col-3">Chọn kho:</mat-label>
+      <button (click)="SelectWH()" type="button" class="col-2"mat-raised-button color="success">
+        <mat-icon class="mat-18">edit</mat-icon>Chọn kho
+      </button>
+    </div>
+   
+    <div class="form-group row mb-1 ">
+      <mat-label class="form-label col-3 ">Đọc:</mat-label>
+      <mat-checkbox style="padding-left: 0;" class="example-margin col" formControlName="read"></mat-checkbox>
+      <mat-label class="form-label col-3 ">Thêm:</mat-label>
+      <mat-checkbox style="padding-left: 0;" class="example-margin col" formControlName="create"></mat-checkbox>
+    </div>
+    <div class="form-group row mb-1 ">
+      <mat-label class="form-label col-3 ">Sửa:</mat-label>
+      <mat-checkbox style="padding-left: 0;" class="example-margin col" formControlName="edit"></mat-checkbox>
+      <mat-label class="form-label col-3 ">Xoá:</mat-label>
+      <mat-checkbox style="padding-left: 0;" class="example-margin col" formControlName="delete"></mat-checkbox>
+    </div>
+    <div class="form-group row mb-1 ">
+      <mat-label class="form-label col-3 ">Trạng thái</mat-label>
+      <mat-checkbox style="padding-left: 0;" class="example-margin col" formControlName="inActive"></mat-checkbox>
+    </div>
+    <div style="margin-top: 10px;float: right;">
+      <button type="submit" mat-button mat-raised-button cdkFocusInitial color="primary">Save</button>
+      <button style="margin-left: 20px;" mat-button type="button" mat-raised-button (click)="onNoClick()">Huỷ
+        bỏ</button>
+
+    </div>
+  </form>
+</div>

@@ -1,0 +1,86 @@
+<header>
+  <mat-toolbar color="primary">
+    <mat-toolbar-row
+      style="background-size: cover;
+    background-repeat: no-repeat;justify-content: space-between;background-image: url(../../../assets/img/header-bg.jpg);">
+
+      <div class="d-flex menu-left h-100">
+        <a routerLink="/page" class="" style="padding: 10px;">
+          <!---->
+          <img src="../../../assets/img/logo.png" height="37px" style="margin-top: 10px;margin-right: 10px;"
+            title="Home" alt="Home" class="">
+          <!---->
+        </a>
+        <a routerLink="/master" class="link-icon menu-left-link active header-a" (click)="changActive($event)">
+          <mat-icon class="icon-link" aria-hidden="false" aria-label="Example home icon">home</mat-icon>
+          Trang chủ
+        </a>
+        <a id="QuanLyDanhMucLink" class="link-icon header-a" #createPlanmenuTrigger="matMenuTrigger"
+          [matMenuTriggerFor]="menu" (click)="createPlanmenuTrigger.openMenu()" (click)="changActive($event)">
+          <i class="bi bi-tools icon-link"></i>
+          Phân quyền
+          <mat-menu #menu="matMenu">
+            <span data-active="QuanLyDanhMucLink" (click)="createPlanmenuTrigger.closeMenu()">
+              <a (click)="changActive($event)" routerLink="/master/role" mat-menu-item>Danh sách</a>
+              <!-- <a (click)="changActive($event)" routerLink="/warehouse-limit" mat-menu-item>Định mức tồn kho</a>
+              <a (click)="changActive($event)" routerLink="/warehouse-benging" mat-menu-item>Tồn kho đầu kì</a> -->
+            </span>
+
+          </mat-menu>
+        </a>
+
+        <!-- <a id="QuanLyDanhMucLinkTwo" #createPlanmenuTriggerDanhMuc="matMenuTrigger" [matMenuTriggerFor]="menuDanhMuc"
+          (click)="createPlanmenuTriggerDanhMuc.openMenu()" class="link-icon header-a" (click)="changActive($event)">
+          <mat-icon class="icon-link" aria-hidden="false" aria-label="Example home icon">playlist_add_check</mat-icon>
+          Danh mục
+          <mat-menu #menuDanhMuc="matMenu">
+            <span data-active="QuanLyDanhMucLinkTwo" (click)="createPlanmenuTriggerDanhMuc.closeMenu()">
+              <a (click)="changActive($event)" routerLink="/warehouse" mat-menu-item>Kho vận</a>
+              <a (click)="changActive($event)" routerLink="/warehouse-item" mat-menu-item>Vật tư</a>
+              <a (click)="changActive($event)" routerLink="/warehouse-item-category" mat-menu-item>Loại vật tư</a>
+              <a (click)="changActive($event)" routerLink="/vendor" mat-menu-item>Nhà cung cấp</a>
+              <a (click)="changActive($event)" routerLink="/unit" mat-menu-item>Đơn vị tính</a>
+            </span>
+
+          </mat-menu>
+        </a> -->
+
+        <!-- <a id="QuanLyReport" #createPlanmenuTriggerReport="matMenuTrigger" [matMenuTriggerFor]="menuReport"
+          (click)="createPlanmenuTriggerReport.openMenu()" class="link-icon header-a" (click)="changActive($event)">
+          <mat-icon class="icon-link" aria-hidden="false" aria-label="Example home icon">list</mat-icon>
+          Báo cáo
+          <mat-menu #menuReport="matMenu">
+            <span data-active="QuanLyDanhMucLinkTwo" (click)="createPlanmenuTriggerReport.closeMenu()">
+              <a (click)="changActive($event)" routerLink="/report-total" mat-menu-item>Báo cáo tổng hợp</a>
+              <a (click)="changActive($event)" routerLink="/report-details" mat-menu-item>Báo cáo chi tiết</a>
+            </span>
+
+          </mat-menu>
+        </a> -->
+
+      </div>
+      <div class="d-flex menu-left h-100">
+        <a class="link-icon" target="_blank" href="https://github.com/ckem1st997/Angular-DoAnTotNghiep">
+          <i class="bi bi-github icon-link"></i>
+          GitHub
+        </a>
+        <a id="QuanLyReport" #createPlanmenuTriggerLogin="matMenuTrigger" [matMenuTriggerFor]="menuLogin"
+          (click)="createPlanmenuTriggerLogin.openMenu()" class="link-icon header-a" (click)="changActive($event)">
+          <mat-icon class="icon-link" aria-hidden="false" aria-label="Example home icon">login</mat-icon>
+          Tài khoản
+          <mat-menu #menuLogin="matMenu">
+            <span data-active="QuanLyDanhMucLinkTwo" (click)="createPlanmenuTriggerLogin.closeMenu()">
+              <a (click)="changActive($event)" (click)="logout()" mat-menu-item>Đăng xuất</a>
+              <a (click)="changActive($event)" routerLink="/report-details" mat-menu-item>Báo cáo chi tiết</a>
+            </span>
+
+          </mat-menu>
+        </a>
+
+      </div>
+
+    </mat-toolbar-row>
+
+
+  </mat-toolbar>
+</header>

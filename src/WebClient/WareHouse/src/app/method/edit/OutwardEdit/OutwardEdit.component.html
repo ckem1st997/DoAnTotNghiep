@@ -1,0 +1,226 @@
+<div id="formCreateDiv" style="height: 100%;position: relative;    padding-top: 362px;">
+  <notifier-container></notifier-container>
+  <form disabled id="formCreate" style="position: absolute;top: 0;width: 100%;" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class=" d-flex justify-content-between" style="border-bottom: 1px solid #ced4da;align-items: center;height: 55px;">
+
+      <div class="breadcrumb hide-none-click">
+        <a class="breadcrumb__step breadcrumb__step--active"routerLink="/">Trang chủ</a>
+        <a class="breadcrumb__step" routerLink="/warehouse-item">Vật tư</a>
+        <a class="breadcrumb__step" routerLink="/warehouse">Kho</a>
+      </div>
+
+      <div class="">
+        <div class="">
+          <button type="submit" routerLink="/wh/warehouse-book" mat-raised-button color="warn">
+            <mat-icon class="mat-18">keyboard_backspace</mat-icon>Quay lại
+          </button>
+          <button style="margin-left: 5px;margin-right: 5px;" type="submit" mat-raised-button color="primary">
+            <mat-icon class="mat-18">save</mat-icon>Save
+          </button>
+          <!-- <button style="margin-left: 5px;" mat-raised-button color="warn">
+            <mat-icon class="mat-18">delete</mat-icon>Huỷ
+          </button> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-4 ">
+          <p style="margin-bottom: 5px;color: #23527c; border-bottom: none; text-transform: uppercase; width: 84%;font-size: 12px;
+          font-weight: 600;
+          font-family: TahomaCustom,Arial,sans-serif !important;">Phiếu nhập kho</p>
+          <div class="form-group d-none">
+            <mat-label class="form-label">Id</mat-label>
+            <input  type="text" formControlName="id" class="form-control" />
+          </div>
+          <div class="form-group mb-1 row">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">Kho</mat-label>
+            <select  formControlName="wareHouseId" class="form-select col-7">
+              <option class="s-c option" *ngFor="let state of dt.wareHouseDTO" [ngValue]="state.id">
+                {{ state.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group mb-1 row">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">Bên giao</mat-label>
+            <input  formControlName="deliver" class="form-control col-7" required>
+          </div>
+          <div class="form-group mb-1 row">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">SĐT người giao</mat-label>
+            <input  formControlName="deliverPhone" class="form-control col-7">
+          </div>
+          <div class="form-group mb-1 row">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">Địa chỉ người giao</mat-label>
+            <input  formControlName="deliverAddress" class="form-control col-7">
+          </div>
+          <div class="form-group mb-1 row">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">Bộ phận người giao</mat-label>
+            <input  formControlName="deliverDepartment" class="form-control col-7">
+          </div>
+          <div class="form-group mb-1 row">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">Đến kho</mat-label>
+            <select  formControlName="toWareHouseId" class="form-select col-7">
+              <option class="s-c option" *ngFor="let state of dt.wareHouseDTO" [ngValue]="state.id">
+                {{ state.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4 ">
+          <p style="opacity: 0;">PHIẾU NHẬP KHO</p>
+          <div class="form-group mb-1 row " style="opacity: 0;">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">Bên nhận</mat-label>
+            <input  class="form-control col-7">
+          </div>
+          <div class="form-group mb-1 row">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">Bên nhận</mat-label>
+            <input  formControlName="receiver" class="form-control col-7">
+          </div>
+          <div class="form-group mb-1 row">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">SĐT người nhận</mat-label>
+            <input  formControlName="receiverPhone" class="form-control col-7">
+          </div>
+          <div class="form-group mb-1 row">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">Địa chỉ người nhận</mat-label>
+            <input  formControlName="receiverAddress" class="form-control col-7">
+          </div>
+          <div class="form-group mb-1 row">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">Bộ phận người nhận</mat-label>
+            <input  formControlName="receiverDepartment" class="form-control col-7">
+          </div>
+          <div class="form-group mb-1 row">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">Lý do</mat-label>
+            <input  formControlName="reason" class="form-control col-7">
+          </div>
+        </div>
+
+        <div class="col-md-4 ">
+          <p style="margin-bottom: 5px;color: #23527c; border-bottom: none; text-transform: uppercase; width: 84%;font-size: 12px;
+          font-weight: 600;
+          font-family: TahomaCustom,Arial,sans-serif !important;">Thông tin chung</p>
+          <div class="form-group mb-1 row ">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">Số chứng từ</mat-label>
+            <input type="text" formControlName="voucher" [value]="this.dt.voucher" class="form-control col-7"
+            [attr.disabled]="true" >
+          </div>
+          <div class="form-group mb-1 row">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">Số chứng từ thực tế</mat-label>
+            <input  formControlName="voucherCode" class="form-control col-7">
+          </div>
+          <div class="form-group mb-1 row dateselect">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">Ngày</mat-label>
+            <input  type="datetime-local" matInput formControlName="voucherDate" class="form-control col-7">
+          </div>
+          <div class="form-group mb-1 row">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">Người sửa</mat-label>
+            <select  formControlName="modifiedBy" class="form-select col-7">
+              <option class="s-c option" *ngFor="let state of dt.getCreateBy" [ngValue]="state.id">
+                {{ state.name }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group mb-1 row dateselect">
+            <mat-label class="form-label col-4" style="margin-right: 10px;">Ngày tạo</mat-label>
+            <input  type="datetime-local" [readonly]="true" matInput formControlName="createdDate"
+              class="form-control col-7">
+          </div>
+        </div>
+
+
+        <div class="col-md-8 ">
+
+          <div class="form-group mb-1 row ">
+            <mat-label class="form-label col-2" style="margin-right: 10px;  ">Mô tả</mat-label>
+            <textarea  style="    width: 79.333333%;" formControlName="description"
+              class="form-control col-10"></textarea>
+          </div>
+
+        </div>
+      </div>
+
+
+    </div>
+  </form>
+
+  <div id="formTable" style="margin-top: 10px;     padding-left: 10px;
+  padding-right: 10px;">
+    <div class="demo-button-container"
+      style="display: flex;justify-content: space-between;align-items: center; margin-bottom: 3px;">
+      <div>DANH SÁCH VẬT TƯ</div>
+      <button (click)="addData()" mat-raised-button color="success">
+        <mat-icon class="mat-18">add</mat-icon>Thêm vật tư
+      </button>
+    </div>
+    <div class="table-data" style="height: 90%;overflow: auto;width: 100%;border-top:1px solid #ced4da ;">
+
+      <cdk-virtual-scroll-viewport appendOnly itemSize="50" class="example-viewport">
+        <table mat-table [dataSource]="dataSource" style="min-height: 1px !important" class="demo-table">
+
+
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>id</th>
+            <td mat-cell *matCellDef="let element">{{element.id}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="itemId">
+            <th mat-header-cell *matHeaderCellDef>Vật tư</th>
+            <td mat-cell *matCellDef="let element">{{getNameItem(element.itemId)}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="unitId">
+            <th mat-header-cell *matHeaderCellDef>Đơn vị tính</th>
+            <td mat-cell *matCellDef="let element">{{getNameUnit(element.unitId)}}</td>
+          </ng-container>
+          <ng-container matColumnDef="uiquantity">
+            <th mat-header-cell *matHeaderCellDef>Số lượng</th>
+            <td mat-cell *matCellDef="let element">{{element.uiquantity}}</td>
+          </ng-container>
+          <ng-container matColumnDef="uiprice">
+            <th mat-header-cell *matHeaderCellDef>Đơn giá</th>
+            <td mat-cell *matCellDef="let element">{{element.uiprice}}</td>
+          </ng-container>
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef>Thành tiền</th>
+            <td mat-cell *matCellDef="let element">{{element.amount}}</td>
+          </ng-container>
+          <ng-container matColumnDef="departmentName">
+            <th mat-header-cell *matHeaderCellDef>Bộ phận</th>
+            <td mat-cell *matCellDef="let element">{{element.departmentName}}</td>
+          </ng-container>
+          <ng-container matColumnDef="employeeName">
+            <th mat-header-cell *matHeaderCellDef>Nhân viên</th>
+            <td mat-cell *matCellDef="let element">{{element.employeeName}}</td>
+          </ng-container>
+          <ng-container matColumnDef="stationName">
+            <th mat-header-cell *matHeaderCellDef>Trạm</th>
+            <td mat-cell *matCellDef="let element">{{element.stationName}}</td>
+          </ng-container>
+          <ng-container matColumnDef="projectName">
+            <th mat-header-cell *matHeaderCellDef>Dự án</th>
+            <td mat-cell *matCellDef="let element">{{element.projectName}}</td>
+          </ng-container>
+          <ng-container matColumnDef="customerName">
+            <th mat-header-cell *matHeaderCellDef>CID</th>
+            <td mat-cell *matCellDef="let element">{{element.customerName}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="method">
+            <th mat-header-cell *matHeaderCellDef> Chức năng </th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button color="primary" (click)="openDialogedit(element.id)">
+                <mat-icon class="mat-18">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="openDialogDelelte(element.id)">
+                <mat-icon class="mat-18">delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </cdk-virtual-scroll-viewport>
+    </div>
+  </div>
+</div>

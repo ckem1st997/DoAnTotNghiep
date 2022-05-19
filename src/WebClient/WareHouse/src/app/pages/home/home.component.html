@@ -1,0 +1,180 @@
+<div class="container-fluid " id="dashboard" style="margin-top: 20px;">
+  <div class="row h-100">
+    <div class="col-9 h-100">
+      <div class=" row" style="height:15%">
+
+        <div class="col-md-6 col-lg-3">
+          <div style="height: 100%; border-bottom: 3px solid #3f6ad8;">
+            <div class="titleTopDashBoard" style="font-size: 18px;    opacity: 0.8;">Vật tư dùng nhiều nhất</div>
+            <div class="d-flex row" style="margin-top: 20px; align-items: baseline;">
+              <i style="font-size: 28px;" class="text-success col-2 bi bi-caret-up-fill"></i>
+              <div style="font-size: 12.5px;font-weight: 500;" class="col-5">[{{listIndex.itemCountMax?.code}}]{{listIndex.itemCountMax?.name}}</div>
+              <div style="font-size: 19px;font-weight: 500;" class="col-5" [countUp]="listIndex.itemCountMax==undefined?0:listIndex.itemCountMax.count==null?0:listIndex.itemCountMax.count">{{listIndex.itemCountMax?.count}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div style="height: 100%; border-bottom: 3px solid #d92550;">
+            <div class="titleTopDashBoard" style="font-size: 18px;    opacity: 0.8;">Kho tồn nhiều nhất</div>
+            <div class="d-flex row" style="margin-top: 20px; align-items: baseline;">
+              <i style="font-size: 28px; color:#26a0fc" class="col-2 bi bi-house-door"></i>
+              <div style="font-size: 12.5px;font-weight: 500;" class="col-5">{{listIndex.wareHouseBeginningCountMax?.name}}</div>
+              <div style="font-size: 19px;font-weight: 500;" class="col-5"  [countUp]="listIndex.wareHouseBeginningCountMax==undefined?0:listIndex.wareHouseBeginningCountMax.sumBalance==null?0:ConvertStringToNumber(listIndex.wareHouseBeginningCountMax.sumBalance)">{{listIndex.wareHouseBeginningCountMax?.sumBalance}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div style="height: 100%; border-bottom: 3px solid #f7b924;">
+            <div class="titleTopDashBoard" style="font-size: 18px;    opacity: 0.8;">Vật tư dùng ít nhất</div>
+            <div class="d-flex row" style="margin-top: 20px; align-items: baseline;">
+              <i style="font-size: 28px;color:#8340ed" class="col-2 bi bi-intersect"></i>
+              <div style="font-size: 12.5px;font-weight: 500;" class="col-5">[{{listIndex.itemCountMin?.code}}]{{listIndex.itemCountMin?.name}}</div>
+              <div style="font-size: 19px;font-weight: 500;" class="col-5" [countUp]="listIndex.itemCountMin==undefined?0:listIndex.itemCountMin.count==null?0:listIndex.itemCountMin.count">{{listIndex.itemCountMin?.count}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div style="height: 100%; border-bottom: 3px solid #3ac47d;">
+            <div class="titleTopDashBoard" style="font-size: 18px;    opacity: 0.8;">Kho tồn ít nhất</div>
+            <div class="d-flex row" style="margin-top: 20px; align-items: baseline;">
+              <i style="font-size: 28px;color: #e521c4;" class="col-2 bi bi-archive-fill"></i>
+              <div style="font-size: 12.5px;font-weight: 500;" class="col-6">{{listIndex.wareHouseBeginningCountMin?.name}}</div>
+              <div style="font-size: 19px;font-weight: 500;" class="col-4" [countUp]="listIndex.wareHouseBeginningCountMin==undefined?0:listIndex.wareHouseBeginningCountMin.sumBalance==null?0:ConvertStringToNumber(listIndex.wareHouseBeginningCountMin.sumBalance)">{{listIndex.wareHouseBeginningCountMin?.sumBalance}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class=" row" style="height:55%;margin-top: 25px;">
+        <div class="col-6">
+          <!-- <div>
+            <mat-form-field appearance="fill">
+              <mat-label>Lọc</mat-label>
+              <mat-select  [(ngModel)]="selectedValue" name="food">
+                <mat-option *ngFor="let food of foods" [value]="food.value">
+                  {{food.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div> -->
+          <div echarts [options]="optioneChartCoulumn" class="demo-chart" [loading]="true" ></div>
+
+        </div>
+        <div class="col-6">
+          <div>
+           
+            <!-- <mat-form-field appearance="fill">
+              <mat-label>Tháng</mat-label>
+              <mat-select (selectionChange)="changeChartPhieu2($event)" [(ngModel)]="checkChart2" name="food">
+                <mat-option *ngFor="let food of foods2" [value]="food.value">
+                  {{food.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field> -->
+          </div>
+          <div echarts [options]="optioneChart2" class="demo-chart" [loading]="true" ></div>
+          <mat-form-field appearance="fill">
+            <mat-label>Lọc</mat-label>
+            <mat-select (selectionChange)="changeChartPhieu($event)" [(ngModel)]="checkChart" name="food">
+              <mat-option *ngFor="let food of foods" [value]="food.value">
+                {{food.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class=" container-fluid" id="style-15" style="height:27%;    overflow: auto;">
+        <div class="main-card mb-3 card">
+          <div class="card-header">
+            <div class="card-header-title font-size-lg text-capitalize font-weight-normal">Lịch sử giao dịch mới nhất
+            </div>
+            <div class="btn-actions-pane-right" style="margin-left: 25px;">
+              <button (click)="getHistory()" type="button" class="btn-icon btn-primary  btn btn-outline-focus btn-sm d-flex">
+                Cập nhật
+                <span class="pl-2 align-middle opacity-7">
+                  <i class="fa fa-angle-right"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="align-middle text-truncate mb-0 table table-borderless table-hover">
+              <thead>
+                <tr>
+                  <th class="text-center">Thời gian</th>
+                  <th class="text-center">Bên giao</th>
+                  <th class="text-center">Bên nhận</th>
+                  <th class="text-center">Loại phiếu</th>
+                  <th class="text-center">Số chứng từ</th>
+                  <th class="text-center">Kho</th>
+                  <th class="text-center">Lí do</th>
+                  <th class="text-center">Chi tiết</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of listHistory.data">
+                  <td class="text-center text-muted" style="width: 100px;">{{getDateToName(item.voucherDate)}}</td>
+                  <td class="text-center" style="width: 100px;">
+                    {{item.deliver}}
+                  </td>
+                  <td class="text-center" style="width: 100px;">
+                    {{item.receiver}}
+                  </td>
+                  <td class="text-center">{{item.type}}
+                  </td>
+                  <td class="text-center"> <span class="badge bg-warning  text-dark">{{item.voucherCode}}</span>
+                  </td>
+                  <td class="text-center">
+                    <span class="badge bg-info text-dark">{{item.wareHouseName}}</span>
+                  </td>
+
+                  <td class="text-center" style="width: 200px;">
+                    <div>
+                      {{item.reason}}
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <div role="group" class="btn-group-sm btn-group">
+                      <button class="btn-shadow btn btn-primary" (click)="openDialog(item)">Xem</button>
+                    </div>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-3 h-100">
+      <div class="h-50" id="style-6" style="    overflow: auto;">
+        <div class="title-border-red title-p-m ">
+          <h5 class="menu-header-title text-capitalize">Danh sách vật tư nhập kho nhiều nhất</h5>
+        </div>
+
+        <div class="widget-chart-content  " *ngFor="let state of listIn.data"  style="margin-top: 20px;">
+          <div class="widget-subheading nameTop">{{state.name}}</div>
+          <div class="row" style="margin-top: 5px;font-weight: 500;">
+            <div class="col-6">Xuất hiện:<span class="countTopIn" [countUp]="state.count==null?0:state.count">{{state.count}}</span></div>
+            <div class="col-6">Số lượng:<span class="quantityTopIn" [countUp]="state.sumQuantity==null?0:state.sumQuantity">{{state.sumQuantity}}</span></div>
+            <!-- <div class="widget-numbers text-success">Tổng tiền:600000</div> -->
+          </div>
+        </div>
+      
+      </div>
+      <div class="h-50" id="style-5" style="    overflow: auto;">
+        <div class="title-border-success title-p-m">
+          <h5 class="menu-header-title text-capitalize">Danh sách vật tư xuất kho nhiều nhất</h5>
+        </div>
+        <div class="widget-chart-content  "  *ngFor="let state of listOut.data"  style="margin-top: 20px;">
+          <div class="widget-subheading nameTop">{{state.name}}</div>
+          <div class="row" style="margin-top: 5px;font-weight: 500;">
+            <div class="col-6">Xuất hiện:<span class="countTopOut" [countUp]="state.count==null?0:state.count">{{state.count}}</span></div>
+            <div class="col-6">Số lượng:<span class="quantityTopOut" [countUp]="state.sumQuantity==null?0:state.sumQuantity">{{state.sumQuantity}}</span></div>
+            <!-- <div class="widget-numbers text-success">Tổng tiền:600000</div> -->
+          </div>
+        </div>
+      
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+table {
+  width: 100%;
+}
+table {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-width: 500px;
+}
+
+th.mat-header-cell {
+  text-align: left;
+  max-width: 300px;
+}
+
+.mat-row:hover .mat-cell {
+  border-color: currentColor;
+}
+.mat-column-id{
+  display: none;
+}
+.mat-column-parentId{
+  display: none;
+}
+
+.activeButtonTreeView{
+  background-color: aqua;;
+}
