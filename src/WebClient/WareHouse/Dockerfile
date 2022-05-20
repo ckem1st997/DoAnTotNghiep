@@ -4,7 +4,7 @@
 # This is needed to build and compile our code 
 # while generating the docker image
 # lấy thư viện node
-FROM node:latest  AS build
+FROM node:16.13.2-alpine  AS build
 # Create a Virtual directory inside the docker image
 # tạo thư mục ảo trong image
 WORKDIR /dist/src/app
@@ -15,6 +15,7 @@ WORKDIR /dist/src/app
 RUN npm cache clean --force
 # Copy files from local machine to virtual directory in docker image
 COPY . .
+RUN npm update
 RUN npm install
 RUN npm run build --prod
 
