@@ -767,9 +767,9 @@
   }
   
   .s010 {
-  height: 100%;
+  // height: 100%;
     display: -ms-flexbox;
-    display: flex;
+    // display: flex;
     -ms-flex-pack: center;
         justify-content: center;
     -ms-flex-align: center;
@@ -802,8 +802,8 @@
     font-size: 18px;
     height: 43px;
     color: #fff;
-    background: linear-gradient(to right, #2c6dd5 0%, #2c6dd5 28%, #ff4b5a 91%, #ff4b5a 100%);
-    font-family: 'Lato', sans-serif;
+    background: linear-gradient(to right, #2c6dd5 0%, #2c6dd5 28%, #3a81dd 91%, #07a8d4 100%);
+        font-family: 'Lato', sans-serif;
   }
   
   .s010 form .inner-form .input-field input.placeholder {

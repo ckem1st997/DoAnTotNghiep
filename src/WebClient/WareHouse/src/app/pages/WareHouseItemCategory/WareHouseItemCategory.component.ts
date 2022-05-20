@@ -209,7 +209,7 @@ export class WareHouseItemCategoryComponent implements OnInit {
   searchQueryDialog(): void {
     const dialogRef = this.dialog.open(FormSearchWareHouseComponent, {
       width: '550px',
-      height: '350px',
+      // height: '350px',
     });
 
     dialogRef.afterClosed().subscribe(result => {

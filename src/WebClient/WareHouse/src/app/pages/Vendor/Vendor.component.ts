@@ -240,7 +240,6 @@ export class VendorComponent implements OnInit {
   searchQueryDialog(): void {
     const dialogRef = this.dialog.open(FormsearchComponent, {
       width: '550px',
-      height: '350px',
     });
 
     dialogRef.afterClosed().subscribe(result => {

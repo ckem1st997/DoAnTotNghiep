@@ -225,7 +225,6 @@ export class UnitComponent implements OnInit {
   searchQueryDialog(): void {
     const dialogRef = this.dialog.open(FormSearchWareHouseComponent, {
       width: '550px',
-      height: '350px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
