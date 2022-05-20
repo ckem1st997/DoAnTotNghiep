@@ -1,7 +1,5 @@
 ﻿using Autofac;
 using KafKa.Net.Abstractions;
-using KafKa.Net.IntegrationEvents.EventHandling;
-using KafKa.Net.IntegrationEvents.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

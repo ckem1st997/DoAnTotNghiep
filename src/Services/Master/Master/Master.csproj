@@ -10,16 +10,12 @@
 	<ItemGroup>
 	  <Compile Remove="Application\Grpc\**" />
 	  <Compile Remove="Application\HealthChecks\**" />
-	  <Compile Remove="Application\IntegrationEvents\**" />
 	  <Content Remove="Application\Grpc\**" />
 	  <Content Remove="Application\HealthChecks\**" />
-	  <Content Remove="Application\IntegrationEvents\**" />
 	  <EmbeddedResource Remove="Application\Grpc\**" />
 	  <EmbeddedResource Remove="Application\HealthChecks\**" />
-	  <EmbeddedResource Remove="Application\IntegrationEvents\**" />
 	  <None Remove="Application\Grpc\**" />
 	  <None Remove="Application\HealthChecks\**" />
-	  <None Remove="Application\IntegrationEvents\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -67,7 +63,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\..\BaseDoAnTotNghiep\BaseDoAnTotNghiep.csproj" />
+	  <ProjectReference Include="..\..\Base\Base\Base.csproj" />
 	  <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
 	</ItemGroup>
 

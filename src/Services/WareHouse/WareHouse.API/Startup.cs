@@ -79,8 +79,8 @@ namespace WareHouse.API
 
             services.AddTransient<GrpcExceptionInterceptor>();
             services.AddGrpc(options => { options.EnableDetailedErrors = true; });
-            //    services.AddSingleton<IKafKaConnection, KafKaConnection>();
-            //  services.AddEventBus(Configuration);
+            services.AddSingleton<IKafKaConnection, KafKaConnection>();
+            services.AddEventBus(Configuration);
             AppContext.SetSwitch(
   "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             var httpHandler = new HttpClientHandler();
@@ -89,7 +89,7 @@ namespace WareHouse.API
                 HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
             services.AddGrpcClient<GrpcGetData.GrpcGetDataClient>(o =>
                 {
-                    o.Address =Configuration.GetValue<bool>("UsingDocker")? new Uri("http://host.docker.internal:5000"): new Uri("http://localhost:5000");
+                    o.Address = Configuration.GetValue<bool>("UsingDocker") ? new Uri("http://host.docker.internal:5000") : new Uri("http://localhost:5000");
                 }).AddInterceptor<GrpcExceptionInterceptor>(InterceptorScope.Client)
                 .ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(httpHandler));
             // Adding Authentication  
@@ -115,7 +115,7 @@ namespace WareHouse.API
                     };
                 });
             services.AddHttpContextAccessor();
-            //services.AddHostedService<RequestTimeConsumer>();
+            services.AddHostedService<RequestTimeConsumer>();
             // services.AddSingleton<IHostedService, RequestTimeConsumer>();
         }
 
@@ -129,7 +129,7 @@ namespace WareHouse.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WareHouse.API v1"));
             }
 
-         //   app.UseHttpsRedirection();
+            //   app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseGrpcWeb();
@@ -142,7 +142,7 @@ namespace WareHouse.API
                 endpoints.MapGrpcService<GrpcGetDataWareHouseService>().EnableGrpcWeb();
                 endpoints.MapControllers();
             });
-         //   app.ConfigureEventBus();
+            //   app.ConfigureEventBus();
         }
     }
 }

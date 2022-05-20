@@ -58,7 +58,7 @@
     <Folder Include="Application\HealthChecks\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\BaseDoAnTotNghiep\BaseDoAnTotNghiep.csproj" />
+    <ProjectReference Include="..\..\Base\Base\Base.csproj" />
     <ProjectReference Include="..\..\KafKa.Net\KafKa.Net.csproj" />
     <ProjectReference Include="..\WareHouse.Domain\WareHouse.Domain.csproj" />
     <ProjectReference Include="..\WareHouse.Infrastructure\WareHouse.Infrastructure.csproj" />

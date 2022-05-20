@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using KafKa.Net.IntegrationEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -186,9 +185,9 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
             CreateMap<Domain.Entity.Outward, OutwardDTO>();
 
             //map to event bus
-            CreateMap<InwardIntegrationEvent, InwardCommands>();
-            CreateMap<InwardDetailIntegrationEvent, InwardDetailCommands>();
-            CreateMap<SerialWareHouseIntegrationEvent, SerialWareHouseCommands>();
+            //CreateMap<InwardIntegrationEvent, InwardCommands>();
+            //CreateMap<InwardDetailIntegrationEvent, InwardDetailCommands>();
+            //CreateMap<SerialWareHouseIntegrationEvent, SerialWareHouseCommands>();
         }
     }
 }

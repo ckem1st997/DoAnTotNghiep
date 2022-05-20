@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
-using KafKa.Net.IntegrationEvents;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -43,8 +42,6 @@ namespace WareHouse.API.Application.Validations.ConfigureServices
             services.AddTransient<IValidator<DashBoardSelectTopWareHouseBeginningCommand>, DashBoardSelectTopWareHouseCommandValidator>();
             services.AddTransient<IValidator<DashBoardChartInAndOutCountByDayCommand>, DashBoardChartInAndOutCountByDayCommandValidator>();
             services.AddTransient<IValidator<DashBoardChartInAndOutCountByMouthCommand>, DashBoardChartInAndOutCountByMounthCommandValidator>();
-            services.AddTransient<IValidator<InwardIntegrationEvent>, InwardIntegrationEventValidator>();
-            services.AddTransient<IValidator<InwardDetailIntegrationEvent>, InwardDetailIntegrationEventCommandValidator>();
         }
     }
 }

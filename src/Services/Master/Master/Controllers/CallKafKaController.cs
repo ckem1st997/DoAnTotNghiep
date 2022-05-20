@@ -1,7 +1,6 @@
 ﻿using Infrastructure;
 using KafKa.Net;
 using KafKa.Net.Abstractions;
-using KafKa.Net.IntegrationEvents;
 using Master.Application.Authentication;
 using Master.Application.Message;
 using Master.Service;
@@ -37,26 +36,26 @@ namespace Master.Controllers
             _userService = userServic;
         }
         
-        [Route("create-inward")]
-        [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult Test(InwardIntegrationEvent inward)
-        {
-            _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at MasterAPI - ({@IntegrationEvent})", inward.Id, typeof(InwardIntegrationEvent));
-            // var user = _userService.User;
-            // if (user.RoleNumber != 3 && !user.WarehouseId.Contains(inward.WareHouseId))
-            //     return Ok(new ResultMessageResponse()
-            //     {
-            //         success = true,
-            //         message = "Bạn không có quyền thao tác với kho này !"
-            //     });         
-            _eventBus.Publish(inward);
-            return Ok(new ResultMessageResponse()
-            {
-                success = true,
-                message = "Thành công, xin vui lòng kiểm tra lại sau !"
-            });
-        }
+        //[Route("create-inward")]
+        //[HttpPost]
+        //[ProducesResponseType((int)HttpStatusCode.OK)]
+        //[ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        //public IActionResult Test(InwardIntegrationEvent inward)
+        //{
+        //    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at MasterAPI - ({@IntegrationEvent})", inward.Id, typeof(InwardIntegrationEvent));
+        //    // var user = _userService.User;
+        //    // if (user.RoleNumber != 3 && !user.WarehouseId.Contains(inward.WareHouseId))
+        //    //     return Ok(new ResultMessageResponse()
+        //    //     {
+        //    //         success = true,
+        //    //         message = "Bạn không có quyền thao tác với kho này !"
+        //    //     });         
+        //    _eventBus.Publish(inward);
+        //    return Ok(new ResultMessageResponse()
+        //    {
+        //        success = true,
+        //        message = "Thành công, xin vui lòng kiểm tra lại sau !"
+        //    });
+        //}
     }
 }

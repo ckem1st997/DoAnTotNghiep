@@ -1,9 +1,6 @@
 ﻿using Autofac;
 using KafKa.Net;
 using KafKa.Net.Abstractions;
-using KafKa.Net.IntegrationEvents;
-using KafKa.Net.IntegrationEvents.EventHandling;
-using KafKa.Net.IntegrationEvents.Events;
 using KafKa.Net.Kafka;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -39,7 +36,7 @@ namespace WareHouse.API.IntegrationEvents
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
             // thêm xử lí event trong app
-            services.AddTransient<InwardIntegrationEventHandler>();
+            //services.AddTransient<InwardIntegrationEventHandler>();
         }
 
 
@@ -47,7 +44,7 @@ namespace WareHouse.API.IntegrationEvents
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             // đăng ký xử lý
-            eventBus.Subscribe<InwardIntegrationEvent, InwardIntegrationEventHandler>();
+          //  eventBus.Subscribe<InwardIntegrationEvent, InwardIntegrationEventHandler>();
         }
     }
 }

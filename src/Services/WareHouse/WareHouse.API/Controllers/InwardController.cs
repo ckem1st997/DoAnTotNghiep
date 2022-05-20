@@ -22,6 +22,10 @@ using WareHouse.API.Application.Queries.GetFisrt;
 using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.SignalRService;
 using WareHouse.API.Application.Extensions;
+using KafKa.Net.Abstractions;
+using Serilog.Context;
+using Base.Events;
+using Microsoft.Extensions.Logging;
 
 namespace WareHouse.API.Controllers
 {
@@ -32,15 +36,19 @@ namespace WareHouse.API.Controllers
         private readonly IFakeData _ifakeData;
         private readonly IUserSevice _userSevice;
         private readonly ISignalRService _signalRService;
+        private readonly IEventBus _eventBus;
+        private readonly ILogger<InwardController> _logger;
 
-        public InwardController(ISignalRService signalRService,IUserSevice userSevice, IFakeData ifakeData, IMediator mediat, ICacheExtension cacheExtension)
+
+        public InwardController(ILogger<InwardController> logger, IEventBus bus, ISignalRService signalRService, IUserSevice userSevice, IFakeData ifakeData, IMediator mediat, ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
             _ifakeData = ifakeData ?? throw new ArgumentNullException(nameof(ifakeData));
             _userSevice = userSevice;
             _signalRService = signalRService;
-
+            _eventBus = bus;
+            _logger = logger;
         }
         #region R    
 
@@ -203,10 +211,10 @@ namespace WareHouse.API.Controllers
             }
             var data = await _mediat.Send(new UpdateInwardCommand() { InwardCommands = inwardCommands });
             var mes = false;
-            if(data)
+            if (data)
             {
-                var user =await _userSevice.GetUser();
-                mes =   await _userSevice.CreateHistory(user.UserName,"Chỉnh sửa","vừa chỉnh sửa phiếu nhập kho có mã "+inwardCommands.VoucherCode+"!",false,inwardCommands.Id);
+                var user = await _userSevice.GetUser();
+                mes = await _userSevice.CreateHistory(user.UserName, "Chỉnh sửa", "vừa chỉnh sửa phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!", false, inwardCommands.Id);
 
             }
 
@@ -238,7 +246,7 @@ namespace WareHouse.API.Controllers
                     }); ;
             }
             var modelCreate = new InwardDTO();
-            modelCreate.Id=Guid.NewGuid().ToString();
+            modelCreate.Id = Guid.NewGuid().ToString();
             modelCreate.WareHouseId = idWareHouse;
             modelCreate.Voucher = ExtensionFull.GetVoucherCode("PN");
             await GetDataToDrop(modelCreate);
@@ -317,8 +325,24 @@ namespace WareHouse.API.Controllers
             if (data)
             {
                 var user = await _userSevice.GetUser();
-                mes = await _userSevice.CreateHistory(user.UserName, "Tạo", "vừa tạo mới phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!", false, inwardCommands.Id);
+                // save history by Grpc
+                //  mes = await _userSevice.CreateHistory(user.UserName, "Tạo", "vừa tạo mới phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!", false, inwardCommands.Id);
+                var kafkaModel = new CreateHistoryIntegrationEvent()
+                {
+                    UserName = user.UserName,
+                    Method = "Tạo",
+                    Body = "vừa tạo mới phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!",
+                    Read = false,
+                    Link = inwardCommands.Id
 
+                };
+                using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
+                {
+                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent})", kafkaModel.Id, kafkaModel);
+                    _eventBus.Publish(kafkaModel);
+                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
+
+                }
             }
 
             var result = new ResultMessageResponse()
@@ -351,7 +375,7 @@ namespace WareHouse.API.Controllers
                 success = data,
                 data = mes
             };
-            return Ok(result);          
+            return Ok(result);
         }
         #endregion
 
