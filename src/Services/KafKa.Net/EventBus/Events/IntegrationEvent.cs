@@ -12,9 +12,9 @@ namespace KafKa.Net.Events
     {
 
       //  [JsonInclude]
-        public string Id { get; set; }
+        public string Id { get; set; }=Guid.NewGuid().ToString();
 
        // [JsonInclude]
-        public DateTime CreationDate { get; set; }
+        public DateTime CreationDate { get; set; }=DateTime.Now;
     }
 }

@@ -115,7 +115,6 @@ namespace WareHouse.API
                     };
                 });
             services.AddHttpContextAccessor();
-            services.AddHostedService<RequestTimeConsumer>();
             // services.AddSingleton<IHostedService, RequestTimeConsumer>();
         }
 

@@ -2,6 +2,10 @@
 using Infrastructure;
 using KafKa.Net.Abstractions;
 using KafKa.Net.Events;
+using Master.Application.Message;
+using Master.Service;
+using Master.SignalRHubs;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
 using System;
@@ -17,12 +21,13 @@ namespace Master.IntegrationEvents
     {
         private readonly ILogger<CreateHistoryIntegrationEventHandler> _logger;
         private readonly MasterdataContext _masterdataContext;
+        private readonly IHubContext<ConnectRealTimeHub> _hubContext;
 
-
-        public CreateHistoryIntegrationEventHandler(MasterdataContext masterdataContext, ILogger<CreateHistoryIntegrationEventHandler> logger)
+        public CreateHistoryIntegrationEventHandler(IHubContext<ConnectRealTimeHub> hubContext,MasterdataContext masterdataContext, ILogger<CreateHistoryIntegrationEventHandler> logger)
         {
             _logger = logger;
             _masterdataContext = masterdataContext;
+            _hubContext = hubContext;
         }
 
         public async Task Handle(CreateHistoryIntegrationEvent @event)
@@ -45,6 +50,15 @@ namespace Master.IntegrationEvents
                 await _masterdataContext.AddAsync(model);
                 var res = await _masterdataContext.SaveChangesAsync();
                 _logger.LogInformation("Result to event: " + (res > 0).ToString() + "");
+                if(res > 0)
+                {
+                    var ress = new ResultMessageResponse()
+                    {
+                        data = request.UserName,
+                        success = res>0
+                    };
+                    await _hubContext.Clients.All.SendAsync("HistoryTrachkingToCLient", ress, request.UserName);
+                }    
             }
 
         }

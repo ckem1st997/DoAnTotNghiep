@@ -24,7 +24,7 @@ import { KafKaService } from 'src/app/service/KafKa.service';
   templateUrl: './InwardCreate.component.html',
   styleUrls: ['./InwardCreate.component.scss']
 })
-export class InwardCreateComponent implements OnInit,OnDestroy {
+export class InwardCreateComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   listDetails = Array<InwardDetailDTO>();
   listItem = Array<WareHouseItemDTO>();
@@ -70,7 +70,7 @@ export class InwardCreateComponent implements OnInit,OnDestroy {
   @ViewChild(MatTable)
   table!: MatTable<InwardDetailDTO>;
 
-  constructor(private kafka:KafKaService,private signalRService: SignalRService,private routerde: Router, private serviceBook: WareHouseBookService, notifierService: NotifierService, public dialog: MatDialog, private formBuilder: FormBuilder, private route: ActivatedRoute, private service: InwardService) {
+  constructor(private kafka: KafKaService, private signalRService: SignalRService, private routerde: Router, private serviceBook: WareHouseBookService, notifierService: NotifierService, public dialog: MatDialog, private formBuilder: FormBuilder, private route: ActivatedRoute, private service: InwardService) {
     this.notifier = notifierService;
   }
   @HostListener('window:resize', ['$event'])
@@ -98,7 +98,7 @@ export class InwardCreateComponent implements OnInit,OnDestroy {
       })
     });
     this.form = this.formBuilder.group({
-      id:null,
+      id: null,
       voucherCode: this.dt.voucherCode,
       voucher: this.dt.voucher,
       voucherDate: new Date().toISOString().slice(0, 16),
@@ -221,8 +221,7 @@ export class InwardCreateComponent implements OnInit,OnDestroy {
     this.dataSource.data.pop();
     this.table.renderRows();
   }
-  saveKafka()
-  {
+  saveKafka() {
     this.form.value["voucher"] = this.dt.voucher;
     var test = new InwardValidator();
     var msg = test.validate(this.form.value);
@@ -235,16 +234,16 @@ export class InwardCreateComponent implements OnInit,OnDestroy {
           if (x.success) {
             this.notifier.notify('success', x.message);
           }
-        }         
+        }
         );
       }
       else {
         this.notifier.notify('error', 'Vui lòng nhập chi tiết phiếu nhập');
       }
- 
- 
+
+
     }
- 
+
     else {
       var message = '';
       for (const [key, value] of Object.entries(msg)) {
@@ -252,10 +251,10 @@ export class InwardCreateComponent implements OnInit,OnDestroy {
       }
       this.notifier.notify('error', message);
     }
- 
+
   }
   onSubmit() {
-   // this.signalRService.SendCreateWareHouseBookTrachking('nhập kho');
+    // this.signalRService.SendCreateWareHouseBookTrachking('nhập kho');
     this.form.value["voucher"] = this.dt.voucher;
     var test = new InwardValidator();
     var msg = test.validate(this.form.value);
@@ -268,15 +267,17 @@ export class InwardCreateComponent implements OnInit,OnDestroy {
           if (x.success) {
             this.signalRService.SendCreateWareHouseBookTrachking('nhập kho');
             this.notifier.notify('success', 'Thêm thành công');
+            console.log(x);
+            // if (x.data)
+            //   this.signalRService.SendHistoryTrachking();
             this.routerde.navigate(['wh/warehouse-book']);
-            if (x.data)
-              this.signalRService.SendHistoryTrachking();
+
             //   this.routerde.navigate(['/details-inward', this.form.value["id"]]);
           }
           // commnet vì xử dụng bộ đánh chặn để thông báo thay vì ở đây
           // else
           //   this.notifier.notify('error', x.errors["msg"][0]);
-        }         
+        }
         );
       }
       else {

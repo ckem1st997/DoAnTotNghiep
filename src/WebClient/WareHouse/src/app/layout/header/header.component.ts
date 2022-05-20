@@ -37,7 +37,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.getHistory();
     this.signalRService.hubConnection.on(this.signalRService.HistoryTrachking, (data: ResultDataResponse<string>) => {
       if (data.success) {
-        if (this.service.userValue.id === data.data || this.service.userValue.role === 3) {
+        console.log(data);
+        if (this.service.userValue.username === data.data || this.service.userValue.role === 3) {
           this.getHistory();
         }
       }

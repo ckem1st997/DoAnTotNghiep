@@ -1,5 +1,9 @@
-﻿using MediatR;
+﻿using Base.Events;
+using KafKa.Net.Abstractions;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Serilog.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,13 +31,17 @@ namespace WareHouse.API.Controllers
         private readonly ICacheExtension _cacheExtension;
         private readonly IFakeData _ifakeData;
         private readonly IUserSevice _userSevice;
+        private readonly ILogger<OutwardController> _logger;
+        private readonly IEventBus _eventBus;
 
-        public OutwardController(IUserSevice userSevice, IFakeData ifakeData, IMediator mediat, ICacheExtension cacheExtension)
+        public OutwardController(IEventBus eventBus,ILogger<OutwardController> logger,IUserSevice userSevice, IFakeData ifakeData, IMediator mediat, ICacheExtension cacheExtension)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
             _ifakeData = ifakeData ?? throw new ArgumentNullException(nameof(ifakeData));
             _userSevice = userSevice;
+            _logger = logger;
+            _eventBus = eventBus;
         }
         #region R      
         #endregion
@@ -152,18 +160,32 @@ namespace WareHouse.API.Controllers
                 item.Price = item.Amount;
             }
             var data = await _mediat.Send(new UpdateOutwardCommand() { OutwardCommands = OutwardCommands });
-            var mes = false;
             if (data)
             {
                 var user = await _userSevice.GetUser();
-                mes = await _userSevice.CreateHistory(user.UserName, "Chỉnh sửa", "vừa chỉnh sửa phiếu xuất kho" + OutwardCommands.VoucherCode + "!", false, OutwardCommands.Id);
+                // save history by Grpc
+                //  mes = await _userSevice.CreateHistory(user.UserName, "Tạo", "vừa tạo mới phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!", false, inwardCommands.Id);
+                var kafkaModel = new CreateHistoryIntegrationEvent()
+                {
+                    UserName = user.UserName,
+                    Method = "Chỉnh sửa",
+                    Body = "vừa chỉnh sửa phiếu xuất kho có mã " + OutwardCommands.VoucherCode + "!",
+                    Read = false,
+                    Link = OutwardCommands.Id,
+                };
+                using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
+                {
+                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent})", kafkaModel.Id, kafkaModel);
+                    _eventBus.Publish(kafkaModel);
+                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
 
+                }
             }
 
             var result = new ResultMessageResponse()
             {
                 success = data,
-                data = mes
+                data = data
             };
             return Ok(result);
         }
@@ -253,18 +275,32 @@ namespace WareHouse.API.Controllers
                 item.Price = item.Amount;
             }
             var data = await _mediat.Send(new CreateOutwardCommand() { OutwardCommands = OutwardCommands });
-            var mes = false;
             if (data)
             {
                 var user = await _userSevice.GetUser();
-                mes = await _userSevice.CreateHistory(user.UserName, "Tạo", "vừa tạo mới phiếu xuất kho" + OutwardCommands.VoucherCode + "!", false, OutwardCommands.Id);
+                // save history by Grpc
+                //  mes = await _userSevice.CreateHistory(user.UserName, "Tạo", "vừa tạo mới phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!", false, inwardCommands.Id);
+                var kafkaModel = new CreateHistoryIntegrationEvent()
+                {
+                    UserName = user.UserName,
+                    Method = "Tạo",
+                    Body = "vừa tạo mới phiếu xuất kho có mã " + OutwardCommands.VoucherCode + "!",
+                    Read = false,
+                    Link = OutwardCommands.Id,
+                };
+                using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
+                {
+                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent})", kafkaModel.Id, kafkaModel);
+                    _eventBus.Publish(kafkaModel);
+                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
 
+                }
             }
 
             var result = new ResultMessageResponse()
             {
                 success = data,
-                data = mes
+                data = data
             };
             return Ok(result);
         }
@@ -279,18 +315,32 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
             var data = await _mediat.Send(new DeleteOutwardCommand() { Id = listIds });
-            var mes = false;
             if (data)
             {
-                var user = await _userSevice.GetUser();
-                mes = await _userSevice.CreateHistory(user.UserName, "Xóa", "vừa xóa phiếu xuất kho !", false, "");
 
+                var user = await _userSevice.GetUser();
+
+                var kafkaModel = new CreateHistoryIntegrationEvent()
+                {
+                    UserName = user.UserName,
+                    Method = "Xóa",
+                    Body = "vừa xóa phiếu nhập kho !",
+                    Read = false,
+                    Link = "",
+                };
+                using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
+                {
+                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent})", kafkaModel.Id, kafkaModel);
+                    _eventBus.Publish(kafkaModel);
+                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
+
+                }
             }
 
             var result = new ResultMessageResponse()
             {
                 success = data,
-                data = mes
+                data = data
             };
             return Ok(result);
         }

@@ -211,17 +211,38 @@ namespace WareHouse.API.Controllers
             }
             var data = await _mediat.Send(new UpdateInwardCommand() { InwardCommands = inwardCommands });
             var mes = false;
+            //if (data)
+            //{
+            //    var user = await _userSevice.GetUser();
+            //    mes = await _userSevice.CreateHistory(user.UserName, "Chỉnh sửa", "vừa chỉnh sửa phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!", false, inwardCommands.Id);
+
+            //}
             if (data)
             {
                 var user = await _userSevice.GetUser();
-                mes = await _userSevice.CreateHistory(user.UserName, "Chỉnh sửa", "vừa chỉnh sửa phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!", false, inwardCommands.Id);
+                // save history by Grpc
+                //  mes = await _userSevice.CreateHistory(user.UserName, "Tạo", "vừa tạo mới phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!", false, inwardCommands.Id);
+                var kafkaModel = new CreateHistoryIntegrationEvent()
+                {
+                    UserName = user.UserName,
+                    Method = "Chỉnh sửa",
+                    Body = "vừa chỉnh sửa phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!",
+                    Read = false,
+                    Link = inwardCommands.Id,
+                };
+                using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
+                {
+                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent})", kafkaModel.Id, kafkaModel);
+                    _eventBus.Publish(kafkaModel);
+                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
 
+                }
             }
 
             var result = new ResultMessageResponse()
             {
                 success = data,
-                data = mes
+                data = data
             };
             return Ok(result);
         }
@@ -321,7 +342,6 @@ namespace WareHouse.API.Controllers
                 item.Price = item.Amount;
             }
             var data = await _mediat.Send(new CreateInwardCommand() { InwardCommands = inwardCommands });
-            var mes = false;
             if (data)
             {
                 var user = await _userSevice.GetUser();
@@ -333,8 +353,7 @@ namespace WareHouse.API.Controllers
                     Method = "Tạo",
                     Body = "vừa tạo mới phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!",
                     Read = false,
-                    Link = inwardCommands.Id
-
+                    Link = inwardCommands.Id,
                 };
                 using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
                 {
@@ -348,7 +367,7 @@ namespace WareHouse.API.Controllers
             var result = new ResultMessageResponse()
             {
                 success = data,
-                data = mes
+                data = data
             };
             return Ok(result);
         }
@@ -362,18 +381,32 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
             var data = await _mediat.Send(new DeleteInwardCommand() { Id = listIds });
-            var mes = false;
             if (data)
             {
-                var user = await _userSevice.GetUser();
-                mes = await _userSevice.CreateHistory(user.UserName, "Xóa", "vừa xóa phiếu nhập kho !", false, "");
 
+                var user = await _userSevice.GetUser();
+
+                var kafkaModel = new CreateHistoryIntegrationEvent()
+                {
+                    UserName = user.UserName,
+                    Method = "Xóa",
+                    Body = "vừa xóa phiếu nhập kho !",
+                    Read = false,
+                    Link = "",
+                };
+                using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
+                {
+                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent})", kafkaModel.Id, kafkaModel);
+                    _eventBus.Publish(kafkaModel);
+                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
+
+                }
             }
 
             var result = new ResultMessageResponse()
             {
                 success = data,
-                data = mes
+                data = data
             };
             return Ok(result);
         }
