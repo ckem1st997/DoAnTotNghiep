@@ -1,5 +1,6 @@
 ﻿using KafKa.Net.Extensions;
 using MediatR;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace WareHouse.API.Application.Behaviors
             if (!checkConnectoDb)
             {
                 _logger.LogError("Can not connect to database");
-                throw new Exception("Can not connect to database");
+                throw new ArgumentException(new Exception().Message);
             }
             if (_userSevice != null && await _userSevice.GetUser() != null)
             {

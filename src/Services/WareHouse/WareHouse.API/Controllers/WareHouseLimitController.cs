@@ -28,6 +28,7 @@ using WareHouse.API.Application.Authentication;
 
 namespace WareHouse.API.Controllers
 {
+    
     [CheckRole(LevelCheck.WAREHOUSE)]
     public class WareHouseLimitController : BaseControllerWareHouse
     {

@@ -83,7 +83,7 @@ namespace KafKa.Net
 
         public IConsumer<string, byte[]> ConsumerConfig
         {
-            get { return this.kafkaProducer == null ? this.ConsumerConfigMethod():this.kafkaConsumer; }
+            get { return this.kafkaConsumer == null ? this.ConsumerConfigMethod():this.kafkaConsumer; }
         }
 
         public bool TryConnect()

@@ -157,37 +157,37 @@ namespace WareHouse.Infrastructure
         }
     }
 
-    public class WarehouseManagementContextDesignFactory : IDesignTimeDbContextFactory<WarehouseManagementContext>
-    {
-        public WarehouseManagementContext CreateDbContext(string[] args)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<WarehouseManagementContext>()
-                .UseSqlServer(WarehouseManagementContext.STRING_CONNECT);
+    //public class WarehouseManagementContextDesignFactory : IDesignTimeDbContextFactory<WarehouseManagementContext>
+    //{
+    //    public WarehouseManagementContext CreateDbContext(string[] args)
+    //    {
+    //        var optionsBuilder = new DbContextOptionsBuilder<WarehouseManagementContext>()
+    //            .UseSqlServer(WarehouseManagementContext.STRING_CONNECT);
 
-            return new WarehouseManagementContext(optionsBuilder.Options, new NoMediator());
-        }
+    //        return new WarehouseManagementContext(optionsBuilder.Options, new NoMediator());
+    //    }
 
-        class NoMediator : IMediator
-        {
-            public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default(CancellationToken)) where TNotification : INotification
-            {
-                return Task.CompletedTask;
-            }
+    //    class NoMediator : IMediator
+    //    {
+    //        public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default(CancellationToken)) where TNotification : INotification
+    //        {
+    //            return Task.CompletedTask;
+    //        }
 
-            public Task Publish(object notification, CancellationToken cancellationToken = default)
-            {
-                return Task.CompletedTask;
-            }
+    //        public Task Publish(object notification, CancellationToken cancellationToken = default)
+    //        {
+    //            return Task.CompletedTask;
+    //        }
 
-            public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                return Task.FromResult<TResponse>(default(TResponse));
-            }
+    //        public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default(CancellationToken))
+    //        {
+    //            return Task.FromResult<TResponse>(default(TResponse));
+    //        }
 
-            public Task<object> Send(object request, CancellationToken cancellationToken = default)
-            {
-                return Task.FromResult(default(object));
-            }
-        }
-    }
+    //        public Task<object> Send(object request, CancellationToken cancellationToken = default)
+    //        {
+    //            return Task.FromResult(default(object));
+    //        }
+    //    }
+    //}
 }

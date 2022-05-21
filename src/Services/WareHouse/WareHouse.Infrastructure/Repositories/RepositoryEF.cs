@@ -163,14 +163,7 @@ namespace WareHouse.Infrastructure.Repositories
             if (listEntity is null)
                 throw new NotImplementedException(nameof(listEntity));
             var sb = new StringBuilder();
-            await _context.BulkInsertAsync(listEntity, options =>
-            {
-                options.Log= s => sb.AppendLine(s);
-
-            });
-            // Result
-            Console.WriteLine("Logging Sql to Raw");
-            Console.WriteLine(sb.ToString());
+            await _context.BulkInsertAsync(listEntity);
         }
 
         public void BulkUpdate(IList<T> listEntity)
@@ -198,7 +191,7 @@ namespace WareHouse.Infrastructure.Repositories
         {
             if (listIds is null)
                 throw new NotImplementedException(nameof(listIds));
-            return await _dbSet.Where(x => listIds.Contains(x.Id)).UpdateFromQueryAsync(x => new T { OnDelete = true });
+            return await _dbSet.Where(x => listIds.Contains(x.Id)).BatchUpdateAsync(x => new T { OnDelete = true });
         }
 
         public async Task BulkInsertOrUpdateAsync(IList<T> listEntity)

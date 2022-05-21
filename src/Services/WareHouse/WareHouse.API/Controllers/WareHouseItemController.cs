@@ -29,6 +29,7 @@ using WareHouse.API.Application.Authentication;
 
 namespace WareHouse.API.Controllers
 {
+    
     public class WareHouseItemController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
