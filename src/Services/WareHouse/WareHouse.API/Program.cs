@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -14,6 +14,7 @@ using Autofac.Extensions.DependencyInjection;
 using System.Net;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog.Sinks.Elasticsearch;
+using System.Reflection;
 
 namespace WareHouse.API
 {
@@ -65,17 +66,22 @@ namespace WareHouse.API
 
             var seqServerUrl = configuration["Serilog:SeqServerUrl"];
             var logstashUrl = configuration["Serilog:LogstashgUrl"];
+            Console.WriteLine(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl);
             return new LoggerConfiguration()
                 .MinimumLevel.Verbose()
                 .Enrich.WithProperty("ApplicationContext", "WareHouse")
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                //https://datalust.co/seq
                 .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl, apiKey: "0QEfAbE4THZTcUu6I7bQ")
-               .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl))
-               {
-                   ModifyConnectionSettings = x => x.BasicAuthentication("elastic", "changeme"),
-               }).ReadFrom.Configuration(configuration)
+               //.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl))
+               //{
+               //    ModifyConnectionSettings = x => x.BasicAuthentication("logstash_internal", "changeme"),
+               //    AutoRegisterTemplate = true,
+               //    IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name.ToLower()}-{DateTime.UtcNow:yyyy-MM}"
+               //})
+               // cần phải connect đến lgstash trước khi create index to kibana
+               .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl)
+               .ReadFrom.Configuration(configuration)
                 .CreateLogger();
         }
 
