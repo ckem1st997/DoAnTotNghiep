@@ -71,7 +71,7 @@ namespace KafKa.Net.Kafka
                 WriteIndented = true
             });
             producer.Produce(_topicName, new Message<string, byte[]> { Key = eventName, Value = body });
-            producer.Flush(timeout: TimeSpan.FromSeconds(10));
+            producer.Flush(timeout: TimeSpan.FromSeconds(5));
         }
 
         public void SubscribeDynamic<TH>(string eventName)
