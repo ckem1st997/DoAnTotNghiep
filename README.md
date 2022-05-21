@@ -1,2 +1,2 @@
 # DoAnTotNghiep
-Đây là đồ án tốt nghiệp được viết bở kiến trúc Microservice 
+Đây là đồ án tốt nghiệp được viết bởi kiến trúc Microservice 
