@@ -9,9 +9,11 @@ namespace KafKa.Net
 {
     public  interface IKafKaConnection : IDisposable
     {
-        bool IsConnected { get; }
+        bool IsConnectedConsumer { get; }
+        bool IsConnectedProducer { get; }
 
-        bool TryConnect();
+        bool TryConnectConsumer();
+        bool TryConnectProducer();
 
         IProducer<string, byte[]> ProducerConfig { get; }
         IConsumer<string, byte[]> ConsumerConfig { get; }

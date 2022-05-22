@@ -64,31 +64,40 @@ namespace KafKa.Net
         [Obsolete]
         private async Task StartConsumerLoop(CancellationToken cancellationToken)
         {
-            kafkaConsumer.Subscribe(this.topic);
-            while (!cancellationToken.IsCancellationRequested)
+            if (!_kafKaConnection.IsConnectedConsumer)
             {
-                try
-                {
-                    var cr = this.kafkaConsumer.Consume(cancellationToken);
-                    if (cr.Message != null)
-                    {
-                        var message = Encoding.UTF8.GetString(cr.Value);
-                        await ProcessEvent(cr.Key, message);
-
-                    }
-                    kafkaConsumer.StoreOffset(cr);
-                }
-                catch (ConsumeException e)
-                {
-                    Console.WriteLine($"Consume error: {e.Error.Reason}");
-                    this.kafkaConsumer.Close();
-                    if (e.Error.IsFatal)
-                    {
-                        break;
-                    }
-                }
+                _logger.LogInformation("Kafka Client is not connected");
+                _kafKaConnection.TryConnectConsumer();
             }
-            this.kafkaConsumer.Close();
+            else
+            {
+                kafkaConsumer.Subscribe(this.topic);
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    try
+                    {
+                        var cr = this.kafkaConsumer.Consume(cancellationToken);
+                        if (cr.Message != null)
+                        {
+                            var message = Encoding.UTF8.GetString(cr.Value);
+                            await ProcessEvent(cr.Key, message);
+
+                        }
+                        kafkaConsumer.StoreOffset(cr);
+                    }
+                    catch (ConsumeException e)
+                    {
+                        Console.WriteLine($"Consume error: {e.Error.Reason}");
+                        this.kafkaConsumer.Close();
+                        if (e.Error.IsFatal)
+                        {
+                            break;
+                        }
+                    }
+                }
+                this.kafkaConsumer.Close();
+            }
+
         }
         private async Task ProcessEvent(string eventName, string message)
         {

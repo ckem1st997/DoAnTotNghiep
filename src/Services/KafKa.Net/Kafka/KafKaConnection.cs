@@ -24,6 +24,7 @@ namespace KafKa.Net
         private IConsumer<string, byte[]> kafkaConsumer;
         private IProducer<string, byte[]> kafkaProducer;
         private readonly IConfiguration _configuration;
+        private Error Error;
         bool _disposed;
 
         object sync_root = new object();
@@ -42,6 +43,8 @@ namespace KafKa.Net
             GroupId = _configuration["KafKaGroupId"];
             BootstrapServers = _configuration["KafKaBootstrapServers"];
             connectionName = _configuration["KafKaconnectionName"];
+            this.kafkaConsumer = ConsumerConfigMethod();
+            this.kafkaProducer = ProducerConfigMethod();
         }
 
         private IProducer<string, byte[]> ProducerConfigMethod()
@@ -51,8 +54,11 @@ namespace KafKa.Net
                 BootstrapServers = BootstrapServers,
                 ClientId = Dns.GetHostName(),
             };
-            kafkaProducer = new ProducerBuilder<string, byte[]>(pConfig).Build();
-            return kafkaProducer;
+
+            return new ProducerBuilder<string, byte[]>(pConfig).SetErrorHandler((p, e) =>
+            {
+                Error = e;
+            }).Build();
         }
 
         private IConsumer<string, byte[]> ConsumerConfigMethod()
@@ -66,27 +72,77 @@ namespace KafKa.Net
                 EnableAutoOffsetStore = false,
                 HeartbeatIntervalMs = 1000
             };
-            kafkaConsumer = new ConsumerBuilder<string, byte[]>(consumerConfig).Build();
-            return kafkaConsumer;
+            return new ConsumerBuilder<string, byte[]>(consumerConfig).SetErrorHandler((p, e) =>
+            {
+                Error = e;
+            }).Build();
         }
 
-        public bool IsConnected
+        public bool IsConnectedConsumer
         {
-            get { return ProducerConfig != null || ConsumerConfig != null && !_disposed; }
+            get { return GetErrorCheck(); }
+        }
+
+        private bool GetErrorCheck()
+        {
+            return this.Error == null || (this.Error != null && !this.Error.Reason.Contains("failed: Unknown error"));
+        }
+
+        public bool IsConnectedProducer
+        {
+            get { return GetErrorCheck(); }
         }
 
         public IProducer<string, byte[]> ProducerConfig
         {
-            get { return this.kafkaProducer==null? this.ProducerConfigMethod():this.kafkaProducer; }
+            get { return this.kafkaProducer; }
         }
 
 
         public IConsumer<string, byte[]> ConsumerConfig
         {
-            get { return this.kafkaConsumer == null ? this.ConsumerConfigMethod():this.kafkaConsumer; }
+            get { return this.kafkaConsumer; }
         }
 
-        public bool TryConnect()
+        public bool TryConnectConsumer()
+        {
+            _logger.LogInformation("Kafka Client is trying to connect");
+            lock (sync_root)
+            {
+                var policy = RetryPolicy.Handle<SocketException>()
+                    .Or<KafkaRetriableException>()
+                    .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                        (ex, time) =>
+                        {
+                            _logger.LogWarning(ex,
+                                "Kafka Client could not connect after {TimeOut}s ({ExceptionMessage})",
+                                $"{time.TotalSeconds:n1}", ex.Message);
+                        }
+                    );
+
+                policy.Execute(() =>
+                {
+                    if (ConsumerConfig == null)
+                        this.kafkaConsumer = this.ConsumerConfigMethod();
+                });
+
+                if (IsConnectedConsumer)
+                {
+                    _logger.LogInformation(
+                        "Kafka Client acquired a persistent connection to '{HostName}' and is subscribed to failure events",
+                        Dns.GetHostName());
+                    return true;
+                }
+                else
+                {
+                    _logger.LogCritical("FATAL ERROR: Kafka connections could not be created and opened");
+                    return false;
+                }
+            }
+        }
+
+
+        public bool TryConnectProducer()
         {
             _logger.LogInformation("Kafka Client is trying to connect");
             lock (sync_root)
@@ -105,12 +161,10 @@ namespace KafKa.Net
                 policy.Execute(() =>
                 {
                     if (ProducerConfig == null)
-                        this.ProducerConfigMethod();
-                    if (ConsumerConfig == null)
-                        this.ConsumerConfigMethod();
+                        this.kafkaProducer = this.ProducerConfigMethod();
                 });
 
-                if (IsConnected)
+                if (IsConnectedProducer)
                 {
                     _logger.LogInformation(
                         "Kafka Client acquired a persistent connection to '{HostName}' and is subscribed to failure events",
@@ -124,16 +178,15 @@ namespace KafKa.Net
                 }
             }
         }
-
         public void Dispose()
         {
             if (_disposed) return;
 
             _disposed = true;
-          
+
             try
             {
-               this.kafkaConsumer.Close();
+                this.kafkaConsumer.Close();
                 this.kafkaProducer.Flush();
             }
             catch (Exception ex)
@@ -141,5 +194,6 @@ namespace KafKa.Net
                 _logger.LogError(ex.Message.ToString());
             }
         }
+
     }
 }

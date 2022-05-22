@@ -44,9 +44,13 @@ namespace KafKa.Net.Kafka
         /// <param name="eventName"></param>
         private void SubsManager_OnEventRemoved(object sender, string eventName)
         {
-            if (!_persistentConnection.IsConnected)
+            if (!_persistentConnection.IsConnectedProducer)
             {
-                _persistentConnection.TryConnect();
+                _persistentConnection.TryConnectProducer();
+            }         
+            if (!_persistentConnection.IsConnectedConsumer)
+            {
+                _persistentConnection.TryConnectConsumer();
             }
         }
 
@@ -57,21 +61,22 @@ namespace KafKa.Net.Kafka
         /// <param name="event"></param>
         public void Publish(IntegrationEvent @event)
         {
-            if (!_persistentConnection.IsConnected)
+            if (!_persistentConnection.IsConnectedProducer)
+                _persistentConnection.TryConnectProducer();
+            else
             {
-                _persistentConnection.TryConnect();
-            }
+                var eventName = @event.GetType().Name;
 
-            var eventName = @event.GetType().Name;
+                _logger.LogTrace("Creating KafKa Topic to publish event: {EventId} ({EventName})", @event.Id, eventName);
+                var producer = _persistentConnection.ProducerConfig;
+                var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+                producer.Produce(_topicName, new Message<string, byte[]> { Key = eventName, Value = body });
+                producer.Flush(timeout: TimeSpan.FromSeconds(5));
+            }    
 
-            _logger.LogTrace("Creating KafKa Topic to publish event: {EventId} ({EventName})", @event.Id, eventName);
-            var producer = _persistentConnection.ProducerConfig;
-            var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
-            producer.Produce(_topicName, new Message<string, byte[]> { Key = eventName, Value = body });
-            producer.Flush(timeout: TimeSpan.FromSeconds(5));
         }
 
         public void SubscribeDynamic<TH>(string eventName)
