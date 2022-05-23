@@ -47,7 +47,7 @@ namespace KafKa.Net.Kafka
             if (!_persistentConnection.IsConnectedProducer)
             {
                 _persistentConnection.TryConnectProducer();
-            }         
+            }
             if (!_persistentConnection.IsConnectedConsumer)
             {
                 _persistentConnection.TryConnectConsumer();
@@ -61,9 +61,7 @@ namespace KafKa.Net.Kafka
         /// <param name="event"></param>
         public void Publish(IntegrationEvent @event)
         {
-            if (!_persistentConnection.IsConnectedProducer)
-                _persistentConnection.TryConnectProducer();
-            else
+            if (_persistentConnection.IsConnectedProducer)
             {
                 var eventName = @event.GetType().Name;
 
@@ -75,7 +73,7 @@ namespace KafKa.Net.Kafka
                 });
                 producer.Produce(_topicName, new Message<string, byte[]> { Key = eventName, Value = body });
                 producer.Flush(timeout: TimeSpan.FromSeconds(5));
-            }    
+            }
 
         }
 
@@ -122,5 +120,19 @@ namespace KafKa.Net.Kafka
 
             _subsManager.Clear();
         }
+
+        public bool IsConnectedProducer()
+        {
+            if (_persistentConnection.IsConnectedProducer)
+                _persistentConnection.TryConnectProducer();
+            return _persistentConnection.IsConnectedProducer;
+        }
+        public bool IsConnectedConsumer()
+        {
+            if (_persistentConnection.IsConnectedConsumer)
+                _persistentConnection.TryConnectConsumer();
+            return _persistentConnection.IsConnectedConsumer;
+        }
+
     }
 }

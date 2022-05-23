@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Base.Events;
+using System.Threading.Tasks;
 using WareHouse.API.Application.Model;
 
 namespace WareHouse.API.Application.Authentication
@@ -24,7 +25,7 @@ namespace WareHouse.API.Application.Authentication
         /// <param name="Read"></param>
         /// <param name="Link"></param>
         /// <returns></returns>
-        public Task<bool> CreateHistory(string UserName, string Method, string Body, bool Read, string Link);
+        public Task<bool> CreateHistory(CreateHistoryIntegrationEvent create);
 
         public Task<bool> ActiveHistory(string UserName);
 

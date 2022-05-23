@@ -22,14 +22,16 @@ namespace GrpcGetDataToMaster
         private readonly MasterdataContext _masterdataContext;
         private readonly ILogger<GrpcGetDataToMasterService> _logger;
         private readonly IUserService _userService;
+        private readonly IHubContext<ConnectRealTimeHub> _hubContext;
 
 
 
-        public GrpcGetDataToMasterService(IUserService userService, MasterdataContext masterdataContext, IDapper mediat, ILogger<GrpcGetDataToMasterService> logger)
+        public GrpcGetDataToMasterService(IHubContext<ConnectRealTimeHub> hubContext,IUserService userService, MasterdataContext masterdataContext, IDapper mediat, ILogger<GrpcGetDataToMasterService> logger)
         {
             _userService = userService;
             _logger = logger;
             _masterdataContext = masterdataContext;
+            _hubContext = hubContext;
         }
 
 
@@ -48,6 +50,15 @@ namespace GrpcGetDataToMaster
             };
             await _masterdataContext.AddAsync(model);
             var res = await _masterdataContext.SaveChangesAsync();
+            if (res > 0)
+            {
+                var ress = new ResultMessageResponse()
+                {
+                    data = request.UserName,
+                    success = res > 0
+                };
+                await _hubContext.Clients.All.SendAsync("HistoryTrachkingToCLient", ress, request.UserName);
+            }
             return new SaveChange() { Check = res>0 };
         }
 

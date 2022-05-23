@@ -1,4 +1,5 @@
-﻿using GrpcGetDataToMaster;
+﻿using Base.Events;
+using GrpcGetDataToMaster;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Model;
 
@@ -28,15 +29,15 @@ namespace WareHouse.API.Application.Authentication
             return user.WarehouseId.Contains(idWareHouse);
         }
 
-        public async Task<bool> CreateHistory(string UserName, string Method, string Body, bool Read, string Link)
+        public async Task<bool> CreateHistory(CreateHistoryIntegrationEvent create)
         {
             var model = new HistotyModel()
             {
-                Body = Body,
-                UserName = UserName,
-                Method = Method,
-                Link = Link,
-                Read = Read
+                Body = create.Body,
+                UserName = create.UserName,
+                Method = create.Method,
+                Link = create.Link,
+                Read = create.Read
             };
             var res = await _client.CreateHistoryAsync(model);
             return res.Check;

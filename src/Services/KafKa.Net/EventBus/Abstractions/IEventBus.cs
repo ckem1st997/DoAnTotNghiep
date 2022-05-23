@@ -11,6 +11,10 @@ namespace KafKa.Net.Abstractions
         /// <param name="event"></param>
         void Publish(IntegrationEvent @event);
 
+        bool IsConnectedConsumer();
+        bool IsConnectedProducer();
+
+
         void Subscribe<T, TH>()
             where T : IntegrationEvent
             where TH : IIntegrationEventHandler<T>;

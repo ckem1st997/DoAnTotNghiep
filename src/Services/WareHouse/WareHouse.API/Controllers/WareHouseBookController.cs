@@ -166,7 +166,7 @@ namespace WareHouse.API.Controllers
             var result = new ResultMessageResponse()
             {
                 data = res,
-                success=res !=null
+                success = res != null
             };
             return Ok(result);
         }
@@ -653,8 +653,24 @@ namespace WareHouse.API.Controllers
             {
                 var user = await _userSevice.GetUser();
                 var data = await _mediat.Send(new OutwardGetFirstCommand() { Id = outwardDetailCommands.OutwardId });
-                mes = await _userSevice.CreateHistory(user.UserName, "Chỉnh sửa", "vừa chỉnh sửa vật tư trong phiếu xuất kho" + data.VoucherCode + "!", false, data.Id);
+                var kafkaModel = new CreateHistoryIntegrationEvent()
+                {
+                    UserName = user.UserName,
+                    Method = "Chỉnh sửa",
+                    Body = "vừa chỉnh sửa vật tư trong phiếu xuất kho" + data.VoucherCode + "!",
+                    Read = false,
+                    Link = data.Id
+                };
+                using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
+                {
+                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent})", kafkaModel.Id, kafkaModel);
+                    if (_eventBus.IsConnectedProducer())
+                        _eventBus.Publish(kafkaModel);
+                    else
+                        await _userSevice.CreateHistory(kafkaModel);
+                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
 
+                }
             }
 
             var result = new ResultMessageResponse()
@@ -680,8 +696,24 @@ namespace WareHouse.API.Controllers
             {
                 var user = await _userSevice.GetUser();
                 var res = await _mediat.Send(new OutwardGetFirstCommand() { Id = outwardDetailCommands.OutwardId });
-                mes = await _userSevice.CreateHistory(user.UserName, "Tạo", "vừa tạo mới vật tư trong phiếu xuất kho" + res.VoucherCode + "!", false, res.Id);
+                var kafkaModel = new CreateHistoryIntegrationEvent()
+                {
+                    UserName = user.UserName,
+                    Method = "Tạo",
+                    Body = "vừa tạo mới vật tư trong phiếu xuất kho" + res.VoucherCode + "!",
+                    Read = false,
+                    Link =res.Id
+                };
+                using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
+                {
+                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent})", kafkaModel.Id, kafkaModel);
+                    if (_eventBus.IsConnectedProducer())
+                        _eventBus.Publish(kafkaModel);
+                    else
+                        await _userSevice.CreateHistory(kafkaModel);
+                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
 
+                }
             }
 
             var result = new ResultMessageResponse()
@@ -948,7 +980,7 @@ namespace WareHouse.API.Controllers
 
             };
             return Ok(result);
-        
+
         }
         #endregion
 

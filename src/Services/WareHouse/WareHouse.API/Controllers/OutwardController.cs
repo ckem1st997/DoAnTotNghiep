@@ -176,7 +176,10 @@ namespace WareHouse.API.Controllers
                 using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
                 {
                     _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent})", kafkaModel.Id, kafkaModel);
-                    _eventBus.Publish(kafkaModel);
+                    if (_eventBus.IsConnectedProducer())
+                        _eventBus.Publish(kafkaModel);
+                    else
+                        await _userSevice.CreateHistory(kafkaModel);
                     _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
 
                 }
@@ -291,7 +294,10 @@ namespace WareHouse.API.Controllers
                 using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
                 {
                     _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent})", kafkaModel.Id, kafkaModel);
-                    _eventBus.Publish(kafkaModel);
+                    if (_eventBus.IsConnectedProducer())
+                        _eventBus.Publish(kafkaModel);
+                    else
+                        await _userSevice.CreateHistory(kafkaModel);
                     _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
 
                 }
@@ -331,7 +337,10 @@ namespace WareHouse.API.Controllers
                 using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
                 {
                     _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent})", kafkaModel.Id, kafkaModel);
-                    _eventBus.Publish(kafkaModel);
+                    if (_eventBus.IsConnectedProducer())
+                        _eventBus.Publish(kafkaModel);
+                    else
+                        await _userSevice.CreateHistory(kafkaModel);
                     _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
 
                 }
