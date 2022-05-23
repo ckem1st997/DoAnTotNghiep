@@ -1,9 +1,8 @@
 <div class="container-fluid " id="dashboard" style="margin-top: 20px;">
   <div class="row h-100">
-    <div class="col-9 h-100">
-      <div class=" row" style="height:15%">
-
-        <div class="col-md-6 col-lg-3">
+    <div class="col-lg-9 column-1 h-100">
+      <div class="list-detalis row" style="height:15%">
+        <div class="col-xl-3 col-lg-6 col-md-6">
           <div style="height: 100%; border-bottom: 3px solid #3f6ad8;">
             <div class="titleTopDashBoard" style="font-size: 18px;    opacity: 0.8;">Vật tư dùng nhiều nhất</div>
             <div class="d-flex row" style="margin-top: 20px; align-items: baseline;">
@@ -13,7 +12,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6 col-lg-3">
+        <div class="col-xl-3 col-lg-6 col-md-6">
           <div style="height: 100%; border-bottom: 3px solid #d92550;">
             <div class="titleTopDashBoard" style="font-size: 18px;    opacity: 0.8;">Kho tồn nhiều nhất</div>
             <div class="d-flex row" style="margin-top: 20px; align-items: baseline;">
@@ -23,7 +22,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6 col-lg-3">
+        <div class="col-xl-3 col-lg-6 col-md-6">
           <div style="height: 100%; border-bottom: 3px solid #f7b924;">
             <div class="titleTopDashBoard" style="font-size: 18px;    opacity: 0.8;">Vật tư dùng ít nhất</div>
             <div class="d-flex row" style="margin-top: 20px; align-items: baseline;">
@@ -33,43 +32,24 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6 col-lg-3">
+        <div class="col-xl-3 col-lg-6 col-md-6">
           <div style="height: 100%; border-bottom: 3px solid #3ac47d;">
             <div class="titleTopDashBoard" style="font-size: 18px;    opacity: 0.8;">Kho tồn ít nhất</div>
             <div class="d-flex row" style="margin-top: 20px; align-items: baseline;">
               <i style="font-size: 28px;color: #e521c4;" class="col-2 bi bi-archive-fill"></i>
-              <div style="font-size: 12.5px;font-weight: 500;" class="col-6">{{listIndex.wareHouseBeginningCountMin?.name}}</div>
-              <div style="font-size: 19px;font-weight: 500;" class="col-4" [countUp]="listIndex.wareHouseBeginningCountMin==undefined?0:listIndex.wareHouseBeginningCountMin.sumBalance==null?0:ConvertStringToNumber(listIndex.wareHouseBeginningCountMin.sumBalance)">{{listIndex.wareHouseBeginningCountMin?.sumBalance}}</div>
+              <div style="font-size: 12.5px;font-weight: 500;" class="col-5">{{listIndex.wareHouseBeginningCountMin?.name}}</div>
+              <div style="font-size: 19px;font-weight: 500;" class="col-5" [countUp]="listIndex.wareHouseBeginningCountMin==undefined?0:listIndex.wareHouseBeginningCountMin.sumBalance==null?0:ConvertStringToNumber(listIndex.wareHouseBeginningCountMin.sumBalance)">{{listIndex.wareHouseBeginningCountMin?.sumBalance}}</div>
             </div>
           </div>
         </div>
       </div>
       <div class=" row" style="height:55%;margin-top: 25px;">
-        <div class="col-6">
-          <!-- <div>
-            <mat-form-field appearance="fill">
-              <mat-label>Lọc</mat-label>
-              <mat-select  [(ngModel)]="selectedValue" name="food">
-                <mat-option *ngFor="let food of foods" [value]="food.value">
-                  {{food.viewValue}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div> -->
+        <div class="col-md-12 col-lg-6">
           <div echarts [options]="optioneChartCoulumn" class="demo-chart" [loading]="true" ></div>
 
         </div>
-        <div class="col-6">
+        <div class="col-md-12 col-lg-6">
           <div>
-           
-            <!-- <mat-form-field appearance="fill">
-              <mat-label>Tháng</mat-label>
-              <mat-select (selectionChange)="changeChartPhieu2($event)" [(ngModel)]="checkChart2" name="food">
-                <mat-option *ngFor="let food of foods2" [value]="food.value">
-                  {{food.viewValue}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field> -->
           </div>
           <div echarts [options]="optioneChart2" class="demo-chart" [loading]="true" ></div>
           <mat-form-field appearance="fill">
@@ -82,7 +62,7 @@
           </mat-form-field>
         </div>
       </div>
-      <div class=" container-fluid" id="style-15" style="height:27%;    overflow: auto;">
+      <div class=" container-fluid" id="style-15" style="height:27%;    overflow: auto;padding: 0;">
         <div class="main-card mb-3 card">
           <div class="card-header">
             <div class="card-header-title font-size-lg text-capitalize font-weight-normal">Lịch sử giao dịch mới nhất
@@ -145,7 +125,7 @@
         </div>
       </div>
     </div>
-    <div class="col-3 h-100">
+    <div class="col-lg-3 h-100 listTop">
       <div class="h-50" id="style-6" style="    overflow: auto;">
         <div class="title-border-red title-p-m ">
           <h5 class="menu-header-title text-capitalize">Danh sách vật tư nhập kho nhiều nhất</h5>

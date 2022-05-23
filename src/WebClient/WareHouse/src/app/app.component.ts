@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { trigger, transition, useAnimation } from "@angular/animations";
 import { fromRightEasing, rotateCubeToLeft } from "ngx-router-animations";
 import { delay } from 'rxjs';
@@ -20,20 +20,30 @@ import { AuthenticationService } from './extension/Authentication.service';
 export class AppComponent {
   title = 'WareHouse';
   loading: boolean = false;
-
+  checkSizeWindows: boolean = true;
+  public getScreenWidth: any;
+  public getScreenHeight: any;
   constructor(
     private _loading: LoadingService,
     private notifierService: NotifierService,
     private signalRService: SignalRService,
     private auth: AuthenticationService
   ) { }
+  @HostListener('window:resize', ['$event'])
 
+  onWindowResize() {
+    this.getScreenWidth = window.innerWidth;
+    this.getScreenHeight = window.innerHeight;
+    if (this.getScreenWidth <= 768)
+      this.checkSizeWindows = false;
+    else
+      this.checkSizeWindows = true;
+      console.log(this.checkSizeWindows);
+  }
   ngOnInit() {
     this.listenToLoading();
     this.signalRService.startConnection();
-
     //  this.signalRService.CallMethodToServiceByInwardChange('SendMessageToCLient');
-
   }
 
   /**

@@ -10,6 +10,7 @@ import { NotifierService } from 'angular-notifier';
 })
 export class FormSearchWareHouseBookComponent implements OnInit {
   private readonly notifier!: NotifierService;
+  selectedValue: string="";
   form!: FormGroup;
   constructor(
     public dialogRef: MatDialogRef<FormSearchWareHouseBookComponent>,
@@ -22,6 +23,7 @@ export class FormSearchWareHouseBookComponent implements OnInit {
       inactive: null,
       start: new FormControl(),
       end: new FormControl(),
+      type:''
     });
   }
   onNoClick(): void {

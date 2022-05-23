@@ -1,9 +1,6 @@
 <div class="s010">
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="inner-form">
-      <div>
-       <h3>Tìm kiếm</h3> 
-      </div>
       <div class="basic-search">
         <div class="input-field">
           <input id="search" formControlName="key" type="text" placeholder="Nhập từ khoá..." />
@@ -19,11 +16,11 @@
       <div class="advance-search">
         <span class="desc">Điều kiện search</span>
         <div class="row">
-          <div>
+          <!-- <div class="col-6">
             <mat-checkbox formControlName="inactive" class="example-margin" name="checkedl">Trạng thái</mat-checkbox>
-          </div>
-          <div>
-            <mat-form-field appearance="fill">
+          </div> -->
+          <div class="col-6">
+            <mat-form-field style="    width: 95%;" appearance="fill">
               <mat-label>Chọn khoảng thời gian</mat-label>
               <mat-date-range-input [formGroup]="form" [rangePicker]="picker">
                 <input matStartDate formControlName="start" placeholder="Start date">
@@ -33,6 +30,17 @@
               <mat-date-range-picker #picker></mat-date-range-picker>
             </mat-form-field>          
           </div>
+         <div class="col-6">
+          <mat-form-field appearance="fill">
+            <!-- <mat-label>Choose an option</mat-label> -->
+            <mat-select formControlName="type">
+              <mat-option value="Phiếu nhập">Phiếu nhập</mat-option>
+              <mat-option value="Phiếu xuất">Phiếu xuất</mat-option>
+              <mat-option value="">Tất cả</mat-option>
+
+            </mat-select>
+          </mat-form-field>
+         </div>
           <div class="row third">
             <div class="input-field">             
               <div class="group-btn">

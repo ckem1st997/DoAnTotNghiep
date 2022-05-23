@@ -1,9 +1,14 @@
 
 <notifier-container></notifier-container>
-<div [ngStyle]="{'opacity': (loading) ? '1' : '0'}" class="loading-container flex-content-center">
+<div  [ngStyle]="{'opacity': (loading) ? '1' : '0'}" class="loading-container flex-content-center">
     <mat-progress-bar
       color="warn"
       mode="indeterminate">
     </mat-progress-bar>
   </div>
-<router-outlet></router-outlet>
+  <div [hidden]="!checkSizeWindows">
+    <router-outlet></router-outlet>
+  </div>
+  <div [hidden]="checkSizeWindows">
+    <p>Màn hình không đủ yêu cầu !</p>
+  </div>

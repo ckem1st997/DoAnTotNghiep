@@ -10,13 +10,13 @@
 
       <div class="">
         <div class="">
-          <button type="submit" routerLink="/wh/warehouse-book" mat-raised-button color="warn">
+          <button style="margin-left: 5px;margin-right: 5px;" type="submit" routerLink="/wh/warehouse-book" mat-raised-button color="warn">
             <mat-icon class="mat-18">keyboard_backspace</mat-icon>Quay lại
           </button>
-          <button style="margin-left: 5px;margin-right: 5px;" type="button" mat-raised-button color="primary">
+          <!-- <button style="margin-left: 5px;margin-right: 5px;" type="button" mat-raised-button color="primary">
             <mat-icon class="mat-18">save</mat-icon>Lưu
-          </button>
-          <a href="{{baseAPI}}ExportExcel/export-out-ward?id={{dt.id}}" download type="button"style="margin-right: 5px;" mat-raised-button color="success">
+          </button> -->
+          <a  href="{{baseAPI}}ExportExcel/export-out-ward?id={{dt.id}}" download type="button"style="margin-right: 5px;" mat-raised-button color="success">
             <i style="    font-size: 18px;" class="bi bi-file-earmark-excel-fill"></i>Xuất Phiếu
           </a>
         </div>
