@@ -1,4 +1,4 @@
-﻿using Redis.OM;
+﻿using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -37,7 +37,7 @@ namespace WareHouse.API.Application.Cache.CacheName
         Task RemoveAllKeysBy(string contains);
 
 
-        Task<RedisReply> RemoveAll();
+        Task<RedisResult> RemoveAll();
 
 
         public bool IsConnected { get; }

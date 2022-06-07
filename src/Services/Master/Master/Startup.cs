@@ -64,8 +64,8 @@ namespace Master
 
             });
             services.AddSingleton<IKafKaConnection, KafKaConnection>();
-            services.AddEventBus(Configuration);
-            services.AddHostedService<RequestTimeConsumer>();
+            //services.AddEventBus(Configuration);
+            //services.AddHostedService<RequestTimeConsumer>();
 
             // call http to grpc
             AppContext.SetSwitch(
@@ -180,7 +180,7 @@ namespace Master
                 endpoints.MapControllers();
                 endpoints.MapHub<ConnectRealTimeHub>("/signalr");
             });
-            app.ConfigureEventBus();
+          //  app.ConfigureEventBus();
         }
 
 

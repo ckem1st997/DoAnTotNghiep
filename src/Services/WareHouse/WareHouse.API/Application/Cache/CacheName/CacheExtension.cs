@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Redis.OM;
-using Redis.OM.Contracts;
 using StackExchange.Redis;
 
 namespace WareHouse.API.Application.Cache.CacheName
@@ -17,14 +15,14 @@ namespace WareHouse.API.Application.Cache.CacheName
         private readonly ILogger<CacheExtension> _logger;
         private readonly IDistributedCache _cache;
         private readonly ConnectionMultiplexer _connectionMultiplexer;
-        private readonly IRedisConnection _redisConnection;
-        public CacheExtension(IConfiguration configuration, IDistributedCache cache, ILogger<CacheExtension> logger, IRedisConnection redisConnection)
+        private readonly IDatabase _db;
+        public CacheExtension(IConfiguration configuration, IDistributedCache cache, ILogger<CacheExtension> logger)
         {
             _configuration = configuration;
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _connectionMultiplexer = GetConnectRedis();
-            _redisConnection = redisConnection;
+            _db = _connectionMultiplexer.GetDatabase();
         }
 
         public bool IsConnected
@@ -102,9 +100,9 @@ namespace WareHouse.API.Application.Cache.CacheName
 
         }
 
-        public async Task<RedisReply> RemoveAll()
+        public async Task<RedisResult> RemoveAll()
         {
-            var res = await _redisConnection.ExecuteAsync("flushall");
+            var res = await _db.ExecuteAsync("flushall");
             return res;
         }
 

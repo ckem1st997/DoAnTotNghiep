@@ -44,12 +44,12 @@ namespace Master
                     //{
                     webBuilder.ConfigureKestrel(options =>
                     {
-                        options.Listen(IPAddress.Any, 5001, listenOptions =>
+                        options.Listen(IPAddress.Any, 50001, listenOptions =>
                         {
                             listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
                         });
 
-                        options.Listen(IPAddress.Any, 5000, listenOptions =>
+                        options.Listen(IPAddress.Any, 50000, listenOptions =>
                         {
                             listenOptions.Protocols = HttpProtocols.Http2;
 
