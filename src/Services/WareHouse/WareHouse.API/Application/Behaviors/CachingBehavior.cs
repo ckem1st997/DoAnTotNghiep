@@ -34,6 +34,7 @@ namespace WareHouse.API.Application.Behaviors
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> next)
         {
+            await _cacheExtension.RemoveAll();
             TResponse response;
             // nếu không cache thì sẽ chạy đến request tiếp theo, ở đây là Handle Mediatr
             // nếu không connect được thì lấy data ở dưới db

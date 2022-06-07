@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Redis.OM;
+using Redis.OM.Contracts;
 using StackExchange.Redis;
 
 namespace WareHouse.API.Application.Cache.CacheName
@@ -15,17 +17,19 @@ namespace WareHouse.API.Application.Cache.CacheName
         private readonly ILogger<CacheExtension> _logger;
         private readonly IDistributedCache _cache;
         private readonly ConnectionMultiplexer _connectionMultiplexer;
-        public CacheExtension(IConfiguration configuration, IDistributedCache cache, ILogger<CacheExtension> logger)
+        private readonly IRedisConnection _redisConnection;
+        public CacheExtension(IConfiguration configuration, IDistributedCache cache, ILogger<CacheExtension> logger, IRedisConnection redisConnection)
         {
             _configuration = configuration;
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _connectionMultiplexer = GetConnectRedis();
+            _redisConnection = redisConnection;
         }
 
         public bool IsConnected
         {
-            get { return _connectionMultiplexer!=null&& _connectionMultiplexer.IsConnected; }
+            get { return _connectionMultiplexer != null && _connectionMultiplexer.IsConnected; }
         }
 
 
@@ -50,7 +54,7 @@ namespace WareHouse.API.Application.Cache.CacheName
         {
             try
             {
-                  var getConnectString = _configuration.GetValue<bool>("UsingDocker") ? _configuration.GetSection("Redis")["ConnectionStringDocker"] : _configuration.GetSection("Redis")["ConnectionString"];
+                var getConnectString = _configuration.GetValue<bool>("UsingDocker") ? _configuration.GetSection("Redis")["ConnectionStringDocker"] : _configuration.GetSection("Redis")["ConnectionString"];
                 //  var getConnectString = _configuration.GetSection("Redis")["ConnectionStringDocker"];
                 return ConnectionMultiplexer.Connect(
         $"{getConnectString},allowAdmin=true");
@@ -96,6 +100,16 @@ namespace WareHouse.API.Application.Cache.CacheName
                     await _cache.RemoveAsync(item);
                 }
 
+        }
+
+        public async Task<RedisReply> RemoveAll()
+        {
+            var res = await _redisConnection.ExecuteAsync("flushall");
+            return res;
+        }
+
+        public void Dispose()
+        {
         }
     }
 }

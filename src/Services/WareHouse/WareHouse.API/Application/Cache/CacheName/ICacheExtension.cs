@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Redis.OM;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace WareHouse.API.Application.Cache.CacheName
@@ -6,7 +8,7 @@ namespace WareHouse.API.Application.Cache.CacheName
     /// <summary>
     /// Extension Cache Redis
     /// </summary>
-    public interface ICacheExtension
+    public interface ICacheExtension : IDisposable
     {
         /// <summary>
         /// Get All Name Keys
@@ -33,6 +35,10 @@ namespace WareHouse.API.Application.Cache.CacheName
         /// <param name="contains">Remove by</param>
         /// <returns></returns>
         Task RemoveAllKeysBy(string contains);
+
+
+        Task<RedisReply> RemoveAll();
+
 
         public bool IsConnected { get; }
     }
