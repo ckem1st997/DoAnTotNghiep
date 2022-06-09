@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using KafKa.Net.Extensions;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
@@ -27,15 +28,16 @@ namespace WareHouse.API.Application.Behaviors
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
             var response = default(TResponse);
-            //     var typeName = request.GetGenericTypeName();
+            var typeName = request.GetGenericTypeName();
 
             try
             {
+
                 if (_dbContext.HasActiveTransaction)
                 {
                     return await next();
                 }
-                
+
                 var strategy = _dbContext.Database.CreateExecutionStrategy();
                 await strategy.ExecuteAsync(async () =>
                 {
@@ -44,12 +46,11 @@ namespace WareHouse.API.Application.Behaviors
                     using (var transaction = await _dbContext.BeginTransactionAsync())
                     using (LogContext.PushProperty("TransactionContext", transaction.TransactionId))
                     {
-                        _logger.LogInformation("----- Begin transaction {TransactionId} for {CommandName} ({@Command})", transaction.TransactionId, "", request);
+                        _logger.LogInformation("----- Begin transaction {TransactionId} for {CommandName} ({@Command})", transaction.TransactionId, typeName, request);
 
                         response = await next();
 
-                        _logger.LogInformation("----- Commit transaction {TransactionId} for {CommandName}", transaction.TransactionId, "");
-
+                        _logger.LogInformation("----- Commit transaction {TransactionId} for {CommandName}", transaction.TransactionId, typeName);
                         await _dbContext.CommitTransactionAsync(transaction);
 
                         transactionId = transaction.TransactionId;
