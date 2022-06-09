@@ -1,6 +1,7 @@
 ﻿using Aspose.Cells;
 using Aspose.Words;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,6 +11,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Cache.CacheName;
@@ -24,7 +26,7 @@ using WareHouse.API.Controllers.BaseController;
 namespace WareHouse.API.Controllers
 {
 
-    [CheckRole(LevelCheck.READ)]
+    //  [CheckRole(LevelCheck.READ)]
     public class ExportExcelController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
@@ -41,8 +43,15 @@ namespace WareHouse.API.Controllers
         #endregion
 
 
-
-
+        private static void SetLicense()
+        {
+            new Aspose.BarCode.License().SetLicense(AsposeHelper.BarCodeLicenseStream);
+            new Aspose.Cells.License().SetLicense(AsposeHelper.CellsLicenseStream);
+            new Aspose.Pdf.License().SetLicense(AsposeHelper.PdfLicenseStream);
+            new Aspose.Words.License().SetLicense(AsposeHelper.WordsLicenseStream);
+            // Fix tương thích trên .NET Core
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
 
         [Route("export-out-ward")]
         [HttpGet]
@@ -50,6 +59,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult> ExportOutWard(string id)
         {
+            //   SetLicense();
             #region Validation
 
             if (string.IsNullOrEmpty(id))
@@ -190,6 +200,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult> ExportInWard(string id)
         {
+
             #region Validation
 
             if (string.IsNullOrEmpty(id))
@@ -239,7 +250,7 @@ namespace WareHouse.API.Controllers
             var sumUIQuantity = 0m;
             var Deliver = entity.Deliver;
 
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            //  System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
             #region Invoice details
 
@@ -321,6 +332,7 @@ namespace WareHouse.API.Controllers
             return File(dstStream, docSave.ContentType, "phieu-nhap-" + entity.VoucherCode + ".pdf");
 
             #endregion
+            //  SetLicense();
 
 
         }
@@ -343,6 +355,8 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetExcelReportTotal([FromQuery] SearchReportTotalCommand searchModel)
         {
+            //   SetLicense();
+
 
             if (searchModel is null || !searchModel.Excel)
             {
@@ -434,6 +448,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetExcelReportDetails([FromQuery] SearchReportDetailsCommand searchModel)
         {
+            //  SetLicense();
 
             if (searchModel is null || !searchModel.Excel)
             {
@@ -474,14 +489,14 @@ namespace WareHouse.API.Controllers
                         Beginning = e.Beginning,
                         Import = e.Import,
                         Export = e.Export,
-                        Balance = e.Beginning+e.Import-e.Export,
+                        Balance = e.Beginning + e.Import - e.Export,
                         Purpose = e.Description,
                         DepartmentName = e.DepartmentName,
                         ProjectName = e.ProjectName,
                         Description = e.Description,
                         Moment = e.VoucherDate.ToString(),
-                        Reason=e.Reason,
-                        EmployeeName=e.EmployeeName
+                        Reason = e.Reason,
+                        EmployeeName = e.EmployeeName
                     };
                     stt++;
                     models.Add(m);

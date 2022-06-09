@@ -10,8 +10,6 @@
     <None Remove="Proto\getdatawh.proto" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Aspose.Cells" Version="22.2.0" />
-    <PackageReference Include="Aspose.Words" Version="22.4.0" />
     <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
@@ -66,5 +64,43 @@
   <ItemGroup>
 	  <Protobuf Include="Proto\getdatawh.proto" GrpcServices="Server" Generator="MSBuild:Compile" />
 	  <Protobuf Include="Proto\getdata.proto" GrpcServices="Client" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Aspose.3D">
+      <HintPath>..\..\..\..\storage\Aspose\Aspose.3D.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.BarCode">
+      <HintPath>..\..\..\..\storage\Aspose\Aspose.BarCode.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.Cells">
+      <HintPath>..\..\..\..\storage\Aspose\Aspose.Cells.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.Diagram">
+      <HintPath>..\..\..\..\storage\Aspose\Aspose.Diagram.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.Email">
+      <HintPath>..\..\..\..\storage\Aspose\Aspose.Email.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.Imaging">
+      <HintPath>..\..\..\..\storage\Aspose\Aspose.Imaging.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.Note">
+      <HintPath>..\..\..\..\storage\Aspose\Aspose.Note.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.OCR">
+      <HintPath>..\..\..\..\storage\Aspose\Aspose.OCR.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.Pdf">
+      <HintPath>..\..\..\..\storage\Aspose\Aspose.Pdf.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.Slides">
+      <HintPath>..\..\..\..\storage\Aspose\Aspose.Slides.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.Tasks">
+      <HintPath>..\..\..\..\storage\Aspose\Aspose.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.Words">
+      <HintPath>..\..\..\..\storage\Aspose\Aspose.Words.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

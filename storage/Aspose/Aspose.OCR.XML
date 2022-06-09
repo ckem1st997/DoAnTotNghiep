@@ -1,0 +1,2828 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>Aspose.OCR</name>
+  </assembly>
+  <members>
+    <member name="T:Aspose.OCR.License">
+      <summary>
+            Provides methods to license the component.
+            </summary>
+      <example>
+            In this example, an attempt will be made to find a license file named MyLicense.lic
+            in the folder that contains 
+            
+            
+            the component, in the folder that contains the calling assembly,
+            in the folder of the entry assembly and then in the embedded resources of the calling assembly.
+            <code>
+            [C#]
+            
+            License license = new License();
+            license.SetLicense("MyLicense.lic");
+            
+            
+            [Visual Basic]
+            
+            Dim license As license = New license
+            License.SetLicense("MyLicense.lic")
+            </code></example>
+    </member>
+    <member name="M:Aspose.OCR.License.SetLicense(System.String)">
+      <summary>
+            Licenses the component.
+            </summary>
+      <remarks>
+        <p>Tries to find the license in the following locations:</p>
+        <p>1. Explicit path.</p>
+        <p>2. The folder that contains the Aspose component assembly.</p>
+        <p>3. The folder that contains the client's calling assembly.</p>
+        <p>4. The folder that contains the entry (startup) assembly.</p>
+        <p>5. An embedded resource in the client's calling assembly.</p>
+        <p>
+          <b>Note:</b>On the .NET Compact Framework, tries to find the license only in these locations:</p>
+        <p>1. Explicit path.</p>
+        <p>2. An embedded resource in the client's calling assembly.</p>
+      </remarks>
+      <example>
+            In this example, an attempt will be made to find a license file named MyLicense.lic
+            in the folder that contains 
+            
+            
+            the component, in the folder that contains the calling assembly,
+            in the folder of the entry assembly and then in the embedded resources of the calling assembly.
+            <code>
+            [C#]
+            
+            License license = new License();
+            license.SetLicense("MyLicense.lic");
+            
+            
+            [Visual Basic]
+            
+            Dim license As License = New License
+            license.SetLicense("MyLicense.lic")
+            </code><param name="licenseName">Can be a full or short file name or name of an embedded resource.
+            Use an empty string to switch to evaluation mode.</param></example>
+    </member>
+    <member name="M:Aspose.OCR.License.SetLicense(System.IO.Stream)">
+      <summary>
+            Licenses the component.
+            </summary>
+      <param name="stream">A stream that contains the license.</param>
+      <remarks>
+        <p>Use this method to load a license from a stream.</p>
+      </remarks>
+      <example>
+        <code>
+            [C#]
+            
+            License license = new License();
+            license.SetLicense(myStream);
+            
+            
+            [Visual Basic]
+            
+            Dim license as License = new License
+            license.SetLicense(myStream)
+            </code>
+      </example>
+    </member>
+    <member name="P:Aspose.OCR.License.IsLicensed">
+      <summary>
+            Gets a value indicating whether product is licensed.
+            </summary>
+      <value>
+        <c>true</c> if product is licensed; otherwise, <c>false</c>.
+            </value>
+    </member>
+    <member name="T:Aspose.OCR.Filter">
+      <summary>
+            This class represents an abstract image correction algoritm.
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.IImageStream">
+      <summary>
+            This interface is for working with images. Data format is specified in the field “Format”. Instance of this interface is required for recognition in “OCREngine”.
+            Instance of this interface can be construct in <see cref="T:Aspose.OCR.ImageStream" /> factory only.
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.Image = ImageStream.FromFile(@"image.tiff");
+            ocr.Image = ImageStream.FromStream(stream, imageStreamFormat);
+            </code>
+      </example>
+    </member>
+    <member name="P:Aspose.OCR.IImageStream.Data">
+      <summary>
+            Gets image data.
+            This image data stored in various formats. The format is specified in field “Format”.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.IImageStream.Format">
+      <summary>
+            Gets the format of data in which the image is stored in the field <see cref="P:Aspose.OCR.IImageStream.Data">Data</see>.
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.ILanguage">
+      <summary>
+            This interface represents recognition language.
+            Instance of this can be construct only in <see cref="T:Aspose.OCR.LanguageFactory" />.
+            </summary>
+      <example>
+        <code>
+            OcrEngine ocr = new OcrEngine();
+            ocr.LanguageContainer.AddLanguage(LanguageFactory.Load(@"englishresources.zip"));     
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OCR.ILanguage.AddWord(System.String)">
+      <summary>
+            Adds the word to the dictionary.
+            </summary>
+      <param name="word">The word to add.</param>
+    </member>
+    <member name="M:Aspose.OCR.ILanguage.Save">
+      <summary>
+            Saves changes.
+            </summary>
+    </member>
+    <member name="M:Aspose.OCR.ILanguage.GetClassName(System.Char)">
+      <summary>
+            Returns name of the class input character refers to. For example letter "x" is small_letter
+            </summary>
+      <param name="ch">
+            The input character.
+            </param>
+      <returns>
+            The character class name.
+            </returns>
+    </member>
+    <member name="M:Aspose.OCR.ILanguage.GetCharsByClass">
+      <summary>
+            Returns all chars ordered by theirs classes: ba dg sa ss
+            </summary>
+      <returns>
+            All chars ordered by theirs classes: ba dg sa ss
+            </returns>
+    </member>
+    <member name="P:Aspose.OCR.ILanguage.Name">
+      <summary>
+            Gets the name of the language.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.ILanguage.Alphabet">
+      <summary>
+            Gets the alphabet of the language.
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.INotifier">
+      <summary>
+            This interface represents a notifier.
+            Each notifier can send event (recognized word, recognized several characters).
+            </summary>
+    </member>
+    <member name="E:Aspose.OCR.INotifier.Elapsed">
+      <summary>
+            Occurs when the event has raised.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.INotifier.Text">
+      <summary>
+            Gets the recognized text.
+            This is only part of the recognized text that was processed between the two raisings of events.
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.Elements.BarCodeType">
+      <summary>
+            Specifies the type of barcode specification
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Auto">
+      <summary>
+            Auto detect type
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Codabar">
+      <summary>
+            The Codabar symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Code11">
+      <summary>
+            The Code11 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Code39Standard">
+      <summary>
+            The Code39Standard symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Code39Extended">
+      <summary>
+            The Code39Extended symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Code93Standard">
+      <summary>
+            The Code93Standard symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Code93Extended">
+      <summary>
+            The Code93Extended symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Code128">
+      <summary>
+            The Code128 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.GS1Code128">
+      <summary>
+            The GS1Code128 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.EAN8">
+      <summary>
+            The EAN8 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.EAN13">
+      <summary>
+            The EAN13 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.EAN14">
+      <summary>
+            The EAN14 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.SCC14">
+      <summary>
+            The SCC14 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.SSCC18">
+      <summary>
+            The SSCC18 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.UPCA">
+      <summary>
+            The UPCA symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.UPCE">
+      <summary>
+            The UPCE symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.ISBN">
+      <summary>
+            The ISBN symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Standard2of5">
+      <summary>
+            The Standard2of5 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Interleaved2of5">
+      <summary>
+            The Interleaved2of5 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Matrix2of5">
+      <summary>
+            The Matrix2of5 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.ItalianPost25">
+      <summary>
+            The ItalianPost25 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.IATA2of5">
+      <summary>
+            The IATA2of5 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.ITF14">
+      <summary>
+            The ITF14 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.ITF6">
+      <summary>
+            The ITF6 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.MSI">
+      <summary>
+            The MSI symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.VIN">
+      <summary>
+            The VIN symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.DeutschePostIdentcode">
+      <summary>
+            The DeutschePostIdentcode symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.DeutschePostLeitcode">
+      <summary>
+            The DeutschePostLeitcode symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.OPC">
+      <summary>
+            The OPC symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.PZN">
+      <summary>
+            The PZN symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Pharmacode">
+      <summary>
+            The Pharmacode symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.DataMatrix">
+      <summary>
+            The DataMatrix symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.GS1DataMatrix">
+      <summary>
+            The GS1DataMatrix symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.QR">
+      <summary>
+            The QR symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Aztec">
+      <summary>
+            The Aztec symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Pdf417">
+      <summary>
+            The Pdf417 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.MacroPdf417">
+      <summary>
+            The MacroPdf417 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.MicroPdf417">
+      <summary>
+            The MicroPdf417 symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.AustraliaPost">
+      <summary>
+            The AustraliaPost symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Postnet">
+      <summary>
+            The Postnet symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Planet">
+      <summary>
+            The Planet symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.OneCode">
+      <summary>
+            The OneCode symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.RM4SCC">
+      <summary>
+            The RM4SCC symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.DatabarOmniDirectional">
+      <summary>
+            The DatabarOmniDirectional symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.DatabarTruncated">
+      <summary>
+            The DatabarTruncated symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.DatabarLimited">
+      <summary>
+            The DatabarLimited symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.DatabarExpanded">
+      <summary>
+            The DatabarExpanded symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.PatchCode">
+      <summary>
+            The PatchCode symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.ISSN">
+      <summary>
+            The ISSN symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.ISMN">
+      <summary>
+            The ISMN symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Supplement">
+      <summary>
+            The Supplement symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.AustralianPosteParcel">
+      <summary>
+            The AustralianPosteParcel symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.SwissPostParcel">
+      <summary>
+            The SwissPostParcel symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.Code16K">
+      <summary>
+            The Code16K symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.DatabarStackedOmniDirectional">
+      <summary>
+            The DatabarStackedOmniDirectional symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.MicroQR">
+      <summary>
+            The MicroQR symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.DatabarStacked">
+      <summary>
+            The DatabarStacked symbology
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.Elements.BarCodeType.DatabarExpandedStacked">
+      <summary>
+            The DatabarExpandedStacked symbology
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.Elements.BarcodeElement">
+      <summary>
+            Represent a barcode block.
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.Elements.BasicElement">
+      <summary>
+            The base class for elements of the OMR template.
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.Elements.BasicElement.#ctor(System.String,System.Drawing.PointF,System.Drawing.SizeF)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.Elements.BasicElement" /> class.
+            </summary>
+      <param name="name">The name of the element.</param>
+      <param name="position">Element position, in millimeters, relative to top left corner of an image</param>
+      <param name="size">Size of the element, in millimeters.</param>
+    </member>
+    <member name="M:Aspose.OMR.Elements.BasicElement.SaveProperties">
+      <summary>
+            Converts values of the properties of an element from their string representation.
+            </summary>
+      <returns>A collection of properties' values.</returns>
+    </member>
+    <member name="M:Aspose.OMR.Elements.BasicElement.LoadProperties(System.Collections.Specialized.StringDictionary)">
+      <summary>
+            Initializes the properties of an element from their string representation.
+            </summary>
+      <param name="properties">A collection of properties' values.</param>
+    </member>
+    <member name="M:Aspose.OMR.Elements.BasicElement.ExtractData(Aspose.OMR.OmrImage,Aspose.OMR.OmrConfig)">
+      <summary>
+            Extracts data from a portion of scanned OMR sheet assigned to this element.
+            </summary>
+      <param name="image">
+            The image to extract data from.
+            </param>
+      <param name="config">Global configuration for OMR extraction algorithm.</param>
+      <returns>
+            A string that contains data extracted from the sheet.
+            </returns>
+    </member>
+    <member name="P:Aspose.OMR.Elements.BasicElement.Position">
+      <summary>
+            Gets or sets position, in millimeters, relative to top left corner of an image
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.Elements.BasicElement.Size">
+      <summary>
+            Gets or sets size of the element, in millimeters.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.Elements.BasicElement.Name">
+      <summary>
+            Gets or sets the name of the element. Value cannot be null.
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.Elements.BarcodeElement.#ctor(System.String,System.Drawing.PointF,System.Drawing.SizeF)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.Elements.BarcodeElement" /> class.
+            </summary>
+      <param name="name">The name of the element.</param>
+      <param name="position">Element position, in millimeters, relative to top left corner of an image</param>
+      <param name="size">Size of the element, in millimeters.</param>
+    </member>
+    <member name="M:Aspose.OMR.Elements.BarcodeElement.LoadProperties(System.Collections.Specialized.StringDictionary)">
+      <summary>
+            Initializes the properties of an element from their string representation.
+            </summary>
+      <param name="properties">A collection of properties' values.</param>
+    </member>
+    <member name="M:Aspose.OMR.Elements.BarcodeElement.SaveProperties">
+      <summary>
+            Converts values of the properties of an element from their string representation.
+            </summary>
+      <returns>A collection of properties' values.</returns>
+    </member>
+    <member name="M:Aspose.OMR.Elements.BarcodeElement.ExtractData(Aspose.OMR.OmrImage,Aspose.OMR.OmrConfig)">
+      <summary>
+            Extracts data from a portion of scanned OMR sheet assigned to this element.
+            </summary>
+      <param name="image">The image to extract data from.</param>
+      <param name="ignored">Configuration for OMR extraction algorithm (ignored.)</param>
+      <returns>A string that contains data extracted from the sheet.</returns>
+    </member>
+    <member name="P:Aspose.OMR.Elements.BarcodeElement.BarCodeType">
+      <summary>
+            Gets or sets type of bar code to read
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.Elements.ChoiceBoxElement">
+      <summary>
+            Represents an OMR choice element
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.Elements.OmrElement">
+      <summary>
+            Represents an abstract OMR element on a sheet.
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.Elements.OmrElement.#ctor(System.String,System.Drawing.PointF,System.Drawing.SizeF)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.Elements.OmrElement" /> class.
+            </summary>
+      <param name="name">The name of the element.</param>
+      <param name="position">Element position, in millimeters, relative to top left corner of an image</param>
+      <param name="size">Size of the element, in millimeters.</param>
+    </member>
+    <member name="M:Aspose.OMR.Elements.OmrElement.SaveProperties">
+      <summary>
+            Converts values of the properties of an element from their string representation.
+            </summary>
+      <returns>A collection of properties' values.</returns>
+    </member>
+    <member name="M:Aspose.OMR.Elements.OmrElement.LoadProperties(System.Collections.Specialized.StringDictionary)">
+      <summary>
+            Initializes the properties of an element from their string representation.
+            </summary>
+      <param name="properties">A collection of properties' values.</param>
+    </member>
+    <member name="P:Aspose.OMR.Elements.OmrElement.Configuration">
+      <summary>
+            Gets or sets element-level configuration for OMR extraction algorithm. 
+            Overrides page-level configuration if set.
+            If set to <c>null</c> (by default), page-level configuration will be used.
+            </summary>
+      <remarks>
+            This settings are used during data extraction only 
+            and are not saved in the template file.
+            </remarks>
+    </member>
+    <member name="P:Aspose.OMR.Elements.OmrElement.IsHorizontal">
+      <summary>
+            Gets or sets a value indicating whether values of this element are located horizontally.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.Elements.OmrElement.Cells">
+      <summary>
+            Gets a collection of cells in the element.
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.Elements.ChoiceBoxElement.#ctor(System.String,System.Drawing.PointF,System.Drawing.SizeF)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.Elements.ChoiceBoxElement" /> class.
+            </summary>
+      <param name="name">The name of the element.</param>
+      <param name="position">Element position, in millimeters, relative to top left corner of an image</param>
+      <param name="size">Size of the element, in millimeters.</param>
+    </member>
+    <member name="M:Aspose.OMR.Elements.ChoiceBoxElement.ExtractData(Aspose.OMR.OmrImage,Aspose.OMR.OmrConfig)">
+      <summary>
+            Extracts data from a portion of scanned OMR sheet assigned to this element.
+            </summary>
+      <param name="image">The image to extract data from.</param>
+      <param name="config">Configuration for OMR extraction algorithm.</param>
+      <returns>
+            An string that contains data extracted from the element.
+            </returns>
+    </member>
+    <member name="M:Aspose.OMR.Elements.ChoiceBoxElement.LoadProperties(System.Collections.Specialized.StringDictionary)">
+      <summary>
+            Initializes the properties of an element from their string representation.
+            </summary>
+      <param name="properties">A collection of properties' values.</param>
+    </member>
+    <member name="M:Aspose.OMR.Elements.ChoiceBoxElement.SaveProperties">
+      <summary>
+            Converts values of the properties of an element from their string representation.
+            </summary>
+      <returns>A collection of properties' values.</returns>
+    </member>
+    <member name="P:Aspose.OMR.Elements.ChoiceBoxElement.MultipleSelectionAllowed">
+      <summary>
+            Gets or sets a value indicating whether the choice box can have multiple items selected at once.
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.Elements.CustomImageProcessingAttribute">
+      <summary>
+            Specifies that the element does its own image processing and 
+            its area should not be touched by the image processing pipeline. 
+            This class cannot be inherited.
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.Elements.GridElement">
+      <summary>
+            Represents an OMR grid element
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.Elements.GridElement.#ctor(System.String,System.Drawing.PointF,System.Drawing.SizeF)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.Elements.GridElement" /> class.
+            </summary>
+      <param name="name">The name of the element.</param>
+      <param name="position">Element position, in millimeters, relative to top left corner of an image</param>
+      <param name="size">Size of the element, in millimeters.</param>
+    </member>
+    <member name="M:Aspose.OMR.Elements.GridElement.SetSectionsCount(System.Int32)">
+      <summary>
+            A shortcut method for setting the sections count in the grid. Adds and removes elements from <see cref="P:Aspose.OMR.Elements.GridElement.Sections" /> as necessary.
+            </summary>
+      <param name="count">New sections count.</param>
+    </member>
+    <member name="M:Aspose.OMR.Elements.GridElement.ExtractData(Aspose.OMR.OmrImage,Aspose.OMR.OmrConfig)">
+      <summary>
+            Extracts data from a portion of scanned OMR sheet assigned to this element.
+            </summary>
+      <param name="image">The image to extract data from.</param>
+      <param name="config">Configuration for OMR extraction algorithm.</param>
+      <returns>
+            An string that contains data extracted from the sheet.
+            </returns>
+    </member>
+    <member name="P:Aspose.OMR.Elements.GridElement.Sections">
+      <summary>
+            Gets a collection of sections of the grid.
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.Elements.GridSection">
+      <summary>
+            Section of a <see cref="T:Aspose.OMR.Elements.GridElement" />.
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.Elements.ISpacedArea">
+      <summary>
+            An area that requires spacing before and after itself.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.Elements.ISpacedArea.SpaceBefore">
+      <summary>
+            Gets or sets spacing that follows the area, in millimeters.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.Elements.ISpacedArea.SpaceAfter">
+      <summary>
+            Gets or sets spacing that precedes the area, in millimeters.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.Elements.GridSection.SpaceBefore">
+      <summary>
+            Gets or sets spacing that precedes the cell, in millimeters. Zero by default.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.Elements.GridSection.SpaceAfter">
+      <summary>
+            Gets or sets spacing that follows the cell, in millimeters. Zero by default.
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.Elements.NamespaceDoc">
+      <summary>
+        <c>Aspose.OMR.Elements</c> namespace provides classes that represent various elements of OMR forms.
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.Elements.OmrCell">
+      <summary>
+            Represents a cell in an <see cref="T:Aspose.OMR.Elements.OmrElement" />.
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.Elements.OmrCell.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.Elements.OmrCell" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.Elements.OmrCell.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.Elements.OmrCell" /> class.
+            </summary>
+      <param name="value">The value associated with the cell.</param>
+    </member>
+    <member name="P:Aspose.OMR.Elements.OmrCell.Value">
+      <summary>
+            Gets or sets value associated with the cell.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.Elements.OmrCell.SpaceBefore">
+      <summary>
+            Gets or sets spacing that precedes the cell, in millimeters. Zero by default.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.Elements.OmrCell.SpaceAfter">
+      <summary>
+            Gets or sets spacing that follows the cell, in millimeters. Zero by default.
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.Elements.TextOcrElement">
+      <summary>
+            Represent an OCR block.
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.Elements.TextOcrElement.#ctor(System.String,System.Drawing.PointF,System.Drawing.SizeF)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.Elements.TextOcrElement" /> class.
+            </summary>
+      <param name="name">The name of the element.</param>
+      <param name="position">Element position, in millimeters, relative to top left corner of an image</param>
+      <param name="size">Size of the element, in millimeters.</param>
+    </member>
+    <member name="M:Aspose.OMR.Elements.TextOcrElement.ExtractData(Aspose.OMR.OmrImage,Aspose.OMR.OmrConfig)">
+      <summary>
+            Extracts data from a portion of scanned OMR sheet assigned to this element.
+            </summary>
+      <param name="image">The image to extract data from.</param>
+      <param name="ignored">Configuration for OMR extraction algorithm (ignored.)</param>
+      <returns>A string that contains data extracted from the sheet.</returns>
+    </member>
+    <member name="P:Aspose.OMR.Elements.TextOcrElement.Resource">
+      <summary>
+            Gets or sets path to the OCR resources file.
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.ImageProcessing.AverageThresholdAlgorithm">
+      <summary>
+            Binarization algorithms that uses an average value threshold filter.
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.ImageProcessing.IProcessingAlgorithm">
+      <summary>
+            Represents a mechanism for image preprocessing, so that the image can be used for data extraction
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.ImageProcessing.IProcessingAlgorithm.Process(Aspose.OMR.OmrImage,System.Drawing.Rectangle)">
+      <summary>
+            Processes an <see cref="T:Aspose.OMR.OmrImage" /> with an image manipulation algorithm.
+            </summary>
+      <param name="image">An image to process.</param>
+      <param name="area">Area of image to be processed.</param>
+    </member>
+    <member name="M:Aspose.OMR.ImageProcessing.AverageThresholdAlgorithm.Process(Aspose.OMR.OmrImage,System.Drawing.Rectangle)">
+      <summary>
+            Processes a grayscale <see cref="T:Aspose.OMR.OmrImage" /> with average value threshold algorithm.
+            </summary>
+      <param name="image">An image to process.</param>
+      <param name="area">Area of image to be processed.</param>
+    </member>
+    <member name="T:Aspose.OMR.ImageProcessing.GrayscaleAlgorithm">
+      <summary>
+            Represent a grayscale conversion algorithm
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.ImageProcessing.GrayscaleAlgorithm.Process(Aspose.OMR.OmrImage,System.Drawing.Rectangle)">
+      <summary>
+            Processes an <see cref="T:Aspose.OMR.OmrImage" /> with an image manipulation algorithm.
+            </summary>
+      <param name="image">An image to process.</param>
+      <param name="area">Area of image to be processed.</param>
+    </member>
+    <member name="T:Aspose.OMR.ImageProcessing.NamespaceDoc">
+      <summary>
+        <c>Aspose.OMR.ImageProcessing</c> namespace provides means to fine-tune the image processing aspects of data extraction.
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.ImageProcessing.OtsuBinarizationAlgorithm">
+      <summary>
+            Otsu binarization algorithm.
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.ImageProcessing.OtsuBinarizationAlgorithm.Process(Aspose.OMR.OmrImage,System.Drawing.Rectangle)">
+      <summary>
+            Processes a grayscale <see cref="T:Aspose.OMR.OmrImage" /> with Otsu binarization algorithm.
+            </summary>
+      <param name="image">An image to process.</param>
+      <param name="area">Area of image to be processed.</param>
+    </member>
+    <member name="T:Aspose.OMR.ImageProcessing.ProcessingPipeline">
+      <summary>
+            Represents an ordered chain of image processing algorithms.
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.ImageProcessing.ProcessingPipeline.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.ImageProcessing.ProcessingPipeline.#ctor(System.Collections.ICollection)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" /> class.
+            </summary>
+      <param name="algorithms">The ordered collection of algorithms.</param>
+    </member>
+    <member name="M:Aspose.OMR.ImageProcessing.ProcessingPipeline.Add(Aspose.OMR.ImageProcessing.IProcessingAlgorithm)">
+      <summary>
+            Adds an object to the end of the <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" />.
+            </summary>
+      <returns>
+            The <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" /> index at which the <paramref name="value" /> has been added.
+            </returns>
+      <param name="value">
+            The <see cref="T:Aspose.OMR.ImageProcessing.IProcessingAlgorithm" /> to be added to the end of the <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" />. 
+            The value cannot be null. 
+            </param>
+    </member>
+    <member name="M:Aspose.OMR.ImageProcessing.ProcessingPipeline.IndexOf(Aspose.OMR.ImageProcessing.IProcessingAlgorithm)">
+      <summary>
+            Searches for the specified <see cref="T:Aspose.OMR.ImageProcessing.IProcessingAlgorithm" /> and returns the zero-based index of 
+            the first occurrence within the entire <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" />.
+            </summary>
+      <returns>
+            The zero-based index of the first occurrence of <paramref name="value" /> within the entire 
+            <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" />, if found; otherwise, -1.
+            </returns>
+      <param name="value">
+            The <see cref="T:Aspose.OMR.ImageProcessing.IProcessingAlgorithm" /> to locate in the <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" />. 
+            The value cannot be null. 
+            </param>
+    </member>
+    <member name="M:Aspose.OMR.ImageProcessing.ProcessingPipeline.Insert(System.Int32,Aspose.OMR.ImageProcessing.IProcessingAlgorithm)">
+      <summary>
+            Inserts the elements of a collection into the <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" /> at the specified index.
+            </summary>
+      <param name="index">The zero-based index at which the new elements should be inserted. </param>
+      <param name="value">
+            The <see cref="T:Aspose.OMR.ImageProcessing.IProcessingAlgorithm" /> that should be inserted into the <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" />. 
+            </param>
+    </member>
+    <member name="M:Aspose.OMR.ImageProcessing.ProcessingPipeline.Remove(Aspose.OMR.ImageProcessing.IProcessingAlgorithm)">
+      <summary>
+            Removes the first occurrence of a specific <see cref="T:Aspose.OMR.ImageProcessing.IProcessingAlgorithm" /> from
+             the <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" />.
+            </summary>
+      <param name="value">
+            The <see cref="T:Aspose.OMR.ImageProcessing.IProcessingAlgorithm" /> to remove from the <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" />. 
+            The value cannot be null. 
+            </param>
+    </member>
+    <member name="M:Aspose.OMR.ImageProcessing.ProcessingPipeline.Contains(Aspose.OMR.ImageProcessing.IProcessingAlgorithm)">
+      <summary>
+            Determines whether this <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" /> contains 
+            the specified <see cref="T:Aspose.OMR.ImageProcessing.IProcessingAlgorithm" />.
+            </summary>
+      <param name="value">
+            The <see cref="T:Aspose.OMR.ImageProcessing.IProcessingAlgorithm" /> to locate in the <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" />.
+            </param>
+      <returns>
+        <c>true</c> if this <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" /> contains 
+            the specified <see cref="T:Aspose.OMR.ImageProcessing.IProcessingAlgorithm" />; otherwise, <c>false</c>.
+            </returns>
+    </member>
+    <member name="M:Aspose.OMR.ImageProcessing.ProcessingPipeline.CopyTo(Aspose.OMR.ImageProcessing.IProcessingAlgorithm[],System.Int32)">
+      <summary>
+            Copies the elements of the <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" /> to an <see cref="T:System.Array" />, 
+            starting at a particular <see cref="T:System.Array" /> index.
+            </summary>
+      <param name="array">
+            The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from 
+            <see cref="T:Aspose.OMR.ImageProcessing.ProcessingPipeline" />. The <see cref="T:System.Array" /> must have zero-based indexing. 
+            </param>
+      <param name="index">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+    </member>
+    <member name="M:Aspose.OMR.ImageProcessing.ProcessingPipeline.Process(Aspose.OMR.OmrImage,System.Drawing.Rectangle)">
+      <summary>
+            Processes an image with a chain of image preprocessing algorithms.
+            </summary>
+      <param name="image">An image to process.</param>
+      <param name="area">Area of image to be processed.</param>
+    </member>
+    <member name="M:Aspose.OMR.ImageProcessing.ProcessingPipeline.OnValidate(System.Object)">
+      <summary>
+            Performs additional custom processes when validating a value.
+            </summary>
+      <param name="value">The object to validate.</param>
+    </member>
+    <member name="P:Aspose.OMR.ImageProcessing.ProcessingPipeline.Default">
+      <summary>
+            Gets a default pipeline of image preprocessing algorithms
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.ImageProcessing.ProcessingPipeline.Item(System.Int32)">
+      <summary>
+            Gets or sets the element at the specified index.
+            </summary>
+      <returns>
+            The element at the specified index.
+            </returns>
+      <param name="index">The zero-based index of the element to get or set. </param>
+    </member>
+    <member name="T:Aspose.OMR.NamespaceDoc">
+      <summary>
+        <c>Aspose.OMR</c> namespace provides classes that allow to extract data from filled OMR sheets.
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.OmrConfig">
+      <summary>
+            Configuration for OMR extraction algorithm.
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OmrTemplate template = OmrTemplate.Load(@"template.amr"); // template path
+            OmrEngine engine = new OmrEngine(template);
+            OmrConfig config = engine.Configuration;
+            // The area containing an OMR mark will not be reduced to size that contain all black pixels.
+            config.TrimWhitePixels = false; 
+            </code>
+      </example>
+    </member>
+    <member name="P:Aspose.OMR.OmrConfig.TrimWhitePixels">
+      <summary>
+            Gets or sets value indicating should be the area containing an OMR mark 
+            reduced or not to size that contain all black pixels.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.OmrConfig.FillThreshold">
+      <summary>
+            Gets or sets the threshold percentage of black pixels in the area to consider it filled.
+            The value is in range [0;1], with 1 corresponding to 100% of pixels in area must be black to consider it filled.
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.OmrElementsCollection">
+      <summary>
+            Represents a collection of elements on a page.
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.OmrElementsCollection.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.OmrElementsCollection" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.OmrElementsCollection.#ctor(System.Collections.ICollection)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.OmrElementsCollection" /> class.
+            </summary>
+      <param name="elements">The ordered collection of elements.</param>
+    </member>
+    <member name="M:Aspose.OMR.OmrElementsCollection.Add(Aspose.OMR.Elements.BasicElement)">
+      <summary>
+            Adds an object to the end of the <see cref="T:Aspose.OMR.OmrElementsCollection" />.
+            </summary>
+      <returns>
+            The <see cref="T:Aspose.OMR.OmrElementsCollection" /> index at which the <paramref name="value" /> has been added.
+            </returns>
+      <param name="value">
+            The element to be added to the end of the <see cref="T:Aspose.OMR.OmrElementsCollection" />. 
+            The value cannot be null. 
+            </param>
+    </member>
+    <member name="M:Aspose.OMR.OmrElementsCollection.IndexOf(Aspose.OMR.Elements.BasicElement)">
+      <summary>
+            Searches for the specified element and returns the zero-based index of 
+            the first occurrence within the entire <see cref="T:Aspose.OMR.OmrElementsCollection" />.
+            </summary>
+      <returns>
+            The zero-based index of the first occurrence of <paramref name="value" /> within the entire 
+            <see cref="T:Aspose.OMR.OmrElementsCollection" />, if found; otherwise, -1.
+            </returns>
+      <param name="value">
+            The element to locate in the <see cref="T:Aspose.OMR.OmrElementsCollection" />. 
+            The value cannot be null. 
+            </param>
+    </member>
+    <member name="M:Aspose.OMR.OmrElementsCollection.Insert(System.Int32,Aspose.OMR.Elements.BasicElement)">
+      <summary>
+            Inserts the elements of a collection into the <see cref="T:Aspose.OMR.OmrElementsCollection" /> at the specified index.
+            </summary>
+      <param name="index">The zero-based index at which the new elements should be inserted. </param>
+      <param name="value">
+            The element that should be inserted into the <see cref="T:Aspose.OMR.OmrElementsCollection" />. 
+            </param>
+    </member>
+    <member name="M:Aspose.OMR.OmrElementsCollection.Remove(Aspose.OMR.Elements.BasicElement)">
+      <summary>
+            Removes the first occurrence of a specific <see cref="T:Aspose.OMR.Elements.OmrElement" /> from
+             the <see cref="T:Aspose.OMR.OmrElementsCollection" />.
+            </summary>
+      <param name="value">
+            The element to remove from the <see cref="T:Aspose.OMR.OmrElementsCollection" />. 
+            The value cannot be null. 
+            </param>
+    </member>
+    <member name="M:Aspose.OMR.OmrElementsCollection.Contains(Aspose.OMR.Elements.BasicElement)">
+      <summary>
+            Determines whether this <see cref="T:Aspose.OMR.OmrElementsCollection" /> contains 
+            the specified element.
+            </summary>
+      <param name="value">
+            The <see cref="T:Aspose.OMR.Elements.OmrElement" /> to locate in the <see cref="T:Aspose.OMR.OmrElementsCollection" />.
+            </param>
+      <returns>
+        <c>true</c> if this <see cref="T:Aspose.OMR.OmrElementsCollection" /> contains 
+            the specified element; otherwise, <c>false</c>.
+            </returns>
+    </member>
+    <member name="M:Aspose.OMR.OmrElementsCollection.CopyTo(Aspose.OMR.Elements.BasicElement[],System.Int32)">
+      <summary>
+            Copies the elements of the <see cref="T:Aspose.OMR.OmrElementsCollection" /> to an <see cref="T:System.Array" />, 
+            starting at a particular <see cref="T:System.Array" /> index.
+            </summary>
+      <param name="array">
+            The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from 
+            <see cref="T:Aspose.OMR.OmrElementsCollection" />. The <see cref="T:System.Array" /> must have zero-based indexing. 
+            </param>
+      <param name="index">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+    </member>
+    <member name="M:Aspose.OMR.OmrElementsCollection.OnValidate(System.Object)">
+      <summary>
+            Performs additional custom processes when validating a value.
+            </summary>
+      <param name="value">The object to validate.</param>
+    </member>
+    <member name="P:Aspose.OMR.OmrElementsCollection.Item(System.Int32)">
+      <summary>
+            Gets or sets the element at the specified index.
+            </summary>
+      <returns>
+            The element at the specified index.
+            </returns>
+      <param name="index">The zero-based index of the element to get or set. </param>
+    </member>
+    <member name="T:Aspose.OMR.OmrEngine">
+      <summary>
+            The main entry point for the users of the library. It collects all data necessary for data extractions.
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OmrImage image = OmrImage.Load(@"image.png"); // image path
+            OmrTemplate template = OmrTemplate.Load("template.amr"); // template path
+            OmrEngine engine = new OmrEngine(template);
+            OmrProcessingResult result = engine.ExtractData(new OmrImage[] { image });
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OMR.OmrEngine.#ctor(Aspose.OMR.OmrTemplate)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.OmrEngine" /> class.
+            </summary>
+      <param name="template">
+            An instance of <see cref="T:Aspose.OMR.OmrTemplate" /> to be used for data extraction.
+            </param>
+    </member>
+    <member name="M:Aspose.OMR.OmrEngine.#ctor(Aspose.OMR.OmrTemplate,Aspose.OMR.ImageProcessing.ProcessingPipeline)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.OmrEngine" /> class.
+            </summary>
+      <param name="template">
+            An instance of <see cref="T:Aspose.OMR.OmrTemplate" /> to be used for data extraction.
+            </param>
+      <param name="pipeline">
+            An instance of <see cref="P:Aspose.OMR.OmrEngine.ProcessingPipeline" /> that contains image processing algorithms 
+            used for preprocessing of a scanned image before data extraction.
+            </param>
+    </member>
+    <member name="M:Aspose.OMR.OmrEngine.ChangeProcessingPipeline(Aspose.OMR.ImageProcessing.ProcessingPipeline)">
+      <summary>
+            Replaces the image processing pipeline with a new one.
+            </summary>
+      <param name="newPipeline">The new pipeline.</param>
+    </member>
+    <member name="M:Aspose.OMR.OmrEngine.ExtractData(Aspose.OMR.OmrImage[])">
+      <summary>
+            Extracts data from a scanned OMR sheets.
+            </summary>
+      <param name="documentImages">Collection of scanned pages, according to the template.</param>
+      <returns>
+            An instance of <see cref="T:Aspose.OMR.OmrProcessingResult" /> that contains data extracted from the sheet.
+            </returns>
+      <example>
+        <code>
+            [C#]
+            OmrImage image = OmrImage.Load(@"image.png"); // image path
+            OmrTemplate template = OmrTemplate.Load("template.amr"); // template path
+            OmrEngine engine = new OmrEngine(template);
+            OmrProcessingResult result = engine.ExtractData(new OmrImage[] { image });
+            </code>
+      </example>
+    </member>
+    <member name="P:Aspose.OMR.OmrEngine.Template">
+      <summary>
+            Gets or sets a data template that describes data structure of an OMR sheet.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.OmrEngine.ProcessingPipeline">
+      <summary>
+            Gets an instance of <see cref="P:Aspose.OMR.OmrEngine.ProcessingPipeline" /> that contains image processing algorithms 
+            used for preprocessing of a scanned image before data extraction.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.OmrEngine.Configuration">
+      <summary>
+            Gets or sets global configuration for OMR extraction algorithm.
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.OmrException">
+      <summary>
+            This exception indicates an exception while working with OMR module.
+            OmrException appeares when unexpected error happened inside of OMR module. 
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.OmrException.#ctor(System.Exception)">
+      <summary>
+            Create this exception with the given message and underlying cause.
+            This exception indicates an exception while working with OMR module.
+            </summary>
+      <param name="cause">The underlying exception.</param>
+    </member>
+    <member name="M:Aspose.OMR.OmrException.#ctor(System.String,System.Exception)">
+      <summary>
+            Create this exception with the given message and underlying cause.
+            This exception indicates an exception while working with OMR module.
+            </summary>
+      <param name="message">The message of this exception.</param>
+      <param name="cause">The underlying exception.</param>
+    </member>
+    <member name="T:Aspose.OMR.OmrImage">
+      <summary>
+            Represents an image in a way that is suitable for marks recognition.
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OmrImage image = OmrImage.Load(@"image.png"); 
+            OmrTemplate template = OmrTemplate.Load("template.amr"); 
+            OmrEngine engine = new OmrEngine(template);
+            OmrProcessingResult result = engine.ExtractData(new OmrImage[] { image });
+            </code>
+      </example>
+    </member>
+    <member name="F:Aspose.OMR.OmrImage.BufferPixelFormat">
+      <summary>
+            Pixel format of image data in the buffer 
+            </summary>
+    </member>
+    <member name="F:Aspose.OMR.OmrImage.BytesPerPixel">
+      <summary>
+            Number of bytes per pixel
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.OmrImage.#ctor(System.Int32,System.Int32,System.Double,System.Byte[])">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.OmrImage" /> class.
+            </summary>
+      <param name="width">The width, in pixels</param>
+      <param name="height">The height, in pixels.</param>
+      <param name="dpi">The resolution of the image, dots per inch.</param>
+      <param name="pixelData">The pixel data of the image.</param>
+    </member>
+    <member name="M:Aspose.OMR.OmrImage.LoadFromUrl(System.String)">
+      <summary>
+            Loads an image from URL.
+            </summary>
+      <param name="url">The source URL.</param>
+      <returns>An instance of <see cref="T:Aspose.OMR.OmrImage" /> that represents the image.</returns>
+      <example>
+        <code>
+            [C#]
+            OmrImage image = OmrImage.Load("https://sampleurl.com/image.jpg"); // url path
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OMR.OmrImage.Load(System.IO.Stream)">
+      <summary>
+            Loads an image from a stream.
+            </summary>
+      <param name="stream">The stream to load from</param>
+      <returns>An instance of <see cref="T:Aspose.OMR.OmrImage" /> that represents the image.</returns>
+      <example>
+        <code>
+            [C#]
+            OmrImage image = OmrImage.Load(@"image.png"); // image path
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OMR.OmrImage.Load(System.String)">
+      <summary>
+            Loads an image from the specified file name.
+            </summary>
+      <param name="fileName">The file name.</param>
+      <returns>An instance of <see cref="T:Aspose.OMR.OmrImage" /> that represents the image.</returns>
+      <example>
+        <code>
+            [C#]
+            using (Stream stream = File.OpenRead(fileName))
+            {
+               OmrImage image = OmrImage.Load(stream);
+            }
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OMR.OmrImage.AsBitmap">
+      <summary>
+            Copies pixel data into a GDI bitmap format
+            </summary>
+      <returns>A GDI bitmap</returns>
+    </member>
+    <member name="M:Aspose.OMR.OmrImage.Copy">
+      <summary>
+            Creates a deep copy of the <see cref="T:Aspose.OMR.OmrImage" />.
+            </summary>
+      <returns>A new instance of <see cref="T:Aspose.OMR.OmrImage" />.</returns>
+    </member>
+    <member name="P:Aspose.OMR.OmrImage.Buffer">
+      <summary>
+            Gets the pixel data of the <see cref="T:Aspose.OMR.OmrImage" /> object.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.OmrImage.Width">
+      <summary>
+            Gets the width, in pixels, of this <see cref="T:Aspose.OMR.OmrImage" />.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.OmrImage.Height">
+      <summary>
+            Gets the height, in pixels, of this <see cref="T:Aspose.OMR.OmrImage" />.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.OmrImage.Resolution">
+      <summary>
+            Gets or sets image DPI resolution
+            </summary>
+      <example>
+        <code>
+            [C#]
+               OmrImage actual = OmrImage.Load("Path to image");
+               actual.Resolution = actual.Resolution * 2;
+             </code>
+      </example>
+    </member>
+    <member name="P:Aspose.OMR.OmrImage.AutoDetectResolution">
+      <summary>
+            Gets or sets a value indicating whether the engine should attempt to detect actual resolution of 
+            the image basing on dimensions of the template.
+            </summary>
+      <returns>
+        <c>true</c> if autodetection is enabled; otherwise, <c>false</c>.</returns>
+    </member>
+    <member name="T:Aspose.OMR.OmrPage">
+      <summary>
+            Represents a page of an OMR document
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OmrTemplate template = new OmrTemplate(); //Initializes OmrTemplate
+            OmrPage page = template.Pages[0]; // Default page
+            page.Width = 100; // Set width 100
+            page.Height = 100; // Set height 100
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OMR.OmrPage.ExtactData(Aspose.OMR.OmrImage,Aspose.OMR.OmrConfig)">
+      <summary>
+            Extracts data from a scanned OMR sheet.
+            </summary>
+      <param name="documentImage">The document Image.</param>
+      <param name="config">Configuration for OMR extraction algorithm.</param>
+      <returns>
+            A <see cref="T:System.Collections.Hashtable" /> with element names as keys and their respective values as values.
+            </returns>
+    </member>
+    <member name="P:Aspose.OMR.OmrPage.Width">
+      <summary>
+            Gets or sets width of the page, in millimeters.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.OmrPage.Height">
+      <summary>
+            Gets or sets height of the page, in millimeters.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.OmrPage.SheetImage">
+      <summary>
+            Gets or sets a sheet image associated with the page. The value can be null.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.OmrPage.Elements">
+      <summary>
+            Gets the collection of OMR elements of the page.
+            </summary>
+    </member>
+    <member name="P:Aspose.OMR.OmrPage.Configuration">
+      <summary>
+            Gets or sets page-level configuration for OMR extraction algorithm. 
+            Overrides global configuration if set.
+            If set to <c>null</c> (by default), global configuration will be used.
+            </summary>
+      <remarks>
+            This settings are used during data extraction only 
+            and are not saved in the template file.
+            </remarks>
+    </member>
+    <member name="T:Aspose.OMR.OmrPagesCollection">
+      <summary>
+            Represent a collection of pages in an OMR template
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.OmrPagesCollection.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.OmrPagesCollection" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.OmrPagesCollection.#ctor(System.Collections.ICollection)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.OmrPagesCollection" /> class.
+            </summary>
+      <param name="pages">The ordered collection of pages.</param>
+    </member>
+    <member name="M:Aspose.OMR.OmrPagesCollection.Add(Aspose.OMR.OmrPage)">
+      <summary>
+            Adds an object to the end of the <see cref="T:Aspose.OMR.OmrPagesCollection" />.
+            </summary>
+      <returns>
+            The <see cref="T:Aspose.OMR.OmrPagesCollection" /> index at which the <paramref name="value" /> has been added.
+            </returns>
+      <param name="value">
+            The <see cref="T:Aspose.OMR.OmrPage" /> to be added to the end of the <see cref="T:Aspose.OMR.OmrPagesCollection" />. 
+            The value cannot be null. 
+            </param>
+    </member>
+    <member name="M:Aspose.OMR.OmrPagesCollection.IndexOf(Aspose.OMR.OmrPage)">
+      <summary>
+            Searches for the specified <see cref="T:Aspose.OMR.OmrPage" /> and returns the zero-based index of 
+            the first occurrence within the entire <see cref="T:Aspose.OMR.OmrPagesCollection" />.
+            </summary>
+      <returns>
+            The zero-based index of the first occurrence of <paramref name="value" /> within the entire 
+            <see cref="T:Aspose.OMR.OmrPagesCollection" />, if found; otherwise, -1.
+            </returns>
+      <param name="value">
+            The <see cref="T:Aspose.OMR.OmrPage" /> to locate in the <see cref="T:Aspose.OMR.OmrPagesCollection" />. The value cannot be null. 
+            </param>
+    </member>
+    <member name="M:Aspose.OMR.OmrPagesCollection.Insert(System.Int32,Aspose.OMR.OmrPage)">
+      <summary>
+            Inserts the elements of a collection into the <see cref="T:Aspose.OMR.OmrPagesCollection" /> at the specified index.
+            </summary>
+      <param name="index">The zero-based index at which the new elements should be inserted. </param>
+      <param name="value">
+            The <see cref="T:Aspose.OMR.OmrPage" /> that should be inserted into the <see cref="T:Aspose.OMR.OmrPage" />. 
+            </param>
+    </member>
+    <member name="M:Aspose.OMR.OmrPagesCollection.Remove(Aspose.OMR.OmrPage)">
+      <summary>
+            Removes the first occurrence of a specific <see cref="T:Aspose.OMR.OmrPage" /> from the <see cref="T:Aspose.OMR.OmrPagesCollection" />.
+            </summary>
+      <param name="value">
+            The <see cref="T:Aspose.OMR.OmrPage" /> to remove from the <see cref="T:Aspose.OMR.OmrPagesCollection" />. 
+            The value cannot be null. 
+            </param>
+    </member>
+    <member name="M:Aspose.OMR.OmrPagesCollection.Contains(Aspose.OMR.OmrPage)">
+      <summary>
+            Determines whether this <see cref="T:Aspose.OMR.OmrPagesCollection" /> contains the specified <see cref="T:Aspose.OMR.OmrPage" />.
+            </summary>
+      <param name="value">
+            The <see cref="T:Aspose.OMR.OmrPage" /> to locate in the <see cref="T:Aspose.OMR.OmrPagesCollection" />.
+            </param>
+      <returns>
+        <c>true</c> if this <see cref="T:Aspose.OMR.OmrPagesCollection" /> contains
+            the specified <see cref="T:Aspose.OMR.OmrPage" />; otherwise, <c>false</c>.
+            </returns>
+    </member>
+    <member name="M:Aspose.OMR.OmrPagesCollection.CopyTo(Aspose.OMR.OmrPage[],System.Int32)">
+      <summary>
+            Copies the elements of the <see cref="T:Aspose.OMR.OmrPagesCollection" /> to an <see cref="T:System.Array" />, 
+            starting at a particular <see cref="T:System.Array" /> index.
+            </summary>
+      <param name="array">
+            The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from 
+            <see cref="T:Aspose.OMR.OmrPagesCollection" />. The <see cref="T:System.Array" /> must have zero-based indexing. 
+            </param>
+      <param name="index">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+    </member>
+    <member name="M:Aspose.OMR.OmrPagesCollection.OnValidate(System.Object)">
+      <summary>
+            Performs additional custom processes when validating a value.
+            </summary>
+      <param name="value">The object to validate.</param>
+    </member>
+    <member name="P:Aspose.OMR.OmrPagesCollection.Item(System.Int32)">
+      <summary>
+            Gets or sets the element at the specified index.
+            </summary>
+      <returns>
+            The element at the specified index.
+            </returns>
+      <param name="index">The zero-based index of the element to get or set. </param>
+    </member>
+    <member name="T:Aspose.OMR.OmrProcessingResult">
+      <summary>
+            Represent a result of data extraction from an OMR sheet
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OmrImage image = OmrImage.Load(@"image.png"); // image path
+            OmrTemplate template = OmrTemplate.Load("template.amr"); // template path
+            OmrEngine engine = new OmrEngine(template);
+            OmrProcessingResult result = engine.ExtractData(new OmrImage[] { image });
+            // Gets the page data collection of the processed document
+            Hashtable dictionary = result.PageData[0];
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OMR.OmrProcessingResult.#ctor(System.Collections.Hashtable[])">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.OMR.OmrProcessingResult" /> class.
+            </summary>
+      <param name="pageData">The page data.</param>
+    </member>
+    <member name="P:Aspose.OMR.OmrProcessingResult.PageData">
+      <summary>
+            Gets the page data collection of the processed document
+            </summary>
+    </member>
+    <member name="T:Aspose.OMR.OmrTemplate">
+      <summary>
+            Represents an OMR document template
+            OmrTemplate provides methods for loading prepared templates and creating new templates
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OmrImage image = OmrImage.Load(@"image.png"); // image path
+            OmrTemplate template = OmrTemplate.Load("template.amr"); // template path
+            OmrEngine engine = new OmrEngine(template);
+            OmrProcessingResult result = engine.ExtractData(new OmrImage[] { image });
+            </code>
+      </example>
+      <summary>
+            Represents an OMR document template
+            </summary>
+    </member>
+    <member name="M:Aspose.OMR.OmrTemplate.LoadFromUrl(System.String)">
+      <summary>
+            Loads the template from URL.
+            </summary>
+      <param name="url">The source URL.</param>
+      <returns>The freshly loaded <see cref="T:Aspose.OMR.OmrTemplate" />.</returns>
+      <example>
+        <code>
+            [C#]
+            OmrImage image = OmrImage.Load("https://sampleurl.com/template.amr"); // url path
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OMR.OmrTemplate.Load(System.String)">
+      <summary>
+            Loads the template.
+            </summary>
+      <param name="fileName">
+            Name of the file to load the template from.
+            </param>
+      <returns>The freshly loaded <see cref="T:Aspose.OMR.OmrTemplate" />.</returns>
+      <example>
+        <code>
+            [C#]
+            OmrTemplate template = OmrTemplate.Load("template.amr"); // template path
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OMR.OmrTemplate.Load(System.IO.Stream)">
+      <summary>
+            Loads the template.
+            </summary>
+      <param name="stream">Stream to load the template from.</param>
+      <returns>The freshly loaded <see cref="T:Aspose.OMR.OmrTemplate" />.</returns>
+      <example>
+        <code>
+            [C#]
+            using (FileStream stream = File.OpenRead(fileName))
+            {
+               OmrTemplate template = OmrTemplate.Load(stream);
+            }
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OMR.OmrTemplate.Save(System.String)">
+      <summary>
+            Saves the template.
+            </summary>
+      <param name="fileName">Name of the file to save the template to.</param>
+      <example>
+        <code>
+            [C#]
+            OmrTemplate template = new OmrTemplate();
+            OmrImage image = OmrImage.Load(@"image.png");
+            template.Pages[0].SheetImage = image;
+            template.Save(@"template.amr");
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OMR.OmrTemplate.Save(System.IO.Stream)">
+      <summary>
+             Saves the template.
+             </summary>
+      <param name="stream">Stream to save the template to.</param>
+      <example>
+        <code>
+             [C#]
+             OmrTemplate template = new OmrTemplate();
+             OmrImage image = OmrImage.Load(@"image.png");
+             template.Pages[0].SheetImage = image;
+            
+             using (Stream stream = File.OpenWrite(@"template.amr"))
+            {
+                template.Save(stream);
+             }
+             </code>
+      </example>
+    </member>
+    <member name="P:Aspose.OMR.OmrTemplate.Pages">
+      <summary>
+            Gets the collection of pages within the template
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.PreprocessedImages">
+      <summary>
+            Containes several modifications of source image, that were obtained during different preprocessing steps
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.Image = ImageStream.FromFile(@"image.tiff");
+            ocr.Config.SavePreprocessedImages = true;
+            if (ocr.Process())
+            {
+                ocr.PreprocessedImages.BinarizedImage.Save(@"D:\BinImage.png", ImageFormat.Png);
+            }
+            </code>
+      </example>
+    </member>
+    <member name="P:Aspose.OCR.PreprocessedImages.BinarizedImage">
+      <summary>
+            Source image after binarization or background correction.
+            Set Config.SavePreprocessedImages property to true to get image.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.PreprocessedImages.FilteredImage">
+      <summary>
+            Source image after applying specified <see cref="T:Aspose.OCR.CorrectionFilters" />
+            Set Config.SavePreprocessedImages property to true to get image.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.PreprocessedImages.RotatedImage">
+      <summary>
+            Source image after skew correction.        
+            Set Config.SavePreprocessedImages property to true to get image.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.PreprocessedImages.NonTextRemovedImage">
+      <summary>
+            Source image after detecting and removing pictures and other nontext fragments
+            Set Config.SavePreprocessedImages property to true to get image.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.PreprocessedImages.TextBlocksImage">
+      <summary>
+            This image displays detected text blocks with red rectangles.
+            Set Config.SavePreprocessedImages property to true to get image.
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.Filters.NamespaceDoc">
+      <summary>
+        <c>Aspose.OCR.Filter</c> namespace contains classes related to different image filters that can enhance recognition result.
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.NamespaceDoc">
+      <summary>
+        <c>Aspose.OCR</c> namespace provides classes that allow to run and configure optical character recognition tasks.
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.IRecognitionBlock">
+      <summary>
+            This interface represents a block.
+            <para>
+            Block is a rectangular region that may contain text, picture or any other data.
+            OCR Engine will recognize whole image and will try to find text blocks by itself, if blocks are not specified by user.
+            </para></summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.Image = ImageStream.FromFile(@"image.tiff");
+            ocr.LanguageContainer.AddLanguage(LanguageFactory.Load("Portuguese-RSC-HS-PB-ResourcesAllCharsNet.zip"));
+                    
+            IRecognitionBlock pictureBlock = RecognitionBlock.CreatePictureBlock(0, 0, 100, 200);
+            ocr.Config.AddRecognitionBlock(pictureBlock);
+            IRecognitionBlock textBlock = RecognitionBlock.CreateTextBlock(110, 210, 100, 100);
+            ocr.Config.AddRecognitionBlock(textBlock);
+                    
+            if (ocr.Process())
+                if (textBlock.RecognitionData is IRecognizedTextPartInfo)
+                    Console.WriteLine((textBlock.RecognitionData as IRecognizedTextPartInfo).Text);
+            </code>
+      </example>
+    </member>
+    <member name="P:Aspose.OCR.IRecognitionBlock.BlockId">
+      <summary>
+            Returns the block's ID. Each block has unique ID.
+            Sets when the block is created.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.IRecognitionBlock.Rectangle">
+      <summary>
+            Returns the rectangle that defines recognition block inside specified image
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.IRecognitionBlock.ToRecognize">
+      <summary>
+            Shows if block needs to be processed by OCR Engine
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.IRecognitionBlock.RecognitionData">
+      <summary>
+            Gets the recognition data.
+            </summary>
+      <value>
+            The recognition data.
+            </value>
+    </member>
+    <member name="T:Aspose.OCR.CorrectionFilters">
+      <summary>
+            Represents filters for denoising of image before recognition.
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            CorrectionFilters filters = new CorrectionFilters();
+            filters.Add(new MedianFilter());
+            filters.Add(new GaussBlurFilter(5, 1.4f));
+            ocr.Config.CorrectionFilters = filters;
+            </code>
+      </example>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.Config.CorrectionFilters.Add(new GaussBlurFilter());
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OCR.CorrectionFilters.Add(Aspose.OCR.Filter)">
+      <summary>
+            Add new <see cref="T:Aspose.OCR.Filter" /> object.
+            </summary>
+      <param name="value">Filter item.</param>
+    </member>
+    <member name="M:Aspose.OCR.CorrectionFilters.Clear">
+      <summary>
+            Clear current Filters collection.
+            </summary>
+    </member>
+    <member name="M:Aspose.OCR.CorrectionFilters.Contains(Aspose.OCR.Filter)">
+      <summary>
+            Checks if item is in collection.
+            </summary>
+      <param name="item">Filter item.</param>
+      <returns>True is collection contains element.</returns>
+    </member>
+    <member name="M:Aspose.OCR.CorrectionFilters.CopyTo(Aspose.OCR.Filter[],System.Int32)">
+      <summary>
+            Copies collection to one-dimensional array.
+            </summary>
+      <param name="array">Destination array.</param>
+      <param name="arrayIndex">Index to copy array from.</param>
+    </member>
+    <member name="M:Aspose.OCR.CorrectionFilters.Remove(Aspose.OCR.Filter)">
+      <summary>
+            Removes element from collection.
+            </summary>
+      <param name="item">Filter item to remove</param>
+      <returns>True if object was removed.</returns>
+    </member>
+    <member name="M:Aspose.OCR.CorrectionFilters.IndexOf(Aspose.OCR.Filter)">
+      <summary>
+            Find the index of an Filter item.
+            </summary>
+      <param name="item">Filter item.</param>
+      <returns>The index of value if found in the list; otherwise, -1.</returns>
+    </member>
+    <member name="M:Aspose.OCR.CorrectionFilters.Insert(System.Int32,Aspose.OCR.Filter)">
+      <summary>
+            Insert an Filter item to the collection at the specified index.
+            </summary>
+      <param name="index">Index to insert new Filter.</param>
+      <param name="item">Filter item.</param>
+    </member>
+    <member name="M:Aspose.OCR.CorrectionFilters.RemoveAt(System.Int32)">
+      <summary>
+            Remove filter at specified index.
+            </summary>
+      <param name="index">Index to remove filter from.</param>
+    </member>
+    <member name="P:Aspose.OCR.CorrectionFilters.Filters">
+      <summary>
+            Gets all filters.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.CorrectionFilters.Item(System.Int32)">
+      <summary>
+            Gets or sets <see cref="T:Aspose.OCR.Filter" /> object by index.
+            </summary>
+      <param name="index">Index of object.</param>
+      <returns>
+        <see cref="T:Aspose.OCR.Filter" /> object</returns>
+    </member>
+    <member name="P:Aspose.OCR.CorrectionFilters.Count">
+      <summary>
+            Returns count of the filters.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.CorrectionFilters.IsReadOnly">
+      <summary>
+            Returns true if collection is read-only.
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.Filters.BlurFilter">
+      <summary>
+            Represent blur filtration.
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocrEngine = new OcrEngine();
+            // Add blur filtration
+            ocrEngine.Config.CorrectionFilters.Add(new BlurFilter());
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OCR.Filters.BlurFilter.#ctor(System.Int32)">
+      <summary>
+            Initializes a new instance of the BlurFilterOld class.
+            </summary>
+      <param name="size"> Window size. </param>
+    </member>
+    <member name="P:Aspose.OCR.Filters.BlurFilter.Size">
+      <summary>
+            Gets or sets Size of a filter.
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.Filters.GaussBlurFilter">
+      <summary>
+            Represents Gauss blur filtration.
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocrEngine = new OcrEngine();
+            // Add Gauss blur filtration.
+            ocrEngine.Config.CorrectionFilters.Add(new GaussBlurFilter());
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OCR.Filters.GaussBlurFilter.#ctor">
+      <summary>
+            Initializes a new instance of the GaussBlurFilterOld class.
+            </summary>
+    </member>
+    <member name="M:Aspose.OCR.Filters.GaussBlurFilter.#ctor(System.Int32,System.Single)">
+      <summary>
+            Initializes a new instance of the GaussBlurFilterOld class.
+            </summary>
+      <param name="size"> Window size. </param>
+      <param name="sigm"> Sigma parameter. </param>
+    </member>
+    <member name="P:Aspose.OCR.Filters.GaussBlurFilter.Size">
+      <summary>
+            Gets or sets Size of a filter.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.Filters.GaussBlurFilter.Sigm">
+      <summary>
+            Gets or sets sigm parameter.
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.Filters.MedianFilter">
+      <summary>
+            Represents median filtration.
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocrEngine = new OcrEngine();
+            // Add median filtration.
+            ocrEngine.Config.CorrectionFilters.Add(new MedianFilter());
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OCR.Filters.MedianFilter.#ctor">
+      <summary>
+            Initializes a new instance of the MedianFilter class.
+            </summary>
+    </member>
+    <member name="M:Aspose.OCR.Filters.MedianFilter.#ctor(System.Int32)">
+      <summary>
+            Initializes a new instance of the MedianFilterOld class.
+            </summary>
+      <param name="size"> Window size. </param>
+    </member>
+    <member name="P:Aspose.OCR.Filters.MedianFilter.Size">
+      <summary>
+            Gets or sets Size of a filter.
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.Filters.RemoveNoiseFilter">
+      <summary>
+            Represents remove noise filtration.
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocrEngine = new OcrEngine();
+            // Add remove noise filtration
+            ocrEngine.Config.CorrectionFilters.Add(new RemoveNoiseFilter());
+            </code>
+      </example>
+    </member>
+    <member name="T:Aspose.OCR.OCRConfig">
+      <summary>
+            Configuration for OCR system.
+            OCRConfig provides methods for customizing of the image processing and recognition
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.Config.AdjustRotation = AdjustRotationMode.UserDefined;
+            ocr.Config.AdjustRotationAngle = 90;
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OCR.OCRConfig.AddRecognitionBlock(Aspose.OCR.IRecognitionBlock)">
+      <summary>
+            Adds a rectangular block to user defined RecognitionBlocks
+            </summary>
+      <param name="recognitionBlock">a block to add</param>
+    </member>
+    <member name="M:Aspose.OCR.OCRConfig.ClearRecognitionBlocks">
+      <summary>
+            Clear recognition blocks array.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.OCRConfig.ProbabilityRow">
+      <summary>
+            Gets or sets row with probable symbols to return probable symbols from.
+            Default value is 0, so only the most probable symbols return. 
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.OCRConfig.CorrectionFilters">
+      <summary>
+            Gets or sets filters for correction before recognition 
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.OCRConfig.DoSpellingCorrection">
+      <summary>
+             Gets or sets a value indicating whether automatic spelling correction should be applied. 
+             Use this option to improve OCR result but notice that this will increase total processing time
+             </summary>
+      <example>
+        <code>
+             [C#]
+             OcrEngine ocr = new OcrEngine();
+             ocr.Image = ImageStream.FromFile(@"image.tiff");
+            
+             ocr.LanguageContainer.AddLanguage(LanguageFactory.Load("Portuguese-RSC-HS-PB-ResourcesAllCharsNet.zip")); // Resource file name
+             ocr.Config.DoSpellingCorrection = true;
+             if (ocr.Process())
+             {
+                Console.WriteLine(ocr.Text);
+             }
+             </code>
+      </example>
+    </member>
+    <member name="P:Aspose.OCR.OCRConfig.DetectTextRegions">
+      <summary>
+            Gets or sets a value indicating whether automatical detection of the regions with text must be used. 
+            If this property is set to "true", manually set recognition blocks will be ignored.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.OCRConfig.RemoveNonText">
+      <summary>
+             Set this parameter to TRUE if image contains non-text components (e.g. pictures, graphics) that should be detected and ignored during recognition process
+             </summary>
+      <example>
+        <code>
+             [C#]
+             OcrEngine ocr = new OcrEngine();
+             ocr.Image = ImageStream.FromFile(@"image.tiff");
+            
+             ocr.LanguageContainer.AddLanguage(LanguageFactory.Load("Portuguese-RSC-HS-PB-ResourcesAllCharsNet.zip")); // Resource file name
+             ocr.Config.RemoveNonText = true;
+             if (ocr.Process())
+             {
+                Console.WriteLine(ocr.Text);
+             }
+             </code>
+      </example>
+    </member>
+    <member name="P:Aspose.OCR.OCRConfig.Whitelist">
+      <summary>
+            Gets or sets a white list of characters.
+            This property allows to specify a new recognition alphabet (in other words – to restrict recognition alphabet). 
+            This feature may be useful when, for example, images you need to process contain only digits. 
+            Whitelist may guarantee that recognition result will contain only digits without any characters (e.g. digit ‘0’ may be recognized as char ‘O’, or ‘1’ as ‘I’).
+            <example><code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.Config.Whitelist = new char[] {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
+            ocr.Image = Aspose.OCR.ImageStream.FromFile("numbers.png");
+            ocr.Process();
+            </code></example></summary>
+    </member>
+    <member name="P:Aspose.OCR.OCRConfig.DeleteTableLines">
+      <summary>
+             Gets or sets a value that indicates whether need to find and delete table lines in document
+             Don't use this property unnecessarily, because it may remove some meaningful information from the image and will increase total processing time
+             </summary>
+      <example>
+        <code>
+             [C#]
+             OcrEngine ocr = new OcrEngine();
+             ocr.Image = ImageStream.FromFile(@"image.tiff");
+            
+             ocr.LanguageContainer.AddLanguage(LanguageFactory.Load("Portuguese-RSC-HS-PB-ResourcesAllCharsNet.zip")); // Resource file name
+             ocr.Config.DeleteTableLines = true;
+             if (ocr.Process())
+             {
+                Console.WriteLine(ocr.Text);
+             }
+             </code>
+      </example>
+    </member>
+    <member name="P:Aspose.OCR.OCRConfig.DetectReadingOrder">
+      <summary>
+             Gets or sets a value that indicates whether special reading order detection operation must be applied to textblocks
+             Default value is TRUE
+             If OCR process works too much time or is not responding, try to set this property to FALSE
+             </summary>
+      <example>
+        <code>
+             [C#]
+             OcrEngine ocr = new OcrEngine();
+             ocr.Image = ImageStream.FromFile(@"image.tiff");
+            
+             ocr.LanguageContainer.AddLanguage(LanguageFactory.Load("Portuguese-RSC-HS-PB-ResourcesAllCharsNet.zip")); // Resource file name
+             ocr.Config.DetectReadingOrder = false;
+             if (ocr.Process())
+             {
+                Console.WriteLine(ocr.Text);
+             }
+             </code>
+      </example>
+    </member>
+    <member name="P:Aspose.OCR.OCRConfig.AdjustRotation">
+      <summary>
+            Gets or sets a value of adjust rotation mode <see cref="T:Aspose.OCR.AdjustRotationMode" />. Possible values: 
+            <see cref="F:Aspose.OCR.AdjustRotationMode.Automatic" /> - skew angle is defined automatically (this may take some time but will improve recognition quality)
+            <see cref="F:Aspose.OCR.AdjustRotationMode.UserDefined" /> - image is rotated on angle defined in <see cref="P:Aspose.OCR.OCRConfig.AdjustRotationAngle" /><see cref="F:Aspose.OCR.AdjustRotationMode.Disabled" /> - no image rotation will be applied
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.OCRConfig.AdjustRotationAngle">
+      <summary>
+            Gets or sets a value of clockwise rotation angle, in degrees.
+            Use only when AdjustRotation is equal to AdjustRotationMode.UserDefined.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.OCRConfig.AdjustUpsideDownRotation">
+      <summary>
+            Gets or sets a value of upsidedown rotation mode <see cref="T:Aspose.OCR.AdjustUpsideDownRotationMode" />.
+            Set it to <see cref="F:Aspose.OCR.AdjustUpsideDownRotationMode.Flip" /> if text on image is upsidedown so it will be rotated to 180 degrees
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.OCRConfig.ProcessColoredBackground">
+      <summary>
+            Turn on this option if input image have complex colored background and standart process works bad
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.OCRConfig.QuantizationPalleteSize">
+      <summary>
+            It is advanced option, which control number of colors to image pallete while quantization; this option make sence olny if ProcessColoredBackground is true; defalt value is 5
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.OCRConfig.RecognitionBlocks">
+      <summary>
+            User defined blocks that determines page layout
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.OCRConfig.SavePreprocessedImages">
+      <summary>
+            Gets or sets a value indicating whether saving of preprocessed images is enabled.        
+            Default value is false.
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.Image = ImageStream.FromFile(@"image.tiff");
+            ocr.Config.SavePreprocessedImages = true;
+            if (ocr.Process())
+            {
+                ocr.PreprocessedImages.BinarizedImage.Save(@"D:\BinImage.png", ImageFormat.Png);
+            }
+            </code>
+      </example>
+    </member>
+    <member name="T:Aspose.OCR.Page">
+      <summary>
+            Perpesents separate page with recognition results.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.Page.PageText">
+      <summary>
+            Gets recognized text for current page.
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.AdjustRotationMode">
+      <summary>
+            Define adjust rotation mode.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.AdjustRotationMode.Automatic">
+      <summary>
+            Automatic detection of rotation.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.AdjustRotationMode.UserDefined">
+      <summary>
+            User defined value of rotation angle.
+            Need set AdjustRotationAngle property.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.AdjustRotationMode.Disabled">
+      <summary>
+            Without rotation.
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.AdjustUpsideDownRotationMode">
+      <summary>
+            Define adjust upsidedown orientation mode.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.AdjustUpsideDownRotationMode.Flip">
+      <summary>
+            Rotate picture to 180 degrees.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.AdjustUpsideDownRotationMode.None">
+      <summary>
+            Without rotation.
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.BuildVersionInfo">
+      <summary>
+            Represents common information about build.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.BuildVersionInfo.AssemblyVersion">
+      <summary>
+            Version of assembly.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.BuildVersionInfo.FileVersion">
+      <summary>
+            Version of file.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.BuildVersionInfo.Product">
+      <summary>
+            Product name.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.BuildVersionInfo.ProductMajor">
+      <summary>
+            Product major version.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.BuildVersionInfo.ProductMinor">
+      <summary>
+            Product minor version.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.BuildVersionInfo.ReleaseDate">
+      <summary>
+            Date of release.
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.ImageStream">
+      <summary>
+            This factory creates objects of “IImageStream” type. This has a set of static methods for creating objects from different input data.
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.Image = ImageStream.FromFile(@"image.tiff");
+            ocr.Image = ImageStream.FromStream(stream, imageStreamFormat);
+            ocr.Image = ImageStream.FromUrl("http://www.someplace.com/images/logo.gif");
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OCR.ImageStream.FromStream(System.IO.Stream,Aspose.OCR.ImageStreamFormat)">
+      <summary>
+            Creates instance of “IImageStream” object  from Stream, parameter "format" sets a data type.
+            </summary>
+      <param name="stream">The <see cref="T:System.IO.Stream" /> object with image data.</param>
+      <param name="type">The <see cref="T:Aspose.OCR.ImageStreamFormat" /> object sets image format</param>
+      <returns>The instance of <see cref="T:Aspose.OCR.IImageStream" />.</returns>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.Image = ImageStream.FromStream(stream, imageStreamFormat);
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OCR.ImageStream.FromFile(System.String)">
+      <summary>
+            Creates instance of “IImageStream” from the specified file.
+            This will raise exception if the file not exists or the file format is not supported.
+            </summary>
+      <param name="imageFile">A string that contains the name of the file from which to create the <see cref="T:Aspose.OCR.IImageStream" />.</param>
+      <returns>The <see cref="T:Aspose.OCR.IImageStream" /> object.</returns>
+      <exception cref="T:Aspose.OCR.OcrException">Thrown when file not exists or format not supported.</exception>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.Image = ImageStream.FromFile(@"image.tiff");
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OCR.ImageStream.FromUrl(System.String)">
+      <summary>
+            Creates instance of “IImageStream” from the specified URL.
+            This will raise exception if the URL is invalid or the file format is not supported.
+            </summary>
+      <param name="imageUrl">A string that contains the name of the file from which to create the <see cref="T:Aspose.OCR.IImageStream" />.</param>
+      <returns>The <see cref="T:Aspose.OCR.IImageStream" /> object.</returns>
+      <exception cref="T:Aspose.OCR.OcrException">Thrown when URL is invalid or format not supported.</exception>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.Image = ImageStream.FromUrl("http://www.someplace.com/images/logo.gif");
+            </code>
+      </example>
+    </member>
+    <member name="T:Aspose.OCR.ImageStreamFormat">
+      <summary>
+            Enumerable of data formats of images.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.ImageStreamFormat.Tiff">
+      <summary>
+            Specifies that the image format is TIFF.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.ImageStreamFormat.Bmp">
+      <summary>
+            Specifies that the image format is BMP.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.ImageStreamFormat.Png">
+      <summary>
+            Specifies that the image format is PNG.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.ImageStreamFormat.Jpg">
+      <summary>
+            Specifies that the image format is JPG.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.ImageStreamFormat.Gif">
+      <summary>
+            Specifies that the image format is GIF.
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.IRecognizedText">
+      <summary>
+            This interface is for work with recognized text.
+            The result may be in multiple formats (plain text, array parts with details on each, in the hOCR format).
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.LanguageContainer.AddLanguage(LanguageFactory.Load("Portuguese-RSC-HS-PB-ResourcesAllCharsNet.zip"));
+            ocr.Image = ImageStream.FromFile(@"image.tiff");
+            if (ocr.Process())
+                foreach (IRecognizedPartInfo recognizedPartInfo in ocr.Text.PartsInfo)
+                    if (recognizedPartInfo is IRecognizedTextPartInfo)
+                    {
+                        IRecognizedTextPartInfo recognizedBlockInfo = recognizedPartInfo as IRecognizedTextPartInfo;
+                        string text = recognizedBlockInfo.Text;
+                        if (recognizedBlockInfo.Bold) text = String.Format("{0}", text);
+                        if (recognizedBlockInfo.Italic) text = String.Format("{0}", text);
+                        Console.WriteLine(text);
+                    }
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OCR.IRecognizedText.ToString">
+      <summary>
+            Gets whole recognized text without formatting. It is concatenation texts from parts.
+            </summary>
+      <returns>Whole recognized text without formatting</returns>
+    </member>
+    <member name="P:Aspose.OCR.IRecognizedText.PartsInfo">
+      <summary>
+            Gets an array of recognized text by parts.
+            <para>
+            Each part has its own style, font, text size, color, language and more.
+            If the text consists of several parts that are written by different font (or a different language, etc.), then according to each will have an element in this array.
+            It is divided by the words into parts, if have large text that has the same style.
+            Parts are consistently followed, that they found in the original text so they are following here.
+            </para></summary>
+    </member>
+    <member name="T:Aspose.OCR.IRecognizedPartInfo">
+      <summary>
+            Interface that presents information about part of the recognized text.
+            Could be text or detected picture block
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.IRecognizedPartInfo.Box">
+      <summary>
+            Gets the rectangular area where the detected block (with text or picture) is shown on the image.
+            Coordinates starts with the upper left corner of the image.
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.IRecognizedTextPartInfo">
+      <summary>
+            This interface presents information about each part of the recognized text.
+            <para>
+            Part of text seems one part, that has all the same characteristics (style, color, etc.). It is divided by the words into parts, if have large text that has the same style.
+            </para></summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.Image = ImageStream.FromFile(@"image.tiff");
+            foreach (IRecognizedPartInfo recognizedPartInfo in ocr.Text.PartsInfo)
+            {
+               if (recognizedPartInfo is IRecognizedTextPartInfo)
+               {
+                   IRecognizedTextPartInfo recognizedBlockInfo = recognizedPartInfo as IRecognizedTextPartInfo;
+                   string text = recognizedBlockInfo.Text;
+                   if (recognizedBlockInfo.Bold)
+                      text = String.Format("{0}", text);
+                   if (recognizedBlockInfo.Italic)
+                      text = String.Format("{0}", text);
+                   Console.WriteLine(text);
+                }
+            }
+            </code>
+      </example>
+    </member>
+    <member name="P:Aspose.OCR.IRecognizedTextPartInfo.Text">
+      <summary>
+            Gets the text of this part.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.IRecognizedTextPartInfo.Font">
+      <summary>
+            Gets the font of this part.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.IRecognizedTextPartInfo.FontSize">
+      <summary>
+            Gets the font size of this part.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.IRecognizedTextPartInfo.Bold">
+      <summary>
+            Gets the value that indicates whether this part is bold.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.IRecognizedTextPartInfo.Italic">
+      <summary>
+            Gets a value that indicates whether this part is italic.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.IRecognizedTextPartInfo.Underline">
+      <summary>
+            Gets a value that indicates whether this part is underline.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.IRecognizedTextPartInfo.TextColor">
+      <summary>
+            Gets a color of text this part.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.IRecognizedTextPartInfo.BackgroundColor">
+      <summary>
+            Gets the color of background this part.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.IRecognizedTextPartInfo.CharactersQuality">
+      <summary>
+            Gets an array of values specified for some recognition of this character. Size of the array is equal to size of <see cref="P:Aspose.OCR.IRecognizedTextPartInfo.Text">Text</see> (how many letters in part).
+            Each array element can be from 0.0 to 1.0 inclusive. Value 0.0 means that the poorly recognized, 1.0 means that perfectly recognized.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.IRecognizedTextPartInfo.CharactersBox">
+      <summary>
+            Gets an array of rectangles. Size of the array is equal to size of <see cref="P:Aspose.OCR.IRecognizedTextPartInfo.Text">Text</see> (how many letters in part).
+            Each rectangle indicates the area of character.
+            Coordinates starts with the upper left corner of the picture.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.IRecognizedTextPartInfo.Language">
+      <summary>
+            Gets the language of this part.
+            </summary>
+      <seealso cref="T:Aspose.OCR.ILanguage" />
+    </member>
+    <member name="P:Aspose.OCR.IRecognizedTextPartInfo.Children">
+      <summary>
+            Array of lower level text part
+            (e.g. words for text line, or characters for word)
+            <example><code>
+            [C#]
+            IRecognizedTextPartInfo firstBlock = (ocr.Text.PartsInfo[0] as IRecognizedTextPartInfo);
+            IRecognizedPartInfo[] linesOfFirstBlock = firstBlock.Children;
+            </code></example></summary>
+    </member>
+    <member name="P:Aspose.OCR.IRecognizedTextPartInfo.Level">
+      <summary>
+            Shows hierarchical level of text part
+            <example><code>
+            [C#]
+            IRecognizedTextPartInfo firstLine = (ocr.Text.PartsInfo[0] as IRecognizedTextPartInfo).Children[0];
+            Console.WriteLine(firstLine.Level); // will be TextPartLevel.Line
+            </code></example></summary>
+    </member>
+    <member name="P:Aspose.OCR.IRecognizedTextPartInfo.IsTrimmed">
+      <summary>
+            Indicates whether recognition result was trimmed due to evaluation restrictions
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.LanguageFactory">
+      <summary>
+            A factory for creating objects of type <see cref="T:Aspose.OCR.ILanguage" />.
+            It has static methods for creating languages.
+            </summary>
+      <example>
+        <code>
+            [C#]
+            ILanguage english = LanguageFactory.Load(@"engresources.zip");
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OCR.LanguageFactory.Load(System.IO.Stream)">
+      <summary>
+            Creates instance of <see cref="T:Aspose.OCR.ILanguage" /> from a stream.
+            This will raise an exception if files for that language are not correct.
+            </summary>
+      <param name="stream">Input stream with language resources</param>
+      <returns>The instance of <see cref="T:Aspose.OCR.ILanguage" />.</returns>
+      <exception cref="T:System.ArgumentException">Thrown when language is not supported.</exception>
+    </member>
+    <member name="M:Aspose.OCR.LanguageFactory.Load(System.String)">
+      <summary>
+            Creates instance of <see cref="T:Aspose.OCR.ILanguage" /> using specified resources file.
+            This will raise an exception if files for that language are not correct. 
+            </summary>
+      <param name="path">Path to resources file</param>
+      <returns>The instance of <see cref="T:Aspose.OCR.ILanguage" />.</returns>
+    </member>
+    <member name="T:Aspose.OCR.LanguageContainer">
+      <summary>
+            A container for recognition languages.
+            <para>
+            Recognition of multiple languages.
+            The text is recognized by words. Each recognized word has a specific language.
+            There is a priority in recognition languages. Language that was added earlier to the collection has a higher priority. If the word is identical in several languages, a language that was earlier added to the collection will be selected.
+            </para></summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.LanguageContainer.AddLanguage(LanguageFactory.Load(@"engresources.zip")); 
+            ILanguage language = ocr.LanguageContainer.Languages[0];
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OCR.LanguageContainer.AddLanguage(Aspose.OCR.ILanguage)">
+      <summary>
+            Adds a language to language container. If such language is already in the collection, it is added again.
+            </summary>
+      <param name="language">The <see cref="T:Aspose.OCR.ILanguage" /> object to add.</param>
+    </member>
+    <member name="M:Aspose.OCR.LanguageContainer.AddLanguages(Aspose.OCR.ILanguage[])">
+      <summary>
+            Adds a range of languages to the language container
+            </summary>
+      <param name="languages">The <see cref="T:Aspose.OCR.ILanguage" /> array to add.</param>
+    </member>
+    <member name="M:Aspose.OCR.LanguageContainer.RemoveLanguage(Aspose.OCR.ILanguage)">
+      <summary>
+            Removes specified language from the container
+            </summary>
+      <param name="language">The <see cref="T:Aspose.OCR.ILanguage" /> object to be removed</param>
+    </member>
+    <member name="M:Aspose.OCR.LanguageContainer.RemoveLanguages(Aspose.OCR.ILanguage[])">
+      <summary>
+            Removes a range of languages from the container
+            </summary>
+      <param name="languages">Array of <see cref="T:Aspose.OCR.ILanguage" /> to be removed</param>
+    </member>
+    <member name="M:Aspose.OCR.LanguageContainer.Clear">
+      <summary>
+            Removes all languages from language container
+            </summary>
+    </member>
+    <member name="M:Aspose.OCR.LanguageContainer.ResetToDefaults">
+      <summary>
+            Clears all loaded languages and loads the default one
+            </summary>
+    </member>
+    <member name="M:Aspose.OCR.LanguageContainer.Dispose">
+      <summary>
+            Disposes the container
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.LanguageContainer.Languages">
+      <summary>
+            Array of all the languages loaded into the language container
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.NotifierFactory">
+      <summary>
+            This is factory for creating objects of type "INotifier".
+            It has a set of static methods for creating objects from different input data.
+            </summary>
+    </member>
+    <member name="M:Aspose.OCR.NotifierFactory.WordNotifier">
+      <summary>
+            Creates the notifier that causes an event when a word is recognized.
+            </summary>
+      <returns>The notifier.</returns>
+    </member>
+    <member name="M:Aspose.OCR.NotifierFactory.SymbolNotifier">
+      <summary>
+            Creates the notifier that causes an event on each recognized symbol.
+            </summary>
+      <returns>The notifier.</returns>
+    </member>
+    <member name="M:Aspose.OCR.NotifierFactory.LineNotifier">
+      <summary>
+            Creates the notifier that causes an event when a text line is recognized.
+            </summary>
+      <returns>The notifier.</returns>
+    </member>
+    <member name="M:Aspose.OCR.NotifierFactory.BlockNotifier">
+      <summary>
+            Creates the notifier that causes an event when detected text block is recognized.
+            </summary>
+      <returns>The notifier.</returns>
+      <exception cref="T:System.ArgumentException">Thrown when blockSize less or equal zero.</exception>
+    </member>
+    <member name="M:Aspose.OCR.NotifierFactory.PageNotifier">
+      <summary>
+            Creates the notifier that causes an event when a page of a multipage document is recognized.
+            </summary>
+      <returns>The notifier.</returns>
+    </member>
+    <member name="T:Aspose.OCR.NotifierHandler">
+      <summary>
+            Delegate for Elapsed event.
+            </summary>
+      <param name="sender">Object to send event.</param>
+      <param name="recognizedText">Recognized part.</param>
+    </member>
+    <member name="T:Aspose.OCR.OcrAlgorithmMode">
+      <summary>
+            Modes of the OCR algorithm using by engine
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.OcrAlgorithmMode.None">
+      <summary>
+            No algorithm defined.
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.OcrAlgorithmMode.M32PtFontStyles12NEts">
+      <summary>
+            32 Font Size 12 networks
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.OcrAlgorithmMode.M16PtFontStyles12NEts">
+      <summary>
+            16 Font Styles 12 networks
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.OcrAlgorithmMode.M8PtFontStyles12NEts">
+      <summary>
+            8 Font Style 12 networks
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.OcrEngine">
+      <summary>
+            Main Aspose.OCR class.
+            Users will use instance of this class most of the time.
+            OcrEngine provides methods for image processing, choosing language and recognition process  
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.Image = ImageStream.FromFile(@"image.tiff");
+            if (ocr.Process())
+            {
+                Console.WriteLine(ocr.Text);
+            }
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OCR.OcrEngine.Process">
+      <summary>
+            Runs the recognition process.
+            <para>
+            OcrEngine must be configured before running this method, otherwise Exception will be thrown. Once this method is called, you may get recognized text from Text property.
+            Before calling the method, add at least one language to Languages and set image. 
+            </para></summary>
+      <returns>A value indicating whether text has been recognized succesfully.</returns>
+      <exception cref="T:Aspose.OCR.OcrException">Thrown if it instance is not configured.</exception>
+    </member>
+    <member name="M:Aspose.OCR.OcrEngine.AddNotifier(Aspose.OCR.INotifier)">
+      <summary>
+            Adds notifier.
+            <para>
+            Each notifier can send event (recognized word, recognized several characters). You can add many notifiers.
+            </para></summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.Image = ImageStream.FromFile(@"image.tiff");
+                
+            INotifier wordNotifier = NotifierFactory.WordNotifier();
+            wordNotifier.Elapsed += delegate
+            {
+                Console.WriteLine("1!" + wordNotifier.Text);
+            };
+            INotifier blockNotifier = NotifierFactory.BlockNotifier();
+            blockNotifier.Elapsed += delegate
+            {
+               Console.WriteLine("2!" + blockNotifier.Text);
+            };
+            ocr.AddNotifier(wordNotifier);
+            ocr.AddNotifier(blockNotifier);
+            if (ocr.Process())
+            {
+                Console.WriteLine(ocr.Text);
+            }
+            </code>
+      </example>
+      <param name="processor">The processor to add.</param>
+    </member>
+    <member name="M:Aspose.OCR.OcrEngine.ClearNotifies">
+      <summary>
+            Clear notifiers list.
+            </summary>
+    </member>
+    <member name="M:Aspose.OCR.OcrEngine.Dispose">
+      <summary>
+            Disposes the engine
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.OcrEngine.Config">
+      <summary>
+            Gets or sets configuration.
+            </summary>
+      <exception cref="T:System.ArgumentNullException">Thrown when value is null.</exception>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.Config.AdjustRotation = AdjustRotationMode.Automatic;
+            </code>
+      </example>
+    </member>
+    <member name="P:Aspose.OCR.OcrEngine.Image">
+      <summary>
+            Sets the picture to recognize the text from.
+            This property must be set before recognition or specified as one of arguments during “Process” call.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.OcrEngine.ProcessAllPages">
+      <summary>
+            Gets or sets a value indicating whether all frames in image must be processed.
+            </summary>
+    </member>
+    <member name="P:Aspose.OCR.OcrEngine.Pages">
+      <summary>
+            Gets recognized text divided to pages.
+            This property is only available after recognition is complete, otherwise exception will be raised.
+            </summary>
+      <exception cref="T:Aspose.OCR.OcrException">Thrown when use before recognition.</exception>
+    </member>
+    <member name="P:Aspose.OCR.OcrEngine.Text">
+      <summary>
+            Gets recognized text.
+            This property is only available after recognition is complete, otherwise exception will be raised.
+            </summary>
+      <exception cref="T:Aspose.OCR.OcrException">Thrown when use before recognition.</exception>
+    </member>
+    <member name="P:Aspose.OCR.OcrEngine.LanguageContainer">
+      <summary>
+             Gets container with recognition languages.
+             Enables user to define a list of languages to use for recognition. You may add several languages here.
+             By default English language is loaded.
+             <para>
+             Recognition of multiple languages.
+             The text is recognized by words. Each recognized word has a specific language.
+             There is a priority of recognition languages. Language that was added earlier to the collection has a higher priority. If the word is identical in several languages, a language that was earlier added to the collection will be selected.
+             </para></summary>
+      <example>
+        <code>
+             [C#]
+             OcrEngine ocr = new OcrEngine();
+             ocr.Image = ImageStream.FromFile(@"image.tiff");
+            
+             ocr.LanguageContainer.AddLanguage(LanguageFactory.Load("Portuguese-RSC-HS-PB-ResourcesAllCharsNet.zip")); // Resource file name
+             if (ocr.Process())
+             {
+                 Console.WriteLine(ocr.Text);
+             }
+             </code>
+      </example>
+    </member>
+    <member name="P:Aspose.OCR.OcrEngine.PreprocessedImages">
+      <summary>
+            Containes several modifications of source image, that were obtained during different preprocessing steps
+            </summary>
+      <example>
+        <code>
+            [C#]
+            OcrEngine ocr = new OcrEngine();
+            ocr.Image = ImageStream.FromFile(@"image.tiff");
+            ocr.Config.SavePreprocessedImages = true;
+            if (ocr.Process())
+            {
+                ocr.PreprocessedImages.BinarizedImage.Save(@"D:\BinImage.png", ImageFormat.Png);
+            }
+            </code>
+      </example>
+    </member>
+    <member name="T:Aspose.OCR.OcrException">
+      <summary>
+            This exception indicates an exception while working with OCR module.
+            </summary>
+    </member>
+    <member name="M:Aspose.OCR.OcrException.#ctor(System.String,System.Exception)">
+      <summary>
+            Create this exception with the given message and underlying cause.
+            </summary>
+      <param name="message">The message of this exception.</param>
+      <param name="cause">The underlying exception.</param>
+    </member>
+    <member name="M:Aspose.OCR.OcrException.#ctor(System.String)">
+      <summary>
+            Create this exception with the given message.
+            </summary>
+      <param name="message">The message of this exception.</param>
+    </member>
+    <member name="T:Aspose.OCR.RecognitionBlock">
+      <summary>
+            This factory creates objects of type <see cref="T:Aspose.OCR.IRecognitionBlock" />. This has a set of static methods for creating objects from different input data.
+            </summary>
+      <example>
+        <code>
+            [C#]
+            IRecognitionBlock textBlock = RecognitionBlock.CreateTextBlock(0, 0, 100, 200);
+            IRecognitionBlock pictureBlock = RecognitionBlock.CreatePictureBlock(0, 0, 100, 200);
+            </code>
+      </example>
+    </member>
+    <member name="M:Aspose.OCR.RecognitionBlock.CreateTextBlock(System.Int32,System.Int32,System.Int32,System.Int32)">
+      <summary>
+            Creates a block for text recognition in rectangular area.
+            </summary>
+      <param name="x">The x-coordinate of the upper-left corner of the rectangle.</param>
+      <param name="y">The y-coordinate of the upper-left corner of the rectangle.</param>
+      <param name="width">The width of the rectangle.</param>
+      <param name="height">The height of the rectangle.</param>
+      <returns>The instance of <see cref="T:Aspose.OCR.IRecognitionBlock" />.</returns>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="x" /> is less than 0</exception>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="y" /> is less than 0</exception>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="width" /> is less than or equal to 0</exception>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="height" /> is less than or equal to 0</exception>
+    </member>
+    <member name="M:Aspose.OCR.RecognitionBlock.CreatePictureBlock(System.Int32,System.Int32,System.Int32,System.Int32)">
+      <summary>
+            Creates a picture block for rectangular area. This block will not recognize.
+            </summary>
+      <param name="x">The x-coordinate of the upper-left corner of the rectangle.</param>
+      <param name="y">The y-coordinate of the upper-left corner of the rectangle.</param>
+      <param name="width">The width of the rectangle.</param>
+      <param name="height">The height of the rectangle.</param>
+      <returns>The instance of <see cref="T:Aspose.OCR.IRecognitionBlock" />.</returns>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="x" /> is less than 0</exception>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="y" /> is less than 0</exception>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="width" /> is less than or equal to 0</exception>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="height" /> is less than or equal to 0</exception>
+    </member>
+    <member name="T:Aspose.OCR.RecognizedText.TextPartInfo.NamespaceDoc">
+      <summary>
+        <c>Aspose.OCR.RecognizedText.TextPartInfo</c> namespace contains enumerator for text part levels (<see cref="T:Aspose.OCR.RecognizedText.TextPartInfo.TextPartLevel" />).
+            </summary>
+    </member>
+    <member name="T:Aspose.OCR.RecognizedText.TextPartInfo.TextPartLevel">
+      <summary>
+            Level of <see cref="T:Aspose.OCR.IRecognizedTextPartInfo" /> object.
+            Could be text block, line, word or character
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.RecognizedText.TextPartInfo.TextPartLevel.Textblock">
+      <summary>
+            Represents text block
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.RecognizedText.TextPartInfo.TextPartLevel.Line">
+      <summary>
+            Represents text line
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.RecognizedText.TextPartInfo.TextPartLevel.Word">
+      <summary>
+            Represents word
+            </summary>
+    </member>
+    <member name="F:Aspose.OCR.RecognizedText.TextPartInfo.TextPartLevel.Character">
+      <summary>
+            Represents character
+            </summary>
+    </member>
+  </members>
+</doc>

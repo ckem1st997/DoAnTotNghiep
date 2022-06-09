@@ -17,7 +17,7 @@ namespace WareHouse.API.Application.Authentication
 
         public async Task<bool> ActiveHistory(string UserName)
         {
-          var res=await _client.ActiveHistoryAsync(new BaseId() { Id = UserName });
+            var res = await _client.ActiveHistoryAsync(new BaseId() { Id = UserName });
             return res.Check;
         }
 

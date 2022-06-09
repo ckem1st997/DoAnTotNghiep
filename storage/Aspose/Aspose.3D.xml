@@ -1,0 +1,4558 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>Aspose.3D</name>
+  </assembly>
+  <members>
+    <member name="T:Aspose.ThreeD.Animations.AnimationChannel">
+      <summary>
+            A channel maps property's component field to a set of curves
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.AnimationChannel.AddCurve(Aspose.ThreeD.Animations.Curve)">
+      <summary>
+            Adds curve to this channel
+            </summary>
+      <param name="curve">
+      </param>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.AnimationChannel.GetEnumerator">
+      <summary>
+            Gets an enumerator to walk through all curves inside this channel
+            </summary>
+      <returns>Enumerator</returns>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.AnimationChannel.ComponentType">
+      <summary>
+            Gets the component field's type
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.AnimationChannel.Name">
+      <summary>
+            Gets the name of the channel
+             </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.AnimationChannel.DefaultValue">
+      <summary>
+            Gets or sets the Default value of the channel.
+            If a channel has no curves connected, the default value will be used during the animation evaluation.
+            A real scenario: Animation only animates a node's x coordinate, the y and z are not changed, 
+            then the default value will be used during full translation evaluation.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.AnimationChannel.Curves">
+      <summary>
+            Gets all curves inside this channel
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Animations.NamespaceDoc">
+      <summary>
+            The animation namespace of Aspose.3D, all animation related classes are defined in this namespace
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Constraints.NamespaceDoc">
+      <summary>
+            All constraint classes are defined in this namespace
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Deformers.NamespaceDoc">
+      <summary>
+            All deformer classes are defined in this namespace
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.ProjectionType">
+      <summary>
+            Camera's projection types.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.ProjectionType.Perspective">
+      <summary>
+            The camera uses perspective projection. 
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.ProjectionType.Orthographic">
+      <summary>
+            The camera uses orthographic projection.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.IOrientable">
+      <summary>
+            Orientable entities shall implement this interface.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.IOrientable.Direction">
+      <summary>
+            Gets or sets the direction that the entity is looking at.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.IOrientable.Target">
+      <summary>
+            Gets or sets the target that the entity is looking at.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.PolygonModifier">
+      <summary>
+            Utilities to modify polygons
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.PolygonModifier.Triangulate(Aspose.ThreeD.Entities.Mesh)">
+      <summary>
+            Convert a polygon-based mesh into full triangle mesh
+            </summary>
+      <param name="mesh">The original non-triangle mesh</param>
+      <returns>The generated new triangle mesh</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.PolygonModifier.Triangulate(System.Collections.Generic.IList{Aspose.ThreeD.Utils.Vector4},System.Collections.Generic.IList{System.Int32[]},System.Boolean,Aspose.ThreeD.Utils.Vector3[]@)">
+      <summary>
+            Convert a polygon-based mesh into full triangle mesh
+            </summary>
+      <param name="controlPoints">Control points of the mesh</param>
+      <param name="polygons">Polygon faces</param>
+      <param name="generateNormals">Generate normals</param>
+      <param name="nor_out">Generated Per-control point normal</param>
+      <returns>A set of triangles</returns>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.PolygonBuilder">
+      <summary>
+            A helper class to build polygon for <see cref="T:Aspose.ThreeD.Entities.Mesh" /></summary>
+      <example>
+        <code>
+            PolygonBuilder builder = new PolygonBuilder(mesh);
+            builder.Begin();
+            builder.AddVertex(0);
+            builder.AddVertex(1);
+            builder.AddVertex(2);
+            Builder.End();
+            </code>
+            Equals to :
+            <code>
+            int[] indices = new int[] {0, 1, 2};
+            mesh.CreatePolygon(indices);
+            </code>
+            If all indices are ready to use, <see cref="M:Aspose.ThreeD.Entities.Mesh.CreatePolygon(System.Int32[])" /> is preferred, otherwise <see cref="T:Aspose.ThreeD.Entities.PolygonBuilder" /> would be a better choice.
+            </example>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.PolygonBuilder.#ctor(Aspose.ThreeD.Entities.Mesh)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.PolygonBuilder" /> class.
+            </summary>
+      <param name="mesh">On which mesh to build polygon.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.PolygonBuilder.Begin">
+      <summary>
+            Begins to add a new polygon
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.PolygonBuilder.AddVertex(System.Int32)">
+      <summary>
+            Adds a vertex index to the polygon
+            </summary>
+      <param name="index">
+      </param>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.PolygonBuilder.End">
+      <summary>
+            Finishes the polygon creation
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.IO.ObjConfig">
+      <summary>
+            IO Configuration for Wavefront's obj format.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.IO.IOConfig">
+      <summary>
+            IO config for serialization/deserialization.
+            User can specify detailed configurations like dependency look-up path
+            Or format-related configs here
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.IOConfig.CreateStream">
+      <summary>
+            Allows user to create stream while serializing/deserializing external assets.
+            If this is not specified and FileName is specified, external assets will be accessed through your file system.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.IOConfig.LookupPaths">
+      <summary>
+            Some files like OBJ depends on external file, the lookup paths will allows Aspose.3D to look for external file to load.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.IOConfig.FileName">
+      <summary>
+            The file name of the exporting/importing scene.
+            This is optional, but useful when serialize external assets like OBJ's material.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.IO.ObjConfig.#ctor">
+      <summary>
+            Initializes of a new <see cref="T:Aspose.ThreeD.IO.ObjConfig" /> instance.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.ObjConfig.Verbose">
+      <summary>
+            Gets or sets whether generate comments for each section
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.ObjConfig.SerializeW">
+      <summary>
+            Gets or sets whether serialize W component in model's vertex position.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.ObjConfig.EnableMaterials">
+      <summary>
+            Gets or sets whether import/export materials for each object
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.ObjConfig.MaterialLibrary">
+      <summary>
+            Gets or sets file name of the material library, usually a file ends with an extension ".mtl"
+            If the material library is not specified and SerializeMaterials is required, Aspose.3D will generate a file name for it.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.ObjConfig.FlipCoordinateSystem">
+      <summary>
+            Gets or sets whether flip coordinate system of control points/normal during importing/exporting.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.IO.STLConfig">
+      <summary>
+            Import and export Configuration for STL
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.IO.STLConfig.#ctor">
+      <summary>
+            Initializes of a new <see cref="T:Aspose.ThreeD.IO.STLConfig" /> instance.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.IO.STLConfig.#ctor(Aspose.ThreeD.FileContentType)">
+      <summary>
+            Initializes of a new <see cref="T:Aspose.ThreeD.IO.STLConfig" /> instance.
+            </summary>
+      <param name="contentType">
+      </param>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.STLConfig.FlipCoordinateSystem">
+      <summary>
+            Gets or sets whether flip coordinate system of control points/normal during importing/exporting.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.IO.Discreet3DSConfig">
+      <summary>
+            Configuration for 3DS file.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.IO.Discreet3DSConfig.#ctor">
+      <summary>
+            Initializes a <see cref="T:Aspose.ThreeD.IO.Discreet3DSConfig" /></summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.Discreet3DSConfig.GammaCorrectedColor">
+      <summary>
+            A 3ds file may contains original color and gamma corrected color for same attribute,
+            Setting this to true will use the gamma corrected color if possible, 
+            otherwise the Aspose.3D will try to use the original color.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.Discreet3DSConfig.HighPreciseColor">
+      <summary>
+            If this is true, the generated 3ds file will use high precise color, means each channel of red/green/blue are in 32bit float.
+            Otherwise the generated file will use 24bit color, each channel use 8bit byte.
+            The default value is false, because not all applications supports the high-precise color.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.Discreet3DSConfig.ExportLight">
+      <summary>
+            Gets or sets whether export all lights in the scene.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.Discreet3DSConfig.ExportCamera">
+      <summary>
+            Gets or sets whether export all cameras in the scene.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.Discreet3DSConfig.MasterScale">
+      <summary>
+            Gets or sets the master scale used in exporting.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.Discreet3DSConfig.FlipCoordinateSystem">
+      <summary>
+            Gets or sets flip coordinate system of control points/normal during importing/exporting.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.License">
+      <summary>
+            Provides methods to license the component.
+            </summary>
+      <example>
+            In this example, an attempt will be made to find a license file named MyLicense.lic
+            in the folder that contains 
+            
+            
+            the component, in the folder that contains the calling assembly,
+            in the folder of the entry assembly and then in the embedded resources of the calling assembly.
+            <code>
+            [C#]
+            
+            License license = new License();
+            license.SetLicense("MyLicense.lic");
+            
+            
+            [Visual Basic]
+            
+            Dim license As license = New license
+            License.SetLicense("MyLicense.lic")
+            </code></example>
+    </member>
+    <member name="M:Aspose.ThreeD.License.#ctor">
+      <summary>
+            Initializes a new instance of this class.
+            </summary>
+      <example>
+            In this example, an attempt will be made to find a license file named MyLicense.lic
+            in the folder that contains 
+            
+            
+            the component, in the folder that contains the calling assembly,
+            in the folder of the entry assembly and then in the embedded resources of the calling assembly.
+            <code>
+            [C#]
+            
+            License license = new License();
+            license.SetLicense("MyLicense.lic");
+            
+            
+            [Visual Basic]
+            
+            Dim license As license = New license
+            License.SetLicense("MyLicense.lic")
+            </code></example>
+    </member>
+    <member name="M:Aspose.ThreeD.License.SetLicense(System.String)">
+      <summary>
+            Licenses the component.
+            </summary>
+      <remarks>
+        <p>Tries to find the license in the following locations:</p>
+        <p>1. Explicit path.</p>
+        <p>2. The folder that contains the Aspose component assembly.</p>
+        <p>3. The folder that contains the client's calling assembly.</p>
+        <p>4. The folder that contains the entry (startup) assembly.</p>
+        <p>5. An embedded resource in the client's calling assembly.</p>
+        <p>
+          <b>Note:</b>On the .NET Compact Framework, tries to find the license only in these locations:</p>
+        <p>1. Explicit path.</p>
+        <p>2. An embedded resource in the client's calling assembly.</p>
+      </remarks>
+      <example>
+            In this example, an attempt will be made to find a license file named MyLicense.lic
+            in the folder that contains 
+            
+            
+            the component, in the folder that contains the calling assembly,
+            in the folder of the entry assembly and then in the embedded resources of the calling assembly.
+            <code>
+            [C#]
+            
+            License license = new License();
+            license.SetLicense("MyLicense.lic");
+            
+            
+            [Visual Basic]
+            
+            Dim license As License = New License
+            license.SetLicense("MyLicense.lic")
+            </code><param name="licenseName">Can be a full or short file name or name of an embedded resource.
+            Use an empty string to switch to evaluation mode.</param></example>
+    </member>
+    <member name="M:Aspose.ThreeD.License.SetLicense(System.IO.Stream)">
+      <summary>
+            Licenses the component.
+            </summary>
+      <param name="stream">A stream that contains the license.</param>
+      <remarks>
+        <p>Use this method to load a license from a stream.</p>
+      </remarks>
+      <example>
+        <code>
+            [C#]
+            
+            License license = new License();
+            license.SetLicense(myStream);
+            
+            
+            [Visual Basic]
+            
+            Dim license as License = new License
+            license.SetLicense(myStream)
+            </code>
+      </example>
+    </member>
+    <member name="T:Aspose.ThreeD.NamespaceDoc">
+      <summary>
+            The base namespace of Aspose.3D
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.UpVector">
+      <summary>
+            Specifies which canonical axis represents up in the system (typically Y or Z). 
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.UpVector.XAxis">
+      <summary>
+            The X axis.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.UpVector.YAxis">
+      <summary>
+            The Y axis.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.UpVector.ZAxis">
+      <summary>
+            The Z axis.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.CoordinatedSystem">
+      <summary>
+            Specifies the third vector of the system. 
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.CoordinatedSystem.RightHanded">
+      <summary>
+            The right handed.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.CoordinatedSystem.LeftHanded">
+      <summary>
+            The left handed.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.NodeVisitor">
+      <summary>
+            A callback to travel through the whole node hierarchy.
+            </summary>
+      <param name="node">Node being visited</param>
+      <returns>Return false to stop travelling</returns>
+    </member>
+    <member name="T:Aspose.ThreeD.Node">
+      <summary>
+            Represents an element in the scene graph.
+            A scene graph is a tree of Node objects. The tree management services are self contained in this class.
+            Note the Aspose.3D SDK does not test the validity of the constructed scene graph. It is the responsibility of the caller to make sure that it does not generate cyclic graphs in a node hierarchy.
+            Besides the tree management, this class defines all the properties required to describe the position of the object in the scene. This information include the basic Translation, Rotation and Scaling properties and the more advanced options for pivots, limits, and IK joints attributes such the stiffness and dampening.
+            When it is first created, the Node object is "empty" (i.e: it is an object without any graphical representation that only contains the position information). In this state, it can be used to represent parents in the node tree structure but not much more. The normal use of this type of objects is to add them an entity that will specialize the node (see the "Entity").
+            The entity is an object in itself and is connected to the the Node. This also means that the same entity can be shared among multiple nodes. Camera, Light, Mesh, etc... are all entities and they all derived from the base class Entity.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.A3DObject">
+      <summary>
+            The base class of all Aspose.ThreeD objects, all sub classes will support dynamic properties. 
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.A3DObject.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.A3DObject" /> class.
+            </summary>
+      <param name="name">Name</param>
+    </member>
+    <member name="M:Aspose.ThreeD.A3DObject.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.A3DObject" /> class with no name.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.A3DObject.CreateDynamicProperty(System.String,System.Type)">
+      <summary>
+            Creates a new dynamic property
+            If the property already exists, null will be returned
+            </summary>
+      <param name="propName">Property name</param>
+      <param name="type">Property type</param>
+      <returns>Created dynamic property</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.A3DObject.GetDynamicProperty(System.String)">
+      <summary>
+            Gets the dynamic property or null if not existing.
+            </summary>
+      <returns>The dynamic property.</returns>
+      <param name="propName">Property name.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.A3DObject.RemoveProperty(Aspose.ThreeD.Property)">
+      <summary>
+            Removes a dynamic property identified by name.
+            </summary>
+      <param name="property">Which property to remove</param>
+      <returns>true if the property is successfully removed</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.A3DObject.FindProperty(System.String)">
+      <summary>
+            Finds the property.
+            It can be a dynamic property (Created by CreateDynamicProperty) 
+            or native property(Identified by its name)
+            </summary>
+      <returns>The property.</returns>
+      <param name="propertyName">Property name.</param>
+    </member>
+    <member name="P:Aspose.ThreeD.A3DObject.Name">
+      <summary>
+            Gets or sets the name.
+            </summary>
+      <value>The name.</value>
+    </member>
+    <member name="M:Aspose.ThreeD.Node.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Node" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Node.#ctor(System.String,Aspose.ThreeD.Entity)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Node" /> class.
+            </summary>
+      <param name="name">Name.</param>
+      <param name="entity">Default entity.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Node.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Node" /> class.
+            </summary>
+      <param name="name">Name.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Node.CreateChildNode">
+      <summary>
+            Creates a child node
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Node.CreateChildNode(System.String)">
+      <summary>
+            Create a new child node with given node name
+            </summary>
+      <param name="nodeName">The new child node's name</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Node.CreateChildNode(System.String,Aspose.ThreeD.Entity)">
+      <summary>
+            Create a new child node with given node name
+            </summary>
+      <param name="nodeName">The new child node's name</param>
+      <param name="entity">Default entity attached to the node</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Node.GetChild(System.Int32)">
+      <summary>
+            Gets the child node at specified index.
+            </summary>
+      <returns>The child.</returns>
+      <param name="index">Index.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Node.GetChild(System.String)">
+      <summary>
+            Gets the child node with the specified name
+            </summary>
+      <param name="nodeName">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Node.Accept(Aspose.ThreeD.NodeVisitor)">
+      <summary>
+            Walks through all descendant nodes(including the current node) and call the visitor with the node.
+            Visitor can break the walkthrough by returning false
+            </summary>
+      <param name="visitor">Visitor callback to visit the node</param>
+      <returns>true means visitor has broke the walk through.</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Node.ToString">
+      <summary>
+            Gets the string reprensentation of this node.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="P:Aspose.ThreeD.Node.Visible">
+      <summary>
+            Gets or sets to show the node
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Node.ChildNodes">
+      <summary>
+            Gets the children nodes.
+            </summary>
+      <value>The nodes.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Node.Entity">
+      <summary>
+            Gets or sets the first entity attached to this node, if sets, will clear other entities.
+            </summary>
+      <value>The node entity.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Node.Entities">
+      <summary>
+            Gets all node entities.
+            </summary>
+      <value>The node entities.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Node.MetaDatas">
+      <summary>
+            Gets the meta data defined in this node.
+            </summary>
+      <value>The meta datas.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Node.Materials">
+      <summary>
+            Gets the materials associated with this node.
+            </summary>
+      <value>The materials.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Node.Material">
+      <summary>
+            Gets or sets the first material associated with this node, if sets, will clear other materials
+            </summary>
+      <value>The material.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Node.ParentNode">
+      <summary>
+            Gets the parent node.
+            </summary>
+      <value>The parent node.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Node.Transform">
+      <summary>
+            Gets the local transform.
+            </summary>
+      <value>The transform.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.ImportException">
+      <summary>
+            Exception when scene open
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.ImportException.#ctor(System.String)">
+      <summary>
+            Initializes a new instance
+            </summary>
+      <param name="msg">Error message</param>
+    </member>
+    <member name="T:Aspose.ThreeD.Animations.Animation">
+      <summary>
+            Aspose.3D's supports animation hierachy, each animation can be composed by several animations and animation's key-frame definition.
+            
+            Animation defines the transformation of a property value over time, for example, animation can be used to control a node's transformation.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.Animation.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Animations.Animation" /> class.
+            </summary>
+      <param name="name">Name</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.Animation.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Animations.Animation" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.Animation.FindCurveMapping(System.String)">
+      <summary>
+            Finds the curve mapping by name.
+            </summary>
+      <returns>The curve mapping.</returns>
+      <param name="name">Name.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.Animation.GetCurveMapping(Aspose.ThreeD.A3DObject,System.String,System.Boolean)">
+      <summary>
+            Gets the animation curve mapping on given property.
+            </summary>
+      <returns>The curve mapping.</returns>
+      <param name="target">On which object to create the curve mapping.</param>
+      <param name="propName">The property's name.</param>
+      <param name="create">If set to <c>true</c> create the curve mapping if it's not existing.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.Animation.GetCurve(Aspose.ThreeD.A3DObject,System.String,System.String,System.Boolean)">
+      <summary>
+            Gets the animation curve on given property and channel.
+            </summary>
+      <returns>The curve.</returns>
+      <param name="target">On which instance to create the animation curve.</param>
+      <param name="propName">The property's name.</param>
+      <param name="channelName">The channel name.</param>
+      <param name="create">If set to <c>true</c> create the curve if it's not existing.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.Animation.GetCurve(Aspose.ThreeD.A3DObject,System.String,System.Boolean)">
+      <summary>
+            Gets the animation curve on given property.
+            </summary>
+      <returns>The curve.</returns>
+      <param name="target">On which instance to create the animation curve.</param>
+      <param name="propName">The property's name.</param>
+      <param name="create">If set to <c>true</c>, create the curve if it's not existing.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.Animation.CreateCurveMapping(Aspose.ThreeD.A3DObject,System.String)">
+      <summary>
+            Creates a CurveMapping based on the property data type. 
+            </summary>
+      <returns>The curve mapping instance or null if the property is not defined.</returns>
+      <param name="obj">Object.</param>
+      <param name="propName">Property name.</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.Animation.CurveMappings">
+      <summary>
+            Gets the current curve mappings.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.Animation.SubAnimations">
+      <summary>
+            Gets the sub-animations under current animations
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Animations.AnimationClip">
+      <summary>
+            The Animation clip is a collection of animations.
+            The scene can have one or more animation clips. 
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.AnimationClip.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Animations.AnimationClip" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.AnimationClip.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Animations.AnimationClip" /> class.
+            </summary>
+      <param name="name">Name</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.AnimationClip.Animations">
+      <summary>
+            Gets the animations contained inside the clip.
+            </summary>
+      <value>The layers.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.AnimationClip.Description">
+      <summary>
+            Gets or sets the description of this animation clip
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.AnimationClip.Start">
+      <summary>
+              Gets or sets the time in seconds of the beginning of the clip.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.AnimationClip.Stop">
+      <summary>
+            Gets or sets the time in seconds of the end of the clip.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Scene">
+      <summary>
+            A scene is a top-level object that contains the nodes, geometries, materials, textures, animation, poses, sub-scenes and etcs.
+            Scene can have sub-scenes, acts as multiple-document support in files like collada/blender/fbx
+            Node hierarchy can be accessed through <see cref="P:Aspose.ThreeD.Scene.RootNode" /><see cref="P:Aspose.ThreeD.Scene.Library" /> is used to keep a reference of unattached objects during serialization(like meta data or custom objects) so it can be used as a library. 
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Scene.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Scene" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Scene.#ctor(Aspose.ThreeD.Scene,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Scene" /> class as a sub-scene.
+            </summary>
+      <param name="parentScene">The parent scene.</param>
+      <param name="name">Scene's name.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Scene.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Scene" /> class.
+            </summary>
+      <param name="name">Scene's name.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Scene.GetAnimationClip(System.String)">
+      <summary>
+            Gets a named <see cref="T:Aspose.ThreeD.Animations.AnimationClip" /></summary>
+      <param name="name">The <see cref="T:Aspose.ThreeD.Animations.AnimationClip" />'s name to look up</param>
+      <returns>Returned AnimationClip</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Scene.Clear">
+      <summary>
+            Clears the scene content and restores the default settings.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Scene.Open(System.IO.Stream,Aspose.ThreeD.FileFormat)">
+      <summary>
+            Opens the scene from given stream using specified file format.
+            </summary>
+      <param name="stream">Input stream, user is responsible for closing the stream.</param>
+      <param name="format">File format.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Scene.Open(System.IO.Stream,Aspose.ThreeD.IO.IOConfig)">
+      <summary>
+            Opens the scene from given stream using specified IO config.
+            </summary>
+      <param name="stream">Input stream, user is responsible for closing the stream.</param>
+      <param name="config">More detailed configuration to open the stream.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Scene.Open(System.IO.Stream)">
+      <summary>
+             Opens the scene from given stream
+            </summary>
+      <param name="stream">Input stream, user is responsible for closing the stream.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Scene.Open(System.String,Aspose.ThreeD.FileFormat)">
+      <summary>
+            Opens the scene from given path using specified file format.
+            </summary>
+      <param name="fileName">File name.</param>
+      <param name="format">File format.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Scene.Open(System.String,Aspose.ThreeD.IO.IOConfig)">
+      <summary>
+            Opens the scene from given path using specified file format.
+            </summary>
+      <param name="fileName">File name.</param>
+      <param name="config">More detailed configuration to open the stream.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Scene.Open(System.String)">
+      <summary>
+            Opens the scene from given path
+            </summary>
+      <param name="fileName">File name.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Scene.Save(System.IO.Stream,Aspose.ThreeD.FileFormat)">
+      <summary>
+            Saves the scene to stream using specified file format.
+            </summary>
+      <param name="stream">Input stream, user is responsible for closing the stream.</param>
+      <param name="format">Format.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Scene.Save(System.IO.Stream,Aspose.ThreeD.IO.IOConfig)">
+      <summary>
+            Saves the scene to stream using specified file format.
+            </summary>
+      <param name="stream">Input stream, user is responsible for closing the stream.</param>
+      <param name="config">More detailed configuration to save the stream.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Scene.Save(System.String,Aspose.ThreeD.FileFormat)">
+      <summary>
+            Saves the scene to specified path using specified file format.
+            </summary>
+      <param name="fileName">File name.</param>
+      <param name="format">Format.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Scene.Save(System.String,Aspose.ThreeD.IO.IOConfig)">
+      <summary>
+            Saves the scene to specified path using specified file format.
+            </summary>
+      <param name="fileName">File name.</param>
+      <param name="config">More detailed configuration to save the stream.</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Scene.SubScenes">
+      <summary>
+            Gets all sub-scenes
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Scene.Library">
+      <summary>
+            Objects that not directly used in scene hierarchy can be defined in Library.
+            This is useful when you're using sub-scenes and put reusable components under sub-scenes.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Scene.AnimationClips">
+      <summary>
+            Gets all <see cref="T:Aspose.ThreeD.Animations.AnimationClip" /> defined in the scene.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Scene.CurrentAnimationClip">
+      <summary>
+            Gets or sets the active <see cref="T:Aspose.ThreeD.Animations.AnimationClip" /></summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Scene.AssetInfo">
+      <summary>
+            Gets or sets the top-level asset information
+            </summary>
+      <value>The document info.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Scene.Poses">
+      <summary>
+            Gets all <see cref="T:Aspose.ThreeD.Pose" /> used in this scene.
+            </summary>
+      <value>The poses.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Scene.RootNode">
+      <summary>
+            Gets the root node of the scene.
+            </summary>
+      <value>The root node.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.IO.CreateStream">
+      <summary>
+            Delegate used in <see cref="P:Aspose.ThreeD.IO.IOConfig.CreateStream" /></summary>
+      <param name="fileName">The file name to access, it's can be a relative name or absolute name.</param>
+      <param name="fileMode">File mode to create the stream.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="T:Aspose.ThreeD.Transform">
+      <summary>
+            A transform contains information that allow access to object's translate/scale/rotation or transform matrix at minimum cost
+            This is used by local transform.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Transform.Translation">
+      <summary>
+            Gets or sets the translation
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Transform.Scale">
+      <summary>
+            Gets or sets the scale
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Transform.EulerAngles">
+      <summary>
+            Gets or sets the rotation represented in euler angles, measured in degree
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Transform.Rotation">
+      <summary>
+            Gets or sets the rotation represented in quaternion.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Transform.TransformMatrix">
+      <summary>
+            Gets or sets the transform matrix.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Shading.NamespaceDoc">
+      <summary>
+            All shading related classes are defined in this namespace.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Utils.IArrayList`1">
+      <summary>
+            Aspose.3D has its own highly optimized implementation of <see cref="T:System.Collections.Generic.List`1" /> for better loading/saving performance
+            Only this interface is exposed for user with compatible and similar interfaces.
+            </summary>
+      <typeparam name="T">
+      </typeparam>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.IArrayList`1.AddRange(System.Collections.Generic.IList{`0})">
+      <summary>
+            Adds all items from <paramref name="list" />, this is optimized version for <see cref="T:System.Collections.Generic.IList`1" /></summary>
+      <param name="list">
+      </param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.IArrayList`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
+      <summary>
+            Adds all items from <paramref name="collection" />, this is general version for <see cref="T:System.Collections.Generic.IEnumerable`1" /></summary>
+      <param name="collection">
+      </param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.IArrayList`1.ToArray">
+      <summary>
+            Converts all items in the list to an array
+            </summary>
+      <returns>Items array</returns>
+    </member>
+    <member name="T:Aspose.ThreeD.Utils.NamespaceDoc">
+      <summary>
+            All utility classes are defined in this namespace.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Animations.CurveMapping">
+      <summary>
+            A CurveMapping is usually created on an object's property, some property types contains multiple component fields(like a Vector3 field),
+            CurveMapping will generate channel for each component field and connects the field to one or more curve instance(s) through the channels.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.CurveMapping.#ctor(Aspose.ThreeD.Scene,Aspose.ThreeD.Property)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Animations.CurveMapping" /> class.
+            </summary>
+      <param name="scene">The scene that contains the animation.</param>
+      <param name="prop">Property.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.CurveMapping.GetCurve(System.String)">
+      <summary>
+            Gets the first curve in specified channel 
+            </summary>
+      <param name="channelName">
+      </param>
+      <returns>First Curve with the channel name</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.CurveMapping.GetCurves(System.String)">
+      <summary>
+            Gets all curves in specified channel
+            </summary>
+      <param name="channelName">
+      </param>
+      <returns>Curve list with the channel name</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.CurveMapping.GetCurve(System.String,System.Int32,System.String)">
+      <summary>
+            Get n-th curve in specified channel with given curve name
+            </summary>
+      <returns>The curve.</returns>
+      <param name="channelName">Channel name.</param>
+      <param name="id">Identifier.</param>
+      <param name="curveName">Curve name.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.CurveMapping.CreateCurve(System.String)">
+      <summary>
+            Creates a new curve and connects it to the first channel of the curve mapping
+            </summary>
+      <returns>The curve.</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.CurveMapping.CreateCurve(System.String,System.String)">
+      <summary>
+            Creates a named curve instance and connects it to specified channel
+            </summary>
+      <param name="curveName">Curve name</param>
+      <param name="channelName">Channel name</param>
+      <returns>Created curve</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.CurveMapping.GetChannel(System.String)">
+      <summary>
+            Gets channel by given name
+            </summary>
+      <param name="channelName">
+      </param>
+      <returns>Channel with the name</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.CurveMapping.AddChannel(System.String,System.Type,System.Object)">
+      <summary>
+            Adds the specified channel property. 
+            </summary>
+      <returns>true, if channel was added, false otherwise.</returns>
+      <param name="name">Name.</param>
+      <param name="type">Type.</param>
+      <param name="value">Value.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.CurveMapping.ResetChannels">
+      <summary>
+            Empties the property channels of this animation curve mapping. 
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.CurveMapping.ToString">
+      <summary>
+            Formats object to string
+            </summary>
+      <returns>Object string</returns>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.CurveMapping.Property">
+      <summary>
+            Gets the property associated with the CurveMapping
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.CurveMapping.Item(System.String)">
+      <summary>
+            Gets channel by given name
+            </summary>
+      <param name="channelName">Channel name</param>
+      <returns>Animation channel</returns>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.CurveMapping.ChannelsCount">
+      <summary>
+            Gets the total number of property channels defined in this animation curve mapping. 
+            </summary>
+      <returns>The channels count.</returns>
+    </member>
+    <member name="T:Aspose.ThreeD.Deformers.Bone">
+      <summary>
+            A bone defines the subset of the geometry's control point, and defined blend weight for each control point.
+            The <see cref="T:Aspose.ThreeD.Deformers.Bone" /> object cannot be used directly, a <see cref="T:Aspose.ThreeD.Deformers.SkinDeformer" /> instance is used to deform the geometry, and <see cref="T:Aspose.ThreeD.Deformers.SkinDeformer" /> comes with a set of bones, each bone linked to a node.
+            NOTE: A control point of a geometry can be bounded to more than one Bones.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Deformers.Bone.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Deformers.Bone" /> class.
+            </summary>
+      <param name="name">Name.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Deformers.Bone.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Deformers.Bone" /> class.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Deformers.Bone.Item(System.Int32)">
+      <summary>
+            Gets or sets the blend weight of specified control point
+            </summary>
+      <param name="index">
+      </param>
+      <returns>The weight</returns>
+    </member>
+    <member name="P:Aspose.ThreeD.Deformers.Bone.Transform">
+      <summary>
+            Gets or sets the transform matrix of this bone.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Deformers.Bone.Node">
+      <summary>
+            Gets or sets the node. The bone node is the bone which skin attached to, the <see cref="T:Aspose.ThreeD.Deformers.SkinDeformer" /> will use bone node to influence the displacement of the control points.
+            Bone node usually has a <see cref="T:Aspose.ThreeD.Entities.Skeleton" /> attached, but it's not required.
+            Attached <see cref="T:Aspose.ThreeD.Entities.Skeleton" /> is usually used by DCC software to show skeleton to user.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Deformers.SkinDeformer">
+      <summary>
+            A skin deformer contains multiple bones to work, each bone blends a part of the geometry by control point's weights.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Deformers.Deformer">
+      <summary>
+            Base class for <see cref="T:Aspose.ThreeD.Deformers.SkinDeformer" /> and <see cref="T:Aspose.ThreeD.Deformers.MorphTargetDeformer" /></summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Deformers.Deformer.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Deformers.Deformer" /> class.
+            </summary>
+      <param name="name">Name.</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Deformers.Deformer.Owner">
+      <summary>
+            Gets the geometry which owns this deformer
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Deformers.SkinDeformer.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Deformers.SkinDeformer" /> class.
+            </summary>
+      <param name="name">Name.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Deformers.SkinDeformer.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Deformers.SkinDeformer" /> class.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Deformers.SkinDeformer.Bones">
+      <summary>
+            Gets all bones that the skin deformer contains
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Animations.Curve">
+      <summary>
+            A curve is composed by several key-frames, it describes the transformation of a sampled value over time, so it's a 2D curve.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.Curve.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Animations.Curve" /> class.
+            </summary>
+      <param name="name">Name</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.Curve.CreateKeyFrame(System.Double)">
+      <summary>
+            Creates a new key frame.
+            </summary>
+      <param name="time">Time position(measured in seconds)</param>
+      <returns>The added key frame.</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.Curve.CreateKeyFrame(System.Double,System.Single)">
+      <summary>
+            Create a new key frame with specified value
+            </summary>
+      <param name="time">Time position(measured in seconds)</param>
+      <param name="value">The value at this time position</param>
+      <returns>The added key frame.</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.Curve.CreateKeyFrame(System.Double,System.Single,Aspose.ThreeD.Animations.Interpolation)">
+      <summary>
+            Create a new key frame with specified value
+            </summary>
+      <param name="time">Time position(measured in seconds)</param>
+      <param name="value">The value at this time position</param>
+      <param name="interpolation">The interpolation type of this key frame</param>
+      <returns>The added key frame.</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.Curve.Reset">
+      <summary>
+            Removes all key frames and reset the post/pre behaviors.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.Curve.CurveMapping">
+      <summary>
+            Gets the curve mapping which owns this curve
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.Curve.KeyFrames">
+      <summary>
+            Gets the key frames of this curve.
+            </summary>
+      <value>The keys.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.Curve.PostBehavior">
+      <summary>
+            Gets the post behavior indicates what the sampled value should be after the last key frame.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.Curve.PreBehavior">
+      <summary>
+            Gets the pre behavior indicates what the sampled value should be before the first key.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Animations.Interpolation">
+      <summary>
+            The key frame's interpolation type.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.Interpolation.Constant">
+      <summary>
+            The value will remains constant to the value of the first point until the next segment.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.Interpolation.Linear">
+      <summary>
+            Linear interpolation is a straight line between two points.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.Interpolation.Bezier">
+      <summary>
+            A bezier or hermite spline.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.Interpolation.BSpline">
+      <summary>
+            Basis splines are defined by a series of control points, for which the curve is guaranteed only to go through the first and the last point.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.Interpolation.CardinalSpline">
+      <summary>
+            A cardinal spline is a cubic hermite spline whose tangents are defined by the endpoints and a tension parameter.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.Interpolation.TCBSpline">
+      <summary>
+            Also called Kochanek-Bartels spline, the behavior of tangent is defined by tension/bias/continuity
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Animations.WeightedMode">
+      <summary>
+            Weighted mode.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.WeightedMode.None">
+      <summary>
+            Both out and next in weights are not used.
+            When calculation needs tangent information, default value(0.3333) will be used.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.WeightedMode.OutWeight">
+      <summary>
+            Out(right) tangent is weighted.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.WeightedMode.NextInWeight">
+      <summary>
+            Next in(left) tangent is weighted.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.WeightedMode.Both">
+      <summary>
+            Both out and next in tangents are weighted.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Animations.StepMode">
+      <summary>
+            Interpolation step mode.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.StepMode.PreviousValue">
+      <summary>
+            Curve value of a segment always uses the value from previous key frame
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.StepMode.NextValue">
+      <summary>
+            Curve value of a segment always uses the value from the next key frame
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Animations.ExtrapolationType">
+      <summary>
+            Extrapolation type.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.ExtrapolationType.Constant">
+      <summary>
+            Value will keep the same value of the last value
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.ExtrapolationType.Gradient">
+      <summary>
+            Value will keep the same slope by time
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.ExtrapolationType.Cycle">
+      <summary>
+            The repetition.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.ExtrapolationType.CycleRelative">
+      <summary>
+            Repeat the previous pattern based on the last value
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Animations.ExtrapolationType.Oscillate">
+      <summary>
+            The mirror repetition.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Animations.KeyFrame">
+      <summary>
+            A key frame is mainly defined by a time and a value, for some interpolation types, tangent/tension/bias/continuity is also used by calculating the final sampled value.
+            Sampled values in a non-key-frame time position is interpolated by key-frames between the previous and next key-frames
+            Value before/after the first/last key-frame are calculated by the <see cref="T:Aspose.ThreeD.Animations.Extrapolation" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.KeyFrame.#ctor(Aspose.ThreeD.Utils.ArrayList{Aspose.ThreeD.Animations.KeyFrameData},System.Int32)">
+      <summary>
+            Default weight
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.KeyFrame.#ctor(Aspose.ThreeD.Animations.Curve,System.Double)">
+      <summary>
+            Create a new key frame on specified curve
+            </summary>
+      <param name="curve">The curve that the key frame will be created on</param>
+      <param name="time">The time position of the key frame</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Animations.KeyFrame.#ctor(System.Double,System.Single)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Animations.KeyFrame" /> class.
+            </summary>
+      <param name="time">Time position of list.data[index] key frame.</param>
+      <param name="value">Value .</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.KeyFrame.Time">
+      <summary>
+            Gets or sets the time position of list.data[index] key frame, measured in seconds.
+            </summary>
+      <value>The time.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.KeyFrame.Value">
+      <summary>
+            Gets or sets the key-frame's value.
+            </summary>
+      <value>The value.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.KeyFrame.Interpolation">
+      <summary>
+            Gets or sets the key's interpolation type, list.data[index] defines the algorithm how the sampled value is calculated.
+            </summary>
+      <value>The interpolation.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.KeyFrame.TangentWeightMode">
+      <summary>
+            Gets or sets the key's tangent weight mode.
+            The out tangent or the next in tangent can be customized by select correct <see cref="T:Aspose.ThreeD.Animations.WeightedMode" /></summary>
+      <value>The tangent weight mode.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.KeyFrame.StepMode">
+      <summary>
+            Gets or sets the key's step mode.
+            If the interpolation type is <see cref="F:Aspose.ThreeD.Animations.Interpolation.Constant" />, list.data[index] decides which key-frame's value will be used during interpolation.  
+            A <see cref="F:Aspose.ThreeD.Animations.StepMode.PreviousValue" /> means the left key-frame's value will be used  
+            A <see cref="F:Aspose.ThreeD.Animations.StepMode.NextValue" /> means the next right key-frame's value will be used  
+            </summary>
+      <value>The step mode.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.KeyFrame.NextInTangent">
+      <summary>
+            Gets or sets the next in(left) tangent on this key frame.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.KeyFrame.OutTangent">
+      <summary>
+             Gets or sets the out(right) tangent on this key frame.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.KeyFrame.OutWeight">
+      <summary>
+             Gets or sets the out(right) weight on this key frame.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.KeyFrame.NextInWeight">
+      <summary>
+             Gets or sets the next in(left) weight on this key frame.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.KeyFrame.Tension">
+      <summary>
+             Gets or sets tension used in TCB spline
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.KeyFrame.Continuity">
+      <summary>
+             Gets or sets the continuity used in TCB spline
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.KeyFrame.Bias">
+      <summary>
+             Gets or sets the bias used in TCB spline
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.KeyFrame.IndependentTangent">
+      <summary>
+             Gets or sets the out and next in tangents are independent.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.KeyFrame.Flat">
+      <summary>
+            Get or set if the key frame is flat.
+            Key frame should be flat if next or previous key frame has the same value.
+            Flat key frame has flat tangents and fixed interpolation.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.KeyFrame.TimeIndependentTangent">
+      <summary>
+             Gets or sets the tangent is time-independent
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.IO.FBXConfig">
+      <summary>
+            Configuration for FBX file.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.IO.FBXConfig.#ctor(Aspose.ThreeD.FileFormat)">
+      <summary>
+            Initializes a <see cref="T:Aspose.ThreeD.IO.FBXConfig" /></summary>
+      <param name="format">
+      </param>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.FBXConfig.FillDummyIndexArray">
+      <summary>
+            Gets or sets whether a layer element's reference mode is direct access, do we need to serialize the index array with zero filled?
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.FBXConfig.FoldRepeatedCurveData">
+      <summary>
+            Gets or sets whether reuse repeated curve data by increasing last data's ref count
+            </summary>
+      <value>true if fold repeated curve data; otherwise, false.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.FBXConfig.ExportLegacyMaterialProperties">
+      <summary>
+            Gets or sets whether export legacy material properties, used for back compatibility.
+            This option is turned on by default.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.FBXConfig.VideoForTexture">
+      <summary>
+            Gets or sets whether generate a Video instance for <see cref="T:Aspose.ThreeD.Shading.Texture" /> when exporting as FBX.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.IO.FBXConfig.GenerateVertexElementMaterial">
+      <summary>
+            Gets or sets whether always generate a <see cref="T:Aspose.ThreeD.Entities.VertexElementMaterial" /> for geometries if the attached node contains materials.
+            This is turned off by default.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.PoseType">
+      <summary>
+            Pose type.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.PoseType.BindPose">
+      <summary>
+            The bind pose.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.PoseType.Snapshot">
+      <summary>
+            The rest pose, means it's a snapshot of the bind pose.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Pose">
+      <summary>
+            The pose is used to store transformation matrix when the geometry is skinned.
+            The pose is a set of <see cref="T:Aspose.ThreeD.BonePose" />, each <see cref="T:Aspose.ThreeD.BonePose" /> saves the concrete transformation information of the bone node.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Pose.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Pose" /> class.
+            </summary>
+      <param name="name">Name</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Pose.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Pose" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Pose.AddBonePose(Aspose.ThreeD.Node,Aspose.ThreeD.Utils.Matrix4,System.Boolean)">
+      <summary>
+            Saves pose transformation matrix for the given bone node. 
+            </summary>
+      <param name="node">Bone Node.</param>
+      <param name="matrix">Transformation matrix.</param>
+      <param name="localMatrix">If set to <c>true</c> means to use local matrix otherwise means global matrix.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Pose.AddBonePose(Aspose.ThreeD.Node,Aspose.ThreeD.Utils.Matrix4)">
+      <summary>
+            Saves pose transformation matrix for the given bone node. 
+            Global transformation matrix is implied.
+            </summary>
+      <param name="node">Bone Node.</param>
+      <param name="matrix">Transformation matrix.</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Pose.PoseType">
+      <summary>
+            Gets or sets the type of the pose.
+            </summary>
+      <value>The type of the pose.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Pose.BonePoses">
+      <summary>
+            Gets all <see cref="T:Aspose.ThreeD.BonePose" />.
+            </summary>
+      <value>The nodes.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Shading.Texture">
+      <summary>
+             This class defines the texture from an external file.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Shading.TextureBase">
+      <summary>
+            Base class for all concrete textures.
+            Texture defines the look and feel of a geometry surface.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.TextureBase.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Shading.TextureBase" /> class.
+            </summary>
+      <param name="name">Name.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.TextureBase.SetTranslation(System.Double,System.Double)">
+      <summary>
+            Sets the UV translation.
+            </summary>
+      <param name="u">U.</param>
+      <param name="v">V.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.TextureBase.SetScale(System.Double,System.Double)">
+      <summary>
+            Sets the UV scale.
+            </summary>
+      <param name="u">U.</param>
+      <param name="v">V.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.TextureBase.SetRotation(System.Double,System.Double)">
+      <summary>
+            Sets the UV rotation.
+            </summary>
+      <param name="u">U.</param>
+      <param name="v">V.</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.TextureBase.WrapModeU">
+      <summary>
+            Gets or sets the texture wrap modes in U.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.TextureBase.WrapModeV">
+      <summary>
+            Gets or sets the texture wrap modes in V.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.TextureBase.WrapModeW">
+      <summary>
+            Gets or sets the texture wrap modes in W.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.TextureBase.MinFilter">
+      <summary>
+            Gets or sets the filter for minification.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.TextureBase.MagFilter">
+      <summary>
+            Gets or sets the filter for maginification.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.TextureBase.MipFilter">
+      <summary>
+            Gets or sets the filter for mip-level sampling.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.TextureBase.UVRotation">
+      <summary>
+            Gets or sets the rotation of the texture
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.TextureBase.UVScale">
+      <summary>
+            Gets or sets the UV scale.
+            </summary>
+      <value>The UV scale.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.TextureBase.UVTranslation">
+      <summary>
+            Gets or sets the UV translation.
+            </summary>
+      <value>The UV translation.</value>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.Texture.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Shading.Texture" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.Texture.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Shading.Texture" /> class.
+            </summary>
+      <param name="name">Name</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.Texture.EnableMipMap">
+      <summary>
+            Gets or sets if the mipmap is enabled for this texture
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.Texture.FileName">
+      <summary>
+            Gets or sets the associated texture file. 
+            </summary>
+      <value>The name of the file.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Shading.WrapMode">
+      <summary>
+            Texture's wrap mode.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.WrapMode.Wrap">
+      <summary>
+            Tiles the texture on the model's surface, creating a repeating pattern. 
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.WrapMode.Clamp">
+      <summary>
+            Clamps the texture to the last pixel at the border.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.WrapMode.Mirror">
+      <summary>
+             The texture will be repeated, but it will be mirrored when the integer part of the coordinate is odd.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.WrapMode.MirrorOnce">
+      <summary>
+            The texture will be mirrored once, and then clamps to the maximum value.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.WrapMode.Border">
+      <summary>
+            The coordinates that outside of the range [0.0, 1.0] are set to a specified border color.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Shading.TextureFilter">
+      <summary>
+            Filter options during texture sampling.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.TextureFilter.None">
+      <summary>
+            No minification, this is only used by minification filter.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.TextureFilter.Point">
+      <summary>
+            Use point sampling
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.TextureFilter.Linear">
+      <summary>
+            Use linear interpolation for sampling
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.TextureFilter.Anisotropic">
+      <summary>
+            Use anisotropic interpolation for sampling, this is only used by minification filter.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.CustomObject">
+      <summary>
+            Meta data or custom objects used in 3D files are managed by this class.
+            All custom properties are saved as dynamic properties.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.CustomObject.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.CustomObject" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.CustomObject.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.CustomObject" /> class.
+            </summary>
+      <param name="name">Name</param>
+    </member>
+    <member name="T:Aspose.ThreeD.FileFormatType">
+      <summary>
+            File format type
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileFormatType.FBX">
+      <summary>
+            FBX file format type
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileFormatType.STL">
+      <summary>
+            STL file format type
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileFormatType.WavefrontOBJ">
+      <summary>
+            Wavefront OBJ format type
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileFormatType.Distreet3DS">
+      <summary>
+            Distreet 3D Studio's file format
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.FileFormatType.ToString">
+      <summary>
+            Get the name of this file format type
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="P:Aspose.ThreeD.FileFormatType.Extension">
+      <summary>
+            The extension name of this file format, started with .
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.FileContentType">
+      <summary>
+            File content type
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileContentType.Binary">
+      <summary>
+            Binary format type, such as binary FBX, binary STL
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileContentType.ASCII">
+      <summary>
+            ASCII format type, such as ASCII FBX, ASCII STL
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.FileFormat">
+      <summary>
+            File format definition
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileFormat.FBX7200ASCII">
+      <summary>
+            ASCII FBX file format, with 7.2.0 version
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileFormat.FBX7200Binary">
+      <summary>
+            Binary FBX file format, with 7.2.0 version
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileFormat.FBX7300ASCII">
+      <summary>
+            ASCII FBX file format, with 7.3.0 version
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileFormat.FBX7300Binary">
+      <summary>
+            Binary FBX file format, with 7.3.0 version
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileFormat.FBX7400ASCII">
+      <summary>
+            ASCII FBX file format, with 7.4.0 version
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileFormat.FBX7400Binary">
+      <summary>
+            Binary FBX file format, with 7.4.0 version
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileFormat.FBX7500ASCII">
+      <summary>
+            ASCII FBX file format, with 7.5.0 version
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileFormat.FBX7500Binary">
+      <summary>
+            Binary FBX file format, with 7.5.0 version
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileFormat.STLBinary">
+      <summary>
+            Binary STL file format
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileFormat.STLASCII">
+      <summary>
+            ASCII STL file format
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileFormat.WavefrontOBJ">
+      <summary>
+            Wavefront's Obj file format
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.FileFormat.Distreet3DS">
+      <summary>
+            3D Studio's file format
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.FileFormat.ToString">
+      <summary>
+            Formats to string
+            </summary>
+      <returns>Object string</returns>
+    </member>
+    <member name="P:Aspose.ThreeD.FileFormat.Version">
+      <summary>
+            Gets file format version
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.FileFormat.ContentType">
+      <summary>
+            Gets file format content type
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.FileFormat.FileFormatType">
+      <summary>
+            Gets file format type
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.AssetInfo">
+      <summary>
+            Information of asset.
+            Asset information can be attached to a <see cref="T:Aspose.ThreeD.Scene" />.
+            Child <see cref="T:Aspose.ThreeD.Scene" /> can have its own <see cref="T:Aspose.ThreeD.AssetInfo" /> to override parent's definition.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.AssetInfo.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.AssetInfo" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.AssetInfo.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.AssetInfo" /> class.
+            </summary>
+      <param name="name">Name</param>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.CreationTime">
+      <summary>
+            Gets or Sets the creation time of this asset
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.ModificationTime">
+      <summary>
+            Gets or Sets the modification time of this asset
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.Ambient">
+      <summary>
+            Gets or Sets the default ambient color of this asset
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.Url">
+      <summary>
+            Gets or Sets the URL of this asset.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.ApplicationVendor">
+      <summary>
+            Gets or sets the application vendor's name
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.ApplicationName">
+      <summary>
+            Gets or sets the application that created this asset
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.ApplicationVersion">
+      <summary>
+            Gets or sets the version of the application that created this asset.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.Title">
+      <summary>
+            Gets or sets the title of this asset
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.Subject">
+      <summary>
+            Gets or sets the subject of this asset
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.Author">
+      <summary>
+            Gets or sets the author of this asset
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.Keywords">
+      <summary>
+            Gets or sets the keywords of this asset
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.Revision">
+      <summary>
+            Gets or sets the revision number of this asset, usually used in version control system.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.Comment">
+      <summary>
+            Gets or sets the comment of this asset.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.UnitName">
+      <summary>
+            Gets or sets the unit of length used in this asset.
+            e.g. cm/m/km/inch/feet
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.UnitScaleFactor">
+      <summary>
+            Gets or sets the scale factor to real-world meter.
+            </summary>
+      <remarks>
+            This is ignored during serialization if the unit name is null.
+            </remarks>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.CoordinatedSystem">
+      <summary>
+            Gets or sets the coordinate system used in this asset.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.AssetInfo.UpVector">
+      <summary>
+            Gets or sets the up-vector used in this asset.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Shading.ShadingLanguage">
+      <summary>
+            Commonly used shading languages
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.ShadingLanguage.RenderMan">
+      <summary>
+            RenderMan shading language.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.ShadingLanguage.HoudiniVEX">
+      <summary>
+            Houdini VEX Shading language
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.ShadingLanguage.Gelato">
+      <summary>
+            The gelato shading language
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.ShadingLanguage.OpenShadingLanguage">
+      <summary>
+            Open shading language is developed by Sony Pictures Imageworks used in its Arnold renderer.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.ShadingLanguage.ARBAssembly">
+      <summary>
+            ARB assembly language is a low-level shading language created by OpenGL Architecture Review Board to standardize GPU instructions.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.ShadingLanguage.DirectXShaderAssembly">
+      <summary>
+            The DirectX shader assembly language
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.ShadingLanguage.HLSL">
+      <summary>
+            DirectX High-Level Shader language
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.ShadingLanguage.GLSL">
+      <summary>
+            The GLSL
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.ShadingLanguage.AGAL">
+      <summary>
+            Adobe Graphics Assembly Language
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.ShadingLanguage.PSSL">
+      <summary>
+            PlayStation Shader Language
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.ShadingLanguage.Metal">
+      <summary>
+            iOS Metal Shading language
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.ShadingLanguage.CGFX">
+      <summary>
+            NVIDIA Cg 
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.ShadingLanguage.SFX">
+      <summary>
+            SFX
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.ShadingLanguage.MentalRay">
+      <summary>
+            Mental Ray Shader language
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Shading.RenderingAPI">
+      <summary>
+            Commonly used rendering APIs
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.RenderingAPI.None">
+      <summary>
+            No rendering API
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.RenderingAPI.Preview">
+      <summary>
+            PreviewColorAPI, compatible with FBX
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.RenderingAPI.DirectX">
+      <summary>
+            DirectX
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.RenderingAPI.OpenGL">
+      <summary>
+            OpenGL
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.RenderingAPI.OpenGLES">
+      <summary>
+            OpenGL ES
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.RenderingAPI.Mantle">
+      <summary>
+            AMD Mantle
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.RenderingAPI.Metal">
+      <summary>
+            Metal developed by Apple
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.RenderingAPI.Vulkan">
+      <summary>
+            Vulkan
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.RenderingAPI.RenderMan">
+      <summary>
+            RenderMan
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.RenderingAPI.RenderWare">
+      <summary>
+            RenderWare
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.RenderingAPI.Stage3D">
+      <summary>
+            Stage3D used in Adobe Flash
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.RenderingAPI.MentalRay">
+      <summary>
+            MetanRay
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Shading.RenderingAPI.Custom">
+      <summary>
+            Custom rendering APi
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.MathUtils.Clamp(System.Double,System.Double,System.Double)">
+      <summary>
+            Clamp value to range [min, max]
+            </summary>
+      <param name="val">
+      </param>
+      <param name="min">
+      </param>
+      <param name="max">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.MathUtils.ToDegree(Aspose.ThreeD.Utils.Vector3)">
+      <summary>
+            Convert a <see cref="T:Aspose.ThreeD.Utils.Vector3" /> from radian to degree.
+            </summary>
+      <param name="radian">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.MathUtils.ToRadian(Aspose.ThreeD.Utils.Vector3)">
+      <summary>
+            Convert a <see cref="T:Aspose.ThreeD.Utils.Vector3" /> from degree to radian
+            </summary>
+      <param name="degree">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.MathUtils.ToDegree(System.Single)">
+      <summary>
+            Convert a number from radian to degree
+            </summary>
+      <param name="radian">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.MathUtils.ToDegree(System.Double)">
+      <summary>
+            Convert a number from radian to degree
+            </summary>
+      <param name="radian">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.MathUtils.ToRadian(System.Single)">
+      <summary>
+            Convert a number from degree to radian
+            </summary>
+      <param name="degree">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.MathUtils.ToRadian(System.Double)">
+      <summary>
+            Convert a number from degree to radian
+            </summary>
+      <param name="degree">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="T:Aspose.ThreeD.Utils.Matrix4">
+      <summary>
+            4x4 matrix implementation.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Matrix4.m00">
+      <summary>
+            The m00.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Matrix4.m01">
+      <summary>
+            The m01.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Matrix4.m02">
+      <summary>
+            The m02.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Matrix4.m03">
+      <summary>
+            The m03.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Matrix4.m10">
+      <summary>
+            The m10.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Matrix4.m11">
+      <summary>
+            The m11.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Matrix4.m12">
+      <summary>
+            The m12.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Matrix4.m13">
+      <summary>
+            The m13.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Matrix4.m20">
+      <summary>
+            The m20.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Matrix4.m21">
+      <summary>
+            The m21.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Matrix4.m22">
+      <summary>
+            The m22.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Matrix4.m23">
+      <summary>
+            The m23.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Matrix4.m30">
+      <summary>
+            The m30.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Matrix4.m31">
+      <summary>
+            The m31.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Matrix4.m32">
+      <summary>
+            The m32.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Matrix4.m33">
+      <summary>
+            The m33.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Matrix4.#ctor(Aspose.ThreeD.Utils.Vector4,Aspose.ThreeD.Utils.Vector4,Aspose.ThreeD.Utils.Vector4,Aspose.ThreeD.Utils.Vector4)">
+      <summary>
+            Constructs matrix from 4 rows.
+            </summary>
+      <param name="r0">R0.</param>
+      <param name="r1">R1.</param>
+      <param name="r2">R2.</param>
+      <param name="r3">R3.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Matrix4.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Utils.Matrix4" /> struct.
+            </summary>
+      <param name="m00">M00.</param>
+      <param name="m01">M01.</param>
+      <param name="m02">M02.</param>
+      <param name="m03">M03.</param>
+      <param name="m10">M10.</param>
+      <param name="m11">M11.</param>
+      <param name="m12">M12.</param>
+      <param name="m13">M13.</param>
+      <param name="m20">M20.</param>
+      <param name="m21">M21.</param>
+      <param name="m22">M22.</param>
+      <param name="m23">M23.</param>
+      <param name="m30">M30.</param>
+      <param name="m31">M31.</param>
+      <param name="m32">M32.</param>
+      <param name="m33">M33.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Matrix4.#ctor(System.Double[])">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Utils.Matrix4" /> struct.
+            </summary>
+      <param name="m">M.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Matrix4.Concatenate(Aspose.ThreeD.Utils.Matrix4)">
+      <summary>
+            Concatenates the two matrices
+            </summary>
+      <param name="m2">M2.</param>
+      <returns>New matrix4</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Matrix4.Transpose">
+      <summary>
+            Transposes this instance.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Matrix4.Normalize">
+      <summary>
+            Normalizes this instance.
+            </summary>
+      <returns>Normalize matrix4</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Matrix4.Inverse">
+      <summary>
+            Inverses this instance.
+            </summary>
+      <returns>Inverse matrix4</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Matrix4.op_Multiply(Aspose.ThreeD.Utils.Matrix4,Aspose.ThreeD.Utils.Matrix4)">
+      <summary>
+            Multiply the two matrices
+            </summary>
+      <param name="lhs">Lhs.</param>
+      <param name="rhs">Rhs.</param>
+      <returns>Result matrix</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Matrix4.op_Multiply(Aspose.ThreeD.Utils.Matrix4,Aspose.ThreeD.Utils.Vector3)">
+      <summary>
+            Multiply the matrix and vector3
+            </summary>
+      <param name="lhs">Lhs.</param>
+      <param name="v">V.</param>
+      <returns>Result matrix</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Matrix4.SetTRS(Aspose.ThreeD.Utils.Vector3,Aspose.ThreeD.Utils.Vector3,Aspose.ThreeD.Utils.Vector3)">
+      <summary>
+            Initializes the matrix with translation/rotation/scale
+            </summary>
+      <param name="translation">Translation.</param>
+      <param name="rotation">Euler angles for rotation, fields are in degree.</param>
+      <param name="scale">Scale.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Matrix4.op_Multiply(Aspose.ThreeD.Utils.Matrix4,Aspose.ThreeD.Utils.Vector4)">
+      <summary>
+            Multiply the matrix and vector4
+            </summary>
+      <param name="lhs">Lhs.</param>
+      <param name="v">V.</param>
+      <returns>Result matrix</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Matrix4.op_Multiply(Aspose.ThreeD.Utils.Matrix4,System.Double)">
+      <summary>
+            Multiply the matrix and double value
+            </summary>
+      <param name="lhs">Lhs.</param>
+      <param name="v">V.</param>
+      <returns>Result matrix</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Matrix4.ToArray">
+      <summary>
+            Converts matrix to array.
+            </summary>
+      <returns>The array.</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Matrix4.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents the current <see cref="T:Aspose.ThreeD.Utils.Matrix4" />.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents the current <see cref="T:Aspose.ThreeD.Utils.Matrix4" />.</returns>
+    </member>
+    <member name="P:Aspose.ThreeD.Utils.Matrix4.Identity">
+      <summary>
+            Gets the identity matrix.
+            </summary>
+      <value>The identity.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Utils.Matrix4.Determinant">
+      <summary>
+            Gets the determinant of the matrix.
+            </summary>
+      <value>The determinant.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Utils.Quaternion">
+      <summary>
+            Quaternion is usually used to perform rotation in computer graphics.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Quaternion.w">
+      <summary>
+            The w component.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Quaternion.x">
+      <summary>
+            The x component.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Quaternion.y">
+      <summary>
+            The y component.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Quaternion.z">
+      <summary>
+            The z component.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.#ctor(System.Double,System.Double,System.Double,System.Double)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Utils.Quaternion" /> class.
+            </summary>
+      <param name="w">w component of the quaternion</param>
+      <param name="x">x component of the quaternion</param>
+      <param name="y">y component of the quaternion</param>
+      <param name="z">z component of the quaternion</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.Conjugate">
+      <summary>
+            Returns a conjugate quaternion of current quaternion
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.Inverse">
+      <summary>
+            Returns a inverse quaternion of current quaternion
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.Dot(Aspose.ThreeD.Utils.Quaternion)">
+      <summary>
+            Dots product
+            </summary>
+      <param name="q">The quaternion</param>
+      <returns>Dot value</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.EulerAngles">
+      <summary>
+            Converts quaternion to rotation represented by euler angles
+            All components are in radian
+            </summary>
+      <returns>Result vector</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.GetPitch">
+      <summary>
+            Gets the pitch rotation in radian
+            </summary>
+      <returns>Pitch value</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.GetYaw">
+      <summary>
+            Gets the yaw rotation in radian
+            </summary>
+      <returns>Yaw rotation value</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.GetRoll">
+      <summary>
+            Gets the roll rotation in radian
+            </summary>
+      <returns>Roll value</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.Normalize">
+      <summary>
+            Normalize the quaternion
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.ToAngleAxis(System.Double@,Aspose.ThreeD.Utils.Vector3@)">
+      <summary>
+            Decompose the quaternion to angle and axis
+            </summary>
+      <param name="angle">The angle to rotate, in radian.</param>
+      <param name="axis">The axis that rotates around.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.FromAngleAxis(System.Double,Aspose.ThreeD.Utils.Vector3)">
+      <summary>
+            Creates a quaternion around given axis and rotate in clockwise 
+            </summary>
+      <param name="a">Clockwise rotation in radian</param>
+      <param name="axis">Axis</param>
+      <returns>Created quaternion</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.FromRotation(Aspose.ThreeD.Utils.Vector3,Aspose.ThreeD.Utils.Vector3)">
+      <summary>
+            Creates a quaternion that rotate from original to destinal direction
+            </summary>
+      <param name="orig">Original direction</param>
+      <param name="dest">Destinal direction</param>
+      <returns>Created quaternion</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.FromEulerAngle(System.Double,System.Double,System.Double)">
+      <summary>
+            Creates quaternion from given euler angle
+            </summary>
+      <param name="pitch">Pitch in radian</param>
+      <param name="yaw">Yaw in radian</param>
+      <param name="roll">Roll in radian</param>
+      <returns>Created quaternion</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.FromEulerAngle(Aspose.ThreeD.Utils.Vector3)">
+      <summary>
+            Creates quaternion from given euler angle
+            </summary>
+      <param name="eulerAngle">Euler angle in radian</param>
+      <returns>Created quaternion</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.ToMatrix">
+      <summary>
+            Convert the rotation presented by quaternion to transform matrix.
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.op_Addition(Aspose.ThreeD.Utils.Quaternion,Aspose.ThreeD.Utils.Quaternion)">
+      <summary>
+            Operator overloading for +
+            </summary>
+      <param name="lhs">Left quaternion</param>
+      <param name="rhs">Right quaternion</param>
+      <returns>Result quaternion</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.op_Division(Aspose.ThreeD.Utils.Quaternion,System.Double)">
+      <summary>
+            Operator overloading for /
+            </summary>
+      <param name="lhs">Left quaternion</param>
+      <param name="rhs">Right quaternion</param>
+      <returns>Result quaternion</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.op_Multiply(Aspose.ThreeD.Utils.Quaternion,System.Double)">
+      <summary>
+            Operator overloading for *
+            </summary>
+      <param name="lhs">Left quaternion</param>
+      <param name="rhs">Right quaternion</param>
+      <returns>Result quaternion</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.op_Multiply(Aspose.ThreeD.Utils.Quaternion,Aspose.ThreeD.Utils.Quaternion)">
+      <summary>
+            Operator overloading for *
+            </summary>
+      <param name="lhs">Left quaternion</param>
+      <param name="rhs">Right quaternion</param>
+      <returns>Result quaternion</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.op_Multiply(Aspose.ThreeD.Utils.Quaternion,Aspose.ThreeD.Utils.Vector3)">
+      <summary>
+            Operator overloading for *
+            </summary>
+      <param name="q">The rotation quaternion</param>
+      <param name="v">Vector to rotate</param>
+      <returns>Rotated vector</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.ToString">
+      <summary>
+            Gets the representation of quaternion in string
+            </summary>
+      <returns>Object string</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Quaternion.op_Multiply(Aspose.ThreeD.Utils.Vector3,Aspose.ThreeD.Utils.Quaternion)">
+      <summary>
+            Operator overloading for *
+            </summary>
+      <param name="v">The rotation quaternion</param>
+      <param name="q">Vector to rotate</param>
+      <returns>Rotated vector</returns>
+    </member>
+    <member name="P:Aspose.ThreeD.Utils.Quaternion.Length">
+      <summary>
+            Gets the length of the quaternion
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Utils.Vector2">
+      <summary>
+             A vector with two components.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Vector2.x">
+      <summary>
+            The x component.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Vector2.y">
+      <summary>
+            The y component.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector2.#ctor(System.Double)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Utils.Vector2" /> struct.
+            </summary>
+      <param name="s">S.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector2.#ctor(System.Double,System.Double)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Utils.Vector2" /> struct.
+            </summary>
+      <param name="x">The x coordinate.</param>
+      <param name="y">The y coordinate.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector2.Dot(Aspose.ThreeD.Utils.Vector2)">
+      <summary>
+            Gets the dot product of two vectors
+            </summary>
+      <param name="rhs">Rhs.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector2.op_Addition(Aspose.ThreeD.Utils.Vector2,Aspose.ThreeD.Utils.Vector2)">
+      <summary>
+            Addition operator for Vector2
+            </summary>
+      <param name="lhs">
+      </param>
+      <param name="rhs">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector2.op_Subtraction(Aspose.ThreeD.Utils.Vector2,Aspose.ThreeD.Utils.Vector2)">
+      <summary>
+            Substraction operator for Vector2
+            </summary>
+      <param name="lhs">
+      </param>
+      <param name="rhs">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector2.op_Division(Aspose.ThreeD.Utils.Vector2,System.Double)">
+      <summary>
+            Division operator for Vector2
+            </summary>
+      <param name="lhs">
+      </param>
+      <param name="rhs">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector2.op_Multiply(Aspose.ThreeD.Utils.Vector2,System.Double)">
+      <summary>
+            Multiply operator for Vector2
+            </summary>
+      <param name="lhs">
+      </param>
+      <param name="rhs">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector2.op_Equality(Aspose.ThreeD.Utils.Vector2,Aspose.ThreeD.Utils.Vector2)">
+      <summary>
+            Equal operator for Vector2
+            </summary>
+      <param name="lhs">
+      </param>
+      <param name="rhs">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector2.op_Inequality(Aspose.ThreeD.Utils.Vector2,Aspose.ThreeD.Utils.Vector2)">
+      <summary>
+            Not-equal operator for Vector2
+            </summary>
+      <param name="lhs">
+      </param>
+      <param name="rhs">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector2.Equals(Aspose.ThreeD.Utils.Vector2)">
+      <summary>
+            Check if two vector2 equals
+            </summary>
+      <param name="rhs">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector2.GetHashCode">
+      <summary>
+            Gets the hash code of Vector2
+            </summary>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector2.Equals(System.Object)">
+      <summary>
+            Check if two vector2 equals
+            </summary>
+      <param name="rhs">
+      </param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector2.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents the current <see cref="T:Aspose.ThreeD.Utils.Vector2" />.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents the current <see cref="T:Aspose.ThreeD.Utils.Vector2" />.</returns>
+    </member>
+    <member name="P:Aspose.ThreeD.Utils.Vector2.U">
+      <summary>
+            Gets or sets the U component if the <see cref="T:Aspose.ThreeD.Utils.Vector2" /> is used as a mapping coordinate.
+            It's an alias of x component.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Utils.Vector2.V">
+      <summary>
+            Gets or sets the V component if the <see cref="T:Aspose.ThreeD.Utils.Vector2" /> is used as a mapping coordinate.
+            It's an alias of y component.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Utils.Vector2.Length">
+      <summary>
+            Gets the length.
+            </summary>
+      <value>The length.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Utils.Vector3">
+      <summary>
+             A vector with three components.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Vector3.x">
+      <summary>
+            The x component.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Vector3.y">
+      <summary>
+            The y component.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Vector3.z">
+      <summary>
+            The z component.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector3.#ctor(System.Double,System.Double,System.Double)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Utils.Vector3" /> struct.
+            </summary>
+      <param name="x">The x coordinate.</param>
+      <param name="y">The y coordinate.</param>
+      <param name="z">The z coordinate.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector3.#ctor(System.Drawing.Color)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Utils.Vector3" /> struct.
+            </summary>
+      <param name="color">Color.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector3.#ctor(System.Double)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Utils.Vector3" /> struct.
+            </summary>
+      <param name="v">V.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector3.#ctor(Aspose.ThreeD.Utils.Vector4)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Utils.Vector3" /> struct.
+            </summary>
+      <param name="vec4">Vec4.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector3.Dot(Aspose.ThreeD.Utils.Vector3)">
+      <summary>
+            Gets the dot product of two vectors
+            </summary>
+      <param name="rhs">Rhs.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector3.Normalize">
+      <summary>
+            Normalizes this instance.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector3.Sin">
+      <summary>
+            Calculates sine on each component
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector3.Cos">
+      <summary>
+            Calculates cosine on each component
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector3.Cross(Aspose.ThreeD.Utils.Vector3)">
+      <summary>
+            Crosses product of two vectors
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector3.op_UnaryNegation(Aspose.ThreeD.Utils.Vector3)">
+      <summary>
+            Operator overloading for -
+            </summary>
+      <param name="v">The origin vector</param>
+      <returns>Result vector</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector3.op_Subtraction(Aspose.ThreeD.Utils.Vector3,Aspose.ThreeD.Utils.Vector3)">
+      <summary>
+             Operator overloading for - (minus)
+            </summary>
+      <param name="lhs">The left vector</param>
+      <param name="rhs">The right vector</param>
+      <returns>Result vector</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector3.op_Addition(Aspose.ThreeD.Utils.Vector3,Aspose.ThreeD.Utils.Vector3)">
+      <summary>
+            Operator overloading for +
+            </summary>
+      <param name="lhs">The left vector</param>
+      <param name="rhs">The right vector</param>
+      <returns>Result vector</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector3.op_Multiply(Aspose.ThreeD.Utils.Vector3,Aspose.ThreeD.Utils.Vector3)">
+      <summary>
+            Operator overloading for *
+            </summary>
+      <param name="lhs">The left vector</param>
+      <param name="rhs">The right vector</param>
+      <returns>Result vector</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector3.op_Multiply(Aspose.ThreeD.Utils.Vector3,System.Double)">
+      <summary>
+             Operator overloading for *
+            </summary>
+      <param name="lhs">The left vector</param>
+      <param name="rhs">The right double value</param>
+      <returns>Result vector</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector3.Set(System.Double,System.Double,System.Double)">
+      <summary>
+            Sets the x/y/z component in one call.
+            </summary>
+      <param name="newX">The x component.</param>
+      <param name="newY">The y component.</param>
+      <param name="newZ">The z component.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector3.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents the current <see cref="T:Aspose.ThreeD.Utils.Vector3" />.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents the current <see cref="T:Aspose.ThreeD.Utils.Vector3" />.</returns>
+    </member>
+    <member name="P:Aspose.ThreeD.Utils.Vector3.Length2">
+      <summary>
+            Gets the square of the length.
+            </summary>
+      <value>The length2.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Utils.Vector3.Length">
+      <summary>
+            Gets the length of this vector.
+            </summary>
+      <value>The length.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Utils.Vector3.Origin">
+      <summary>
+            Gets the origin position.
+            </summary>
+      <value>The origin.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Utils.Vector3.YAxis">
+      <summary>
+            Gets the Y axis.
+            </summary>
+      <value>The Y axis.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Utils.Vector4">
+      <summary>
+             A vector with four components.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Vector4.x">
+      <summary>
+            The x component.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Vector4.y">
+      <summary>
+            The y component.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Vector4.z">
+      <summary>
+            The z component.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Utils.Vector4.w">
+      <summary>
+            The w component.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector4.#ctor(System.Drawing.Color)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Utils.Vector4" /> struct.
+            </summary>
+      <param name="color">Color.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector4.#ctor(Aspose.ThreeD.Utils.Vector3,System.Double)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Utils.Vector4" /> struct.
+            </summary>
+      <param name="vec">Vec.</param>
+      <param name="w">The width.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector4.#ctor(System.Double,System.Double,System.Double)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Utils.Vector4" /> struct.
+            </summary>
+      <param name="x">The x coordinate.</param>
+      <param name="y">The y coordinate.</param>
+      <param name="z">The z coordinate.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector4.#ctor(System.Double,System.Double,System.Double,System.Double)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Utils.Vector4" /> struct.
+            </summary>
+      <param name="x">The x coordinate.</param>
+      <param name="y">The y coordinate.</param>
+      <param name="z">The z coordinate.</param>
+      <param name="w">The width.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector4.op_Addition(Aspose.ThreeD.Utils.Vector4,Aspose.ThreeD.Utils.Vector4)">
+      <summary>
+            Operator overloading for +
+            </summary>
+      <param name="lhs">The left vector</param>
+      <param name="rhs">The right vector</param>
+      <returns>Result vector</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector4.op_Subtraction(Aspose.ThreeD.Utils.Vector4,Aspose.ThreeD.Utils.Vector4)">
+      <summary>
+             Operator overloading for - (minus)
+            </summary>
+      <param name="lhs">The left vector</param>
+      <param name="rhs">The right vector</param>
+      <returns>Result vector</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector4.op_Multiply(Aspose.ThreeD.Utils.Vector4,Aspose.ThreeD.Utils.Vector4)">
+      <summary>
+            Operator overloading for *
+            </summary>
+      <param name="lhs">The left vector</param>
+      <param name="rhs">The right vector</param>
+      <returns>Result vector</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector4.op_Multiply(Aspose.ThreeD.Utils.Vector4,System.Double)">
+      <summary>
+             Operator overloading for *
+            </summary>
+      <param name="lhs">The left vector</param>
+      <param name="rhs">The right double value</param>
+      <returns>Result vector</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector4.Set(System.Double,System.Double,System.Double)">
+      <summary>
+            Sets vector's xyz components at a time, w will be set to 1
+            </summary>
+      <param name="newX">
+      </param>
+      <param name="newY">
+      </param>
+      <param name="newZ">
+      </param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector4.Set(System.Double,System.Double,System.Double,System.Double)">
+      <summary>
+            Sets vector's all components at a time 
+            </summary>
+      <param name="newX">
+      </param>
+      <param name="newY">
+      </param>
+      <param name="newZ">
+      </param>
+      <param name="newW">
+      </param>
+    </member>
+    <member name="M:Aspose.ThreeD.Utils.Vector4.ToString">
+      <summary>
+            Returns a <see cref="T:System.String" /> that represents the current <see cref="T:Aspose.ThreeD.Utils.Vector4" />.
+            </summary>
+      <returns>A <see cref="T:System.String" /> that represents the current <see cref="T:Aspose.ThreeD.Utils.Vector4" />.</returns>
+    </member>
+    <member name="T:Aspose.ThreeD.BonePose">
+      <summary>
+            The <see cref="T:Aspose.ThreeD.BonePose" /> contains the transformation matrix for a bone node
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.BonePose.Node">
+      <summary>
+            Gets or sets the scene node, points to a skinned skeleton node
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.BonePose.Matrix">
+      <summary>
+            Gets or sets the transform matrix of the node in current pose. 
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.BonePose.IsLocal">
+      <summary>
+            Gets or sets if the matrix is defined in local coordinate.
+            </summary>
+      <value>true if this instance is local space; otherwise, false means global space.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Animations.Extrapolation">
+      <summary>
+            Extrapolation defines how to do when sampled value is out of the range which defined by the first and last key-frames.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.Extrapolation.Type">
+      <summary>
+            Gets and sets the sampling pattern of extrapolation
+            </summary>
+      <value>The type.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Animations.Extrapolation.RepeatCount">
+      <summary>
+            Gets and sets the repeat times of the extrapolation pattern.
+            </summary>
+      <value>The count.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.PropertyFlags">
+      <summary>
+            Property's flags
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.PropertyFlags.None">
+      <summary>
+            The property has no flags
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.PropertyFlags.NotSerializable">
+      <summary>
+            This property is not serializable
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.PropertyFlags.UserDefined">
+      <summary>
+            This is a user defined property
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.PropertyFlags.Animatable">
+      <summary>
+            The property is animatable
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.PropertyFlags.Animated">
+      <summary>
+            The property is animated
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.PropertyFlags.Hidden">
+      <summary>
+            The property is marked as hidden.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Property">
+      <summary>
+             Class to hold user-defined properties. 
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Property.HasFlags(Aspose.ThreeD.PropertyFlags)">
+      <summary>
+            Determines whether this instance has the specified flags.
+            </summary>
+      <returns>true if this instance has flags the specified flags; otherwise, false.</returns>
+      <param name="f">Flags.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Property.GetCurveMapping(Aspose.ThreeD.Animations.Animation,System.Boolean)">
+      <summary>
+            Gets the curve mapping on specified animation instance.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Property.GetCurve(Aspose.ThreeD.Animations.Animation,System.Boolean)">
+      <summary>
+            Gets the curve on specified animation instance.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Property.SetFlags(Aspose.ThreeD.PropertyFlags,System.Boolean)">
+      <summary>
+            Modifies the property's flag.
+            </summary>
+      <param name="f">Flags.</param>
+      <param name="set">If set to true, set, otherwise, clear.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Property.ToString">
+      <summary>
+            Returns a string that represents the current <see cref="T:Aspose.ThreeD.Property" />.
+            </summary>
+      <returns>A string that represents the current <see cref="T:Aspose.ThreeD.Property" />.</returns>
+    </member>
+    <member name="P:Aspose.ThreeD.Property.Value">
+      <summary>
+            Gets or sets the value.
+            </summary>
+      <value>The value.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Property.ExtraData">
+      <summary>
+            Gets or sets the extra data.
+            Some data types like stringlist has a set of enum options, when parsing a FBX file
+            the enum options will be put in this property
+            </summary>
+      <value>The extra data.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Property.Flags">
+      <summary>
+            Gets the property's flags.
+            </summary>
+      <value>The flags.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Property.Name">
+      <summary>
+             Gets the name of the property 
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Property.ValueType">
+      <summary>
+            Gets the type of the property value.
+            </summary>
+      <value>The type of the value.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Entity">
+      <summary>
+            The base class of all entities.
+            Entity represents a concrete object that attached under a node like <see cref="T:Aspose.ThreeD.Entities.Light" />/<see cref="T:Aspose.ThreeD.Entities.Geometry" />.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entity.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entity" /> class.
+            </summary>
+      <param name="name">Name.</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Entity.ParentNodes">
+      <summary>
+            Gets all parent nodes, an entity can be attached to multiple parent nodes for geometry instancing
+            </summary>
+      <value>The nodes.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Entity.ParentNode">
+      <summary>
+            Gets or sets the first parent node, if set the first parent node, this entity will be detached from other parent nodes.
+            </summary>
+      <value>The parent node.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.NamespaceDoc">
+      <summary>
+            All geometry and entities are defined in this namespace
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.Camera">
+      <summary>
+            The camera describes the eye point of the viewer looking at the scene.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Camera.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.Camera" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Camera.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.Camera" /> class.
+            </summary>
+      <param name="name">Name.</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Camera.Position">
+      <summary>
+            Gets or sets the position of the camera
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Camera.Up">
+      <summary>
+            Gets or sets the up direction of the camera
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Camera.LookAt">
+      <summary>
+            Gets or sets the the interested position that the camera is looking at.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Camera.Direction">
+      <summary>
+            Gets or sets the direction that the camera is looking at.
+            Changes on this property will also affects the <see cref="P:Aspose.ThreeD.Entities.Camera.LookAt" /> and <see cref="P:Aspose.ThreeD.Entities.Camera.Target" />.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Camera.Target">
+      <summary>
+            Gets or sets the target that the camera is looking at.
+            If the user supports this property, it should be prior to <see cref="P:Aspose.ThreeD.Entities.Camera.LookAt" /> property.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Camera.ApertureMode">
+      <summary>
+            Gets or sets the camera's aperture mode
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Camera.FieldOfView">
+      <summary>
+            Gets or sets the camera's field of view in degrees, this property is used only when ApertureMode is <see cref="!:ApertureMode.Horizontal" /> or <see cref="!:ApertureMode.Vertical" /></summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Camera.FieldOfViewX">
+      <summary>
+            Gets or sets the camera's horizontal field of view in degrees, this property is used only when ApertureMode is <see cref="!:ApertureMode.HorizAndVert" /></summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Camera.FieldOfViewY">
+      <summary>
+            Gets or sets the camera's vertical field of view in degrees, this property is used only when ApertureMode is <see cref="!:ApertureMode.HorizAndVert" /></summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Camera.NearPlane">
+      <summary>
+            Gets or sets the camera's near plane distance.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Camera.FarPlane">
+      <summary>
+            Gets or sets the camera's far plane distance.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Camera.Width">
+      <summary>
+            Gets or sets the view plane's width measured in inches
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Camera.Height">
+      <summary>
+            Gets or sets the view plane's height measured in inches
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Camera.AspectRatio">
+      <summary>
+            Gets or sets the view plane aspect ratio.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Camera.Magnification">
+      <summary>
+            Gets or sets the maginification used in orthographic camera
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Camera.ProjectionType">
+      <summary>
+            Gets or sets the camera's projection type.
+            By default the perspective projection is used.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.LightType">
+      <summary>
+            Light types.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.LightType.Point">
+      <summary>
+            The point light.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.LightType.Directional">
+      <summary>
+            The directional light.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.LightType.Spot">
+      <summary>
+            The spot light.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.LightType.Area">
+      <summary>
+            The area light.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.LightType.Volume">
+      <summary>
+            The volume light.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.Light">
+      <summary>
+            The light illuminates the scene.
+            <para />
+            The formula to calculate the total attenuation of light is:
+            <c>A = ConstantAttenuation + (Dist * LinearAttenuation) + ((Dist^2) * QuadraticAttenuation)</c></summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Light.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.Light" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Light.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.Light" /> class.
+            </summary>
+      <param name="name">Name</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Light.#ctor(System.String,Aspose.ThreeD.Entities.LightType)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.Light" /> class.
+            </summary>
+      <param name="name">Name</param>
+      <param name="type">New light's type</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Light.Color">
+      <summary>
+            Gets or sets the light's color
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Light.LightType">
+      <summary>
+            Gets or sets the light's type
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Light.CastLight">
+      <summary>
+            Gets or sets if the current light instance can illuminate other objects.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Light.Intensity">
+      <summary>
+            Gets or sets the light's intensity
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Light.HotSpot">
+      <summary>
+            Gets or sets the hot spot cone angle(in degrees).
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Light.Falloff">
+      <summary>
+            Gets or sets the falloff cone angle (in degrees).
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Light.ConstantAttenuation">
+      <summary>
+             Gets or sets the constant attenuation to calculate the total attenuation of the light
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Light.LinearAttenuation">
+      <summary>
+             Gets or sets the linear attenuation to calculate the total attenuation of the light
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Light.QuadraticAttenuation">
+      <summary>
+             Gets or sets the quadratic attenuation to calculate the total attenuation of the light
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Light.CastShadows">
+      <summary>
+            Gets or sets if the light can cast shadows on other objects.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Light.ShadowColor">
+      <summary>
+            Gets or sets the shadow's color.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Light.Target">
+      <summary>
+            The target that the light is oriented to.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Light.Direction">
+      <summary>
+            Gets or sets the direction that the entity is looking at.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.Mesh">
+      <summary>
+            A mesh is made of many n-sided polygons.
+            </summary>
+      <example>
+            To add a polygon in mesh:
+            <code>
+            int[] indices = new int[] {0, 1, 2};
+            mesh.CreatePolygon(indices);
+            </code>
+            Travel through all polygons in mesh:
+            <code>
+            foreach(int[] polygon in mesh)
+            {
+                //deal with polygon
+            }
+            </code></example>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.Geometry">
+      <summary>
+            The base class of all renderable geometric objects (like <see cref="T:Aspose.ThreeD.Entities.Mesh" />, <see cref="T:Aspose.ThreeD.Entities.NurbsSurface" />, <see cref="T:Aspose.ThreeD.Entities.Patch" /> and etcs).
+            <para />
+            The <see cref="T:Aspose.ThreeD.Entities.Geometry" /> base class supports:  
+            <ul><li><b>Control point management</b>, control points defines the base 3D spatial structure of the geometry, different geometric types has different way to define concrete 3D models. </li><li><b>Vertex element definition</b>, vertex elements applies extra informations like normals/uv coordinates/vertex colors to the geometry, see <see cref="T:Aspose.ThreeD.Entities.VertexElement" /> for more details.</li><li><b>Object deforming</b>, <see cref="T:Aspose.ThreeD.Deformers.Deformer" /> can be binded to animate geometry's shape.</li></ul></summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Geometry.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.Geometry" /> class.
+            </summary>
+      <param name="name">Name</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Geometry.GetElement(Aspose.ThreeD.Entities.VertexElementType)">
+      <summary>
+            Gets a vertex element with specified type
+            </summary>
+      <param name="type">which vertex element type to find</param>
+      <returns>
+        <see cref="T:Aspose.ThreeD.Entities.VertexElement" /> instance if found, otherwise null will be returned.</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Geometry.GetVertexElementOfUV(Aspose.ThreeD.Entities.TextureMapping)">
+      <summary>
+            Gets a <see cref="T:Aspose.ThreeD.Entities.VertexElementUV" /> instance with given texture mapping type
+            </summary>
+      <param name="textureMapping">
+      </param>
+      <returns>VertexElementUV with the texture mapping type</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Geometry.CreateElement(Aspose.ThreeD.Entities.VertexElementType)">
+      <summary>
+            Creates a vertex element with specified type and add it to the geometry.
+            </summary>
+      <remarks>
+            If type is <see cref="F:Aspose.ThreeD.Entities.VertexElementType.UV" />, a <see cref="T:Aspose.ThreeD.Entities.VertexElementUV" /> with texture mapping type to <see cref="F:Aspose.ThreeD.Entities.TextureMapping.Diffuse" /> will be created.
+            </remarks>
+      <param name="type">Vertex element type</param>
+      <returns>Created element.</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Geometry.CreateElementUV(Aspose.ThreeD.Entities.TextureMapping)">
+      <summary>
+            Creates a <see cref="T:Aspose.ThreeD.Entities.VertexElementUV" /> with given texture mapping type.
+            </summary>
+      <param name="uvMapping">Which texture mapping type to create</param>
+      <returns>Created element uv</returns>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Geometry.Visible">
+      <summary>
+            Gets or sets if the geometry is visible
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Geometry.Deformers">
+      <summary>
+            Gets all deformers assocated with this geometry.
+            </summary>
+      <value>The deformers.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Geometry.ControlPoints">
+      <summary>
+            Gets all control points
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Geometry.VertexElements">
+      <summary>
+            Gets all vertex elements
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Mesh.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.Mesh" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Mesh.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.Mesh" /> class.
+            </summary>
+      <param name="name">Name.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Mesh.GetPolygonSize(System.Int32)">
+      <summary>
+            Gets the vertex count of the specified polygon.
+            </summary>
+      <returns>The polygon size.</returns>
+      <param name="index">Index.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Mesh.GetEnumerator">
+      <summary>
+            Gets the enumerator for each inner polygons.
+            </summary>
+      <returns>The enumerator.</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Mesh.CreatePolygon(System.Int32[])">
+      <summary>
+            Creates a new polygon with all vertices defined in <paramref name="indices" />.
+            To create polygon vertex by vertex, please use <see cref="T:Aspose.ThreeD.Entities.PolygonBuilder" />.
+            </summary>
+      <example>
+        <code>
+            int[] indices = new int[] {0, 1, 2};
+            mesh.CreatePolygon(indices);
+            </code>
+      </example>
+      <param name="indices">Array of the polygon indices, each index points to a control point that forms the polygon.</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Mesh.Edges">
+      <summary>
+            Gets edges of the Mesh.  Edge is optional in mesh, so it can be empty.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Mesh.PolygonCount">
+      <summary>
+            Gets the count of polygons
+            </summary>
+      <value>The polygon count.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.ApertureMode">
+      <summary>
+            Camera aperture modes.
+            The aperture mode determines which values drive the camera aperture. 
+            If the aperture mode is HorizAndVert, Horizontal, or Vertical, then the field of view is used. 
+            If the aperture mode is FocalLength, then the focal length is used.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.ApertureMode.HorizAndVert">
+      <summary>
+            Set the angle values for both the horizontal and vertical settings.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.ApertureMode.Horizontal">
+      <summary>
+            Set only the horizontal angle.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.ApertureMode.Vertical">
+      <summary>
+            Set only the vertical angle.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.ApertureMode.FocalLength">
+      <summary>
+            Use focal length directly.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.Patch">
+      <summary>
+             A <see cref="T:Aspose.ThreeD.Entities.Patch" /> is a parametric modeling surface, similar to <see cref="T:Aspose.ThreeD.Entities.NurbsSurface" />, it's also defined by two 
+             <see cref="T:Aspose.ThreeD.Entities.PatchDirection" />, the <see cref="P:Aspose.ThreeD.Entities.Patch.U" /> and <see cref="P:Aspose.ThreeD.Entities.Patch.V" />.
+            
+             But difference between <see cref="T:Aspose.ThreeD.Entities.Patch" /> and <see cref="T:Aspose.ThreeD.Entities.NurbsSurface" /> is that the <see cref="T:Aspose.ThreeD.Entities.PatchDirection" /> curve 
+             can be one of <see cref="F:Aspose.ThreeD.Entities.PatchDirectionType.Bezier" />, <see cref="F:Aspose.ThreeD.Entities.PatchDirectionType.QuadraticBezier" />, <see cref="F:Aspose.ThreeD.Entities.PatchDirectionType.BasisSpline" />, <see cref="F:Aspose.ThreeD.Entities.PatchDirectionType.CardinalSpline" /> and <see cref="F:Aspose.ThreeD.Entities.PatchDirectionType.Linear" /></summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Patch.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.Patch" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Patch.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.Patch" /> class.
+            </summary>
+      <param name="name">Name.</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Patch.U">
+      <summary>
+            Gets the u direction.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Patch.V">
+      <summary>
+            Gets the v direction.
+            </summary>
+      <value>The v.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.SkeletonType">
+      <summary>
+        <see cref="T:Aspose.ThreeD.Entities.Skeleton" />'s types.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.SkeletonType.Skeleton">
+      <summary>
+            The <see cref="T:Aspose.ThreeD.Entities.Skeleton" /> is a skeleton entity, which means the associated node is the root node of the whole skeletal hierarchy.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.SkeletonType.Bone">
+      <summary>
+            The <see cref="T:Aspose.ThreeD.Entities.Skeleton" /> is a bone entity.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.Skeleton">
+      <summary>
+            The <see cref="T:Aspose.ThreeD.Entities.Skeleton" /> is mainly used by CAD software to help designer to manipulate the transformation of skeletal structure, it's usually useless outside the CAD softwares.
+            To make the skeleton hierarchy acts like one object in CAD software, it's necessary to mark the top <see cref="T:Aspose.ThreeD.Entities.Skeleton" /> node as the root one by setting <see cref="P:Aspose.ThreeD.Entities.Skeleton.Type" /> to <see cref="F:Aspose.ThreeD.Entities.SkeletonType.Skeleton" />,
+            and all children set to <see cref="F:Aspose.ThreeD.Entities.SkeletonType.Bone" /></summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Skeleton.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.Skeleton" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Skeleton.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.Skeleton" /> class.
+            </summary>
+      <param name="name">Name.</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Skeleton.Size">
+      <summary>
+            Gets or sets the limb node size that used in CAD software to represent the size of the bone.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Skeleton.Type">
+      <summary>
+            Gets or sets the type of the skeleton.
+            </summary>
+      <value>The type of the skeleton.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.Shape">
+      <summary>
+            The shape describes the deformation on a set of control points, which is similar to the cluster deformer in Maya.
+            For example, we can add a shape to a created geometry. 
+            And the shape and the geometry have the same topological information but different position of the control points. 
+            With varying amounts of influence, the geometry performs a deformation effect. 
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Shape.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.Shape" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Shape.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.Shape" /> class.
+            </summary>
+      <param name="name">Name</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Shape.Indices">
+      <summary>
+            Gets the indices.
+            </summary>
+      <value>The indices.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.Line">
+      <summary>
+            A line is a path defined by a set of points with <see cref="P:Aspose.ThreeD.Entities.Geometry.ControlPoints" />, and connected by <see cref="P:Aspose.ThreeD.Entities.Line.Indices" />,
+            which means it can also be a set of connected line segments.
+            The line is usually a linear object, which means it cannot be used to represent a curve, in order to represent a curve, uses <see cref="T:Aspose.ThreeD.Entities.NurbsCurve" />.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Line.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.Line" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.Line.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.Line" /> class.
+            </summary>
+      <param name="name">Name.</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.Line.Indices">
+      <summary>
+            Gets or sets the indices.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.NurbsType">
+      <summary>
+            NURBS types.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.NurbsType.Open">
+      <summary>
+            The <see cref="T:Aspose.ThreeD.Entities.NurbsCurve" /> is an open curve.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.NurbsType.Closed">
+      <summary>
+            The <see cref="T:Aspose.ThreeD.Entities.NurbsCurve" /> is a closed curve has its last control point equals to its first one.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.NurbsType.Periodic">
+      <summary>
+            The <see cref="T:Aspose.ThreeD.Entities.NurbsCurve" /> is an periodic curve.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.CurveDimension">
+      <summary>
+             The dimension of the curves. 
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.CurveDimension.TwoDimensional">
+      <summary>
+            The curves are two dimensional points. 
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.CurveDimension.ThreeDimensional">
+      <summary>
+            The curves are three dimensional points. 
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.NurbsCurve">
+      <summary>
+        <a href="https://en.wikipedia.org/wiki/Non-uniform_rational_B-spline">NURBS curve</a> is a curve represented by NURBS(Non-uniform rational basis spline),
+            A NURBS curve is defined by its <see cref="P:Aspose.ThreeD.Entities.NurbsCurve.Order" />, a set of weighted <see cref="P:Aspose.ThreeD.Entities.Geometry.ControlPoints" /> and a <see cref="P:Aspose.ThreeD.Entities.NurbsCurve.KnotVectors" />
+            The w component in control point is used as control point's weight, whatever it is a <see cref="F:Aspose.ThreeD.Entities.CurveDimension.TwoDimensional" /> or <see cref="F:Aspose.ThreeD.Entities.CurveDimension.ThreeDimensional" /></summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.NurbsCurve.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.NurbsCurve" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.NurbsCurve.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.NurbsCurve" /> class.
+            </summary>
+      <param name="name">Name</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.NurbsCurve.Multiplicity">
+      <summary>
+            Gets the multiplicity.
+            </summary>
+      <value>The multiplicity.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.NurbsCurve.Order">
+      <summary>
+            Gets or sets the order of a NURBS curve, it defines the number of nearby control points that influence any given point on the curve.
+            </summary>
+      <value>The order.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.NurbsCurve.Dimension">
+      <summary>
+            Gets or sets the curve's dimension.
+            </summary>
+      <remarks>
+            For a <see cref="F:Aspose.ThreeD.Entities.CurveDimension.TwoDimensional" /> curve, the z component in control point is unused.
+            </remarks>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.NurbsCurve.CurveType">
+      <summary>
+            Gets or sets the type of the curve.
+            </summary>
+      <value>The type of the curve.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.NurbsCurve.KnotVectors">
+      <summary>
+            Gets the knot vector, it is a sequence of parameter values that determines where and how the control points affect the NURBS curve.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.NurbsCurve.Rational">
+      <summary>
+            Gets or sets whether it is rational, this value indicates whether this <see cref="T:Aspose.ThreeD.Entities.NurbsCurve" /> is rational spline or non-rational spline.
+            Non-rational B-spline is a special case of rational B-splines.
+            </summary>
+      <value>true if it's rational spline; otherwise, false is a non-rational spline.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.NurbsSurface">
+      <summary>
+        <see cref="T:Aspose.ThreeD.Entities.NurbsSurface" /> is a surface represented by <a href="https://en.wikipedia.org/wiki/Non-uniform_rational_B-spline">NURBS(Non-uniform rational basis spline)</a>,
+            A <see cref="T:Aspose.ThreeD.Entities.NurbsSurface" /> is defined by two <see cref="T:Aspose.ThreeD.Entities.NurbsDirection" /><see cref="P:Aspose.ThreeD.Entities.NurbsSurface.U" /> and <see cref="P:Aspose.ThreeD.Entities.NurbsSurface.V" />.
+            The w component in control point is used as control point's weight whatever the direction's type is a <see cref="F:Aspose.ThreeD.Entities.CurveDimension.TwoDimensional" /> or <see cref="F:Aspose.ThreeD.Entities.CurveDimension.ThreeDimensional" /></summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.NurbsSurface.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.NurbsSurface" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.NurbsSurface.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.NurbsSurface" /> class.
+            </summary>
+      <param name="name">Name.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.NurbsSurface.GetControlPointIndex(System.Int32,System.Int32)">
+      <summary>
+            Gets the index of control point identified by coordinate (u,v)
+            </summary>
+      <param name="u">
+      </param>
+      <param name="v">
+      </param>
+      <returns>The index</returns>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.NurbsSurface.U">
+      <summary>
+            Gets the nurbs surface's U direction
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.NurbsSurface.V">
+      <summary>
+            Gets the nurbs surface's V direction
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.PatchDirectionType">
+      <summary>
+            Patch direction's types.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.PatchDirectionType.Bezier">
+      <summary>
+        <a href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve">The patch direction is a Bezier curve.</a>
+      </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.PatchDirectionType.QuadraticBezier">
+      <summary>
+            The quadratic bezier patch.
+            <a href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Quadratic_curves">The patch direction is a quadratic curve.</a></summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.PatchDirectionType.CardinalSpline">
+      <summary>
+            cardinal patch.
+            <a href="https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Cardinal_spline">The patch direction is a cardinal spline.</a></summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.PatchDirectionType.BasisSpline">
+      <summary>
+        <a href="https://en.wikipedia.org/wiki/B-spline">The patch direction is a basis spline.</a>
+      </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.PatchDirectionType.Linear">
+      <summary>
+        <a href="https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Linear_curves">The patch direction is a linear curve.</a>
+      </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.PatchDirection">
+      <summary>
+            Patch's U and V direction.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.PatchDirection.Type">
+      <summary>
+            Gets or sets the patch's type.
+            </summary>
+      <value>The type.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.PatchDirection.Divisions">
+      <summary>
+            Gets or sets the number of divisions between adjacent control points.
+            </summary>
+      <value>The step.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.PatchDirection.ControlPoints">
+      <summary>
+            Gets or sets the count of control points in current direction.
+            </summary>
+      <value>The count.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.PatchDirection.Closed">
+      <summary>
+            Gets or sets a value indicating whether this <see cref="T:Aspose.ThreeD.Entities.PatchDirection" /> is a closed curve.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.NurbsDirection">
+      <summary>
+            A 3D <see cref="T:Aspose.ThreeD.Entities.NurbsSurface" /> has two direction, the <see cref="P:Aspose.ThreeD.Entities.NurbsSurface.U" /> and <see cref="P:Aspose.ThreeD.Entities.NurbsSurface.V" />, the <see cref="T:Aspose.ThreeD.Entities.NurbsDirection" /> defines data for each direction.
+            A direction is actually a NURBS curve, that means it's also defined by its <see cref="P:Aspose.ThreeD.Entities.NurbsDirection.Order" />, a <see cref="P:Aspose.ThreeD.Entities.NurbsDirection.KnotVectors" />, and a set of weighted control points(defined in <see cref="T:Aspose.ThreeD.Entities.NurbsSurface" />).
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.NurbsDirection.KnotVectors">
+      <summary>
+            Gets the knot vector, it is a sequence of parameter values that determines where and how the control points affect the NURBS curve.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.NurbsDirection.Multiplicity">
+      <summary>
+            Gets the multiplicity.
+            </summary>
+      <value>The multiplicity.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.NurbsDirection.Order">
+      <summary>
+            Gets or sets the order of a NURBS curve, it defines the number of nearby control points that influence any given point on the curve.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.NurbsDirection.Divisions">
+      <summary>
+            Gets or sets the number of divisions between adjacent control points in current direction.
+            </summary>
+      <value>The step.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.NurbsDirection.Type">
+      <summary>
+            Gets or sets the type of the current direction.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.NurbsDirection.Count">
+      <summary>
+            Gets or sets the count of control points in current direction.
+            </summary>
+      <value>The count.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Shading.ShaderTechnique">
+      <summary>
+            A shader technique represents a concrete rendering implementation.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.ShaderTechnique.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Shading.ShaderTechnique" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.ShaderTechnique.AddBinding(System.String,System.String)">
+      <summary>
+            Binds the dynamic property to shader parameter
+            </summary>
+      <param name="property">The name of the dynamic property.</param>
+      <param name="shaderParameter">The name of the shader parameter.</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.ShaderTechnique.Description">
+      <summary>
+            Gets or sets the description of this technique
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.ShaderTechnique.ShaderLanguage">
+      <summary>
+            Gets or sets the shader language used by this technique.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.ShaderTechnique.ShaderVersion">
+      <summary>
+            Gets or sets the shader version used by this technique.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.ShaderTechnique.ShaderFile">
+      <summary>
+            Gets or sets the file name of the external shader file.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.ShaderTechnique.ShaderContent">
+      <summary>
+            Gets or sets the content of a embedded shader script.
+            It could be HLSL/GLSL shader source file.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.ShaderTechnique.ShaderEntry">
+      <summary>
+            Gets or sets the entry point of the shader, some shader like HLSL can have customized shader entries.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.ShaderTechnique.RenderAPI">
+      <summary>
+            Gets or sets the rendering API used by this technique
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.ShaderTechnique.RenderAPIVersion">
+      <summary>
+            Gets or sets the version of the rendering API.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.ShaderTechnique.ShaderParameters">
+      <summary>
+            Gets the shader parameter definition.
+            The key is the name of the dynamic property, and value is the shader parameter name that the property connected to.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Shading.ShaderMaterial">
+      <summary>
+            A shader material allows to describe the material by external rendering engine or shader language.
+            <see cref="T:Aspose.ThreeD.Shading.ShaderMaterial" /> uses <see cref="T:Aspose.ThreeD.Shading.ShaderTechnique" /> to describe the concrete rendering details, 
+            and the most suitable one will be used according to the final rendering platform.
+            For example, your <see cref="T:Aspose.ThreeD.Shading.ShaderMaterial" /> instance can have two technique, one is defined by HLSL, and another is defined by GLSL
+            Under non-window platform the GLSL should be used instead of HLSL 
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Shading.Material">
+      <summary>
+            Material defines the parameters necessary for visual appearance of geometry.
+            Aspose.3D provides shading model for <see cref="T:Aspose.ThreeD.Shading.LambertMaterial" />, <see cref="T:Aspose.ThreeD.Shading.PhongMaterial" /> and <see cref="T:Aspose.ThreeD.Shading.ShaderMaterial" /></summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.Material.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Shading.Material" /> class.
+            </summary>
+      <param name="name">Name</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.Material.GetTexture(System.String)">
+      <summary>
+            Gets the texture from the specified slot, it can be material's property name or shader's parameter name
+            </summary>
+      <returns>The texture.</returns>
+      <param name="slotName">Slot name.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.Material.SetTexture(System.String,Aspose.ThreeD.Shading.TextureBase)">
+      <summary>
+            Sets the texture to specified slot
+            </summary>
+      <param name="slotName">Slot name.</param>
+      <param name="texture">Texture.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.Material.ToString">
+      <summary>
+            Formats object to string
+            </summary>
+      <returns>Object string</returns>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.ShaderMaterial.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Shading.ShaderMaterial" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.ShaderMaterial.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Shading.ShaderMaterial" /> class.
+            </summary>
+      <param name="name">Name</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.ShaderMaterial.Techniques">
+      <summary>
+            Gets all available techniques defined in this material.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Shading.LambertMaterial">
+      <summary>
+             Material for lambert shading model
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.LambertMaterial.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Shading.LambertMaterial" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.LambertMaterial.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Shading.LambertMaterial" /> class.
+            </summary>
+      <param name="name">Name</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.LambertMaterial.EmissiveColor">
+      <summary>
+            Gets or sets the emissive color
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.LambertMaterial.AmbientColor">
+      <summary>
+             Gets or sets the ambient color
+            </summary>
+      <value>The ambient.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.LambertMaterial.DiffuseColor">
+      <summary>
+            Gets or sets the diffuse color
+            </summary>
+      <value>The diffuse.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.LambertMaterial.TransparentColor">
+      <summary>
+            Gets or sets the transparent color. 
+            </summary>
+      <value>The color of the transparent.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.LambertMaterial.Transparency">
+      <summary>
+             Gets or sets the transparency factor.
+            The factor should be ranged between 0(0%) and 1(100%)
+            Any invalid factor value will be clampped.
+            </summary>
+      <value>The transparency factor.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Shading.PhongMaterial">
+      <summary>
+            Material for blinn-phong shading model.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.PhongMaterial.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Shading.PhongMaterial" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Shading.PhongMaterial.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Shading.PhongMaterial" /> class.
+            </summary>
+      <param name="name">Name</param>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.PhongMaterial.SpecularColor">
+      <summary>
+            Gets or sets the specular color. 
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.PhongMaterial.SpecularFactor">
+      <summary>
+             Gets or sets the specular factor. 
+            The formula of specular:
+             SpecularColor * SpecularFactor * (N dot H) ^ Shininess
+             </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.PhongMaterial.Shininess">
+      <summary>
+              Gets or sets the shininess, this controls the specular highlight's size.
+            The formula of specular:
+             SpecularColor * SpecularFactor * (N dot H) ^ Shininess
+             </summary>
+      <value>The shininess.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.PhongMaterial.ReflectionColor">
+      <summary>
+            Gets or sets the reflection color.
+            </summary>
+      <value>The reflection.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Shading.PhongMaterial.ReflectionFactor">
+      <summary>
+            Gets or sets the attenuatation of the reflection color. 
+            </summary>
+      <value>The reflection factor.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Deformers.MorphTargetDeformer">
+      <summary>
+            MorphTargetDeformer provides per-vertex animation.
+            MorphTargetDeformer organize all targets via <see cref="T:Aspose.ThreeD.Deformers.MorphTargetChannel" />, each channel can organize multiple targets.
+            A common use of morph target deformer is to apply facial expression to a character.
+            More details can be found at https://en.wikipedia.org/wiki/Morph_target_animation
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Deformers.MorphTargetDeformer.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Deformers.MorphTargetDeformer" /> class.
+            </summary>
+      <param name="name">Name.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Deformers.MorphTargetDeformer.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Deformers.MorphTargetDeformer" /> class.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Deformers.MorphTargetDeformer.Item(Aspose.ThreeD.Entities.Geometry)">
+      <summary>
+            Gets or sets the weight for given geometry, this is a short-handed way to modify weight for target without accessing channel.
+            </summary>
+      <param name="target">Target geometry</param>
+      <returns>Weight</returns>
+    </member>
+    <member name="P:Aspose.ThreeD.Deformers.MorphTargetDeformer.Channels">
+      <summary>
+            Gets all channels contained in this deformer
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Deformers.MorphTargetChannel">
+      <summary>
+            A MorphTargetChannel is used by <see cref="T:Aspose.ThreeD.Deformers.MorphTargetDeformer" /> to organize the target geometries.
+            Some file formats like FBX support multiple channels in parallel.
+            </summary>
+      <remarks>
+            Weight is between 0 and 1.0, and default weight for target is 1.0; 
+            </remarks>
+    </member>
+    <member name="F:Aspose.ThreeD.Deformers.MorphTargetChannel.DefaultWeight">
+      <summary>
+            Default weight for morph target.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Deformers.MorphTargetChannel.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Deformers.MorphTargetChannel" /> class.
+            </summary>
+      <param name="name">Name.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Deformers.MorphTargetChannel.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Deformers.MorphTargetChannel" /> class.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Deformers.MorphTargetChannel.Weights">
+      <summary>
+            Gets the full weight values of target geometries. 
+            </summary>
+      <value>The full weights.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Deformers.MorphTargetChannel.ChannelWeight">
+      <summary>
+            Gets or sets the deformer weight of this channel. 
+            The weight is between 0.0 and 1.0
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Deformers.MorphTargetChannel.Targets">
+      <summary>
+            Gets all targets associated with the channel.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Deformers.MorphTargetChannel.Item(Aspose.ThreeD.Entities.Geometry)">
+      <summary>
+            Gets or sets the weight for specified geometry
+            </summary>
+      <param name="target">Target geometry.</param>
+      <returns>Weight</returns>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElementType">
+      <summary>
+             The type of the vertex element, defined how it will be used in modeling.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.VertexElementType.Binormal">
+      <summary>
+            Binormal vector, see <see cref="T:Aspose.ThreeD.Entities.VertexElementBinormal" /></summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.VertexElementType.Normal">
+      <summary>
+            Normal vector, see <see cref="T:Aspose.ThreeD.Entities.VertexElementNormal" /></summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.VertexElementType.Tangent">
+      <summary>
+            Tangent vector, see <see cref="T:Aspose.ThreeD.Entities.VertexElementTangent" /></summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.VertexElementType.Material">
+      <summary>
+            Material index, see <see cref="T:Aspose.ThreeD.Entities.VertexElementMaterial" /></summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.VertexElementType.PolygonGroup">
+      <summary>
+            Polygon group index, see <see cref="T:Aspose.ThreeD.Entities.VertexElementPolygonGroup" /></summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.VertexElementType.UV">
+      <summary>
+            Texture UV coordinate, see <see cref="T:Aspose.ThreeD.Entities.VertexElementUV" /></summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.VertexElementType.VertexColor">
+      <summary>
+            Vertex color, see <see cref="T:Aspose.ThreeD.Entities.VertexElementVertexColor" /></summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.VertexElementType.SmoothingGroup">
+      <summary>
+            Smoothing group, See <see cref="T:Aspose.ThreeD.Entities.VertexElementSmoothingGroup" /></summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.VertexElementType.VertexCrease">
+      <summary>
+            Vertex crease, See <see cref="T:Aspose.ThreeD.Entities.VertexElementVertexCrease" /></summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.VertexElementType.EdgeCrease">
+      <summary>
+            Edge crease, <see cref="T:Aspose.ThreeD.Entities.VertexElementEdgeCrease" /></summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.VertexElementType.UserData">
+      <summary>
+            User data, usually for application-specific purpose, See <see cref="T:Aspose.ThreeD.Entities.VertexElementUserData" /></summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.VertexElementType.Visibility">
+      <summary>
+            Visibility for components, see <see cref="T:Aspose.ThreeD.Entities.VertexElementVisibility" /></summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.VertexElementType.Specular">
+      <summary>
+            Specular colors, see <see cref="T:Aspose.ThreeD.Entities.VertexElementSpecular" /></summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.VertexElementType.Weight">
+      <summary>
+            Blend weights, see <see cref="T:Aspose.ThreeD.Entities.VertexElementWeight" /></summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.TextureMapping">
+      <summary>
+            The texture mapping type for <see cref="T:Aspose.ThreeD.Entities.VertexElementUV" />
+            Describes which kind of texture mapping is used.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.TextureMapping.Ambient">
+      <summary>
+            Ambient maps 
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.TextureMapping.Emissive">
+      <summary>
+            Emissive maps
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.TextureMapping.Diffuse">
+      <summary>
+            Diffuse maps
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.TextureMapping.Opacity">
+      <summary>
+            Opacity maps
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.TextureMapping.Bump">
+      <summary>
+            Bump maps
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.TextureMapping.Normal">
+      <summary>
+            Normal maps
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.TextureMapping.Specular">
+      <summary>
+            Specular maps
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.TextureMapping.Glow">
+      <summary>
+            Glow maps
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.TextureMapping.Reflection">
+      <summary>
+            Reflection maps
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.TextureMapping.Shadow">
+      <summary>
+            Shadow maps
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.TextureMapping.Shininess">
+      <summary>
+            Shininess maps
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.TextureMapping.Displacement">
+      <summary>
+            Displacement maps
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.MappingMode">
+      <summary>
+             Determines how the element is mapped to a surface. 
+            The <see cref="T:Aspose.ThreeD.Entities.MappingMode" /> defined how <see cref="T:Aspose.ThreeD.Entities.VertexElement" /> is mapped to the surface of geometry.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.MappingMode.ControlPoint">
+      <summary>
+            Each data is mapped to the control point of the geometry.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.MappingMode.PolygonVertex">
+      <summary>
+            The data is mapped to the polygon's vertex
+            When a control point is shared by multiple polygons, and the data is mapped as <see cref="F:Aspose.ThreeD.Entities.MappingMode.PolygonVertex" />, the control point as different polygon vertex will have their own data
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.MappingMode.Polygon">
+      <summary>
+            The data is mapped to the polygon.
+            Each polygon vertex shares the same data when mapping mode is <see cref="F:Aspose.ThreeD.Entities.MappingMode.Polygon" />.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.MappingMode.Edge">
+      <summary>
+            The data is mapped to the edge.
+            Each edge end point shares the same data when mapping is <see cref="F:Aspose.ThreeD.Entities.MappingMode.Edge" />.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.MappingMode.AllSame">
+      <summary>
+            One data mapped to the whole surface.
+            What ever data is interpreted as control point/polygon vertex/edge endpoints, the data is always the same as it defined by <see cref="F:Aspose.ThreeD.Entities.MappingMode.AllSame" />.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.ReferenceMode">
+      <summary>
+        <see cref="T:Aspose.ThreeD.Entities.ReferenceMode" /> defines how mapping information is stored and referenced by.
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.ReferenceMode.Direct">
+      <summary>
+            Data is directly referenced
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.ReferenceMode.Index">
+      <summary>
+            Data is referenced by index
+            </summary>
+    </member>
+    <member name="F:Aspose.ThreeD.Entities.ReferenceMode.IndexToDirect">
+      <summary>
+            Data is referenced by index, then accessed by index in <see cref="T:Aspose.ThreeD.Entities.VertexElement" />'s data list.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElement">
+      <summary>
+             Base class of vertex elements.
+             A vertex element type is identified by VertexElementType. 
+             A VertexElement describes how the vertex element is mapped to a geometry surface and how the mapping information is arranged in memory. 
+             A VertexElement contains Normals, UVs or other kind of information. 
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElement.Clear">
+      <summary>
+             Clears all the data from this vertex element. 
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.VertexElement.VertexElementType">
+      <summary>
+            Gets the type of the <see cref="T:Aspose.ThreeD.Entities.VertexElement" /></summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.VertexElement.Name">
+      <summary>
+            Gets or sets the name.
+            </summary>
+      <value>The name.</value>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.VertexElement.MappingMode">
+      <summary>
+            Gets or sets how the element is mapped.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.VertexElement.ReferenceMode">
+      <summary>
+            Gets or sets how the element is referenced.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.IIndicedVertexElement">
+      <summary>
+            VertexElement with indice data.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.IIndicedVertexElement.Indices">
+      <summary>
+            Gets the indice data
+            </summary>
+      <value>The index array.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElementTemplate`1">
+      <summary>
+            A helper class for defining concrete <see cref="T:Aspose.ThreeD.Entities.VertexElement" /> implementations.
+            </summary>
+      <typeparam name="T">Element type.</typeparam>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementTemplate`1.CopyTo(Aspose.ThreeD.Entities.VertexElementTemplate{`0})">
+      <summary>
+            Copys data to specified element
+            </summary>
+      <param name="target">Target.</param>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementTemplate`1.Clear">
+      <summary>
+             Removes all elements from the direct and the index arrays.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.VertexElementTemplate`1.Data">
+      <summary>
+            Gets the vertex data
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.VertexElementTemplate`1.Indices">
+      <summary>
+            Gets the indice data
+            </summary>
+      <value>The index array.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElementVisibility">
+      <summary>
+            Defines if specified components is visible
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementVisibility.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.VertexElementVisibility" /> class.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElementEdgeCrease">
+      <summary>
+            Defines the edge crease for specified components
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementEdgeCrease.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.VertexElementEdgeCrease" /> class.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElementVertexCrease">
+      <summary>
+            Defines the vertex crease for specified components
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementVertexCrease.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.VertexElementVertexCrease" /> class.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElementVertexColor">
+      <summary>
+            Defines the vertex color for specified components
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementVertexColor.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.VertexElementVertexColor" /> class.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElementUV">
+      <summary>
+            Defines the UV coordinates for specified components.
+            A geometry can have multiple <see cref="T:Aspose.ThreeD.Entities.VertexElementUV" /> elements, and each one have different <see cref="T:Aspose.ThreeD.Entities.TextureMapping" />s.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementUV.#ctor(Aspose.ThreeD.Entities.TextureMapping)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.VertexElementUV" /> class.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElementBinormal">
+      <summary>
+            Defines the binormal vectors for specified components.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementBinormal.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.VertexElementBinormal" /> class.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElementNormal">
+      <summary>
+            Defines normal vectors for specified components.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementNormal.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.VertexElementNormal" /> class.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElementTangent">
+      <summary>
+            Defines tangent vectors for specified components.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementTangent.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.VertexElementTangent" /> class.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElementPolygonGroup">
+      <summary>
+            Defines polygon group for specified components to group related polygons together.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementPolygonGroup.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.VertexElementPolygonGroup" /> class.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElementSmoothingGroup">
+      <summary>
+            A smoothing group is a group of polygons in a polygon mesh which should appear to form a smooth surface.
+            Some early 3d modeling software like 3D studio max for DOS used smoothing group to void storing normal vector for each mesh vertex.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementSmoothingGroup.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.VertexElementSmoothingGroup" /> class.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElementMaterial">
+      <summary>
+            Defines material index for specified components.
+            
+            A node can have multiple materials, the <see cref="T:Aspose.ThreeD.Entities.VertexElementMaterial" /> is used to render different part of the geometry in different materials.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementMaterial.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.VertexElementMaterial" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementMaterial.Clear">
+      <summary>
+             Removes all elements from the direct and the index arrays.
+            </summary>
+    </member>
+    <member name="P:Aspose.ThreeD.Entities.VertexElementMaterial.Indices">
+      <summary>
+            Gets the indice data
+            </summary>
+      <value>The index array.</value>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElementUserData">
+      <summary>
+            Defines custom user data for specified components.
+            Usually it's application-specific data for special purpose.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementUserData.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.VertexElementUserData" /> class.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElementSpecular">
+      <summary>
+            Defines specular color for specified components.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementSpecular.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.VertexElementSpecular" /> class.
+            </summary>
+    </member>
+    <member name="T:Aspose.ThreeD.Entities.VertexElementWeight">
+      <summary>
+            Defines blend weight for specified components.
+            </summary>
+    </member>
+    <member name="M:Aspose.ThreeD.Entities.VertexElementWeight.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Aspose.ThreeD.Entities.VertexElementWeight" /> class.
+            </summary>
+    </member>
+  </members>
+</doc>

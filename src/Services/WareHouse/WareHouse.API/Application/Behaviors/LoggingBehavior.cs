@@ -37,11 +37,11 @@ namespace WareHouse.API.Application.Behaviors
                 _logger.LogError("Can not connect to database");
                 throw new ArgumentException(new Exception().Message);
             }
-            if (_userSevice != null && await _userSevice.GetUser() != null)
-            {
-                var user = await _userSevice.GetUser();
-                _logger.LogInformation("----- Handling command by {UserName}", user.UserName);
-            }
+            //if (_userSevice != null && await _userSevice.GetUser() != null)
+            //{
+            //    var user = await _userSevice.GetUser();
+            //    _logger.LogInformation("----- Handling command by {UserName}", user.UserName);
+            //}
             request.GetType().GetProperties().ToList().ForEach(p =>
             {
                 _logger.LogInformation("----- {PropertyName} : {PropertyValue}", p.Name, p.GetValue(request));
