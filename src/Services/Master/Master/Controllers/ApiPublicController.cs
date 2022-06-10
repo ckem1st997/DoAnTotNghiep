@@ -82,7 +82,7 @@ namespace Master.Controllers
                 });
             foreach (var item in listHistory)
             {
-                item.UserNameRead = item.UserNameRead+"," + user.UserName;
+                item.UserNameRead = item.UserNameRead + "," + user.UserName;
             }
             var res = await _context.SaveChangesAsync();
             return Ok(new ResultMessageResponse()

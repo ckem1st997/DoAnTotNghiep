@@ -18,6 +18,5 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="5.13.14" />
 	</ItemGroup>
 </Project>

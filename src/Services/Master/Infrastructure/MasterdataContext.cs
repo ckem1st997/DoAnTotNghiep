@@ -29,6 +29,8 @@ namespace Infrastructure
             {
                 optionsBuilder.UseSqlServer("Data Source=localhost,5433;Initial Catalog=MasterData;Persist Security Info=True;User ID=sa;Password=Aa!0977751021");
             }
+            optionsBuilder.LogTo(Console.WriteLine).EnableSensitiveDataLogging();
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

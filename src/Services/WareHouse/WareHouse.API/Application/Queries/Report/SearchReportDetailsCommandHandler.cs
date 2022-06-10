@@ -127,7 +127,7 @@ namespace WareHouse.API.Application.Queries.Report
             sb.Append("inner join Unit on WareHouseItem.UnitId=Unit.Id ");
             sb.Append("where d1.VoucherDate BETWEEN @pFrom  AND @pTo ");
             if (!string.IsNullOrEmpty(request.KeySearch))
-                sb.Append("and (d1.DepartmentName like @key or d1.EmployeeName like @key or d1.Description like @key or d1.ProjectName like @key) ");
+                sb.Append("and (d1.VoucherCode like @key or d1.DepartmentName like @key or d1.EmployeeName like @key or d1.Description like @key or d1.ProjectName like @key) ");
             sb.Append("group by d1.VoucherDate,d1.Quantity,d1.Beginning,d1.Import,d1.Export,WareHouseItem.Code,WareHouseItem.Name,d1.VoucherCode,Unit.UnitName,d1.Reason,d1.EmployeeName,d1.DepartmentName,d1.ProjectName,d1.Description ");
             sb.Append(" order by d1.VoucherDate");
             if (!request.Excel)
@@ -187,7 +187,7 @@ namespace WareHouse.API.Application.Queries.Report
             sbCount.Append("inner join Unit on WareHouseItem.UnitId=Unit.Id ");
             sbCount.Append("where d1.VoucherDate BETWEEN @pFrom  AND @pTo ");
             if (!string.IsNullOrEmpty(request.KeySearch))
-                sbCount.Append("and (d1.DepartmentName like @key or d1.EmployeeName like @key or d1.Description like @key or d1.ProjectName like @key) ");
+                sbCount.Append("and (d1.VoucherCode like @key or d1.DepartmentName like @key or d1.EmployeeName like @key or d1.Description like @key or d1.ProjectName like @key) ");
             sbCount.Append("group by d1.VoucherDate,d1.Quantity,d1.Beginning,d1.Import,d1.Export,WareHouseItem.Code,WareHouseItem.Name,d1.VoucherCode,Unit.UnitName,d1.Reason,d1.EmployeeName,d1.DepartmentName,d1.ProjectName,d1.Description ");
             sbCount.Append("              ) t   ");
             sbCount.Append("  ");
