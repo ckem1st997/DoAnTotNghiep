@@ -97,12 +97,12 @@ namespace GrpcGetDataToMaster
             //   var list = await _mediat.GetAllAync<ListCreateBy>("select * from FakeDataMaster where Type=1 order by Type ",null,System.Data.CommandType.Text)
 
             var list = new ListCreateBy();
-            foreach (var item in FakeData.GetCreateBy())
+            foreach (var item in _masterdataContext.UserMasters.ToList())
             {
                 var tem = new BaseSelectDTO()
                 {
                     Id = item.Id,
-                    Name = item.Name,
+                    Name = item.UserName,
                 };
                 list.ListCreateBy_.Add(tem);
             }

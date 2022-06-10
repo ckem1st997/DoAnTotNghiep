@@ -107,76 +107,76 @@ namespace KafKa.Net
         public bool TryConnectConsumer()
         {
             _logger.LogInformation("Kafka Client is trying to connect");
-            lock (sync_root)
+            //  lock (sync_root)
+            //  {
+            //var policy = RetryPolicy.Handle<SocketException>()
+            //    .Or<KafkaRetriableException>()
+            //    .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+            //        (ex, time) =>
+            //        {
+            //            _logger.LogWarning(ex,
+            //                "Kafka Client could not connect after {TimeOut}s ({ExceptionMessage})",
+            //                $"{time.TotalSeconds:n1}", ex.Message);
+            //        }
+            //    );
+
+            //  policy.Execute(() =>
+            //  {
+            if (ConsumerConfig == null)
+                this.kafkaConsumer = this.ConsumerConfigMethod();
+            //  });
+
+            if (IsConnectedConsumer)
             {
-                var policy = RetryPolicy.Handle<SocketException>()
-                    .Or<KafkaRetriableException>()
-                    .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                        (ex, time) =>
-                        {
-                            _logger.LogWarning(ex,
-                                "Kafka Client could not connect after {TimeOut}s ({ExceptionMessage})",
-                                $"{time.TotalSeconds:n1}", ex.Message);
-                        }
-                    );
-
-                policy.Execute(() =>
-                {
-                    if (ConsumerConfig == null)
-                        this.kafkaConsumer = this.ConsumerConfigMethod();
-                });
-
-                if (IsConnectedConsumer)
-                {
-                    _logger.LogInformation(
-                        "Kafka Client acquired a persistent connection to '{HostName}' and is subscribed to failure events",
-                        Dns.GetHostName());
-                    return true;
-                }
-                else
-                {
-                    _logger.LogCritical("FATAL ERROR: Kafka connections could not be created and opened");
-                    return false;
-                }
+                _logger.LogInformation(
+                    "Kafka Client acquired a persistent connection to '{HostName}' and is subscribed to failure events",
+                    Dns.GetHostName());
+                return true;
             }
+            else
+            {
+                _logger.LogCritical("FATAL ERROR: Kafka connections could not be created and opened");
+                return false;
+            }
+            //  }
         }
 
 
         public bool TryConnectProducer()
         {
             _logger.LogInformation("Kafka Client is trying to connect");
-            lock (sync_root)
+            //  lock (sync_root)
+            //   {
+            //var policy = RetryPolicy.Handle<SocketException>()
+            //    .Or<KafkaRetriableException>()
+            //    .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+            //        (ex, time) =>
+            //        {
+            //            _logger.LogWarning(ex,
+            //                "Kafka Client could not connect after {TimeOut}s ({ExceptionMessage})",
+            //                $"{time.TotalSeconds:n1}", ex.Message);
+            //        }
+            //    );
+
+            //policy.Execute(() =>
+            //{
+            if (ProducerConfig == null)
+                this.kafkaProducer = this.ProducerConfigMethod();
+            // });
+
+            if (IsConnectedProducer)
             {
-                var policy = RetryPolicy.Handle<SocketException>()
-                    .Or<KafkaRetriableException>()
-                    .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                        (ex, time) =>
-                        {
-                            _logger.LogWarning(ex,
-                                "Kafka Client could not connect after {TimeOut}s ({ExceptionMessage})",
-                                $"{time.TotalSeconds:n1}", ex.Message);
-                        }
-                    );
-
-                policy.Execute(() =>
-                {
-                    if (ProducerConfig == null)
-                        this.kafkaProducer = this.ProducerConfigMethod();
-                });
-
-                if (IsConnectedProducer)
-                {
-                    _logger.LogInformation(
-                        "Kafka Client acquired a persistent connection to '{HostName}' and is subscribed to failure events",
-                        Dns.GetHostName());
-                    return true;
-                }
-                else
-                {
-                    _logger.LogCritical("FATAL ERROR: Kafka connections could not be created and opened");
-                    return false;
-                }
+                _logger.LogInformation(
+                    "Kafka Client acquired a persistent connection to '{HostName}' and is subscribed to failure events",
+                    Dns.GetHostName());
+                return true;
             }
+            else
+            {
+                _logger.LogCritical("FATAL ERROR: Kafka connections could not be created and opened");
+                return false;
+            }
+            //  }
         }
         public void Dispose()
         {

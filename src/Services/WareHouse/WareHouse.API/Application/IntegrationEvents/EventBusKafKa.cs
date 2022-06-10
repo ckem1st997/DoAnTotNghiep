@@ -44,7 +44,7 @@ namespace WareHouse.API.IntegrationEvents
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             // đăng ký xử lý
-          //  eventBus.Subscribe<InwardIntegrationEvent, InwardIntegrationEventHandler>();
+            //  eventBus.Subscribe<InwardIntegrationEvent, InwardIntegrationEventHandler>();
         }
     }
 }

@@ -52,7 +52,7 @@ namespace KafKa.Net
                        _logger.LogWarning(ex, "Kafka Client could not connect after {TimeOut}s ({ExceptionMessage})", $"{time.TotalSeconds:n1}", ex.Message);
                    }
                );
-
+            
             policy.Execute(() =>
             {
                 new Thread(() => StartConsumerLoop(stoppingToken)).Start();

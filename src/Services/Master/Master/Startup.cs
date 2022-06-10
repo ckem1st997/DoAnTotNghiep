@@ -64,8 +64,8 @@ namespace Master
 
             });
             services.AddSingleton<IKafKaConnection, KafKaConnection>();
-            //services.AddEventBus(Configuration);
-            //services.AddHostedService<RequestTimeConsumer>();
+            services.AddEventBus(Configuration);
+            services.AddHostedService<RequestTimeConsumer>();
 
             // call http to grpc
             AppContext.SetSwitch(
@@ -150,9 +150,6 @@ namespace Master
                 loggingBuilder.AddSeq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl,
                     apiKey: "0QEfAbE4THZTcUu6I7bQ");
             });
-            // kafka pro by sage
-            //    services.AddSingleton<IKafKaConnection, KafKaConnection>();
-            //   services.AddEventBus(Configuration);
         }
 
 
@@ -180,7 +177,7 @@ namespace Master
                 endpoints.MapControllers();
                 endpoints.MapHub<ConnectRealTimeHub>("/signalr");
             });
-          //  app.ConfigureEventBus();
+            app.ConfigureEventBus();
         }
 
 

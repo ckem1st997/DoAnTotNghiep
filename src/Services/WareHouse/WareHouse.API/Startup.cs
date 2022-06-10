@@ -141,7 +141,7 @@ namespace WareHouse.API
                 endpoints.MapGrpcService<GrpcGetDataWareHouseService>().EnableGrpcWeb();
                 endpoints.MapControllers();
             });
-            //   app.ConfigureEventBus();
+               app.ConfigureEventBus();
         }
     }
 }
