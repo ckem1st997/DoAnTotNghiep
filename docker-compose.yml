@@ -196,16 +196,17 @@ services:
           - "1337:1337"
       volumes:
           - ./storage/konga:/konga
-  # angular:
-  #     image: warehouse
-  #     container_name: angular
-  #     build:
-  #       context: src/WebClient/WareHouse/
-  #       dockerfile: ./Dockerfile
-  #     environment:
-  #         NODE_ENV: production
-  #     ports:
-  #         - 4200:80
+          
+  angular:
+       image: warehouse
+       container_name: angular
+       build:
+         context: src/WebClient/WareHouse/
+         dockerfile: ./Dockerfile
+       environment:
+           NODE_ENV: production
+       ports:
+           - 4200:80
 
 networks:
     kong-net:

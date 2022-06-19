@@ -4,7 +4,7 @@
 # This is needed to build and compile our code 
 # while generating the docker image
 # lấy thư viện node
-FROM node:16.13.2-alpine  AS build
+FROM node:14.17.4  AS build
 # Create a Virtual directory inside the docker image
 # tạo thư mục ảo trong image
 WORKDIR /dist/src/app

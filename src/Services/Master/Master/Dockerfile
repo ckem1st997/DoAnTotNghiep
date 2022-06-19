@@ -8,9 +8,9 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["src/Services/Master/Master/Master.csproj", "src/Services/Master/Master/"]
-COPY ["BaseDoAnTotNghiep/BaseDoAnTotNghiep.csproj", "BaseDoAnTotNghiep/"]
-COPY ["src/Services/KafKa.Net/KafKa.Net.csproj", "src/Services/KafKa.Net/"]
 COPY ["src/Services/Master/Infrastructure/Infrastructure.csproj", "src/Services/Master/Infrastructure/"]
+COPY ["src/Services/Base/Base/Base.csproj", "src/Services/Base/Base/"]
+COPY ["src/Services/KafKa.Net/KafKa.Net.csproj", "src/Services/KafKa.Net/"]
 RUN dotnet restore "src/Services/Master/Master/Master.csproj"
 COPY . .
 WORKDIR "/src/src/Services/Master/Master"
