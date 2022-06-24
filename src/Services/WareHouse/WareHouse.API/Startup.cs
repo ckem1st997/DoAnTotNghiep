@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +31,7 @@ using Grpc.Net.ClientFactory;
 using GrpcGetDataToWareHouse;
 using WareHouse.API.IntegrationEvents;
 using KafKa.Net;
+using WareHouse.API.Application.Extensions;
 
 namespace WareHouse.API
 {
@@ -47,6 +48,7 @@ namespace WareHouse.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            SetLicense();
             services.AddCustomConfiguration(Configuration);
             services.AddMapper();
             services.AddValidator();
@@ -142,6 +144,17 @@ namespace WareHouse.API
                 endpoints.MapControllers();
             });
                app.ConfigureEventBus();
+        }
+
+
+        private static void SetLicense()
+        {
+            new Aspose.BarCode.License().SetLicense(AsposeHelper.BarCodeLicenseStream);
+            new Aspose.Cells.License().SetLicense(AsposeHelper.CellsLicenseStream);
+            new Aspose.Pdf.License().SetLicense(AsposeHelper.PdfLicenseStream);
+            new Aspose.Words.License().SetLicense(AsposeHelper.WordsLicenseStream);
+            // Fix tương thích trên .NET Core
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
     }
 }
