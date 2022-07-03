@@ -33,9 +33,9 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouses
             if (request.KeySearch == null)
                 request.KeySearch = "";
             StringBuilder sbCount = new StringBuilder();
-            sbCount.Append("SELECT COUNT(*) FROM ( select * from WareHouse where ");
+            sbCount.Append("SELECT COUNT(*) FROM ( select Id,Code,Name,Address,Description,Inactive from WareHouse where ");
             StringBuilder sb = new StringBuilder();
-            sb.Append("select * from WareHouse where ");
+            sb.Append("select Id,Code,Name,Address,Description,Inactive from WareHouse where ");
             if (request.Active != null)
             {
                 sb.Append("  Inactive =@active and ");
