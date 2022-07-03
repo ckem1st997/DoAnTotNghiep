@@ -21,6 +21,8 @@ using WareHouse.API.Controllers.BaseController;
 using WareHouse.API.Application.Querie.CheckCode;
 using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Model;
+using WareHouse.Domain.IRepositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WareHouse.API.Controllers
 {
@@ -28,12 +30,41 @@ namespace WareHouse.API.Controllers
     {
         private readonly IMediator _mediat;
         private readonly ICacheExtension _cacheExtension;
+        private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
 
-        public WareHousesController(IMediator mediat, ICacheExtension cacheExtension)
+
+        public WareHousesController(IMediator mediat, ICacheExtension cacheExtension, IRepositoryEF<Domain.Entity.WareHouse> repository)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
+            _repository = repository;
         }
+        #region Raw
+
+        [AllowAnonymous]
+        [HttpGet("CreateWareHouse")]
+        public async Task<IActionResult> CreateWareHouse()
+        {
+            for (int i = 0; i < 1000000; i++)
+            {
+                await _repository.AddAsync(new Domain.Entity.WareHouse()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Code = Guid.NewGuid().ToString(),
+                    Address = Guid.NewGuid().ToString(),
+                    Inactive = true,
+                    Name = "Kho tạm " + i,
+                });
+            }
+            var res = await _repository.UnitOfWork.SaveEntitiesAsync();
+            return Ok(res);
+        }
+
+        #endregion
+
+
+
+
 
         #region R
 
