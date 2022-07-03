@@ -13,6 +13,14 @@ using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Queries.Paginated.WareHouses
 {
+    /// <summary>
+    /// Đánh index, nên order by theo thứ tự index hoặc order by theo cột đánh index đầu tiên
+    /// nếu order by Address hoặc Description hoặc OnDelete thì sẽ rất chậm, nếu order by theo Name
+    /// Thì sẽ rất nhanh vì đứng ở đầu index
+    /// select * from WareHouse where  OnDelete=0 order by Name OFFSET 0 ROWS FETCH NEXT 15 ROWS ONLY
+    ///--CREATE INDEX WareHouse_index_name
+    ///--ON WareHouse(Name, Address, Description, OnDelete);
+    /// </summary>
     public class PaginatedWareHouseCommandHandler : IRequestHandler<PaginatedWareHouseCommand, IPaginatedList<WareHouseDTO>>
     {
         private readonly IDapper _repository;
@@ -43,8 +51,8 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouses
             }
             if (!string.IsNullOrEmpty(request.KeySearch))
             {
-                sb.Append("  (Code like @key or Name like @key )  and ");
-                sbCount.Append("  (Code like @key or Name like @key ) and ");
+                sb.Append("  ( Name like @key or Code like @key  )  and ");
+                sbCount.Append("  ( Name like @key or Code like @key) and ");
             }
             sb.Append("  OnDelete=0 ");
             sbCount.Append("  OnDelete=0 ");
