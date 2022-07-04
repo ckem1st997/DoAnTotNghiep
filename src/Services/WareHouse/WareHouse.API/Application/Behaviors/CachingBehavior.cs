@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Serilog;
 using WareHouse.API.Application.Cache;
 using WareHouse.API.Application.Cache.CacheName;
 
@@ -17,15 +18,13 @@ namespace WareHouse.API.Application.Behaviors
         where TRequest : ICacheableMediatrQuery
     {
         private readonly IDistributedCache _cache;
-        private readonly ILogger _logger;
         private readonly CacheSettings _settings;
         private readonly IConfiguration _configuration;
         private readonly ICacheExtension _cacheExtension;
 
-        public CachingBehavior(ICacheExtension cacheExtension, IConfiguration configuration, IDistributedCache cache, ILogger<TResponse> logger, IOptions<CacheSettings> settings)
+        public CachingBehavior(ICacheExtension cacheExtension, IConfiguration configuration, IDistributedCache cache, IOptions<CacheSettings> settings)
         {
             _cache = cache;
-            _logger = logger;
             _settings = settings.Value;
             _configuration = configuration;
             _cacheExtension = cacheExtension;
@@ -39,7 +38,7 @@ namespace WareHouse.API.Application.Behaviors
             // nếu không connect được thì lấy data ở dưới db
             if (request.BypassCache || !_cacheExtension.IsConnected)
             {
-                _logger.LogInformation("Redis not connected !");
+                Log.Information("Redis not connected !");
                 return await next();
             }
             // nếu data null thì chạy đến request tiếp theo để lấy data và gán vào cache
@@ -47,12 +46,12 @@ namespace WareHouse.API.Application.Behaviors
             if (cachedResponse is not null)
             {
                 response = JsonConvert.DeserializeObject<TResponse>(Encoding.UTF8.GetString(cachedResponse));
-                _logger.LogInformation($"Fetched from Cache -> '{request.CacheKey}'.");
+                Log.Information($"Fetched from Cache -> '{request.CacheKey}'.");
             }
             else
             {
                 response = await GetResponseAndAddToCache();
-                _logger.LogInformation($"Added to Cache -> '{request.CacheKey}'.");
+                Log.Information($"Added to Cache -> '{request.CacheKey}'.");
             }
             async Task<TResponse> GetResponseAndAddToCache()
             {

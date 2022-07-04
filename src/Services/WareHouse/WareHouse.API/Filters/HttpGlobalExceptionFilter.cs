@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -50,8 +51,8 @@ namespace WareHouse.API.Filters
             }
             else if (context.Exception.GetType() == typeof(RedisConnectionException))
             {
-                logger.LogError("Redis not connected !");
-                logger.LogError(context.Exception.Message.ToString());
+                Log.Error("Redis not connected !");
+                Log.Error(context.Exception.Message.ToString());
                 var problemDetails = new ValidationProblemDetails()
                 {
                     Instance = context.HttpContext.Request.Path,

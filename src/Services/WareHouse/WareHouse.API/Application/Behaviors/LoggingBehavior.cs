@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,7 @@ namespace WareHouse.API.Application.Behaviors
             var checkConnectoDb = await _dbContext.Database.CanConnectAsync();
             if (!checkConnectoDb)
             {
-                _logger.LogError("Can not connect to database");
+                Log.Error("Can not connect to database");
                 throw new ArgumentException(new Exception().Message);
             }
             //if (_userSevice != null && await _userSevice.GetUser() != null)
@@ -44,12 +45,19 @@ namespace WareHouse.API.Application.Behaviors
             //}
             request.GetType().GetProperties().ToList().ForEach(p =>
             {
-                _logger.LogInformation("----- {PropertyName} : {PropertyValue}", p.Name, p.GetValue(request));
+                Log.Information("----- {PropertyName} : {PropertyValue}", p.Name, p.GetValue(request));
+              //  _logger.LogInformation("----- {PropertyName} : {PropertyValue}", p.Name, p.GetValue(request));
             });
-            _logger.LogInformation("----- Handling command {CommandName} ({@Command})", request.GetGenericTypeName(), request);
-            _logger.LogInformation("----- Handling command {CommandName} ({@Command})", "", request);
+            Log.Information("----- Handling command {CommandName} ({@Command})", request.GetGenericTypeName(), request);
+            Log.Information("----- Handling command {CommandName} ({@Command})", "", request);
             var response = await next();
-            _logger.LogInformation("----- Command {CommandName} handled - response: {@Response}", "", response);
+            Log.Information("----- Command {CommandName} handled - response: {@Response}", "", response);
+
+
+            //_logger.LogInformation("----- Handling command {CommandName} ({@Command})", request.GetGenericTypeName(), request);
+            //_logger.LogInformation("----- Handling command {CommandName} ({@Command})", "", request);
+            //var response = await next();
+            //_logger.LogInformation("----- Command {CommandName} handled - response: {@Response}", "", response);
 
             return response;
         }

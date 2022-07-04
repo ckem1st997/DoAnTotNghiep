@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using Serilog.Context;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace WareHouse.API.Application.Behaviors
             ILogger<TransactionBehaviour<TRequest, TResponse>> logger)
         {
             _dbContext = dbContext ?? throw new ArgumentException(nameof(WarehouseManagementContext));
-            _logger = logger ?? throw new ArgumentException(nameof(ILogger));
+            _logger = logger ?? throw new ArgumentException(nameof(Microsoft.Extensions.Logging.ILogger));
         }
 
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
@@ -46,11 +47,11 @@ namespace WareHouse.API.Application.Behaviors
                     using (var transaction = await _dbContext.BeginTransactionAsync())
                     using (LogContext.PushProperty("TransactionContext", transaction.TransactionId))
                     {
-                        _logger.LogInformation("----- Begin transaction {TransactionId} for {CommandName} ({@Command})", transaction.TransactionId, typeName, request);
+                        Log.Information("----- Begin transaction {TransactionId} for {CommandName} ({@Command})", transaction.TransactionId, typeName, request);
 
                         response = await next();
 
-                        _logger.LogInformation("----- Commit transaction {TransactionId} for {CommandName}", transaction.TransactionId, typeName);
+                        Log.Information("----- Commit transaction {TransactionId} for {CommandName}", transaction.TransactionId, typeName);
                         await _dbContext.CommitTransactionAsync(transaction);
 
                         transactionId = transaction.TransactionId;
@@ -62,7 +63,7 @@ namespace WareHouse.API.Application.Behaviors
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "ERROR Handling transaction for {CommandName} ({@Command})", "", request);
+                Log.Error(ex, "ERROR Handling transaction for {CommandName} ({@Command})", "", request);
 
                 throw;
             }

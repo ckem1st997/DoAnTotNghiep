@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,7 +51,7 @@ namespace WareHouse.API.Filters
             }
             catch (RpcException e)
             {
-                _logger.LogError("Error calling via grpc: {Status} - {Message}", e.Status, e.Message);
+                Log.Error("Error calling via grpc: {Status} - {Message}", e.Status, e.Message);
                 return default;
             }
         }

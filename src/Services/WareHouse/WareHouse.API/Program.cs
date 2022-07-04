@@ -79,7 +79,7 @@ namespace WareHouse.API
                //    AutoRegisterTemplate = true,
                //    IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name.ToLower()}-{DateTime.UtcNow:yyyy-MM}"
                //})
-               // cần phải connect đến lgstash trước khi create index to kibana
+               // cần phải connect đến logstash trước khi create index to kibana
                .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl)
                .ReadFrom.Configuration(configuration)
                 .CreateLogger();

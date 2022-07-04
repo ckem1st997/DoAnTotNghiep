@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace WareHouse.API.Application.Behaviors
         {
             // var typeName = request.GetGenericTypeName();
 
-             _logger.LogInformation("----- Validating command ");
+            Log.Information("----- Validating command ");
 
             var failures = _validators
                 .Select(v => v.Validate(request))
@@ -35,7 +36,7 @@ namespace WareHouse.API.Application.Behaviors
 
             if (failures.Any())
             {
-                _logger.LogWarning("Validation errors - {CommandType} - Command: {@Command} - Errors: {@ValidationErrors}", "", request, failures);
+                Log.Warning("Validation errors - {CommandType} - Command: {@Command} - Errors: {@ValidationErrors}", "", request, failures);
                 string error = "";
                 foreach (var item in failures)
                 {
