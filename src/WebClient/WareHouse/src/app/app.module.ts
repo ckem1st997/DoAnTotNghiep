@@ -112,6 +112,7 @@ import { SelectWareHouseComponent } from './method/edit/selectWareHouse/selectWa
 import { PagesHomeCenterComponent } from './pages/PagesHomeCenter/PagesHomeCenter.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
 import { SignalRService } from './service/SignalR.service';
+import { HttpCancelService } from './extension/HttpCancel.service';
 const customNotifierOptions: NotifierOptions = {
   position: {
     horizontal: {
@@ -276,7 +277,7 @@ const customNotifierOptions: NotifierOptions = {
     provide: HTTP_INTERCEPTORS,
     useClass: ErrorIntercept,
     multi: true
-  },HeaderComponent,SignalRService],
+  },HeaderComponent,SignalRService,HttpCancelService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

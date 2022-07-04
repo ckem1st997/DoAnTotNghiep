@@ -1,11 +1,12 @@
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, retry, catchError, throwError, map } from "rxjs";
+import { Observable, retry, catchError, throwError, map, takeUntil } from "rxjs";
 import { LoadingService } from "../service/Loading.service";
 import { AuthenticationService } from 'src/app/extension/Authentication.service';
-import { Router } from "@angular/router";
+import { ActivationEnd, Router } from "@angular/router";
 import { NotifierService } from "angular-notifier";
 import { MatDialog } from "@angular/material/dialog";
+import { HttpCancelService } from "./HttpCancel.service";
 /// bắt lỗi toàn client
 @Injectable()
 export class ErrorIntercept implements HttpInterceptor {
@@ -14,13 +15,23 @@ export class ErrorIntercept implements HttpInterceptor {
         private service: AuthenticationService,
         private router: Router,
         private notife: NotifierService,
-        private dialogRef: MatDialog
-    ) { }
+        private dialogRef: MatDialog,
+        private httpCancelService: HttpCancelService
+    ) {
+        router.events.subscribe(event => {
+            // An event triggered at the end of the activation part of the Resolve phase of routing.
+            // if (event instanceof ActivationEnd) {
+            //   // Cancel pending calls
+            //   this.httpCancelService.cancelPendingRequests(window.location.href);
+            // }
+        });
+     }
     intercept(
         request: HttpRequest<any>,
         next: HttpHandler
     ): Observable<HttpEvent<any>> {
         this._loading.setLoading(true, request.url);
+        console.log(request.url);
         if (this.service.userCheck)
             request = request.clone({
                 setHeaders: { Authorization: `Bearer ${this.service.userValue.token}` }
@@ -72,6 +83,7 @@ export class ErrorIntercept implements HttpInterceptor {
                     this._loading.setLoading(false, request.url);
                 }
                 return evt;
-            }));
+            }))
+            //.pipe(takeUntil(this.httpCancelService.onCancelPendingRequests()));
     }
 }

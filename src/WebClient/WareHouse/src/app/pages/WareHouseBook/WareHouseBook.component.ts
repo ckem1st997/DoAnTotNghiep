@@ -332,7 +332,7 @@ export class WareHouseBookComponent implements OnInit, OnDestroy {
       this.model.active = res.inactive;
       this.model.fromDate = res.end !== null ? new Date(res.start).toLocaleDateString() : null;
       this.model.toDate = res.start !== null ? new Date(res.end).toLocaleDateString() : null;
-      this.model.typeWareHouseBook = res.type==undefined?"":res.key
+      this.model.typeWareHouseBook = res.type==undefined?"":res.type
       this.GetData();
     });
   }

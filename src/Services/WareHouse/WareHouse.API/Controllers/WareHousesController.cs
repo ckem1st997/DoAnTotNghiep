@@ -23,6 +23,7 @@ using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Model;
 using WareHouse.Domain.IRepositories;
 using Microsoft.AspNetCore.Authorization;
+using WareHouse.Domain.Entity;
 
 namespace WareHouse.API.Controllers
 {
@@ -31,13 +32,18 @@ namespace WareHouse.API.Controllers
         private readonly IMediator _mediat;
         private readonly ICacheExtension _cacheExtension;
         private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
+        private readonly IRepositoryEF<Domain.Entity.Outward> _repository1;
+        private readonly IRepositoryEF<Domain.Entity.Inward> _repository2;
 
 
-        public WareHousesController(IMediator mediat, ICacheExtension cacheExtension, IRepositoryEF<Domain.Entity.WareHouse> repository)
+
+        public WareHousesController(IMediator mediat, ICacheExtension cacheExtension, IRepositoryEF<Domain.Entity.WareHouse> repository, IRepositoryEF<Domain.Entity.Outward> repository1, IRepositoryEF<Inward> repository2)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
             _repository = repository;
+            _repository1 = repository1;
+            _repository2 = repository2;
         }
         #region Raw
 
@@ -59,6 +65,124 @@ namespace WareHouse.API.Controllers
             var res = await _repository.UnitOfWork.SaveEntitiesAsync();
             return Ok(res);
         }
+
+        [AllowAnonymous]
+        [HttpGet("CreateIn")]
+        public async Task<IActionResult> CreateIn()
+        {
+            var item = new string[3];
+            item[0] = "15f148b2-f324-4376-8e40-a07315544dd5";
+            item[1] = "ae973639-135a-48d7-8f04-0e5bfa660d1a";
+            item[2] = "eda15932-8f25-47d1-b568-0641d078e06d";
+
+            var itemUnit = new string[3];
+            itemUnit[0] = "422aa3b8-93d8-4e5c-acaf-8c1a491e4d0a";
+            itemUnit[1] = "0eb2a9a3-4b6b-4a7b-af94-e5804c5d7b8d";
+            itemUnit[2] = "e71dce44-bdfd-4f17-ade3-aa5054c87be8";
+
+
+            var itemwh = new string[3];
+            itemwh[0] = "a3da7204-ec66-4f62-8c8a-72cda7740044";
+            itemwh[1] = "84fd821c-2984-470b-8c1b-5123f7ddbd10";
+            itemwh[2] = "fc8c5689-2d04-4dcf-9ed3-26f4c1522e0d";
+
+            for (int i = 0; i < 500; i++)
+            {
+                await Task.Delay(1000);
+                if (i % 2 == 0)
+                {
+                    var inwid = Guid.NewGuid().ToString();
+                    var timenow = DateTime.Now;
+                    var en = new Domain.Entity.Outward()
+                    {
+                        Id = inwid,
+                        CreatedBy = "9a5fc419-63e0-423e-98f6-058c164c7a9b",
+                        CreatedDate = timenow,
+                        ModifiedDate = timenow,
+                        VoucherCode = inwid,
+                        VoucherDate = timenow,
+                        Deliver = "Bên Test",
+                        Receiver = "Bên Test 1",
+                        Reason = "Nguyễn Văn B ",
+                        Description = "Test",
+                        DeliverPhone = "1234567890",
+                        DeliverAddress = "Hà Nội",
+                        DeliverDepartment = "CNTT",
+                        ReceiverPhone = "1111111111",
+                        ReceiverDepartment = "Hà Nội",
+                    };
+                    var rdj = new Random().Next(1, 3);
+                    var id = Guid.NewGuid().ToString();
+                    var itemm = new OutwardDetail()
+                    {
+                        Id = id,
+                        OutwardId = en.Id,
+                        ItemId = item[rdj],
+                        UnitId = itemUnit[rdj],
+                        Uiquantity = 5,
+                        Uiprice = 70000,
+                        Quantity = 15,
+                        Amount = 35000,
+                        Price = 35000
+
+                    };
+                    en.WareHouseId = itemwh[rdj];
+                    en.OutwardDetails.Add(itemm);
+                    await _repository1.AddAsync(en);
+                    Console.WriteLine(i);
+                }
+                else
+                {
+
+                    var inwid = Guid.NewGuid().ToString();
+                    var timenow = DateTime.Now;
+                    var en = new Domain.Entity.Inward()
+                    {
+                        Id = inwid,
+                        CreatedBy = "9a5fc419-63e0-423e-98f6-058c164c7a9b",
+                        CreatedDate = timenow,
+                        ModifiedDate = timenow,
+                        VoucherCode = inwid,
+                        VoucherDate = timenow,
+                        Deliver = "Bên Test",
+                        Receiver = "Bên Test 1",
+                        VendorId = "68c36a4a-ee7b-4ac1-b5d5-c6f7cdb40250",
+                        Reason = "Nguyễn Văn B ",
+                        Description = "Test",
+                        DeliverPhone = "1234567890",
+                        DeliverAddress = "Hà Nội",
+                        DeliverDepartment = "CNTT",
+                        ReceiverPhone = "1111111111",
+                        ReceiverDepartment = "Hà Nội",
+                    };
+                    var rdj = new Random().Next(1, 3);
+                    var id = Guid.NewGuid().ToString();
+                    var itemm = new InwardDetail()
+                    {
+                        Id = id,
+                        InwardId = en.Id,
+                        ItemId = item[rdj],
+                        UnitId = itemUnit[rdj],
+                        Uiquantity = 5,
+                        Uiprice = 70000,
+                        Quantity = 15,
+                        Amount = 35000,
+                        Price = 35000
+
+                    };
+                    en.WareHouseId = itemwh[rdj];
+                    en.InwardDetails.Add(itemm);
+                    await _repository2.AddAsync(en);
+                    Console.WriteLine(i);
+                }
+
+            }
+            await _repository1.UnitOfWork.SaveEntitiesAsync();
+
+
+            return Ok(1);
+        }
+
 
         #endregion
 

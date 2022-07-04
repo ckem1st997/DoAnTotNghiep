@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -56,43 +57,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
                 return null;
             request.KeySearch = request.KeySearch?.Trim() ?? "";
             request.TypeWareHouseBook = request.TypeWareHouseBook?.Trim() ?? "";
-            StringBuilder sb = new StringBuilder();
-            StringBuilder sbCount = new StringBuilder();
-            sbCount.Append("SELECT COUNT(*) FROM (  ");
-            sbCount.Append("select d1.Id from  ");
-            sbCount.Append(
-                "(select Inward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu nhập' as Type,Inward.OnDelete from Inward inner join InwardDetail on Inward.Id=InwardDetail.InwardId ");
-            sbCount.Append("union all  ");
-            sbCount.Append(
-                "select Outward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu xuất' as Type,Outward.OnDelete from Outward inner join OutwardDetail on Outward.Id=OutwardDetail.OutwardId ) d1 ");
-            sbCount.Append(" where ");
 
-
-            sb.Append("select d1.*,WareHouse.Name as WareHouseName from  ");
-            sb.Append(
-                "(select Inward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu nhập' as Type,Inward.OnDelete from Inward inner join InwardDetail on Inward.Id=InwardDetail.InwardId ");
-            sb.Append("union all  ");
-            sb.Append(
-                "select Outward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu xuất' as Type,Outward.OnDelete from Outward inner join OutwardDetail on Outward.Id=OutwardDetail.OutwardId ) d1 ");
-            sb.Append(" inner join WareHouse on d1.WareHouseID=WareHouse.Id ");
-            sb.Append(" where ");
-            if (request.FromDate.HasValue)
-            {
-                sb.Append(" d1.VoucherDate>=@fromDate and ");
-                sbCount.Append(" d1.VoucherDate>=@fromDate and ");
-            }
-
-            if (request.ToDate.HasValue)
-            {
-                sb.Append(" d1.VoucherDate<=@toDate and ");
-                sbCount.Append(" d1.VoucherDate<=@toDate and ");
-            }
-
-            if (request.KeySearch.HasValue())
-            {
-                sb.Append(" (d1.Reason like @key or d1.VoucherCode like @key) and ");
-                sbCount.Append(" (d1.Reason like @key or d1.VoucherCode like @key) and ");
-            }
             var user = await _context.GetUser();
             //get list id Chidren
             var departmentIds = new List<string>();
@@ -123,33 +88,97 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
                 if (user.RoleNumber < 3)
                     departmentIds = departmentIds.Where(x => user.WarehouseId.Contains(x)).ToList();
             }
-
-
+            StringBuilder sb = new StringBuilder();
+            StringBuilder sbCount = new StringBuilder();
+            //query count
+            sbCount.Append("SELECT COUNT(*) FROM (  ");
+            sbCount.Append("select d1.Id from  ");
+            sbCount.Append(
+                "(select Inward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu nhập' as Type,Inward.OnDelete from Inward inner join InwardDetail on Inward.Id=InwardDetail.InwardId ");
+            sbCount.Append(" where ");
+            if (request.FromDate.HasValue)
+                sbCount.Append(" Inward.VoucherDate>=@fromDate and ");
+            if (request.ToDate.HasValue)
+                sbCount.Append(" Inward.VoucherDate<=@toDate and ");
+            if (request.KeySearch.HasValue())
+                sbCount.Append(" (Inward.Reason like @key or Inward.VoucherCode like @key) and ");
             if (request.WareHouseId.HasValue() && departmentIds.Count() > 0 || user.RoleNumber < 3)
-            {
-                sb.Append(" d1.WareHouseId in @WareHouseId and ");
-                sbCount.Append(" d1.WareHouseId in @WareHouseId and ");
-            }
-            if (request.TypeWareHouseBook.HasValue() && (request.TypeWareHouseBook == TypeWareHouseBook.In ||
-                                                         request.TypeWareHouseBook == TypeWareHouseBook.Out))
-            {
-                sb.Append(" d1.Type=@type and ");
-                sbCount.Append(" d1.Type=@type and ");
-            }
+                sbCount.Append(" Inward.WareHouseId in @WareHouseId and ");
+            sbCount.Append(" Inward.OnDelete=0  ");
 
-            sb.Append("    ");
-            sb.Append(" d1.OnDelete=0  ");
+
+
+
+            sbCount.Append("union all  ");
+            sbCount.Append(
+                "select Outward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu xuất' as Type,Outward.OnDelete from Outward inner join OutwardDetail on Outward.Id=OutwardDetail.OutwardId  ");
+            sbCount.Append(" where ");
+            if (request.FromDate.HasValue)
+                sbCount.Append(" Outward.VoucherDate>=@fromDate and ");
+            if (request.ToDate.HasValue)
+                sbCount.Append(" Outward.VoucherDate<=@toDate and ");
+            if (request.KeySearch.HasValue())
+                sbCount.Append(" (Outward.Reason like @key or Outward.VoucherCode like @key) and ");
+            if (request.WareHouseId.HasValue() && departmentIds.Count() > 0 || user.RoleNumber < 3)
+                sbCount.Append(" Outward.WareHouseId in @WareHouseId and ");
+            sbCount.Append(" Outward.OnDelete=0  ");
+            sbCount.Append(" ) d1  ");
+
+
+            #region querySelect
+            //query select
+
+            sb.Append(" select  top(" + request.Take + ") d1.*,WareHouse.Name as WareHouseName from  ");
+            //query inward
+            sb.Append(
+                "(select Inward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu nhập' as Type,Inward.OnDelete from Inward inner join InwardDetail on Inward.Id=InwardDetail.InwardId  ");
+
+            sb.Append(" where ");
+            if (request.FromDate.HasValue)
+                sb.Append(" Inward.VoucherDate>=@fromDate and ");
+            if (request.ToDate.HasValue)
+                sb.Append(" Inward.VoucherDate<=@toDate and ");
+            if (request.KeySearch.HasValue())
+                sb.Append(" (Inward.Reason like @key or Inward.VoucherCode like @key) and ");
+            if (request.WareHouseId.HasValue() && departmentIds.Count() > 0 || user.RoleNumber < 3)
+                sb.Append(" Inward.WareHouseId in @WareHouseId and ");
+            sb.Append(" Inward.OnDelete=0 order by Inward.VoucherDate desc  OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY  ");
+            sb.Append("union all  ");
+            ////query outward
+            sb.Append(
+                " select Outward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu xuất' as Type,Outward.OnDelete from Outward inner join OutwardDetail on Outward.Id=OutwardDetail.OutwardId  ");
+            sb.Append(" where ");
+            if (request.FromDate.HasValue)
+                sb.Append(" Outward.VoucherDate>=@fromDate and ");
+            if (request.ToDate.HasValue)
+                sb.Append(" Outward.VoucherDate<=@toDate and ");
+            if (request.KeySearch.HasValue())
+                sb.Append(" (Outward.Reason like @key or Outward.VoucherCode like @key) and ");
+            if (request.WareHouseId.HasValue() && departmentIds.Count() > 0 || user.RoleNumber < 3)
+                sb.Append(" Outward.WareHouseId in @WareHouseId and ");
+            sb.Append(" Outward.OnDelete=0 order by Outward.VoucherDate desc  OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY  ");
+            sb.Append(" ) d1 ");
+            sb.Append(" inner join WareHouse on d1.WareHouseID=WareHouse.Id ");
+
+            if (request.TypeWareHouseBook.Equals(TypeWareHouseBook.In) || request.TypeWareHouseBook.Equals(TypeWareHouseBook.Out))
+                sb.Append(" where d1.Type=N'" + (request.TypeWareHouseBook.Equals(TypeWareHouseBook.In) ? TypeWareHouseBook.In : TypeWareHouseBook.Out) + "' ");
+            //sb.Append("  and  ");
+            //sb.Append(" d1.OnDelete=0  ");
             sb.Append(" group by d1.Id,d1.WareHouseID,d1.CreatedBy,d1.Deliver,d1.Reason,d1.Type,d1.VoucherCode,d1.VoucherDate,d1.ModifiedBy,d1.Receiver,d1.OnDelete,WareHouse.Name ");
             sb.Append("  order by d1.VoucherDate desc  ");
-            sb.Append("OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
+            //  sb.Append(" OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
+            #endregion
 
-            sbCount.Append("    ");
-            sbCount.Append(" d1.OnDelete=0 ");
+
+            sbCount.Append("  inner join WareHouse on d1.WareHouseID=WareHouse.Id    ");
+            if (request.TypeWareHouseBook.Equals(TypeWareHouseBook.In) || request.TypeWareHouseBook.Equals(TypeWareHouseBook.Out))
+                sbCount.Append(" where d1.Type=N'" + (request.TypeWareHouseBook.Equals(TypeWareHouseBook.In) ? TypeWareHouseBook.In : TypeWareHouseBook.Out) + "' ");
+            sbCount.Append(" ");
             sbCount.Append(" group by d1.Id,d1.WareHouseID,d1.CreatedBy,d1.Deliver,d1.Reason,d1.Type,d1.VoucherCode,d1.VoucherDate,d1.ModifiedBy,d1.Receiver,d1.OnDelete ");
             sbCount.Append(" ) t   ");
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@key", '%' + request.KeySearch + '%');
-            parameter.Add("@type", request.TypeWareHouseBook);
+            //   parameter.Add("@type", "N' + request.KeySearch + '");
             if (!request.WareHouseId.HasValue() && user.RoleNumber < 3)
             {
                 var list = new List<string>();
