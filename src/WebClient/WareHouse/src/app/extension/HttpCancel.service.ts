@@ -9,18 +9,18 @@ export class HttpCancelService {
 
   private pendingHTTPRequests$ = new Subject<void>();
 
-constructor(        private _loading: LoadingService,
+  constructor(private _loading: LoadingService,
   ) { }
 
-// Cancel Pending HTTP calls
-public cancelPendingRequests(url:string) {
-  this.pendingHTTPRequests$.next();
-  this._loading.setLoading(false, url);
+  // Cancel Pending HTTP calls
+  public cancelPendingRequests(url: string) {
+    this.pendingHTTPRequests$.next();
+    this._loading.setLoading(false, url);
 
-}
+  }
 
-public onCancelPendingRequests() {
-  return this.pendingHTTPRequests$.asObservable();
-}
+  public onCancelPendingRequests() {
+    return this.pendingHTTPRequests$.asObservable();
+  }
 
 }
