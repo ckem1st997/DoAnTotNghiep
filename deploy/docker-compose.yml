@@ -3,6 +3,7 @@ version: '3.4'
 services:
 
   elasticsearch:
+    container_name: elasticsearch
     build:
       context: elk/elasticsearch/
     volumes:
@@ -14,6 +15,8 @@ services:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
 
   logstash:
+    container_name: logstash
+    restart: always
     build:
       context: elk/logstash/
     volumes:
@@ -27,6 +30,7 @@ services:
       - elasticsearch
 
   kibana:
+    container_name: kibana
     build:
       context: elk/kibana/
     volumes:
