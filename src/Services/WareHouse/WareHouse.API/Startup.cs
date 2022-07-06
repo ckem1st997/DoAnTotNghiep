@@ -32,6 +32,7 @@ using GrpcGetDataToWareHouse;
 using WareHouse.API.IntegrationEvents;
 using KafKa.Net;
 using WareHouse.API.Application.Extensions;
+using Nest;
 
 namespace WareHouse.API
 {
@@ -83,6 +84,14 @@ namespace WareHouse.API
             services.AddGrpc(options => { options.EnableDetailedErrors = true; });
             services.AddSingleton<IKafKaConnection, KafKaConnection>();
             services.AddEventBus(Configuration);
+
+            services.AddScoped<IElasticClient, ElasticClient>(sp =>
+            {
+                var settings = new ConnectionSettings(new Uri("http://localhost:9200/")).DefaultIndex("mssql");
+                return new ElasticClient(settings);
+            });
+
+
             AppContext.SetSwitch(
   "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             var httpHandler = new HttpClientHandler();
@@ -143,7 +152,7 @@ namespace WareHouse.API
                 endpoints.MapGrpcService<GrpcGetDataWareHouseService>().EnableGrpcWeb();
                 endpoints.MapControllers();
             });
-               app.ConfigureEventBus();
+            app.ConfigureEventBus();
         }
 
 
