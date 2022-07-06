@@ -8,6 +8,18 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
    #   ZOOKEEPER_TICK_TIME: 2000
+  
+  logstash:
+    build: ./logstash
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    ports:
+      - 3030:3030
+    container_name: logstashSql
+    restart: always
+    volumes:
+      - ./logstash/config:/usr/share/logstash/pipeline
+
 
   broker:
     image: confluentinc/cp-kafka:7.0.1
@@ -208,9 +220,11 @@ services:
        ports:
            - 4200:80
 
+
+
 networks:
-    kong-net:
-        name: kong-net
-        driver: bridge
+  kong-net:
+    name: kong-net
+    driver: bridge
         
 

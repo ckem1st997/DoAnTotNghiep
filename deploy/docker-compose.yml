@@ -39,3 +39,6 @@ services:
       - "5601:5601"
     depends_on:
       - elasticsearch
+networks:
+  elasticsearch:
+    driver: bridge
