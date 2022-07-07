@@ -15,6 +15,8 @@ using System.Net;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog.Sinks.Elasticsearch;
 using System.Reflection;
+using Microsoft.AspNetCore.Builder;
+using Serilog.Events;
 
 namespace WareHouse.API
 {
@@ -26,11 +28,18 @@ namespace WareHouse.API
 
             Log.Logger = CreateSerilogLogger(configuration);
             Log.Information("Starting up");
+            Log.Information(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
             CreateHostBuilder(args).Build().Run();
+            WebApplication.CreateBuilder(new WebApplicationOptions
+            {
+                EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+            });
         }
+
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
                  Host.CreateDefaultBuilder(args)
+            //.UseSerilog()
                          .ConfigureLogging(logging =>
                          {
                              logging.AddFilter("Grpc", LogLevel.Debug);
@@ -66,6 +75,7 @@ namespace WareHouse.API
 
             var seqServerUrl = configuration["Serilog:SeqServerUrl"];
             var logstashUrl = configuration["Serilog:LogstashgUrl"];
+            Console.WriteLine(seqServerUrl + " " + logstashUrl);
             return new LoggerConfiguration()
                 .MinimumLevel.Verbose()
                 .Enrich.WithProperty("ApplicationContext", "WareHouse")
@@ -86,9 +96,11 @@ namespace WareHouse.API
 
         static IConfiguration GetConfiguration()
         {
+            var appjon = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals(Environments.Production) ? "appsettings.Production.json" : "appsettings.Development.json";
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+          .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
                 .AddEnvironmentVariables();
 
             var config = builder.Build();

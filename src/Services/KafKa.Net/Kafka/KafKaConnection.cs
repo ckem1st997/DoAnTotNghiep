@@ -42,6 +42,7 @@ namespace KafKa.Net
             Topic = _configuration["KafKaTopic"];
             GroupId = _configuration["KafKaGroupId"];
             BootstrapServers = _configuration["KafKaBootstrapServers"];
+            Console.WriteLine(BootstrapServers);
             connectionName = _configuration["KafKaconnectionName"];
             this.kafkaConsumer = ConsumerConfigMethod();
             this.kafkaProducer = ProducerConfigMethod();

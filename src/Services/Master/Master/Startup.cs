@@ -129,7 +129,7 @@ namespace Master
             services.AddCors(o => o.AddPolicy("AllowAll", builder =>
             {
                 builder.AllowAnyOrigin()
-                .WithOrigins("http://localhost:4200,http://localhost:8000")
+                .WithOrigins("http://localhost:4200,http://localhost:8000,http://host.docker.internal:8000")
                        .AllowAnyMethod()
                        .AllowAnyHeader()
                        .SetIsOriginAllowed(host => true)

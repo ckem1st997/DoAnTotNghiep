@@ -42,7 +42,7 @@ namespace WareHouse.API.IntegrationEvents
 
         public static void ConfigureEventBus(this IApplicationBuilder app)
         {
-            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+          //  var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             // đăng ký xử lý
             //  eventBus.Subscribe<InwardIntegrationEvent, InwardIntegrationEventHandler>();
         }

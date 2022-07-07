@@ -131,6 +131,7 @@ services:
     depends_on:
       - redis
       - sqlserver
+      - broker
     environment:
       # - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_ENVIRONMENT=Production
@@ -152,6 +153,7 @@ services:
     depends_on:
       - redis
       - sqlserver
+      - broker
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:5001
@@ -265,6 +267,8 @@ services:
          dockerfile: ./Dockerfile
        environment:
            NODE_ENV: production
+       depends_on:
+        - master-api
        ports:
            - 4200:80
 
