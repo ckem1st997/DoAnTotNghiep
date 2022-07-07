@@ -76,8 +76,7 @@ namespace Master
                 HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
             services.AddGrpcClient<GrpcGetDataWareHouse.GrpcGetDataWareHouseClient>(o =>
             {
-                o.Address = Configuration.GetValue<bool>("UsingDocker") ? new Uri("http://host.docker.internal:5006") : new Uri("http://localhost:5006");
-
+                o.Address = new Uri(Configuration.GetValue<string>("Grpc:Port"));
             }).AddInterceptor<GrpcExceptionInterceptor>(InterceptorScope.Client).ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(httpHandler));
 
             services.Configure<PasswordHasherOptions>(option =>

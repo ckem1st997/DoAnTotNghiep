@@ -57,11 +57,9 @@ namespace WareHouse.API
             services.AddCache(Configuration);
             services.AddApiVersioning(x =>
             {
-                // setup ApiVersion v1 
                 x.DefaultApiVersion = new ApiVersion(1, 0);
                 x.AssumeDefaultVersionWhenUnspecified = true;
                 x.ReportApiVersions = true;
-                //    x.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
             });
             services.AddCors(o => o.AddPolicy("AllowAll", builder =>
             {
@@ -100,7 +98,7 @@ namespace WareHouse.API
                 HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
             services.AddGrpcClient<GrpcGetData.GrpcGetDataClient>(o =>
                 {
-                    o.Address = Configuration.GetValue<bool>("UsingDocker") ? new Uri("http://host.docker.internal:50000") : new Uri("http://localhost:50000");
+                    o.Address =  new Uri(Configuration.GetValue<string>("Grpc:Port"));
                 }).AddInterceptor<GrpcExceptionInterceptor>(InterceptorScope.Client)
                 .ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(httpHandler));
             // Adding Authentication  

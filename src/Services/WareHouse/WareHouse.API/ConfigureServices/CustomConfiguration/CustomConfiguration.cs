@@ -55,7 +55,7 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WH.API", Version = "v1" });
             });
-            var sqlConnect = configuration.GetValue<bool>("UsingDocker") ? configuration.GetConnectionString("WarehouseManagementContextDocker") : configuration.GetConnectionString("WarehouseManagementContext");
+            var sqlConnect = configuration.GetConnectionString("WarehouseManagementContext");
             services.AddDbContext<WarehouseManagementContext>(options =>
             {
                 options.UseSqlServer(sqlConnect,

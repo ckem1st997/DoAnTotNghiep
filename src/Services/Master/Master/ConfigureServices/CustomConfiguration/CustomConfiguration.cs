@@ -34,11 +34,9 @@ namespace Master.ConfigureServices.CustomConfiguration
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
                 options.Filters.Add(typeof(CustomValidationAttribute));
             })
-                //   .AddApplicationPart(typeof(WareHousesController).Assembly)
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.WriteIndented = true;
-                    //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
                 }).AddNewtonsoftJson();
             services.Configure<ApiBehaviorOptions>(options =>
             {
@@ -46,9 +44,9 @@ namespace Master.ConfigureServices.CustomConfiguration
             });
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "DDD.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MASTER.API", Version = "v1" });
             });
-            var sqlConnect = configuration.GetValue<bool>("UsingDocker") ? configuration.GetConnectionString("MasterdataContextDocker") : configuration.GetConnectionString("MasterdataContext");
+            var sqlConnect =  configuration.GetConnectionString("MasterdataContext");
             Console.WriteLine(sqlConnect);
             services.AddDbContext<MasterdataContext>(options =>
             {
@@ -61,35 +59,12 @@ namespace Master.ConfigureServices.CustomConfiguration
             },
                        ServiceLifetime.Scoped  //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
                    );
-            //  services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
             services.AddScoped<IDapper, Dapperr>();
             services.AddScoped<IUserService, UserService>();
-            //   services.AddScoped<IConnectRealTimeHub, ConnectRealTimeHub>();
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-
             services.AddMediatR(Assembly.GetExecutingAssembly());
-            //   services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
         }
 
-        //public static ILoggingBuilder UseSerilog(this ILoggingBuilder builder, IConfiguration configuration)
-        //{
-        //    var seqServerUrl = configuration["Serilog:SeqServerUrl"];
-        //    var logstashUrl = configuration["Serilog:LogstashgUrl"];
-
-        //    Log.Logger = new LoggerConfiguration()
-        //        .MinimumLevel.Verbose()
-        //        .Enrich.WithProperty("ApplicationContext", "Products")
-        //        .Enrich.FromLogContext()
-        //        .WriteTo.Console()
-        //        //https://datalust.co/seq
-        //        .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl, apiKey: "vNdhiRHZqJJGWYAkYVlc")
-        //        //  .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:8080" : logstashUrl)
-        //        .ReadFrom.Configuration(configuration)
-        //        .CreateLogger();
-
-        //    return builder;
-        //}
     }
 }

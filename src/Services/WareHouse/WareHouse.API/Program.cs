@@ -66,7 +66,6 @@ namespace WareHouse.API
 
             var seqServerUrl = configuration["Serilog:SeqServerUrl"];
             var logstashUrl = configuration["Serilog:LogstashgUrl"];
-            Console.WriteLine(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl);
             return new LoggerConfiguration()
                 .MinimumLevel.Verbose()
                 .Enrich.WithProperty("ApplicationContext", "WareHouse")

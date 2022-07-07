@@ -31,7 +31,6 @@ export class ErrorIntercept implements HttpInterceptor {
         next: HttpHandler
     ): Observable<HttpEvent<any>> {
         this._loading.setLoading(true, request.url);
-        console.log(request.url);
         if (this.service.userCheck)
             request = request.clone({
                 setHeaders: { Authorization: `Bearer ${this.service.userValue.token}` }

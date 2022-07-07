@@ -13,7 +13,7 @@ namespace WareHouse.API.Application.Cache
             services.AddDistributedMemoryCache();
             // Register the RedisCache service
             //  services.AddMemoryCache();
-            var stringConnect = configuration.GetValue<bool>("UsingDocker") ? configuration.GetSection("Redis")["ConnectionStringDocker"] : configuration.GetSection("Redis")["ConnectionString"];
+            var stringConnect = configuration.GetSection("Redis")["ConnectionString"];
             var connect = new ConfigurationOptions
             {
                 Password = configuration.GetSection("Redis")["Password"],

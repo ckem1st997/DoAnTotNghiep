@@ -18,13 +18,11 @@ namespace WareHouse.Infrastructure.Repositories
     public class Dapperr : IDapper
     {
         private readonly IConfiguration _config;
-      //  private string Connectionstring = "WarehouseManagementContext";
         private string Connectionstring = "WarehouseManagementContext";
 
         public Dapperr(IConfiguration config)
         {
             _config = config;
-            Connectionstring = _config.GetValue<bool>("UsingDocker") ? "WarehouseManagementContextDocker" : "WarehouseManagementContext";
         }
 
         public void Dispose()
