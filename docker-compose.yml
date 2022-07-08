@@ -156,15 +156,15 @@ services:
       - broker
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://0.0.0.0:5001
+      - ASPNETCORE_URLS=http://0.0.0.0:50001
       #- ConnectionString=${MasterdataContext:-Server=sqlserver;Initial Catalog=MasterData;Persist Security Info=True;User ID=sa;Password=Aa!0977751021;MultipleActiveResultSets = true}
       #- PATH_BASE=/warehouse-api
       #- Redis=${ConnectionString:-redis}
       - GRPC_PORT=81
       - PORT=80
     ports:
-      - "5001:5001"
-      - "5000:5000"
+      - "50001:50001"
+      - "50000:50000"
    
   kong-database:
     image: postgres:9.6

@@ -128,13 +128,17 @@ namespace Master
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddCors(o => o.AddPolicy("AllowAll", builder =>
             {
+                //builder.AllowAnyOrigin()
+                //.WithOrigins("http://localhost:4200,http://localhost:8000,http://host.docker.internal:8000,http://angular:4200,http://kong:8000")
+                //       .AllowAnyMethod()
+                //       .AllowAnyHeader()
+                //       .SetIsOriginAllowed(host => true)
+                //       .AllowCredentials()
+                //       .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
                 builder.AllowAnyOrigin()
-                .WithOrigins("http://localhost:4200,http://localhost:8000,http://host.docker.internal:8000")
-                       .AllowAnyMethod()
-                       .AllowAnyHeader()
-                       .SetIsOriginAllowed(host => true)
-                       .AllowCredentials()
-                       .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
+                   .AllowAnyMethod()
+                   .AllowAnyHeader()
+                   .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
             }));
             services.AddSignalR(options =>
             {
@@ -157,12 +161,12 @@ namespace Master
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+          //  if (env.IsDevelopment())
+          //  {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BasicAuth v1"));
-            }
+          //  }
             //  app.UseHttpsRedirection();
 
             app.UseRouting();

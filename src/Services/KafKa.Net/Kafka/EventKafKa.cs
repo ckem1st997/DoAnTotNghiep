@@ -6,6 +6,7 @@ using KafKa.Net.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Polly.Retry;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,7 +66,7 @@ namespace KafKa.Net.Kafka
             {
                 var eventName = @event.GetType().Name;
 
-                _logger.LogTrace("Creating KafKa Topic to publish event: {EventId} ({EventName})", @event.Id, eventName);
+                Log.Information("Creating KafKa Topic by EnventBus to publish event: {EventId} ({EventName})", @event.Id, eventName);
                 var producer = _persistentConnection.ProducerConfig;
                 var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
                 {

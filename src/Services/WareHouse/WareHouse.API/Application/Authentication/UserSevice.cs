@@ -1,5 +1,6 @@
 ﻿using Base.Events;
 using GrpcGetDataToMaster;
+using Serilog;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Model;
 
@@ -40,6 +41,7 @@ namespace WareHouse.API.Application.Authentication
                 Read = create.Read
             };
             var res = await _client.CreateHistoryAsync(model);
+            Log.Information("Creating KafKa Topic by Service to publish event: {EventId} ({EventName})", create.Id, nameof(CreateHistoryIntegrationEvent));
             return res.Check;
         }
 
