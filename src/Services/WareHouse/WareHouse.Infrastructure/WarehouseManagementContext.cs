@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -85,7 +86,7 @@ namespace WareHouse.Infrastructure
         {
             //string databasePath = $"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}WHSqliteDatabase.db";
             //optionsBuilder.UseSqlite($"Data Source={databasePath}");
-            optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLogging();
+            optionsBuilder.LogTo(Log.Information, LogLevel.Information).EnableSensitiveDataLogging();
          //   optionsBuilder.AddInterceptors(new SqlInterceptor(), new AadAuthenticationInterceptor());
 
         }

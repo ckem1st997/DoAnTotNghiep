@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
+using Serilog;
 using Serilog.Core;
 using System;
 using System.Collections.Concurrent;
@@ -45,6 +46,7 @@ namespace KafKa.Net
             connectionName = _configuration["KafKaconnectionName"];
             this.kafkaConsumer = ConsumerConfigMethod();
             this.kafkaProducer = ProducerConfigMethod();
+            Log.Information(BootstrapServers);
         }
 
         private IProducer<string, byte[]> ProducerConfigMethod()

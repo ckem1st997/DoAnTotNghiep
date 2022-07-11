@@ -15,6 +15,7 @@ using KafKa.Net.Abstractions;
 using Polly.Retry;
 using System.Net.Sockets;
 using Polly;
+using Serilog;
 
 namespace KafKa.Net
 {
@@ -64,6 +65,7 @@ namespace KafKa.Net
         [Obsolete]
         private async Task StartConsumerLoop(CancellationToken cancellationToken)
         {
+            Log.Information("Listen to Kafka");
             if (!_kafKaConnection.IsConnectedConsumer)
             {
                 _logger.LogInformation("Kafka Client is not connected");

@@ -66,7 +66,7 @@ namespace KafKa.Net.Kafka
             {
                 var eventName = @event.GetType().Name;
 
-                Log.Information("Creating KafKa Topic by EnventBus to publish event: {EventId} ({EventName})", @event.Id, eventName);
+                Log.Information("Creating KafKa Topic by EventBus to publish event: {EventId} ({EventName})", @event.Id, eventName);
                 var producer = _persistentConnection.ProducerConfig;
                 var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
                 {

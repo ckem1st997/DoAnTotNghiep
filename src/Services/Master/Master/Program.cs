@@ -65,39 +65,28 @@ namespace Master
 
             var seqServerUrl = configuration["Serilog:SeqServerUrl"];
             var logstashUrl = configuration["Serilog:LogstashgUrl"];
+            Console.WriteLine(seqServerUrl + " " + logstashUrl);
             return new LoggerConfiguration()
                 .MinimumLevel.Verbose()
                 .Enrich.WithProperty("ApplicationContext", "Master")
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                //https://datalust.co/seq
                 .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl, apiKey: "0QEfAbE4THZTcUu6I7bQ")
-                  .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl))
-                  {
-                      ModifyConnectionSettings = x => x.BasicAuthentication("elastic", "changeme"),
-                  })
-                .ReadFrom.Configuration(configuration)
+               .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl)
+               .ReadFrom.Configuration(configuration)
                 .CreateLogger();
         }
 
         static IConfiguration GetConfiguration()
         {
+            var appjon = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals(Environments.Production) ? "appsettings.Production.json" : "appsettings.Development.json";
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+          .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
                 .AddEnvironmentVariables();
 
             var config = builder.Build();
-
-            //if (config.GetValue<bool>("UseVault", false))
-            //{
-            //    TokenCredential credential = new ClientSecretCredential(
-            //        config["Vault:TenantId"],
-            //        config["Vault:ClientId"],
-            //        config["Vault:ClientSecret"]);
-            //    builder.AddAzureKeyVault(new Uri($"https://{config["Vault:Name"]}.vault.azure.net/"), credential);
-            //}
-
             return builder.Build();
         }
     }

@@ -3,6 +3,8 @@ using Infrastructure.Configurations;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Serilog;
+using Microsoft.Extensions.Logging;
 #nullable disable
 
 #nullable disable
@@ -18,6 +20,7 @@ namespace Infrastructure
         public MasterdataContext(DbContextOptions<MasterdataContext> options)
             : base(options)
         {
+            System.Diagnostics.Debug.WriteLine("MasterdataContext::ctor ->" + this.GetHashCode());
         }
 
         public virtual DbSet<HistoryNotication> HistoryNotications { get; set; }
@@ -25,11 +28,11 @@ namespace Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Data Source=localhost,5433;Initial Catalog=MasterData;Persist Security Info=True;User ID=sa;Password=Aa!0977751021");
-            }
-            optionsBuilder.LogTo(Console.WriteLine).EnableSensitiveDataLogging();
+            //if (!optionsBuilder.IsConfigured)
+            //{
+            //    optionsBuilder.UseSqlServer("Data Source=localhost,5433;Initial Catalog=MasterData;Persist Security Info=True;User ID=sa;Password=Aa!0977751021");
+            //}
+            optionsBuilder.LogTo(Log.Information, LogLevel.Information).EnableSensitiveDataLogging();
 
         }
 
