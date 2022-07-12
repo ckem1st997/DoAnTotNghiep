@@ -35,6 +35,9 @@ using WareHouse.API.Application.Extensions;
 using Nest;
 using Elasticsearch.Net;
 using Serilog;
+using static Nest.ConnectionSettings;
+using Newtonsoft.Json;
+using Nest.JsonNetSerializer;
 
 namespace WareHouse.API
 {
@@ -87,10 +90,14 @@ namespace WareHouse.API
 
             services.AddScoped<IElasticClient, ElasticClient>(sp =>
             {
-                var settings = new ConnectionSettings(new SingleNodeConnectionPool(new Uri("http://localhost:9200")), new InMemoryConnection())
-                .DefaultIndex("mssql-warehouse")
-                .DisableDirectStreaming()
-                .OnRequestCompleted(apiCallDetails =>
+                var connectionPool = new SingleNodeConnectionPool(new Uri(Configuration.GetValue<string>("Elastic:Url")));
+                var settings = new ConnectionSettings(connectionPool, (builtInSerializer, connectionSettings) =>
+                    new JsonNetSerializer(builtInSerializer, connectionSettings, () => new JsonSerializerSettings
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    })).DefaultIndex("mssqlwarehouse").DisableDirectStreaming()
+                    .PrettyJson()
+                    .OnRequestCompleted(apiCallDetails =>
                 {
                     var list = new List<string>();
                     // log out the request and the request body, if one exists for the type of request
@@ -116,6 +123,35 @@ namespace WareHouse.API
                         Log.Information($"Status: {apiCallDetails.HttpStatusCode}");
                     }
                 });
+                //var settings = new ConnectionSettings(new SingleNodeConnectionPool(new Uri("http://localhost:9200")), new InMemoryConnection())
+                //.DefaultIndex("mssql-warehouse")
+                //.DisableDirectStreaming()
+                //.OnRequestCompleted(apiCallDetails =>
+                //{
+                //    var list = new List<string>();
+                //    // log out the request and the request body, if one exists for the type of request
+                //    if (apiCallDetails.RequestBodyInBytes != null)
+                //    {
+                //        Log.Information(
+                //            $"{apiCallDetails.HttpMethod} {apiCallDetails.Uri} " +
+                //            $"{Encoding.UTF8.GetString(apiCallDetails.RequestBodyInBytes)}");
+                //    }
+                //    else
+                //    {
+                //        Log.Information($"{apiCallDetails.HttpMethod} {apiCallDetails.Uri}");
+                //    }
+
+                //    // log out the response and the response body, if one exists for the type of response
+                //    if (apiCallDetails.ResponseBodyInBytes != null)
+                //    {
+                //        Log.Information($"Status: {apiCallDetails.HttpStatusCode}" +
+                //                    $"{Encoding.UTF8.GetString(apiCallDetails.ResponseBodyInBytes)}");
+                //    }
+                //    else
+                //    {
+                //        Log.Information($"Status: {apiCallDetails.HttpStatusCode}");
+                //    }
+                //});
                 return new ElasticClient(settings);
             });
 
