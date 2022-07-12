@@ -27,6 +27,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.SignalRService;
+using WareHouse.API.Infrastructure.ElasticSearch;
 
 namespace WareHouse.API.ConfigureServices.CustomConfiguration
 {
@@ -69,6 +70,7 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
                        ServiceLifetime.Scoped  //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
                    );
             services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
+            services.AddScoped(typeof(IElasticSearchClient<>), typeof(ElasticSearchClient<>));
             services.AddScoped<IDapper, Dapperr>(sp =>
             {
                 var config = sp.GetRequiredService<IConfiguration>();
@@ -83,6 +85,8 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
             services.AddScoped(typeof(GetServiceByInterface<>));
+
+
         }
 
 

@@ -27,6 +27,7 @@ using WareHouse.Domain.Entity;
 using Nest;
 using WareHouse.API.Application.Queries.Paginated.WareHouseBook;
 using WareHouse.API.Application.Interface;
+using WareHouse.API.Infrastructure.ElasticSearch;
 
 namespace WareHouse.API.Controllers
 {
@@ -38,9 +39,10 @@ namespace WareHouse.API.Controllers
         private readonly IRepositoryEF<Domain.Entity.Outward> _repository1;
         private readonly IRepositoryEF<Domain.Entity.Inward> _repository2;
         private readonly IElasticClient _elasticClient;
+        private readonly IElasticSearchClient<WareHouseBookDTO> _elasticSearchClient;
 
 
-        public WareHousesController(IMediator mediat, ICacheExtension cacheExtension, IRepositoryEF<Domain.Entity.WareHouse> repository, IRepositoryEF<Domain.Entity.Outward> repository1, IRepositoryEF<Inward> repository2, IElasticClient elasticClient)
+        public WareHousesController(IMediator mediat, ICacheExtension cacheExtension, IRepositoryEF<Domain.Entity.WareHouse> repository, IRepositoryEF<Domain.Entity.Outward> repository1, IRepositoryEF<Inward> repository2, IElasticClient elasticClient, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
@@ -48,6 +50,7 @@ namespace WareHouse.API.Controllers
             _repository1 = repository1;
             _repository2 = repository2;
             _elasticClient = elasticClient;
+            _elasticSearchClient = elasticSearchClient;
         }
         #region Raw
 
@@ -61,6 +64,55 @@ namespace WareHouse.API.Controllers
                 data = res
             });
         }
+
+        [AllowAnonymous]
+        [HttpGet("DeleteAll")]
+        public async Task<IActionResult> DeleteAll()
+        {
+            var res = await _elasticClient.DeleteByQueryAsync<WareHouseBookDTO>(d => d.MatchAll());
+
+            return Ok(new ResultMessageResponse()
+            {
+                data = res
+            });
+        }
+
+
+        [AllowAnonymous]
+        [HttpPost("CreateDataWareHouseBook")]
+        public async Task<IActionResult> CreateDataWareHouseBook([FromBody]WareHouseBookDTO ware)
+        {
+            ware.Id = Guid.NewGuid().ToString();
+            var res = await _elasticSearchClient.InsertOrUpdateAsync(ware);
+            return Ok(new ResultMessageResponse()
+            {
+                data = await _elasticClient.SearchAsync<WareHouseBookDTO>(s => s.From(0).Size(150))
+            });
+        }
+         
+        
+        [AllowAnonymous]
+        [HttpPost("UpdateDataWareHouseBook")]
+        public async Task<IActionResult> UpdateDataWareHouseBook([FromBody] WareHouseBookDTO ware)
+        {
+            var res = await _elasticSearchClient.InsertOrUpdateAsync(ware);
+            return Ok(new ResultMessageResponse()
+            {
+                data = await _elasticClient.SearchAsync<WareHouseBookDTO>(s => s.From(0).Size(150))
+        });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("DeleteDataWareHouseBook")]
+        public async Task<IActionResult> DeleteDataWareHouseBook(IEnumerable<string> listIds)
+        {
+            var res = await _elasticSearchClient.DeleteManyAsync(listIds);
+            return Ok(new ResultMessageResponse()
+            {
+                data = await _elasticClient.SearchAsync<WareHouseBookDTO>(s => s.From(0).Size(150))
+            });
+        }
+
 
 
         [AllowAnonymous]
@@ -77,8 +129,8 @@ namespace WareHouse.API.Controllers
 
             //var response = _elasticClient.Search<WareHouseBookDTO>(request);
             var list = new PaginatedListDynamic();
-            var getlisst= await _elasticClient.SearchAsync<WareHouseBookDTO>(s => s.From(0).Size(15)
-            .Query(q => q.Term(t => t.WareHouseName, query) || q.Match(mq => mq.Field(f => f.WareHouseName).Query(query))));
+            var getlisst = await _elasticClient.SearchAsync<WareHouseBookDTO>(s => s.From(0).Size(15)
+             .Query(q => q.Term(t => t.WareHouseName, query) || q.Match(mq => mq.Field(f => f.WareHouseName).Query(query))));
             list.Result = getlisst.Hits;
             var t = await _elasticClient.CountAsync<
                 WareHouseBookDTO>(s => s.Query(q => q.Term(t => t.WareHouseName, query) || q.Match(mq => mq.Field(f => f.WareHouseName).Query(query))));

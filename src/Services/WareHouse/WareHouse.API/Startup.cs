@@ -95,7 +95,7 @@ namespace WareHouse.API
                     new JsonNetSerializer(builtInSerializer, connectionSettings, () => new JsonSerializerSettings
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                    })).DefaultIndex("mssqlwarehouse").DisableDirectStreaming()
+                    })).DefaultIndex(Configuration.GetValue<string>("Elastic:Index")).DisableDirectStreaming()
                     .PrettyJson()
                     .OnRequestCompleted(apiCallDetails =>
                 {
