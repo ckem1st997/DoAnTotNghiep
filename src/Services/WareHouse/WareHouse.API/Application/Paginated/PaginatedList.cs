@@ -17,4 +17,17 @@ namespace WareHouse.API.Application.Interface
             totalCount = 0;
         }
     }
+
+    public class PaginatedListDynamic
+    {
+        public dynamic Result { get; set; }
+
+        public dynamic totalCount { get; set; }
+
+        public PaginatedListDynamic()
+        {
+            Result = null;
+            totalCount = 0;
+        }
+    }
 }

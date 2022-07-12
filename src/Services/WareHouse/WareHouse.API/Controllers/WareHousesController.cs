@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Authorization;
 using WareHouse.Domain.Entity;
 using Nest;
 using WareHouse.API.Application.Queries.Paginated.WareHouseBook;
+using WareHouse.API.Application.Interface;
 
 namespace WareHouse.API.Controllers
 {
@@ -75,11 +76,16 @@ namespace WareHouse.API.Controllers
             //};
 
             //var response = _elasticClient.Search<WareHouseBookDTO>(request);
-            var res = await _elasticClient.SearchAsync<WareHouseBookDTO>(s => s.From(0).Size(15)
+            var list = new PaginatedListDynamic();
+            var getlisst= await _elasticClient.SearchAsync<WareHouseBookDTO>(s => s.From(0).Size(15)
             .Query(q => q.Term(t => t.WareHouseName, query) || q.Match(mq => mq.Field(f => f.WareHouseName).Query(query))));
+            list.Result = getlisst.Hits;
+            var t = await _elasticClient.CountAsync<
+                WareHouseBookDTO>(s => s.Query(q => q.Term(t => t.WareHouseName, query) || q.Match(mq => mq.Field(f => f.WareHouseName).Query(query))));
+            list.totalCount = t.Count;
             return Ok(new ResultMessageResponse()
             {
-                data = res
+                data = list
             });
         }
 
@@ -93,7 +99,7 @@ namespace WareHouse.API.Controllers
 
             var res = await _mediat.Send(new WareHouseBookgetAllCommand());
             if (res.Result.Any())
-                 await _elasticClient.IndexManyAsync(res.Result);
+                await _elasticClient.IndexManyAsync(res.Result);
             return Ok(new ResultMessageResponse()
             {
                 success = res.Result.Any()
