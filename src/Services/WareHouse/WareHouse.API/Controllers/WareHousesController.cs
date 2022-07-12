@@ -62,6 +62,28 @@ namespace WareHouse.API.Controllers
         }
 
 
+        [AllowAnonymous]
+        [HttpGet("GetList")]
+        public async Task<IActionResult> GetList(string query)
+        {
+            //var request = new SearchRequest
+            //{
+            //    From = 0,
+            //    Size = 10,
+            //    Query = new TermQuery { Field = "user", Value = "kimchy" } ||
+            //new MatchQuery { Field = "description", Query = "nest" }
+            //};
+
+            //var response = _elasticClient.Search<WareHouseBookDTO>(request);
+            var res = await _elasticClient.SearchAsync<WareHouseBookDTO>(s => s.From(0).Size(15)
+            .Query(q => q.Term(t => t.WareHouseName, query) || q.Match(mq => mq.Field(f => f.WareHouseName).Query(query))));
+            return Ok(new ResultMessageResponse()
+            {
+                data = res
+            });
+        }
+
+
 
         [AllowAnonymous]
         [HttpGet("GetDataWareHouseBook")]
