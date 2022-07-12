@@ -1,6 +1,7 @@
 ﻿using Base.Events;
 using GrpcGetDataToMaster;
 using Serilog;
+using System;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Model;
 
@@ -13,7 +14,7 @@ namespace WareHouse.API.Application.Authentication
 
         public UserSevice(GrpcGetData.GrpcGetDataClient client)
         {
-            _client = client;
+            _client = client?? throw new ArgumentNullException(nameof(client));
         }
 
         public async Task<bool> ActiveHistory(string UserName)

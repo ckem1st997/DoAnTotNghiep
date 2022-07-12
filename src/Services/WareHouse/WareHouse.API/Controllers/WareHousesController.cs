@@ -24,6 +24,7 @@ using WareHouse.API.Application.Model;
 using WareHouse.Domain.IRepositories;
 using Microsoft.AspNetCore.Authorization;
 using WareHouse.Domain.Entity;
+using Nest;
 
 namespace WareHouse.API.Controllers
 {
@@ -34,18 +35,36 @@ namespace WareHouse.API.Controllers
         private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
         private readonly IRepositoryEF<Domain.Entity.Outward> _repository1;
         private readonly IRepositoryEF<Domain.Entity.Inward> _repository2;
+        private readonly IElasticClient _elasticClient;
 
 
-
-        public WareHousesController(IMediator mediat, ICacheExtension cacheExtension, IRepositoryEF<Domain.Entity.WareHouse> repository, IRepositoryEF<Domain.Entity.Outward> repository1, IRepositoryEF<Inward> repository2)
+        public WareHousesController(IMediator mediat, ICacheExtension cacheExtension, IRepositoryEF<Domain.Entity.WareHouse> repository, IRepositoryEF<Domain.Entity.Outward> repository1, IRepositoryEF<Inward> repository2, IElasticClient elasticClient)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
             _repository = repository;
             _repository1 = repository1;
             _repository2 = repository2;
+            _elasticClient = elasticClient;
         }
         #region Raw
+
+        [AllowAnonymous]
+        [HttpGet("CreateWareHouse3")]
+        public async Task<IActionResult> CreateWareHouse3()
+        {
+
+            var person = new WareHouseDTO
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name= Guid.NewGuid().ToString()
+            };
+
+            var asyncIndexResponse = await _elasticClient.IndexDocumentAsync(person);
+            var searchResponse = _elasticClient.Search<WareHouseDTO>(s => s.From(0).Size(10));
+            return Ok(searchResponse.Documents);
+        }
+
 
         [AllowAnonymous]
         [HttpGet("CreateWareHouse")]

@@ -35,6 +35,7 @@ namespace WareHouse.API.Filters
             logger.LogError(new EventId(context.Exception.HResult),
                 context.Exception,
                 context.Exception.Message);
+            Log.Error(context.Exception + "|" + context.Exception.Message);
             if (context.Exception.GetType() == typeof(WareHouseDomainException))
             {
                 var problemDetails = new ValidationProblemDetails()
