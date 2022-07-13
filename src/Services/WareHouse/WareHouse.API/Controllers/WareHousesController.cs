@@ -55,6 +55,27 @@ namespace WareHouse.API.Controllers
         #region Raw
 
         [AllowAnonymous]
+        [HttpGet("FakeDataWareHouseBook")]
+        public async Task<IActionResult> FakeDataWareHouseBook()
+        {
+            var res = await _mediat.Send(new WareHouseBookgetAllCommand());
+            for (int i = 0; i < 5000; i++)
+            {
+                foreach (var item in res.Result)
+                {
+                    item.Id = Guid.NewGuid().ToString();
+                    await _elasticClient.IndexDocumentAsync(item);
+                }
+            }
+          
+            return Ok(new ResultMessageResponse()
+            {
+                success = res.Result.Any()
+            });
+        }
+
+
+        [AllowAnonymous]
         [HttpGet("CountDataWareHouseBook")]
         public async Task<IActionResult> CountDataWareHouseBook()
         {

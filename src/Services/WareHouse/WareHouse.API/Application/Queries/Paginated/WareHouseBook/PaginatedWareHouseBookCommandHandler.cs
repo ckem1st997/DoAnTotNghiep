@@ -145,9 +145,8 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
             }
 
 
-
             var searchRequest = new SearchDescriptor<WareHouseBookDTO>();
-            searchRequest.From(request.Skip).Size(request.Take).Query(q => q.Bool(b => b.Must(queryContainers.ToArray())));
+            searchRequest.From(request.Skip).Size(request.Take).Query(q => q.Bool(b => b.Must(queryContainers.ToArray()))).Sort(x => x.Descending(y => y.VoucherDate));
             var res = await _elasticClient.SearchAsync<WareHouseBookDTO>(searchRequest);
             if (res.Hits != null)
             {
