@@ -243,7 +243,30 @@ namespace WareHouse.API.Controllers
                     _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
 
                 }
+               
+
             }
+            if(data)
+            {
+                var resElastic = await _elasticSearchClient.InsertOrUpdateAsync(new WareHouseBookDTO()
+                {
+                    Id = inwardCommands.Id,
+                    CreatedBy = inwardCommands.CreatedBy,
+                    CreatedDate = inwardCommands.CreatedDate,
+                    Deliver = inwardCommands.Deliver,
+                    Description = inwardCommands.Description,
+                    ModifiedBy = inwardCommands.ModifiedBy,
+                    ModifiedDate = inwardCommands.ModifiedDate,
+                    Reason = inwardCommands.Reason,
+                    ReasonDescription = inwardCommands.ReasonDescription,
+                    Receiver = inwardCommands.Receiver,
+                    Type = "Phiếu nhập",
+                    VendorId = inwardCommands.VendorId,
+                    VoucherCode = inwardCommands.VoucherCode,
+                    VoucherDate = inwardCommands.VoucherDate,
+                    WareHouseId = inwardCommands.WareHouseId,
+                });
+            }    
 
             var result = new ResultMessageResponse()
             {
@@ -376,7 +399,7 @@ namespace WareHouse.API.Controllers
             {
                 var resElastic = await _elasticSearchClient.InsertOrUpdateAsync(new WareHouseBookDTO()
                 {
-                    Id = Guid.NewGuid().ToString(),
+                    Id = inwardCommands.Id,
                     CreatedBy = inwardCommands.CreatedBy,
                     CreatedDate = inwardCommands.CreatedDate,
                     Deliver = inwardCommands.Deliver,

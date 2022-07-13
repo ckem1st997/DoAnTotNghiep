@@ -38,6 +38,16 @@ namespace WareHouse.API.Infrastructure.ElasticSearch
             return res.IsValid;
         }
 
+        public bool InsertOrUpdate(T entity)
+        {
+            if (entity is null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+            var res =  _elasticClient.IndexDocument<T>(entity);
+            Log.Information($"InsertOrUpdate {nameof(T)} width result {res.IsValid}");
+            return res.IsValid;
+        }
 
         public async Task<bool> InsertOrUpdateAsync(T entity)
         {
