@@ -26,6 +26,7 @@ using KafKa.Net.Abstractions;
 using Serilog.Context;
 using Base.Events;
 using Microsoft.Extensions.Logging;
+using WareHouse.API.Infrastructure.ElasticSearch;
 
 namespace WareHouse.API.Controllers
 {
@@ -38,9 +39,10 @@ namespace WareHouse.API.Controllers
         private readonly ISignalRService _signalRService;
         private readonly IEventBus _eventBus;
         private readonly ILogger<InwardController> _logger;
+        private readonly IElasticSearchClient<WareHouseBookDTO> _elasticSearchClient;
 
 
-        public InwardController(ILogger<InwardController> logger, IEventBus bus, ISignalRService signalRService, IUserSevice userSevice, IFakeData ifakeData, IMediator mediat, ICacheExtension cacheExtension)
+        public InwardController(ILogger<InwardController> logger, IEventBus bus, ISignalRService signalRService, IUserSevice userSevice, IFakeData ifakeData, IMediator mediat, ICacheExtension cacheExtension, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
@@ -49,6 +51,7 @@ namespace WareHouse.API.Controllers
             _signalRService = signalRService;
             _eventBus = bus;
             _logger = logger;
+            _elasticSearchClient = elasticSearchClient;
         }
         #region R    
 
@@ -369,6 +372,27 @@ namespace WareHouse.API.Controllers
 
                 }
             }
+            if(data)
+            {
+                await _elasticSearchClient.InsertOrUpdateAsync(new WareHouseBookDTO()
+                {
+                    Id=Guid.NewGuid().ToString(),
+                    CreatedBy= inwardCommands.CreatedBy,
+                    CreatedDate= inwardCommands.CreatedDate,
+                    Deliver= inwardCommands.Deliver,
+                    Description= inwardCommands.Description,
+                    ModifiedBy= inwardCommands.ModifiedBy,
+                    ModifiedDate= inwardCommands.ModifiedDate,
+                    Reason= inwardCommands.Reason,
+                    ReasonDescription= inwardCommands.ReasonDescription,
+                    Receiver= inwardCommands.Receiver,
+                    Type="Phiếu nhập",
+                    VendorId= inwardCommands.VendorId,
+                    VoucherCode= inwardCommands.VoucherCode,
+                    VoucherDate= inwardCommands.VoucherDate,
+                    WareHouseId= inwardCommands.WareHouseId,
+                });
+            }    
 
             var result = new ResultMessageResponse()
             {

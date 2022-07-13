@@ -87,7 +87,7 @@ namespace WareHouse.Infrastructure
             //string databasePath = $"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}WHSqliteDatabase.db";
             //optionsBuilder.UseSqlite($"Data Source={databasePath}");
             optionsBuilder.LogTo(Log.Information, LogLevel.Information).EnableSensitiveDataLogging();
-         //   optionsBuilder.AddInterceptors(new SqlInterceptor(), new AadAuthenticationInterceptor());
+            //   optionsBuilder.AddInterceptors(new SqlInterceptor(), new AadAuthenticationInterceptor());
 
         }
 
@@ -99,7 +99,7 @@ namespace WareHouse.Infrastructure
             // side effects from the domain event handlers which are using the same DbContext with "InstancePerLifetimeScope" or "scoped" lifetime
             // B) Right AFTER committing data (EF SaveChanges) into the DB will make multiple transactions. 
             // You will need to handle eventual consistency and compensatory actions in case of failures in any of the Handlers. 
-         //   await _mediator.DispatchDomainEventsAsync(this);
+            //   await _mediator.DispatchDomainEventsAsync(this);
 
             // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
             // performed through the DbContext will be committed
@@ -120,8 +120,10 @@ namespace WareHouse.Infrastructure
 
         public async Task CommitTransactionAsync(IDbContextTransaction transaction)
         {
-            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
-            if (transaction != _currentTransaction) throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");
+            if (transaction == null)
+                throw new ArgumentNullException(nameof(transaction));
+            if (transaction != _currentTransaction)
+                throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");
 
             try
             {

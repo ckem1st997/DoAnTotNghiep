@@ -50,7 +50,7 @@ namespace KafKa.Net
                    .Or<KafkaRetriableException>()
                    .WaitAndRetry(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
                    {
-                       _logger.LogWarning(ex, "Kafka Client could not connect after {TimeOut}s ({ExceptionMessage})", $"{time.TotalSeconds:n1}", ex.Message);
+                       Log.Warning(ex, "Kafka Client could not connect after {TimeOut}s ({ExceptionMessage})", $"{time.TotalSeconds:n1}", ex.Message);
                    }
                );
             
@@ -68,7 +68,7 @@ namespace KafKa.Net
             Log.Information("Listen to Kafka");
             if (!_kafKaConnection.IsConnectedConsumer)
             {
-                _logger.LogInformation("Kafka Client is not connected");
+                Log.Error("Kafka Client is not connected");
                 _kafKaConnection.TryConnectConsumer();
             }
             else
@@ -89,7 +89,7 @@ namespace KafKa.Net
                     }
                     catch (ConsumeException e)
                     {
-                        Console.WriteLine($"Consume error: {e.Error.Reason}");
+                        Log.Error($"Consume error: {e.Error.Reason}");
                         this.kafkaConsumer.Close();
                         if (e.Error.IsFatal)
                         {
@@ -136,7 +136,7 @@ namespace KafKa.Net
             }
             else
             {
-                _logger.LogWarning("No subscription for KafKa event: {EventName}", eventName);
+                Log.Warning("No subscription for KafKa event: {EventName}", eventName);
             }
         }
 

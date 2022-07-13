@@ -1,6 +1,9 @@
 ﻿using System.Threading.Tasks;
 using WareHouse.API.Application.Model;
 using System.Collections.Generic;
+using WareHouse.API.Application.Interface;
+using WareHouse.API.Application.Queries.Paginated.WareHouseBook;
+
 namespace WareHouse.API.Infrastructure.ElasticSearch
 {
     public interface IElasticSearchClient<T> where T : BaseModel

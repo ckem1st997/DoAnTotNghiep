@@ -108,7 +108,7 @@ namespace KafKa.Net
 
         public bool TryConnectConsumer()
         {
-            _logger.LogInformation("Kafka Client is trying to connect");
+            Log.Information("Kafka Client is trying to connect");
             //  lock (sync_root)
             //  {
             //var policy = RetryPolicy.Handle<SocketException>()
@@ -130,14 +130,14 @@ namespace KafKa.Net
 
             if (IsConnectedConsumer)
             {
-                _logger.LogInformation(
+                Log.Information(
                     "Kafka Client acquired a persistent connection to '{HostName}' and is subscribed to failure events",
                     Dns.GetHostName());
                 return true;
             }
             else
             {
-                _logger.LogCritical("FATAL ERROR: Kafka connections could not be created and opened");
+                Log.Error("FATAL ERROR: Kafka connections could not be created and opened");
                 return false;
             }
             //  }
@@ -146,7 +146,7 @@ namespace KafKa.Net
 
         public bool TryConnectProducer()
         {
-            _logger.LogInformation("Kafka Client is trying to connect");
+            Log.Information("Kafka Client is trying to connect");
             //  lock (sync_root)
             //   {
             //var policy = RetryPolicy.Handle<SocketException>()
@@ -168,14 +168,14 @@ namespace KafKa.Net
 
             if (IsConnectedProducer)
             {
-                _logger.LogInformation(
+                Log.Information(
                     "Kafka Client acquired a persistent connection to '{HostName}' and is subscribed to failure events",
                     Dns.GetHostName());
                 return true;
             }
             else
             {
-                _logger.LogCritical("FATAL ERROR: Kafka connections could not be created and opened");
+                Log.Error("FATAL ERROR: Kafka connections could not be created and opened");
                 return false;
             }
             //  }
@@ -193,7 +193,7 @@ namespace KafKa.Net
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message.ToString());
+                Log.Error(ex.Message.ToString());
             }
         }
 

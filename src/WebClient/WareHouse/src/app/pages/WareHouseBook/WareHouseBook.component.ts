@@ -321,19 +321,24 @@ export class WareHouseBookComponent implements OnInit, OnDestroy {
   }
   //searchQueryDialog
   searchQueryDialog(): void {
+    console.log(this.model);
     const dialogRef = this.dialog.open(FormSearchWareHouseBookComponent, {
       width: '550px',
       height: '350px',
+      data: this.model
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      var res = result;
-      this.model.keySearch = res.key==undefined?"":res.key;
-      this.model.active = res.inactive;
-      this.model.fromDate = res.end !== null ? new Date(res.start).toLocaleDateString() : null;
-      this.model.toDate = res.start !== null ? new Date(res.end).toLocaleDateString() : null;
-      this.model.typeWareHouseBook = res.type==undefined?"":res.type
-      this.GetData();
+      if (result != undefined && result != null) {
+        var res = result;
+        this.model.keySearch = res.key == undefined ? "" : res.key;
+        this.model.active = res.inactive;
+        this.model.fromDate = res.start ;
+        this.model.toDate = res.end ;
+        this.model.typeWareHouseBook = res.type == undefined ? "" : res.type;
+        this.GetData();
+      }
+
     });
   }
   /** Whether the number of selected elements matches the total number of rows. */

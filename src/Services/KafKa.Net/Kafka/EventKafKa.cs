@@ -66,7 +66,7 @@ namespace KafKa.Net.Kafka
             {
                 var eventName = @event.GetType().Name;
 
-                Log.Information("Creating KafKa Topic by EventBus to publish event: {EventId} ({EventName})", @event.Id, eventName);
+                Log.Information($"Creating KafKa Topic by EventBus to publish event: {@event.Id} ({eventName})");
                 var producer = _persistentConnection.ProducerConfig;
                 var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
                 {
@@ -81,7 +81,7 @@ namespace KafKa.Net.Kafka
         public void SubscribeDynamic<TH>(string eventName)
             where TH : IDynamicIntegrationEventHandler
         {
-            _logger.LogInformation("Subscribing to dynamic event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
+            Log.Information($"Subscribing to dynamic event {eventName} with {typeof(TH).GetGenericTypeName()}" );
             _subsManager.AddDynamicSubscription<TH>(eventName);
         }
 
@@ -90,7 +90,7 @@ namespace KafKa.Net.Kafka
             where TH : IIntegrationEventHandler<T>
         {
             var eventName = _subsManager.GetEventKey<T>();
-            _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
+            Log.Information($"Subscribing to event {eventName} width {typeof(TH).GetGenericTypeName()}" );
             _subsManager.AddSubscription<T, TH>();
         }
 
@@ -101,7 +101,7 @@ namespace KafKa.Net.Kafka
         {
             var eventName = _subsManager.GetEventKey<T>();
 
-            _logger.LogInformation("Unsubscribing from event {EventName}", eventName);
+            Log.Information($"Unsubscribing from event {eventName}");
 
             _subsManager.RemoveSubscription<T, TH>();
         }
