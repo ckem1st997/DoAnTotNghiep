@@ -91,6 +91,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
                 if (user.RoleNumber < 3)
                     departmentIds = departmentIds.Where(x => user.WarehouseId.Contains(x)).ToList();
             }
+            // elastic sẽ mặc định trả về 10000 kết quả phù hợp nhất với yêu cầu tìm kiếm
             var queryContainers = new List<QueryContainer>();
             var descriptor = new QueryContainerDescriptor<WareHouseBookDTO>();
             if (!string.IsNullOrEmpty(request.KeySearch))

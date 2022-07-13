@@ -175,6 +175,12 @@ export class WareHouseBookComponent implements OnInit, OnDestroy {
       this.dataSource.data = list.data; setTimeout(() => {
         this.paginator.pageIndex = this.currentPage;
         this.paginator.length = list.totalCount;
+        console.log(this.paginator);
+        this.paginator._intl.getRangeLabel = (page: number, pageSize: number, length: number) => {
+          const start = page * pageSize + 1;
+          const end = (page + 1) * pageSize;
+          return `Trang số ${start} trên tổng số ${end} trang nằm trong ${list.totalCount} kết quả phù hợp !`;
+        };
       });
     });
     this.listDelete = [];
