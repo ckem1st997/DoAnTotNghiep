@@ -27,6 +27,7 @@ using Serilog.Context;
 using Base.Events;
 using Microsoft.Extensions.Logging;
 using WareHouse.API.Infrastructure.ElasticSearch;
+using Serilog;
 
 namespace WareHouse.API.Controllers
 {
@@ -235,12 +236,12 @@ namespace WareHouse.API.Controllers
                 };
                 using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
                 {
-                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent})", kafkaModel.Id, kafkaModel);
+                    Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel})");
                     if (_eventBus.IsConnectedProducer())
                         _eventBus.Publish(kafkaModel);
                     else
                         await _userSevice.CreateHistory(kafkaModel);
-                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
+                    Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel}) done...");
 
                 }
                
@@ -386,14 +387,15 @@ namespace WareHouse.API.Controllers
                 };
                 using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
                 {
-                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent})", kafkaModel.Id, kafkaModel);
+                    Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel})");
                     if (_eventBus.IsConnectedProducer())
                         _eventBus.Publish(kafkaModel);
                     else
                         await _userSevice.CreateHistory(kafkaModel);
-                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
+                    Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel}) done...");
 
                 }
+
             }
             if (data)
             {
@@ -449,14 +451,15 @@ namespace WareHouse.API.Controllers
                 };
                 using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
                 {
-                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent})", kafkaModel.Id, kafkaModel);
+                    Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel})");
                     if (_eventBus.IsConnectedProducer())
                         _eventBus.Publish(kafkaModel);
                     else
                         await _userSevice.CreateHistory(kafkaModel);
-                    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
+                    Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel}) done...");
 
                 }
+
             }
 
             var result = new ResultMessageResponse()
