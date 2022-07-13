@@ -372,27 +372,27 @@ namespace WareHouse.API.Controllers
 
                 }
             }
-            if(data)
+            if (data)
             {
-                await _elasticSearchClient.InsertOrUpdateAsync(new WareHouseBookDTO()
+                var resElastic = await _elasticSearchClient.InsertOrUpdateAsync(new WareHouseBookDTO()
                 {
-                    Id=Guid.NewGuid().ToString(),
-                    CreatedBy= inwardCommands.CreatedBy,
-                    CreatedDate= inwardCommands.CreatedDate,
-                    Deliver= inwardCommands.Deliver,
-                    Description= inwardCommands.Description,
-                    ModifiedBy= inwardCommands.ModifiedBy,
-                    ModifiedDate= inwardCommands.ModifiedDate,
-                    Reason= inwardCommands.Reason,
-                    ReasonDescription= inwardCommands.ReasonDescription,
-                    Receiver= inwardCommands.Receiver,
-                    Type="Phiếu nhập",
-                    VendorId= inwardCommands.VendorId,
-                    VoucherCode= inwardCommands.VoucherCode,
-                    VoucherDate= inwardCommands.VoucherDate,
-                    WareHouseId= inwardCommands.WareHouseId,
+                    Id = Guid.NewGuid().ToString(),
+                    CreatedBy = inwardCommands.CreatedBy,
+                    CreatedDate = inwardCommands.CreatedDate,
+                    Deliver = inwardCommands.Deliver,
+                    Description = inwardCommands.Description,
+                    ModifiedBy = inwardCommands.ModifiedBy,
+                    ModifiedDate = inwardCommands.ModifiedDate,
+                    Reason = inwardCommands.Reason,
+                    ReasonDescription = inwardCommands.ReasonDescription,
+                    Receiver = inwardCommands.Receiver,
+                    Type = "Phiếu nhập",
+                    VendorId = inwardCommands.VendorId,
+                    VoucherCode = inwardCommands.VoucherCode,
+                    VoucherDate = inwardCommands.VoucherDate,
+                    WareHouseId = inwardCommands.WareHouseId,
                 });
-            }    
+            }
 
             var result = new ResultMessageResponse()
             {
