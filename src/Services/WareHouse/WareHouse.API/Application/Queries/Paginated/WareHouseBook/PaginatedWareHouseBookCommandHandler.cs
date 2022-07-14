@@ -56,6 +56,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
         public async Task<IPaginatedList<WareHouseBookDTO>> Handle(PaginatedWareHouseBookCommand request,
             CancellationToken cancellationToken)
         {
+
             if (request == null)
                 return null;
             request.KeySearch = request.KeySearch?.Trim() ?? "";
@@ -91,96 +92,210 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
                 if (user.RoleNumber < 3)
                     departmentIds = departmentIds.Where(x => user.WarehouseId.Contains(x)).ToList();
             }
-            // elastic sẽ mặc định trả về 10000 kết quả phù hợp nhất với yêu cầu tìm kiếm
-            var queryContainers = new List<QueryContainer>();
-            var descriptor = new QueryContainerDescriptor<WareHouseBookDTO>();
-            if (!string.IsNullOrEmpty(request.KeySearch))
+            // sẽ search lâu vì sẽ dính exception
+            var check = await _elasticClient.Cluster.HealthAsync();
+            if (check.IsValid)
             {
-                queryContainers.Add(
-                    descriptor.Term(t => t.WareHouseName, request.KeySearch)
-                    || descriptor.Term(t => t.Reason, request.KeySearch)
-                    || descriptor.Term(t => t.Description, request.KeySearch)
-                    || descriptor.Term(t => t.Deliver, request.KeySearch)
-                    || descriptor.Match(mq => mq.Field(f => f.WareHouseName).Query(request.KeySearch))
-                    || descriptor.Match(mq => mq.Field(f => f.Reason).Query(request.KeySearch))
-                    || descriptor.Match(mq => mq.Field(f => f.Description).Query(request.KeySearch))
-                    || descriptor.Match(mq => mq.Field(f => f.Deliver).Query(request.KeySearch))
-                    );
-            }
-            if (request.FromDate.HasValue)
-            {
-                queryContainers.Add(descriptor.DateRange(x => x.Field(v => v.VoucherDate).GreaterThanOrEquals(request.FromDate)));
-            }
+                #region Elastic
 
-            if (request.ToDate.HasValue)
-            {
-                queryContainers.Add(descriptor.DateRange(x => x.Field(v => v.VoucherDate).LessThanOrEquals(request.ToDate)));
-            }
-
-            if (request.TypeWareHouseBook.Equals(TypeWareHouseBook.In) || request.TypeWareHouseBook.Equals(TypeWareHouseBook.Out))
-            {
-                queryContainers.Add(descriptor.Match(x => x.Field(v => v.Type).Query(request.TypeWareHouseBook)));
-            }
-
-            if (!request.WareHouseId.HasValue() && user.RoleNumber < 3)
-            {
-                var list = new List<string>();
-               // QueryContainer q = new QueryContainer();
-
-                var split = user.WarehouseId.Split(',').ToList();
-                if (split.Any())
+                // elastic sẽ mặc định trả về 10000 kết quả phù hợp nhất với yêu cầu tìm kiếm
+                var queryContainers = new List<QueryContainer>();
+                var descriptor = new QueryContainerDescriptor<WareHouseBookDTO>();
+                if (!string.IsNullOrEmpty(request.KeySearch))
                 {
-                    //for (int i = 0; i < split.Length; i++)
-                    //{
-                    //    q |= descriptor.Match(x => x.Field(v => v.WareHouseId).Query(split[i]));
-                    //}
-                    QueryContainer q = GetQueryByWareHouseId(split, descriptor);
+                    queryContainers.Add(
+                        descriptor.Term(t => t.WareHouseName, request.KeySearch)
+                        || descriptor.Term(t => t.Reason, request.KeySearch)
+                        || descriptor.Term(t => t.Description, request.KeySearch)
+                        || descriptor.Term(t => t.Deliver, request.KeySearch)
+                        || descriptor.Match(mq => mq.Field(f => f.WareHouseName).Query(request.KeySearch))
+                        || descriptor.Match(mq => mq.Field(f => f.Reason).Query(request.KeySearch))
+                        || descriptor.Match(mq => mq.Field(f => f.Description).Query(request.KeySearch))
+                        || descriptor.Match(mq => mq.Field(f => f.Deliver).Query(request.KeySearch))
+                        );
+                }
+                if (request.FromDate.HasValue)
+                {
+                    queryContainers.Add(descriptor.DateRange(x => x.Field(v => v.VoucherDate).GreaterThanOrEquals(request.FromDate)));
+                }
+
+                if (request.ToDate.HasValue)
+                {
+                    queryContainers.Add(descriptor.DateRange(x => x.Field(v => v.VoucherDate).LessThanOrEquals(request.ToDate)));
+                }
+
+                if (request.TypeWareHouseBook.Equals(TypeWareHouseBook.In) || request.TypeWareHouseBook.Equals(TypeWareHouseBook.Out))
+                {
+                    queryContainers.Add(descriptor.Match(x => x.Field(v => v.Type).Query(request.TypeWareHouseBook)));
+                }
+
+                if (!request.WareHouseId.HasValue() && user.RoleNumber < 3)
+                {
+                    var list = new List<string>();
+                    // QueryContainer q = new QueryContainer();
+
+                    var split = user.WarehouseId.Split(',').ToList();
+                    if (split.Any())
+                    {
+                        //for (int i = 0; i < split.Length; i++)
+                        //{
+                        //    q |= descriptor.Match(x => x.Field(v => v.WareHouseId).Query(split[i]));
+                        //}
+                        QueryContainer q = GetQueryByWareHouseId(split, descriptor);
+                        queryContainers.Add(q);
+                    }
+
+                }
+                else
+                {
+                    QueryContainer q = GetQueryByWareHouseId(departmentIds, descriptor);
                     queryContainers.Add(q);
                 }
 
+
+                var searchRequest = new SearchDescriptor<WareHouseBookDTO>();
+                searchRequest.From(request.Skip).Size(request.Take).Query(q => q.Bool(b => b.Must(queryContainers.ToArray()))).Sort(x => x.Descending(y => y.VoucherDate));
+                var res = await _elasticClient.SearchAsync<WareHouseBookDTO>(searchRequest);
+                if (res.Hits != null)
+                {
+                    var listget = new List<WareHouseBookDTO>();
+                    foreach (var item in res.Hits)
+                    {
+                        listget.Add(item.Source);
+                    }
+                    _list.Result = listget;
+                }
+                var countRequest = new CountDescriptor<WareHouseBookDTO>();
+                countRequest.Query(q => q.Bool(b => b.Must(queryContainers.ToArray())));
+                var resCount = await _elasticClient.CountAsync(countRequest);
+                _list.totalCount = (int)resCount.Count;
+
+                #endregion
+
             }
+
             else
             {
-                QueryContainer q = GetQueryByWareHouseId(departmentIds, descriptor);
-                queryContainers.Add(q);
-            }
+                #region Sql
 
 
-            var searchRequest = new SearchDescriptor<WareHouseBookDTO>();
-            searchRequest.From(request.Skip).Size(request.Take).Query(q => q.Bool(b => b.Must(queryContainers.ToArray()))).Sort(x => x.Descending(y => y.VoucherDate));
-            var res = await _elasticClient.SearchAsync<WareHouseBookDTO>(searchRequest);
-            if (res.Hits != null)
-            {
-                var listget = new List<WareHouseBookDTO>();
-                foreach (var item in res.Hits)
+                //sql
+                StringBuilder sb = new StringBuilder();
+                StringBuilder sbCount = new StringBuilder();
+                //query count
+                sbCount.Append("SELECT COUNT(*) FROM (  ");
+                sbCount.Append("select d1.Id from  ");
+                sbCount.Append(
+                    "(select Inward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu nhập' as Type,Inward.OnDelete from Inward inner join InwardDetail on Inward.Id=InwardDetail.InwardId ");
+                sbCount.Append(" where ");
+                if (request.FromDate.HasValue)
+                    sbCount.Append(" Inward.VoucherDate>=@fromDate and ");
+                if (request.ToDate.HasValue)
+                    sbCount.Append(" Inward.VoucherDate<=@toDate and ");
+                if (request.KeySearch.HasValue())
+                    sbCount.Append(" (Inward.Reason like @key or Inward.VoucherCode like @key) and ");
+                if (request.WareHouseId.HasValue() && departmentIds.Count() > 0 || user.RoleNumber < 3)
+                    sbCount.Append(" Inward.WareHouseId in @WareHouseId and ");
+                sbCount.Append(" Inward.OnDelete=0  ");
+
+
+
+
+                sbCount.Append("union all  ");
+                sbCount.Append(
+                    "select Outward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu xuất' as Type,Outward.OnDelete from Outward inner join OutwardDetail on Outward.Id=OutwardDetail.OutwardId  ");
+                sbCount.Append(" where ");
+                if (request.FromDate.HasValue)
+                    sbCount.Append(" Outward.VoucherDate>=@fromDate and ");
+                if (request.ToDate.HasValue)
+                    sbCount.Append(" Outward.VoucherDate<=@toDate and ");
+                if (request.KeySearch.HasValue())
+                    sbCount.Append(" (Outward.Reason like @key or Outward.VoucherCode like @key) and ");
+                if (request.WareHouseId.HasValue() && departmentIds.Count() > 0 || user.RoleNumber < 3)
+                    sbCount.Append(" Outward.WareHouseId in @WareHouseId and ");
+                sbCount.Append(" Outward.OnDelete=0  ");
+                sbCount.Append(" ) d1  ");
+
+
+                #region querySelect
+                //query select
+
+                sb.Append(" select  top(" + request.Take + ") d1.*,WareHouse.Name as WareHouseName from  ");
+                //query inward
+                sb.Append(
+                    "(select Inward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu nhập' as Type,Inward.OnDelete from Inward inner join InwardDetail on Inward.Id=InwardDetail.InwardId  ");
+
+                sb.Append(" where ");
+                if (request.FromDate.HasValue)
+                    sb.Append(" Inward.VoucherDate>=@fromDate and ");
+                if (request.ToDate.HasValue)
+                    sb.Append(" Inward.VoucherDate<=@toDate and ");
+                if (request.KeySearch.HasValue())
+                    sb.Append(" (Inward.Reason like @key or Inward.VoucherCode like @key) and ");
+                if (request.WareHouseId.HasValue() && departmentIds.Count() > 0 || user.RoleNumber < 3)
+                    sb.Append(" Inward.WareHouseId in @WareHouseId and ");
+                sb.Append(" Inward.OnDelete=0 order by Inward.VoucherDate desc  OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY  ");
+                sb.Append("union all  ");
+                ////query outward
+                sb.Append(
+                    " select Outward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu xuất' as Type,Outward.OnDelete from Outward inner join OutwardDetail on Outward.Id=OutwardDetail.OutwardId  ");
+                sb.Append(" where ");
+                if (request.FromDate.HasValue)
+                    sb.Append(" Outward.VoucherDate>=@fromDate and ");
+                if (request.ToDate.HasValue)
+                    sb.Append(" Outward.VoucherDate<=@toDate and ");
+                if (request.KeySearch.HasValue())
+                    sb.Append(" (Outward.Reason like @key or Outward.VoucherCode like @key) and ");
+                if (request.WareHouseId.HasValue() && departmentIds.Count() > 0 || user.RoleNumber < 3)
+                    sb.Append(" Outward.WareHouseId in @WareHouseId and ");
+                sb.Append(" Outward.OnDelete=0 order by Outward.VoucherDate desc  OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY  ");
+                sb.Append(" ) d1 ");
+                sb.Append(" inner join WareHouse on d1.WareHouseID=WareHouse.Id ");
+
+                if (request.TypeWareHouseBook.Equals(TypeWareHouseBook.In) || request.TypeWareHouseBook.Equals(TypeWareHouseBook.Out))
+                    sb.Append(" where d1.Type=N'" + (request.TypeWareHouseBook.Equals(TypeWareHouseBook.In) ? TypeWareHouseBook.In : TypeWareHouseBook.Out) + "' ");
+                //sb.Append("  and  ");
+                //sb.Append(" d1.OnDelete=0  ");
+                sb.Append(" group by d1.Id,d1.WareHouseID,d1.CreatedBy,d1.Deliver,d1.Reason,d1.Type,d1.VoucherCode,d1.VoucherDate,d1.ModifiedBy,d1.Receiver,d1.OnDelete,WareHouse.Name ");
+                sb.Append("  order by d1.VoucherDate desc  ");
+                //  sb.Append(" OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
+                #endregion
+
+
+                sbCount.Append("  inner join WareHouse on d1.WareHouseID=WareHouse.Id    ");
+                if (request.TypeWareHouseBook.Equals(TypeWareHouseBook.In) || request.TypeWareHouseBook.Equals(TypeWareHouseBook.Out))
+                    sbCount.Append(" where d1.Type=N'" + (request.TypeWareHouseBook.Equals(TypeWareHouseBook.In) ? TypeWareHouseBook.In : TypeWareHouseBook.Out) + "' ");
+                sbCount.Append(" ");
+                sbCount.Append(" group by d1.Id,d1.WareHouseID,d1.CreatedBy,d1.Deliver,d1.Reason,d1.Type,d1.VoucherCode,d1.VoucherDate,d1.ModifiedBy,d1.Receiver,d1.OnDelete ");
+                sbCount.Append(" ) t   ");
+                DynamicParameters parameter = new DynamicParameters();
+                parameter.Add("@key", '%' + request.KeySearch + '%');
+
+                if (!request.WareHouseId.HasValue() && user.RoleNumber < 3)
                 {
-                    listget.Add(item.Source);
+                    var list = new List<string>();
+                    var split = user.WarehouseId.Split(',');
+                    if (split.Length > 0)
+                    {
+                        for (int i = 0; i < split.Length; i++)
+                        {
+                            list.Add(split[i]);
+                        }
+                    }
+                    parameter.Add("@WareHouseId", list);
+
                 }
-                _list.Result = listget;
+                else
+                    parameter.Add("@WareHouseId", departmentIds);
+
+                parameter.Add("@fromDate", request.FromDate);
+                parameter.Add("@toDate", request.ToDate);
+                parameter.Add("@skip", request.Skip);
+                parameter.Add("@take", request.Take);
+                _list.Result = await _repository.GetList<WareHouseBookDTO>(sb.ToString(), parameter, CommandType.Text);
+                _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text);
+                #endregion
             }
-            var countRequest = new CountDescriptor<WareHouseBookDTO>();
-            countRequest.Query(q => q.Bool(b => b.Must(queryContainers.ToArray())));
-            var resCount = await _elasticClient.CountAsync(countRequest);
-            _list.totalCount = (int)resCount.Count;
-
-            //  return client.Search<Country>(searchRequest);
-
-            //var getlist = await _elasticClient.SearchAsync<WareHouseBookDTO>(s => s.From(request.Skip * request.Take).Size(request.Take)
-            //.Query(q =>
-            //q.Term(t => t.WareHouseName, request.KeySearch)
-            //|| q.Term(t => t.Reason, request.KeySearch)
-            //|| q.Term(t => t.Description, request.KeySearch)
-            //|| q.Term(t => t.Deliver, request.KeySearch)
-            //|| q.Match(mq => mq.Field(f => f.WareHouseName).Query(request.KeySearch))
-            //|| q.Match(mq => mq.Field(f => f.Reason).Query(request.KeySearch))
-            //|| q.Match(mq => mq.Field(f => f.Description).Query(request.KeySearch))
-            //|| q.Match(mq => mq.Field(f => f.Deliver).Query(request.KeySearch))
-            //).Sort(x => x.Descending(y => y.VoucherDate))
-            //);
-            //_list.Result = getlist.Hits;
-            //var t = await _elasticClient.CountAsync<
-            //    WareHouseBookDTO>(s => s.Query(q => q.Term(t => t.WareHouseName, request.KeySearch) || q.Match(mq => mq.Field(f => f.WareHouseName).Query(request.KeySearch))));
-            //_list.totalCount = t.Count;
 
 
 
@@ -190,124 +305,6 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
 
 
 
-
-
-
-            //sql
-            //StringBuilder sb = new StringBuilder();
-            //StringBuilder sbCount = new StringBuilder();
-            ////query count
-            //sbCount.Append("SELECT COUNT(*) FROM (  ");
-            //sbCount.Append("select d1.Id from  ");
-            //sbCount.Append(
-            //    "(select Inward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu nhập' as Type,Inward.OnDelete from Inward inner join InwardDetail on Inward.Id=InwardDetail.InwardId ");
-            //sbCount.Append(" where ");
-            //if (request.FromDate.HasValue)
-            //    sbCount.Append(" Inward.VoucherDate>=@fromDate and ");
-            //if (request.ToDate.HasValue)
-            //    sbCount.Append(" Inward.VoucherDate<=@toDate and ");
-            //if (request.KeySearch.HasValue())
-            //    sbCount.Append(" (Inward.Reason like @key or Inward.VoucherCode like @key) and ");
-            //if (request.WareHouseId.HasValue() && departmentIds.Count() > 0 || user.RoleNumber < 3)
-            //    sbCount.Append(" Inward.WareHouseId in @WareHouseId and ");
-            //sbCount.Append(" Inward.OnDelete=0  ");
-
-
-
-
-            //sbCount.Append("union all  ");
-            //sbCount.Append(
-            //    "select Outward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu xuất' as Type,Outward.OnDelete from Outward inner join OutwardDetail on Outward.Id=OutwardDetail.OutwardId  ");
-            //sbCount.Append(" where ");
-            //if (request.FromDate.HasValue)
-            //    sbCount.Append(" Outward.VoucherDate>=@fromDate and ");
-            //if (request.ToDate.HasValue)
-            //    sbCount.Append(" Outward.VoucherDate<=@toDate and ");
-            //if (request.KeySearch.HasValue())
-            //    sbCount.Append(" (Outward.Reason like @key or Outward.VoucherCode like @key) and ");
-            //if (request.WareHouseId.HasValue() && departmentIds.Count() > 0 || user.RoleNumber < 3)
-            //    sbCount.Append(" Outward.WareHouseId in @WareHouseId and ");
-            //sbCount.Append(" Outward.OnDelete=0  ");
-            //sbCount.Append(" ) d1  ");
-
-
-            //#region querySelect
-            ////query select
-
-            //sb.Append(" select  top(" + request.Take + ") d1.*,WareHouse.Name as WareHouseName from  ");
-            ////query inward
-            //sb.Append(
-            //    "(select Inward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu nhập' as Type,Inward.OnDelete from Inward inner join InwardDetail on Inward.Id=InwardDetail.InwardId  ");
-
-            //sb.Append(" where ");
-            //if (request.FromDate.HasValue)
-            //    sb.Append(" Inward.VoucherDate>=@fromDate and ");
-            //if (request.ToDate.HasValue)
-            //    sb.Append(" Inward.VoucherDate<=@toDate and ");
-            //if (request.KeySearch.HasValue())
-            //    sb.Append(" (Inward.Reason like @key or Inward.VoucherCode like @key) and ");
-            //if (request.WareHouseId.HasValue() && departmentIds.Count() > 0 || user.RoleNumber < 3)
-            //    sb.Append(" Inward.WareHouseId in @WareHouseId and ");
-            //sb.Append(" Inward.OnDelete=0 order by Inward.VoucherDate desc  OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY  ");
-            //sb.Append("union all  ");
-            //////query outward
-            //sb.Append(
-            //    " select Outward.Id,WareHouseId, VoucherCode,VoucherDate,CreatedBy,ModifiedBy,Deliver,Receiver,Reason,N'Phiếu xuất' as Type,Outward.OnDelete from Outward inner join OutwardDetail on Outward.Id=OutwardDetail.OutwardId  ");
-            //sb.Append(" where ");
-            //if (request.FromDate.HasValue)
-            //    sb.Append(" Outward.VoucherDate>=@fromDate and ");
-            //if (request.ToDate.HasValue)
-            //    sb.Append(" Outward.VoucherDate<=@toDate and ");
-            //if (request.KeySearch.HasValue())
-            //    sb.Append(" (Outward.Reason like @key or Outward.VoucherCode like @key) and ");
-            //if (request.WareHouseId.HasValue() && departmentIds.Count() > 0 || user.RoleNumber < 3)
-            //    sb.Append(" Outward.WareHouseId in @WareHouseId and ");
-            //sb.Append(" Outward.OnDelete=0 order by Outward.VoucherDate desc  OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY  ");
-            //sb.Append(" ) d1 ");
-            //sb.Append(" inner join WareHouse on d1.WareHouseID=WareHouse.Id ");
-
-            //if (request.TypeWareHouseBook.Equals(TypeWareHouseBook.In) || request.TypeWareHouseBook.Equals(TypeWareHouseBook.Out))
-            //    sb.Append(" where d1.Type=N'" + (request.TypeWareHouseBook.Equals(TypeWareHouseBook.In) ? TypeWareHouseBook.In : TypeWareHouseBook.Out) + "' ");
-            ////sb.Append("  and  ");
-            ////sb.Append(" d1.OnDelete=0  ");
-            //sb.Append(" group by d1.Id,d1.WareHouseID,d1.CreatedBy,d1.Deliver,d1.Reason,d1.Type,d1.VoucherCode,d1.VoucherDate,d1.ModifiedBy,d1.Receiver,d1.OnDelete,WareHouse.Name ");
-            //sb.Append("  order by d1.VoucherDate desc  ");
-            ////  sb.Append(" OFFSET @skip ROWS FETCH NEXT @take ROWS ONLY ");
-            //#endregion
-
-
-            //sbCount.Append("  inner join WareHouse on d1.WareHouseID=WareHouse.Id    ");
-            //if (request.TypeWareHouseBook.Equals(TypeWareHouseBook.In) || request.TypeWareHouseBook.Equals(TypeWareHouseBook.Out))
-            //    sbCount.Append(" where d1.Type=N'" + (request.TypeWareHouseBook.Equals(TypeWareHouseBook.In) ? TypeWareHouseBook.In : TypeWareHouseBook.Out) + "' ");
-            //sbCount.Append(" ");
-            //sbCount.Append(" group by d1.Id,d1.WareHouseID,d1.CreatedBy,d1.Deliver,d1.Reason,d1.Type,d1.VoucherCode,d1.VoucherDate,d1.ModifiedBy,d1.Receiver,d1.OnDelete ");
-            //sbCount.Append(" ) t   ");
-            //DynamicParameters parameter = new DynamicParameters();
-            //parameter.Add("@key", '%' + request.KeySearch + '%');
-
-            //if (!request.WareHouseId.HasValue() && user.RoleNumber < 3)
-            //{
-            //    var list = new List<string>();
-            //    var split = user.WarehouseId.Split(',');
-            //    if (split.Length > 0)
-            //    {
-            //        for (int i = 0; i < split.Length; i++)
-            //        {
-            //            list.Add(split[i]);
-            //        }
-            //    }
-            //    parameter.Add("@WareHouseId", list);
-
-            // }
-            //  else
-            //    parameter.Add("@WareHouseId", departmentIds);
-            //
-            //parameter.Add("@fromDate", request.FromDate);
-            //parameter.Add("@toDate", request.ToDate);
-            //parameter.Add("@skip", request.Skip);
-            //parameter.Add("@take", request.Take);
-            //_list.Result = await _repository.GetList<WareHouseBookDTO>(sb.ToString(), parameter, CommandType.Text);
-            //_list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text);
             return _list;
         }
 
