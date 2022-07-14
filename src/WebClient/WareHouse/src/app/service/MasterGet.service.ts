@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ResultMessageResponse } from '../model/ResultMessageResponse';
 import { Observable, retry } from 'rxjs';
+import { ResultDataResponse } from '../model/ResultDataResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -22,4 +23,10 @@ export class MasterGetService {
     );
   }
 
+  GetIndexSqlElastic(): Observable <ResultDataResponse<string>> {
+    var url = this.baseUrl + `/GetIndexDataWareHouseBook`;
+    return this.http.get<ResultDataResponse<string>>(url, this.httpOptions).pipe(
+      retry(1),
+    );
+  }
 }

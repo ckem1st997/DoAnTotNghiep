@@ -1,7 +1,11 @@
-<div class="container pt-5">
+<div class="container mt-5">
   <div class="row">
-    <div class="col-4 d-flex" style="align-items:center">
+    <div class="col-6 d-flex" style="align-items:center">
       <div class="menu-header-title text-capitalize">Đồng bộ hóa giữa Sql Server và Elastic Search</div>
+      <button (click)="AsyncSqlElastic()" mat-raised-button color="primary" class="ms-5">Click</button>
+    </div>
+    <div class="col-6 d-flex" style="align-items:center">
+      <div class="menu-header-title text-capitalize">Chỉ số dữ liệu giữa Sql Server và Elastic Search: {{indexString}}</div>
       <button (click)="AsyncSqlElastic()" mat-raised-button color="primary" class="ms-5">Click</button>
     </div>
     <!-- <div class="col-4 d-flex" style="align-items:center">

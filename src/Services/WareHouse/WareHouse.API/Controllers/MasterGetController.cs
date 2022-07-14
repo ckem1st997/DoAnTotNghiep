@@ -106,5 +106,25 @@ namespace WareHouse.API.Controllers
             // var bulone = _elasticClient.Delete<WareHouseBookDTO>(new WareHouseBookDTO() {Id= "524cd467-a17b-4054-9ea0-52c4a18b86fe" });
             //  return Ok(deleteByQueryResponse);
         }
+
+        [HttpGet("GetIndexDataWareHouseBook")]
+        public async Task<IActionResult> GetIndexDataWareHouseBook()
+        {
+
+            var res = await _mediat.Send(new WareHouseBookgetAllCommand());
+            int i = 0;
+            foreach (var item in res.Result)
+            {
+                i++;
+            }
+            var resElastic = await _elasticSearchClient.CountAllAsync();
+            return Ok(new ResultMessageResponse()
+            {
+                data = res.totalCount + "-" + resElastic,
+                success = res.totalCount>0 || resElastic > 0
+
+            });
+
+        }
     }
 }

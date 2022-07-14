@@ -23,7 +23,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
         private readonly IPaginatedList<WareHouseBookDTO> _list;
 
 
-        public WareHouseBookgetAllCommandHandler( IDapper repository, IPaginatedList<WareHouseBookDTO> list)
+        public WareHouseBookgetAllCommandHandler(IDapper repository, IPaginatedList<WareHouseBookDTO> list)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _list = list ?? throw new ArgumentNullException(nameof(list));
@@ -50,6 +50,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
             sb.Append("group by d1.Id,d1.WareHouseID,d1.CreatedBy,d1.Deliver,d1.Reason,d1.Type,d1.VoucherCode,d1.VoucherDate,d1.ModifiedBy,d1.Receiver,d1.OnDelete,WareHouse.Name  ");
             sb.Append("order by d1.VoucherDate desc   ");
             _list.Result = await _repository.GetList<WareHouseBookDTO>(sb.ToString(), new DynamicParameters(), CommandType.Text);
+            _list.totalCount = _list.Result.AsList().Count;
             return _list;
         }
     }
