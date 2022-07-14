@@ -79,10 +79,11 @@ export class OutwardetailsEditByServiceComponent implements OnInit {
   changAmount() {
     var getUiQuantity = this.form.value['uiquantity'];
     var getUiPrice = this.form.value['uiprice'];
+    let unitId=this.form.value['unitId'];
     this.form.patchValue({ amount: getUiPrice * getUiQuantity });
     var idSelect = this.form.value['itemId'];
     if (this.data.outward != null && this.data.outward.wareHouseId && idSelect)
-      this.service.CheckQuantityIdItem(idSelect, this.data.outward?.wareHouseId).subscribe(
+      this.service.CheckQuantityIdItem(idSelect, this.data.outward?.wareHouseId,unitId).subscribe(
         (data) => {
           if (data) {
             if (data.data < getUiQuantity)
