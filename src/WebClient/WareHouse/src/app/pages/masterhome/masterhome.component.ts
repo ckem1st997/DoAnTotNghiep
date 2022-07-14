@@ -13,12 +13,16 @@ export class MasterhomeComponent implements OnInit, OnDestroy {
   constructor(private signalRService: SignalRService, private master: MasterGetService, private notifierService: NotifierService) { }
 
   ngOnInit() {
-    this.master.GetIndexSqlElastic().subscribe(res => {
-      if (res.success)
-        this.indexString = res.data;           
-    })
+    this.GetIndexSqlElastic();
 
   }
+   GetIndexSqlElastic() {
+    this.master.GetIndexSqlElastic().subscribe(res => {
+      if (res.success)
+        this.indexString = res.data;
+    });
+  }
+
   AsyncSqlElastic() {
     this.master.AsyncSqlElastic().subscribe(res => {
       if (res.success) {
