@@ -52,19 +52,18 @@ export class FormSearchReportTotalComponent implements OnInit {
     notifierService: NotifierService
   ) { this.notifier = notifierService; }
   ngOnInit() {
-    const today = new Date();
-    const month = today.getMonth();
-    const year = today.getFullYear();
-    const day = today.getDay();
     this.form = this.formBuilder.group({
       wareHouseId: this.data.wareHouseId,
       itemId: this.data.itemId,
-      start: new FormControl(new Date( year, month - 1 , day)),
-      end: new FormControl(new Date(year, month, day)),
+      start: this.data?.start != undefined ? this.addDays(new Date(this.data?.start), 1).toISOString().slice(0, -1) : new FormControl(),
+      end: this.data?.end != undefined ? this.addDays(new Date(this.data?.end), 1).toISOString().slice(0, -1) : new FormControl(),
     });
     this.getDropDown();
   }
-
+  addDays(date: Date, days: number): Date {
+    date.setDate(date.getDate() + days);
+    return date;
+  }
   getDropDown() {
     this.serviceWH.getListDropDown().subscribe(x => this.listDropDown = x);
     this.serviceItem.getListDropDown().subscribe(x => this.listDropDownItem = x);

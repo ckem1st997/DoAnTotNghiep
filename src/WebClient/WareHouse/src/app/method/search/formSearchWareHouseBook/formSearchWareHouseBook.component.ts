@@ -20,21 +20,26 @@ export class FormSearchWareHouseBookComponent implements OnInit {
     notifierService: NotifierService
   ) { this.notifier = notifierService; }
   ngOnInit() {
-    console.log(this.data);
+    // var dateStart=this.data?.toDate != undefined?new Date(this.data?.toDate).setDate(new Date(this.data?.toDate).getDate()+1):null;
     this.form = this.formBuilder.group({
       key: this.data?.keySearch != undefined ? this.data.keySearch : '',
       inactive: null,
-      start: this.data?.fromDate != undefined ?new Date(this.data?.fromDate).toISOString().slice(0, -1) : new FormControl(),
-      end: this.data?.toDate != undefined ?new Date(this.data?.toDate).toISOString().slice(0, -1) : new FormControl(),
+      start:  this.data?.fromDate != undefined ? this.addDays(new Date(this.data?.fromDate), 1).toISOString().slice(0, -1) : new FormControl(),
+      end: this.data?.toDate != undefined ? this.addDays(new Date(this.data?.toDate), 1).toISOString().slice(0, -1) : new FormControl(),
       type: this.data?.typeWareHouseBook != undefined ? this.data.typeWareHouseBook : ''
     });
+  }
+
+  addDays(date: Date, days: number): Date {
+    date.setDate(date.getDate() + days);
+    return date;
   }
   onNoClick(): void {
     this.dialogRef.close(false);
   }
   onSubmit() {
-   this.form.value.start= this.form.value.start !=null?new Date(this.form.value.start).toLocaleDateString():null;
-   this.form.value.end= this.form.value.end !=null?new Date(this.form.value.end).toLocaleDateString():null;
+    this.form.value.start = this.form.value.start != null ? new Date(this.form.value.start).toLocaleDateString() : null;
+    this.form.value.end = this.form.value.end != null ? new Date(this.form.value.end).toLocaleDateString() : null;
     this.dialogRef.close(this.form.value)
   }
 }
