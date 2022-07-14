@@ -148,6 +148,12 @@ export class WareHouseBookComponent implements OnInit, OnDestroy {
         this.GetData();
       }
     });
+    this.signalRService.hubConnection.on(this.signalRService.AsyncWareHouseBookTrachking, (data: ResultMessageResponse<string>) => {
+      if (data.success) {
+        this.notifier.notify('success', data.message);
+        this.GetData();
+      }
+    });
     this.GetData();
     this.getScreenWidth = window.innerWidth;
     this.getScreenHeight = window.innerHeight;
@@ -159,6 +165,7 @@ export class WareHouseBookComponent implements OnInit, OnDestroy {
     this.signalRService.off(this.signalRService.WareHouseBookTrachkingToCLient);
     this.signalRService.hubConnection.off(this.signalRService.CreateWareHouseBookTrachking);
     this.signalRService.hubConnection.off(this.signalRService.DeleteWareHouseBookTrachking);
+    this.signalRService.hubConnection.off(this.signalRService.AsyncWareHouseBookTrachking);
   }
   @HostListener('window:resize', ['$event'])
 
@@ -175,7 +182,6 @@ export class WareHouseBookComponent implements OnInit, OnDestroy {
       this.dataSource.data = list.data; setTimeout(() => {
         this.paginator.pageIndex = this.currentPage;
         this.paginator.length = list.totalCount;
-        console.log(this.paginator);
         this.paginator._intl.getRangeLabel = (page: number, pageSize: number, length: number) => {
           const start = page * pageSize + 1;
           const end = (page + 1) * pageSize;

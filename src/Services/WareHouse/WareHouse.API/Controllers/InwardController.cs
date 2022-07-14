@@ -210,17 +210,10 @@ namespace WareHouse.API.Controllers
             {
                 item.Amount = item.Uiquantity * item.Uiprice;
                 int convertRate = await _mediat.Send(new GetConvertRateByIdItemCommand() { IdItem = item.ItemId, IdUnit = item.UnitId });
-                item.Quantity = convertRate * item.Uiquantity;
+                item.Quantity = (decimal)item.Uiquantity/convertRate;
                 item.Price = item.Amount;
             }
             var data = await _mediat.Send(new UpdateInwardCommand() { InwardCommands = inwardCommands });
-            var mes = false;
-            //if (data)
-            //{
-            //    var user = await _userSevice.GetUser();
-            //    mes = await _userSevice.CreateHistory(user.UserName, "Chỉnh sửa", "vừa chỉnh sửa phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!", false, inwardCommands.Id);
-
-            //}
             if (data)
             {
                 var user = await _userSevice.GetUser();
@@ -368,7 +361,7 @@ namespace WareHouse.API.Controllers
             {
                 item.Amount = item.Uiquantity * item.Uiprice;
                 int convertRate = await _mediat.Send(new GetConvertRateByIdItemCommand() { IdItem = item.ItemId, IdUnit = item.UnitId });
-                item.Quantity = convertRate * item.Uiquantity;
+                item.Quantity = (decimal)item.Uiquantity / convertRate;
                 item.Price = item.Amount;
             }
             var data = await _mediat.Send(new CreateInwardCommand() { InwardCommands = inwardCommands });
@@ -459,7 +452,16 @@ namespace WareHouse.API.Controllers
                     Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel}) done...");
 
                 }
+                var listIdDelete = new List<string>();
 
+                foreach (var item in listIds)
+                {
+                    var check = await _mediat.Send(new InwardGetFirstCommand() { Id = item });
+                    if (check == null)
+                        listIdDelete.Add(item);
+                }    
+                if(listIdDelete.Count > 0)
+                    await _elasticSearchClient.DeleteManyAsync(listIdDelete);
             }
 
             var result = new ResultMessageResponse()

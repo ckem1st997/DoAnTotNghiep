@@ -25,18 +25,15 @@ using WareHouse.API.Controllers.BaseController;
 
 namespace WareHouse.API.Controllers
 {
-
-    //  [CheckRole(LevelCheck.READ)]
-    public class ExportExcelController : BaseControllerWareHouse
+    [AllowAnonymous]
+    public class ExportExcelController : BasePublicControllerWareHouse
     {
         private readonly IMediator _mediat;
-        private readonly ICacheExtension _cacheExtension;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public ExportExcelController(IWebHostEnvironment hostEnvironment, IMediator mediat, ICacheExtension cacheExtension)
+        public ExportExcelController(IWebHostEnvironment hostEnvironment, IMediator mediat)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
-            _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
             _hostingEnvironment = hostEnvironment;
         }
         #region R
@@ -50,7 +47,6 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult> ExportOutWard(string id)
         {
-            //   SetLicense();
             #region Validation
 
             if (string.IsNullOrEmpty(id))
@@ -63,7 +59,6 @@ namespace WareHouse.API.Controllers
                     message = "Bạn chưa nhập mã phiếu xuất !"
                 });
             }
-            // var res= await _mediat.Send(paginatedList); OutwardGetFirstExcelCommand
             var res = await _mediat.Send(new OutwardGetFirstExcelCommand() { Id = id });
             if (res is null || res.OutwardDetails is null)
             {
@@ -346,8 +341,6 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetExcelReportTotal([FromQuery] SearchReportTotalCommand searchModel)
         {
-            //   SetLicense();
-
 
             if (searchModel is null || !searchModel.Excel)
             {

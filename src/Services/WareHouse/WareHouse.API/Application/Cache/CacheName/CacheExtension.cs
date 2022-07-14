@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using StackExchange.Redis;
 
 namespace WareHouse.API.Application.Cache.CacheName
@@ -22,12 +23,12 @@ namespace WareHouse.API.Application.Cache.CacheName
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _connectionMultiplexer = GetConnectRedis();
-            _db = _connectionMultiplexer.GetDatabase();
+            _db = _connectionMultiplexer != null ? _connectionMultiplexer.GetDatabase() : null;
         }
 
         public bool IsConnected
         {
-            get { return _connectionMultiplexer != null && _connectionMultiplexer.IsConnected; }
+            get { return _connectionMultiplexer != null && _connectionMultiplexer != null && _db != null && _connectionMultiplexer.IsConnected; }
         }
 
 
@@ -48,19 +49,17 @@ namespace WareHouse.API.Application.Cache.CacheName
         /// connect to redis
         /// </summary>
         /// <returns></returns>
-        private ConnectionMultiplexer GetConnectRedis()
+        private  ConnectionMultiplexer GetConnectRedis()
         {
             try
             {
-                var getConnectString = _configuration.GetValue<bool>("UsingDocker") ? _configuration.GetSection("Redis")["ConnectionStringDocker"] : _configuration.GetSection("Redis")["ConnectionString"];
-                //  var getConnectString = _configuration.GetSection("Redis")["ConnectionStringDocker"];
-                return ConnectionMultiplexer.Connect(
-        $"{getConnectString},allowAdmin=true");
+                var getConnectString = _configuration.GetSection("Redis")["ConnectionString"];
+                return ConnectionMultiplexer.Connect($"{getConnectString},allowAdmin=true");
             }
             catch (Exception ex)
             {
-                _logger.LogError("Can not connect to Redis server !");
-                _logger.LogError(ex.Message);
+                Log.Error("Can not connect to Redis server !");
+                Log.Error("Info: " + ex.Message);
                 return null;
             }
 

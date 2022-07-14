@@ -17,7 +17,8 @@ namespace WareHouse.API.Application.Cache
             var connect = new ConfigurationOptions
             {
                 Password = configuration.GetSection("Redis")["Password"],
-                EndPoints = { stringConnect }
+                EndPoints = { stringConnect },
+                ConnectTimeout=3000
             };
             services.AddStackExchangeRedisCache(options =>
             {

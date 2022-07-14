@@ -74,7 +74,7 @@ namespace WareHouse.Infrastructure
         {
             var sqlConnection = (SqlConnection)connection;
 
-            return result;
+            return await Task.FromResult(result);
         }
     }
 }

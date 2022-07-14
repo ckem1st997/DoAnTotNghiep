@@ -77,15 +77,15 @@
             </ng-container>
 
             <ng-container matColumnDef="import">
-              <th style="width:129px;text-align: center;" mat-header-cell *matHeaderCellDef>Tổng nhập</th>
+              <th style="width:129px;text-align: center;" mat-header-cell *matHeaderCellDef>Tổng nhập(đơn vị tính chính)</th>
               <td style="text-align: center;" mat-cell *matCellDef="let element"> {{element.import}} </td>
             </ng-container>
             <ng-container matColumnDef="export">
-              <th style="width:129px;text-align: center;" mat-header-cell *matHeaderCellDef>Tổng xuất</th>
+              <th style="width:129px;text-align: center;" mat-header-cell *matHeaderCellDef>Tổng xuất(đơn vị tính chính)</th>
               <td style="text-align: center;" mat-cell *matCellDef="let element"> {{element.export}} </td>
             </ng-container>
             <ng-container matColumnDef="balance">
-              <th style="width:279px;text-align: center;" mat-header-cell *matHeaderCellDef>Tồn cuối kì</th>
+              <th style="width:279px;text-align: center;" mat-header-cell *matHeaderCellDef>Tồn cuối kì(đơn vị tính chính)</th>
               <td style="text-align: center;" mat-cell *matCellDef="let element"> {{element.balance}} </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>

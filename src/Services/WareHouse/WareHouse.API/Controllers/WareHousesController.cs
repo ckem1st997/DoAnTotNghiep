@@ -164,57 +164,7 @@ namespace WareHouse.API.Controllers
 
 
 
-        [AllowAnonymous]
-        [HttpGet("GetDataWareHouseBook")]
-        public async Task<IActionResult> GetDataWareHouseBook()
-        {
-            _elasticClient.DeleteByQuery<WareHouseBookDTO>(d => d.MatchAll());
-
-            var res = await _mediat.Send(new WareHouseBookgetAllCommand());
-            if (res.Result.Any())
-                await _elasticClient.IndexManyAsync(res.Result);
-            return Ok(new ResultMessageResponse()
-            {
-                success = res.Result.Any()
-            });
-
-
-            //var person = new WareHouseDTO
-            //{
-            //    Id = Guid.NewGuid().ToString(),
-            //    Name= Guid.NewGuid().ToString()
-            //};
-            // var paginatedList = new PaginatedWareHouseBookCommand()
-            //{
-            //    Skip = 0,
-            //    Take = 10
-            //};
-            //var res = await _mediat.Send(paginatedList);
-
-            //foreach (var item in res.Result)
-            //{
-            //    _elasticClient.IndexDocument(item);
-            //}
-            //if(res !=null)
-            //{
-            //    var asyncIndexResponse = await _elasticClient.IndexDocumentAsync(res.Result);
-            //    return Ok(asyncIndexResponse);
-
-            //}
-            //   var searchResponse = _elasticClient.Search<WareHouseBookDTO>(s => s.From(0).Size(10000).Fields("id"));
-
-
-            //delete all
-            //   var deleteByQueryResponse = _elasticClient.DeleteByQuery<WareHouseBookDTO>(d => d.MatchAll());
-            // var deleteByQueryResponse = _elasticClient.DeleteByQuery<WareHouseBookDTO>(x=>x.Query(c=>c.Match(d=>d.Field(e=>e.Id== "1606d5a6-32e3-478a-8cd8-3573ee424df8"))));
-            // var ids = new List<string> { "1606d5a6-32e3-478a-8cd8-3573ee424df8", "515e219a-a2fc-4202-8afa-cac7377e0231", "3" };
-            // // done delete list id
-            //// var bulkResponse = _elasticClient.DeleteMany<WareHouseBookDTO>(ids.Select(x => new WareHouseBookDTO { Id = x }));
-
-            // // done by id
-            // var bulone = _elasticClient.Delete<WareHouseBookDTO>(new WareHouseBookDTO() {Id= "524cd467-a17b-4054-9ea0-52c4a18b86fe" });
-            //  return Ok(deleteByQueryResponse);
-        }
+       
 
 
         [AllowAnonymous]

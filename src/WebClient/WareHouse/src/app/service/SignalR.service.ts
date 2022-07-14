@@ -23,6 +23,7 @@ export class SignalRService {
   public CreateWareHouseBookTrachking: string = "CreateWareHouseBookTrachkingToCLient";
   public DeleteWareHouseBookTrachking: string = "DeleteWareHouseBookTrachkingToCLient";
   public HistoryTrachking: string = "HistoryTrachkingToCLient";
+  public AsyncWareHouseBookTrachking: string = "AsyncWareHouseBookTrachkingToCLient";
   public constructor(private auth: AuthenticationService) {
 
   }
@@ -62,6 +63,9 @@ export class SignalRService {
   }
   public SendDeleteWareHouseBookTrachking(type: string, id: string) {
     this.hubConnection.send("DeleteWareHouseBookTrachking", type, id);
+  }
+  public SendAsyncWareHouseBookTrachking() {
+    this.hubConnection.send("AsyncWareHouseBookTrachking");
   }
   public SendHistoryTrachking() {
     this.hubConnection.send("HistoryTrachking");

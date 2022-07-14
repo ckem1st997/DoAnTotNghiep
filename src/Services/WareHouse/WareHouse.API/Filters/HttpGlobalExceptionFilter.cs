@@ -52,7 +52,7 @@ namespace WareHouse.API.Filters
             }
             else if (context.Exception.GetType() == typeof(RedisConnectionException))
             {
-                Log.Error("Redis not connected !");
+                Log.Error("Redis not connected width HttpGlobalExceptionFilter!");
                 Log.Error(context.Exception.Message.ToString());
                 var problemDetails = new ValidationProblemDetails()
                 {

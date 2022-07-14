@@ -30,6 +30,7 @@ using KafKa.Net.Abstractions;
 using Microsoft.Extensions.Logging;
 using Base.Events;
 using Serilog.Context;
+using WareHouse.API.Infrastructure.ElasticSearch;
 
 namespace WareHouse.API.Controllers
 {
@@ -42,7 +43,9 @@ namespace WareHouse.API.Controllers
         private readonly IUserSevice _userSevice;
         private readonly IEventBus _eventBus;
         private readonly ILogger<WareHouseBookController> _logger;
-        public WareHouseBookController(IEventBus eventBus, ILogger<WareHouseBookController> logger, IUserSevice userSevice, IFakeData ifakeData, IWebHostEnvironment hostEnvironment, IMediator mediat, ICacheExtension cacheExtension)
+        private readonly IElasticSearchClient<WareHouseBookDTO> _elasticSearchClient;
+
+        public WareHouseBookController(IEventBus eventBus, ILogger<WareHouseBookController> logger, IUserSevice userSevice, IFakeData ifakeData, IWebHostEnvironment hostEnvironment, IMediator mediat, ICacheExtension cacheExtension, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _hostingEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
@@ -50,6 +53,7 @@ namespace WareHouse.API.Controllers
             _userSevice = userSevice;
             _logger = logger;
             _eventBus = eventBus;
+            _elasticSearchClient = elasticSearchClient;
         }
         #region R
 
@@ -251,6 +255,10 @@ namespace WareHouse.API.Controllers
             {
                 throw new ArgumentNullException(nameof(inwardDetailCommands));
             }
+            inwardDetailCommands.Amount = inwardDetailCommands.Uiquantity * inwardDetailCommands.Uiprice;
+            int convertRate = await _mediat.Send(new GetConvertRateByIdItemCommand() { IdItem = inwardDetailCommands.ItemId, IdUnit = inwardDetailCommands.UnitId });
+            inwardDetailCommands.Quantity = (decimal)inwardDetailCommands.Uiquantity/ convertRate;
+            inwardDetailCommands.Price = inwardDetailCommands.Amount;
 
             var res = await _mediat.Send(new UpdateInwardDetailCommand() { InwardDetailCommands = inwardDetailCommands });
             if (res)
@@ -312,7 +320,6 @@ namespace WareHouse.API.Controllers
                         await _mediat.Send(new CreateSerialWareHouseCommand() { SerialWareHouseCommands = listApps });
                 }
             }
-            var mes = false;
             //if (res)
             //{
             //    var user = await _userSevice.GetUser();
@@ -428,15 +435,11 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(InwardDetailCommands inwardDetailCommands)
         {
+            inwardDetailCommands.Amount = inwardDetailCommands.Uiquantity * inwardDetailCommands.Uiprice;
+            int convertRate = await _mediat.Send(new GetConvertRateByIdItemCommand() { IdItem = inwardDetailCommands.ItemId, IdUnit = inwardDetailCommands.UnitId });
+            inwardDetailCommands.Quantity = (decimal)inwardDetailCommands.Uiquantity/convertRate;
+            inwardDetailCommands.Price = inwardDetailCommands.Amount;
             var data = await _mediat.Send(new CreateInwardDetailCommand() { InwardDetailCommands = inwardDetailCommands });
-            var mes = false;
-            //if (data)
-            //{
-            //    var user = await _userSevice.GetUser();
-            //    var res = await _mediat.Send(new InwardGetFirstCommand() { Id = inwardDetailCommands.InwardId });
-            //    mes = await _userSevice.CreateHistory(user.UserName, "Tạo", "vừa tạo mới vật tư trong phiếu nhập kho" + res.VoucherCode + "!", false, res.Id);
-
-            //}
             if (data)
             {
                 var user = await _userSevice.GetUser();
@@ -587,6 +590,10 @@ namespace WareHouse.API.Controllers
             {
                 throw new ArgumentNullException(nameof(outwardDetailCommands));
             }
+            outwardDetailCommands.Amount = outwardDetailCommands.Uiquantity * outwardDetailCommands.Uiprice;
+            int convertRate = await _mediat.Send(new GetConvertRateByIdItemCommand() { IdItem = outwardDetailCommands.ItemId, IdUnit = outwardDetailCommands.UnitId });
+            outwardDetailCommands.Quantity = (decimal)outwardDetailCommands.Uiquantity/ convertRate ;
+            outwardDetailCommands.Price = outwardDetailCommands.Amount;
 
             var res = await _mediat.Send(new UpdateOutwardDetailCommand() { OutwardDetailCommands = outwardDetailCommands });
             if (res)
@@ -690,6 +697,12 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(OutwardDetailCommands outwardDetailCommands)
         {
+            outwardDetailCommands.Amount = outwardDetailCommands.Uiquantity * outwardDetailCommands.Uiprice;
+            int convertRate = await _mediat.Send(new GetConvertRateByIdItemCommand() { IdItem = outwardDetailCommands.ItemId, IdUnit = outwardDetailCommands.UnitId });
+            outwardDetailCommands.Quantity = (decimal)outwardDetailCommands.Uiquantity / convertRate;
+            outwardDetailCommands.Price = outwardDetailCommands.Amount;
+
+
             var data = await _mediat.Send(new CreateOutwardDetailCommand() { OutwardDetailCommands = outwardDetailCommands });
             var mes = false;
             if (data)
@@ -749,6 +762,8 @@ namespace WareHouse.API.Controllers
             var dataOut = true;
             var dataRes = true;
             var mes = "Xoá thành công !";
+            var listIdDelete = new List<string>();
+
             if (wareHouseBookDelete.idsIn != null)
                 dataIn = await _mediat.Send(new DeleteInwardCommand() { Id = wareHouseBookDelete.idsIn });
             if (wareHouseBookDelete.idsOut != null)
@@ -761,19 +776,28 @@ namespace WareHouse.API.Controllers
             else if (dataIn && !dataOut)
             {
                 mes = "Xoá thất bại phiếu xuất !";
+
+                foreach (var item in wareHouseBookDelete.idsIn)
+                {
+                    var check = await _mediat.Send(new InwardGetFirstCommand() { Id = item });
+                    if (check == null)
+                        listIdDelete.Add(item);
+                }
+               
             }
             else if (!dataIn && dataOut)
             {
                 mes = "Xoá thất bại phiếu nhập !";
+                foreach (var item in wareHouseBookDelete.idsOut)
+                {
+                    var check = await _mediat.Send(new OutwardGetFirstCommand() { Id = item });
+                    if (check == null)
+                        listIdDelete.Add(item);
+                }
+
             }
-            var mes1 = false;
-            //if (dataRes)
-            //{
-            //    var user = await _userSevice.GetUser();
-            //    mes1 = await _userSevice.CreateHistory(user.UserName, "Xóa", "vừa xóa phiếu danh sách phiếu trong sổ kho !", false, "");
-
-            //}
-
+            if (listIdDelete.Count > 0)
+                await _elasticSearchClient.DeleteManyAsync(listIdDelete);
             if (dataRes)
             {
                 var user = await _userSevice.GetUser();
@@ -812,13 +836,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> DeleteInward(IEnumerable<string> listIds)
         {
-            var data = await _mediat.Send(new DeleteOutwardCommand() { Id = listIds });
-            //if (data)
-            //{
-            //    var user = await _userSevice.GetUser();
-            //    mes = await _userSevice.CreateHistory(user.UserName, "Xóa", "vừa xóa phiếu nhập kho trong sổ kho !", false, "");
-
-            //}
+            var data = await _mediat.Send(new DeleteInwardCommand() { Id = listIds });
             if (data)
             {
                 var user = await _userSevice.GetUser();
@@ -838,6 +856,16 @@ namespace WareHouse.API.Controllers
                     _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
 
                 }
+                var listIdDelete = new List<string>();
+
+                foreach (var item in listIds)
+                {
+                    var check = await _mediat.Send(new InwardGetFirstCommand() { Id = item });
+                    if (check == null)
+                        listIdDelete.Add(item);
+                }
+                if (listIdDelete.Count > 0)
+                    await _elasticSearchClient.DeleteManyAsync(listIdDelete);
             }
             var result = new ResultMessageResponse()
             {
@@ -856,14 +884,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> DeleteOutward(IEnumerable<string> listIds)
         {
-            var data = await _mediat.Send(new DeleteInwardCommand() { Id = listIds });
-            //var mes = false;
-            //if (data)
-            //{
-            //    var user = await _userSevice.GetUser();
-            //    mes = await _userSevice.CreateHistory(user.UserName, "Xóa", "vừa xóa phiếu xuất kho trong sổ kho !", false, "");
-
-            //}
+            var data = await _mediat.Send(new DeleteOutwardCommand() { Id = listIds });
             if (data)
             {
                 var user = await _userSevice.GetUser();
@@ -883,6 +904,16 @@ namespace WareHouse.API.Controllers
                     _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at CreateHistoryIntegrationEvent - ({@IntegrationEvent}) done...", kafkaModel.Id, kafkaModel);
 
                 }
+                var listIdDelete = new List<string>();
+
+                foreach (var item in listIds)
+                {
+                    var check = await _mediat.Send(new OutwardGetFirstCommand() { Id = item });
+                    if (check == null)
+                        listIdDelete.Add(item);
+                }
+                if (listIdDelete.Count > 0)
+                    await _elasticSearchClient.DeleteManyAsync(listIdDelete);
             }
             var result = new ResultMessageResponse()
             {

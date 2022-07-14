@@ -50,7 +50,7 @@ namespace Report.API.Application.Queries.GetAll.Reports
                 Name = "Báo cáo chi tiết"
             };
             convertToRoot.Add(tem1);
-            return convertToRoot;
+            return await Task.FromResult(convertToRoot);
         }
 
 

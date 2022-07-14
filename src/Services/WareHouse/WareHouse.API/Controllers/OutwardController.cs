@@ -23,6 +23,7 @@ using WareHouse.API.Application.Querie.CheckCode;
 using WareHouse.API.Application.Queries.GetAll.WareHouses;
 using WareHouse.API.Application.Queries.GetFisrt;
 using WareHouse.API.Controllers.BaseController;
+using WareHouse.API.Infrastructure.ElasticSearch;
 
 namespace WareHouse.API.Controllers
 {
@@ -34,8 +35,9 @@ namespace WareHouse.API.Controllers
         private readonly IUserSevice _userSevice;
         private readonly ILogger<OutwardController> _logger;
         private readonly IEventBus _eventBus;
+        private readonly IElasticSearchClient<WareHouseBookDTO> _elasticSearchClient;
 
-        public OutwardController(IEventBus eventBus,ILogger<OutwardController> logger,IUserSevice userSevice, IFakeData ifakeData, IMediator mediat, ICacheExtension cacheExtension)
+        public OutwardController(IEventBus eventBus, ILogger<OutwardController> logger, IUserSevice userSevice, IFakeData ifakeData, IMediator mediat, ICacheExtension cacheExtension, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
@@ -43,6 +45,7 @@ namespace WareHouse.API.Controllers
             _userSevice = userSevice;
             _logger = logger;
             _eventBus = eventBus;
+            _elasticSearchClient = elasticSearchClient;
         }
         #region R      
         #endregion
@@ -157,7 +160,7 @@ namespace WareHouse.API.Controllers
             {
                 item.Amount = item.Uiquantity * item.Uiprice;
                 int convertRate = await _mediat.Send(new GetConvertRateByIdItemCommand() { IdItem = item.ItemId, IdUnit = item.UnitId });
-                item.Quantity = convertRate * item.Uiquantity;
+                item.Quantity = (decimal)item.Uiquantity / convertRate;
                 item.Price = item.Amount;
             }
             var data = await _mediat.Send(new UpdateOutwardCommand() { OutwardCommands = OutwardCommands });
@@ -184,6 +187,25 @@ namespace WareHouse.API.Controllers
                     Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel}) done...");
 
                 }
+
+                var resElastic = await _elasticSearchClient.InsertOrUpdateAsync(new WareHouseBookDTO()
+                {
+                    Id = OutwardCommands.Id,
+                    CreatedBy = OutwardCommands.CreatedBy,
+                    CreatedDate = OutwardCommands.CreatedDate,
+                    Deliver = OutwardCommands.Deliver,
+                    Description = OutwardCommands.Description,
+                    ModifiedBy = OutwardCommands.ModifiedBy,
+                    ModifiedDate = OutwardCommands.ModifiedDate,
+                    Reason = OutwardCommands.Reason,
+                    ReasonDescription = OutwardCommands.ReasonDescription,
+                    Receiver = OutwardCommands.Receiver,
+                    Type = "Phiếu xuất",
+                    VoucherCode = OutwardCommands.VoucherCode,
+                    VoucherDate = OutwardCommands.VoucherDate,
+                    WareHouseId = OutwardCommands.WareHouseId,
+
+                });
 
             }
 
@@ -276,7 +298,7 @@ namespace WareHouse.API.Controllers
             {
                 item.Amount = item.Uiquantity * item.Uiprice;
                 int convertRate = await _mediat.Send(new GetConvertRateByIdItemCommand() { IdItem = item.ItemId, IdUnit = item.UnitId });
-                item.Quantity = convertRate * item.Uiquantity;
+                item.Quantity = (decimal)item.Uiquantity / convertRate;
                 item.Price = item.Amount;
             }
             var data = await _mediat.Send(new CreateOutwardCommand() { OutwardCommands = OutwardCommands });
@@ -303,6 +325,24 @@ namespace WareHouse.API.Controllers
                     Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel}) done...");
 
                 }
+                var resElastic = await _elasticSearchClient.InsertOrUpdateAsync(new WareHouseBookDTO()
+                {
+                    Id = OutwardCommands.Id,
+                    CreatedBy = OutwardCommands.CreatedBy,
+                    CreatedDate = OutwardCommands.CreatedDate,
+                    Deliver = OutwardCommands.Deliver,
+                    Description = OutwardCommands.Description,
+                    ModifiedBy = OutwardCommands.ModifiedBy,
+                    ModifiedDate = OutwardCommands.ModifiedDate,
+                    Reason = OutwardCommands.Reason,
+                    ReasonDescription = OutwardCommands.ReasonDescription,
+                    Receiver = OutwardCommands.Receiver,
+                    Type = "Phiếu xuất",
+                    VoucherCode = OutwardCommands.VoucherCode,
+                    VoucherDate = OutwardCommands.VoucherDate,
+                    WareHouseId = OutwardCommands.WareHouseId,
+
+                });
 
             }
 
@@ -347,7 +387,16 @@ namespace WareHouse.API.Controllers
                     Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel}) done...");
 
                 }
+                var listIdDelete = new List<string>();
 
+                foreach (var item in listIds)
+                {
+                    var check = await _mediat.Send(new OutwardGetFirstCommand() { Id = item });
+                    if (check == null)
+                        listIdDelete.Add(item);
+                }
+                if (listIdDelete.Count > 0)
+                    await _elasticSearchClient.DeleteManyAsync(listIdDelete);
             }
 
             var result = new ResultMessageResponse()

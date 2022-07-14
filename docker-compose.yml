@@ -2,31 +2,10 @@ version: '3.4'
 
 services:
 
-  # zookeeper:
-  #   image: confluentinc/cp-zookeeper:7.0.1
-  #   container_name: zookeeper
-  #   environment:
-  #     ZOOKEEPER_CLIENT_PORT: 2181
-  #     ZOOKEEPER_TICK_TIME: 2000
-  
-  # logstashsql:
-  #   build: ./logstash
-  #   environment:
-  #     LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-  #   ports:
-  #     - 3030:3030
-  #   container_name: logstashsql
-  #   restart: always
-  #   volumes:
-  #     - ./logstash/pipeline:/usr/share/logstash/pipeline
-  #     - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
-
-  #   depends_on:
-  #      - elasticsearch
-
   elasticsearch:
     container_name: elasticsearch
     build: ./deploy/elk/elasticsearch/
+    image: tunnm/docker-es-cococ-tokenizer:7.12.1
     volumes:
       - ./deploy/elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
     ports:
@@ -101,25 +80,6 @@ services:
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
 
-
-
-  # broker:
-  #   image: confluentinc/cp-kafka:7.0.1
-  #   container_name: broker
-  #   ports:
-  #   # To learn about configuring Kafka for access across networks see
-  #   # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
-  #     - "9092:9092"
-  #   depends_on:
-  #     - zookeeper
-  #   environment:
-  #     KAFKA_BROKER_ID: 1
-  #     KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
-  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://host.docker.internal:29092
-  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-  #     KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-  #     KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
   manager:
     image: sheepkiller/kafka-manager
     container_name: managerKafka
@@ -168,13 +128,8 @@ services:
       - sqlserver
       - broker
     environment:
-      # - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:5005
-      #- ConnectionString=${WarehouseManagementContext:-Server=sqlserver;Initial Catalog=WarehouseManagement;Persist Security Info=True;User ID=sa;Password=Aa!0977751021;MultipleActiveResultSets = true}
-      #- PATH_BASE=/warehouse-api
-      #- GRPC_PORT=81
-      #- PORT=80
     ports:
       - "5005:5005"
       - "5006:5006"
@@ -192,9 +147,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:50001
-      #- ConnectionString=${MasterdataContext:-Server=sqlserver;Initial Catalog=MasterData;Persist Security Info=True;User ID=sa;Password=Aa!0977751021;MultipleActiveResultSets = true}
-      #- PATH_BASE=/warehouse-api
-      #- Redis=${ConnectionString:-redis}
       - GRPC_PORT=81
       - PORT=80
     ports:
