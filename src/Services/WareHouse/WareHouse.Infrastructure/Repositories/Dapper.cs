@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using WareHouse.Domain.Entity;
 using WareHouse.Domain.IRepositories;
 using WareHouse.Domain.SeeWork;
-
+using Serilog;
 namespace WareHouse.Infrastructure.Repositories
 {
     public class Dapperr : IDapper
@@ -33,27 +33,34 @@ namespace WareHouse.Infrastructure.Repositories
         public async Task<T> GetAyncFirst<T>(string sp, DynamicParameters parms, CommandType commandType)
         {
             using var connection = new SqlConnection(_config.GetConnectionString(Connectionstring));
+            Log.Information("Dapper query: " + sp);
             return await connection.QueryFirstOrDefaultAsync<T>(sp, parms, commandType: commandType);
         }
 
 
         public async Task<IEnumerable<T>> GetAllAync<T>(string sp, DynamicParameters parms, CommandType commandType)
         {
+            Log.Information("Dapper query: " + sp);
             using var connection = new SqlConnection(_config.GetConnectionString(Connectionstring));
             return await connection.QueryAsync<T>(sp, parms, commandType: commandType);
         }
         public async Task<IEnumerable<T>> GetList<T>(string sp, DynamicParameters parms, CommandType commandType)
         {
+            Log.Information("Dapper query: " + sp);
+
             using var connection = new SqlConnection(_config.GetConnectionString(Connectionstring));
             return await connection.QueryAsync<T>(sp, parms, commandType: commandType);
         }
 
         public async Task<IEnumerable<T>> GetListByListId<T>(IEnumerable<string> listId, string nameEntity, CommandType commandType)
         {
+
             using var connection = new SqlConnection(_config.GetConnectionString(Connectionstring));
             var sp = "select * from " + nameEntity + " where " + nameof(BaseEntity.Id) + " in @ids";
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@ids", listId);
+            Log.Information("Dapper query: " + sp);
+
             return await connection.QueryAsync<T>(sp, parameter, commandType: commandType);
         }
         public DbConnection GetDbconnection()
@@ -67,6 +74,8 @@ namespace WareHouse.Infrastructure.Repositories
             var sp = "select Id from " + nameEntity + " where Code = @code";
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@code", code);
+            Log.Information("Dapper query: " + sp);
+
             var res = await connection.QueryAsync<T>(sp, parameter, commandType: CommandType.Text);
             return res.Count();
         }
@@ -98,6 +107,8 @@ namespace WareHouse.Infrastructure.Repositories
             }
             using var connection = new SqlConnection(_config.GetConnectionString(Connectionstring));
             string sSQL = string.Format("SELECT TOP 1 * FROM {0} (NOLOCK) {1}", nameEntity, sBuider.ToString());
+            Log.Information("Dapper query: "+sSQL);
+
             var res = await connection.QueryAsync<T>(sSQL, commandType: CommandType.Text);
             return res.Count();
         }

@@ -139,7 +139,7 @@ export class WareHouseItemComponent implements OnInit {
       const dialogRef = this.dialog.open(WareHouseItemEditComponent, {
         width: '550px',
         data: this.modelCreate,
-        height:'90vh'
+        height:'auto'
       });
 
       dialogRef.afterClosed().subscribe(result => {
@@ -161,6 +161,7 @@ export class WareHouseItemComponent implements OnInit {
       const dialogRef = this.dialog.open(WareHouseItemDetailsComponent, {
         width: '550px',
         data: this.modelCreate,
+        height:'auto'
       });
 
     });
@@ -170,6 +171,7 @@ export class WareHouseItemComponent implements OnInit {
       this.modelCreate = x.data;
       const dialogRef = this.dialog.open(WareHouseItemCreateComponent, {
         width: '550px',
+        height:'auto',
         data: this.modelCreate
       });
 
