@@ -30,7 +30,9 @@ export class AppComponent {
     private auth: AuthenticationService
   ) { }
   @HostListener('window:resize', ['$event'])
-
+  ngAfterViewInit(){
+    console.log("Time until reaching run phase: ", window.performance.now());
+ }
   onWindowResize() {
     this.getScreenWidth = window.innerWidth;
     this.getScreenHeight = window.innerHeight;
