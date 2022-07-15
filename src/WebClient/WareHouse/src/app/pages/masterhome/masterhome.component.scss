@@ -1,14 +1,21 @@
-.text-capitalize{
+.text-capitalize {
     font-size: 18px;
     font-weight: 500;
 }
-.icon-format{
+
+.icon-format {
     font-size: 39px;
     height: 45px;
 }
-.d-flex-home{
+
+.d-flex-home {
     display: flex;
     align-items: center;
     height: 45px;
     justify-content: space-between;
+}
+
+.align-items-center {
+    align-items: center;
+    margin-top: 79px;
 }

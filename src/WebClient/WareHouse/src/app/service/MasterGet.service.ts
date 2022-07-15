@@ -36,4 +36,34 @@ export class MasterGetService {
       retry(1),
     );
   }
+  
+  
+  CanConnectElastic(): Observable <ResultDataResponse<boolean>> {
+    var url = this.baseUrl + `/CanConnectElastic`;
+    return this.http.get<ResultDataResponse<boolean>>(url, this.httpOptions).pipe(
+      retry(1),
+    );
+  }
+
+  CanConnectSql(): Observable <ResultDataResponse<boolean>> {
+    var url = this.baseUrl + `/CanConnectSql`;
+    return this.http.get<ResultDataResponse<boolean>>(url, this.httpOptions).pipe(
+      retry(1),
+    );
+  }
+
+  DeleteAllElastic(): Observable <ResultDataResponse<boolean>> {
+    var url = this.baseUrl + `/DeleteAllElastic`;
+    return this.http.get<ResultDataResponse<boolean>>(url, this.httpOptions).pipe(
+      retry(1),
+    );
+  }
+
+  CanConnectRedis(): Observable <ResultDataResponse<boolean>> {
+    var url = this.baseUrl + `/CanConnectRedis`;
+    return this.http.get<ResultDataResponse<boolean>>(url, this.httpOptions).pipe(
+      retry(1),
+    );
+  }
+
 }

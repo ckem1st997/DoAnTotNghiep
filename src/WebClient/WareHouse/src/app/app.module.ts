@@ -113,6 +113,9 @@ import { PagesHomeCenterComponent } from './pages/PagesHomeCenter/PagesHomeCente
 import { RegistrationComponent } from './pages/registration/registration.component';
 import { SignalRService } from './service/SignalR.service';
 import { HttpCancelService } from './extension/HttpCancel.service';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatSliderModule} from '@angular/material/slider';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 const customNotifierOptions: NotifierOptions = {
   position: {
     horizontal: {
@@ -233,7 +236,8 @@ const customNotifierOptions: NotifierOptions = {
     RoleEditComponent,
     SelectWareHouseComponent,
     PagesHomeCenterComponent,
-    RegistrationComponent
+    RegistrationComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -248,6 +252,9 @@ const customNotifierOptions: NotifierOptions = {
     MatPaginatorModule,
     MatCheckboxModule,
     FormsModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
     MatButtonModule,
     ScrollingModule,
     MatInputModule,
