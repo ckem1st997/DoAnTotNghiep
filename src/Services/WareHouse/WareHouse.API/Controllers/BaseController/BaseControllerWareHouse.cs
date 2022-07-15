@@ -6,7 +6,7 @@ using WareHouse.API.Application.Extensions;
 
 namespace WareHouse.API.Controllers.BaseController
 {
-    [Authorize(Roles = "User,Admin,Manager")]
+    [Authorize(Roles = "Admin,Manager")]
     [CheckRole(LevelCheck.READ)]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]

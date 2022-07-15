@@ -1,20 +1,24 @@
 <div class="container mt-5">
   <div class="row">
-    <div class="col-6 d-flex" style="align-items:center">
+    <div class="col-6 d-flex-home" >
+      <mat-icon class="me-3 icon-format" >data_usage</mat-icon>
       <div class="menu-header-title text-capitalize">Đồng bộ hóa giữa Sql Server và Elastic Search</div>
       <button (click)="AsyncSqlElastic()" mat-raised-button color="primary" class="ms-5">Click</button>
     </div>
-    <div class="col-6 d-flex" style="align-items:center">
+    <div class="col-6 d-flex-home" >
+      <mat-icon class="icon-format me-3">gps_not_fixed</mat-icon>
       <div class="menu-header-title text-capitalize">Chỉ số dữ liệu giữa Sql Server và Elastic Search: {{indexString}}</div>
       <button (click)="GetIndexSqlElastic()" mat-raised-button color="primary" class="ms-5">Click</button>
     </div>
-    <!-- <div class="col-4 d-flex" style="align-items:center">
-      <div>Đồng bộ hóa giữa Sql Server và Elastic Search</div>
-      <button mat-raised-button color="primary" class="ms-5">Click</button>
+    <div class="col-6 d-flex-home" >
+      <mat-icon  class="icon-format me-3">delete_forever</mat-icon>
+      <div class="menu-header-title text-capitalize">Xóa tất cả bộ nhớ Cache</div>
+      <button (click)="DeleteAllCache()" mat-raised-button color="primary" class="ms-5">Click</button>
     </div>
-    <div class="col-4 d-flex" style="align-items:center">
-      <div>Đồng bộ hóa giữa Sql Server và Elastic Search</div>
-      <button mat-raised-button color="primary" class="ms-5">Click</button>
-    </div> -->
+    <div class="col-6 d-flex-home" >
+      <mat-icon class="icon-format me-3">import_export</mat-icon>
+      <div class="menu-header-title text-capitalize">Kiểm tra cơ sở dữ liệu SQL</div>
+      <button (click)="GetIndexSqlElastic()" mat-raised-button color="primary" class="ms-5">Click</button>
+    </div>
   </div>
 </div>

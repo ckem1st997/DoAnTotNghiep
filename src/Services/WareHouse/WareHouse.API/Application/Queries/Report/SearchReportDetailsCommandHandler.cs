@@ -82,7 +82,7 @@ namespace WareHouse.API.Application.Queries.Report
 
             sb.Append("select d1.VoucherDate,WareHouseItem.Code,WareHouseItem.Name,d1.VoucherCode,Unit.UnitName, ");
             sb.Append("   COALESCE( ");
-            sb.Append("   COALESCE(d1.Quantity,0) ");
+            sb.Append("   COALESCE((SELECT COALESCE( bwh.Quantity,0) FROM BeginningWareHouse bwh where bwh.OnDelete = 0 and bwh.ItemId = @pWareHouseItemId  and bwh.WareHouseId  in @pWareHouseId and bwh.CreatedDate <= d1.VoucherDate),0) ");
             sb.Append("   +  ");
             sb.Append("   (SELECT ");
             sb.Append("   COALESCE(sum(id.Quantity),0) ");

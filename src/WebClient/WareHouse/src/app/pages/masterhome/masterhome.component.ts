@@ -9,14 +9,14 @@ import { SignalRService } from 'src/app/service/SignalR.service';
   styleUrls: ['./masterhome.component.scss']
 })
 export class MasterhomeComponent implements OnInit, OnDestroy {
-   indexString: string = '0-0';
+  indexString: string = '0-0';
   constructor(private signalRService: SignalRService, private master: MasterGetService, private notifierService: NotifierService) { }
 
   ngOnInit() {
     this.GetIndexSqlElastic();
 
   }
-   GetIndexSqlElastic() {
+  GetIndexSqlElastic() {
     this.master.GetIndexSqlElastic().subscribe(res => {
       if (res.success)
         this.indexString = res.data;
@@ -34,7 +34,17 @@ export class MasterhomeComponent implements OnInit, OnDestroy {
     })
 
   }
-
+  DeleteAllCache() {
+    this.master.DeleteAllCache().subscribe(res => {
+      console.log(res);
+      if (res.success) {
+        this.notifierService.notify('success', 'Đã xóa cache thành công !');
+      }
+      else
+        this.notifierService.notify('error', 'Có lỗi xảy ra, chưa xóa cache thành công !');
+    }
+    )
+  }
   ngOnDestroy() {
     this.signalRService.off(this.signalRService.WareHouseBookTrachkingToCLient);
     this.signalRService.hubConnection.off(this.signalRService.CreateWareHouseBookTrachking);

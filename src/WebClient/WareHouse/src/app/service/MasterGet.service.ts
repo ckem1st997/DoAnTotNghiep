@@ -29,4 +29,11 @@ export class MasterGetService {
       retry(1),
     );
   }
+
+  DeleteAllCache(): Observable <ResultDataResponse<object>> {
+    var url = this.baseUrl + `/DeleteAllCache`;
+    return this.http.get<ResultDataResponse<object>>(url, this.httpOptions).pipe(
+      retry(1),
+    );
+  }
 }

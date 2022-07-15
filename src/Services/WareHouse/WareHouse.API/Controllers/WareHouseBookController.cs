@@ -799,6 +799,22 @@ namespace WareHouse.API.Controllers
                 }
 
             }
+            else if (dataIn && dataOut)
+            {
+                foreach (var item in wareHouseBookDelete.idsOut)
+                {
+                    var check = await _mediat.Send(new OutwardGetFirstCommand() { Id = item });
+                    if (check == null)
+                        listIdDelete.Add(item);
+                }
+                foreach (var item in wareHouseBookDelete.idsIn)
+                {
+                    var check = await _mediat.Send(new InwardGetFirstCommand() { Id = item });
+                    if (check == null)
+                        listIdDelete.Add(item);
+                }
+
+            }
             if (listIdDelete.Count > 0)
                 await _elasticSearchClient.DeleteManyAsync(listIdDelete);
             if (dataRes)

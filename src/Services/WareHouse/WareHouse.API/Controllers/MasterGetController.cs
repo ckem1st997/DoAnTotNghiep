@@ -8,6 +8,7 @@ using Serilog.Context;
 using System.Linq;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Authentication;
+using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.Paginated.WareHouseBook;
@@ -23,14 +24,17 @@ namespace WareHouse.API.Controllers
         private readonly IUserSevice _userSevice;
         private readonly IEventBus _eventBus;
         private readonly IElasticSearchClient<WareHouseBookDTO> _elasticSearchClient;
+        private readonly ICacheExtension _cacheExtension;
 
-        public MasterGetController(IElasticClient elasticClient, IMediator mediat, IUserSevice userSevice, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient, IEventBus eventBus)
+
+        public MasterGetController(IElasticClient elasticClient, IMediator mediat, IUserSevice userSevice, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient, IEventBus eventBus, ICacheExtension cacheExtension)
         {
             _elasticClient = elasticClient;
             _mediat = mediat;
             _userSevice = userSevice;
             _elasticSearchClient = elasticSearchClient;
             _eventBus = eventBus;
+            _cacheExtension = cacheExtension;
         }
 
         [HttpGet("GetDataWareHouseBook")]
@@ -120,11 +124,31 @@ namespace WareHouse.API.Controllers
             var resElastic = await _elasticSearchClient.CountAllAsync();
             return Ok(new ResultMessageResponse()
             {
-                data = res.totalCount + "-" + resElastic,
-                success = res.totalCount>0 || resElastic > 0
+                data = res.totalCount + " - " + resElastic,
+                success = res.totalCount > 0 || resElastic > 0
 
             });
 
+        }
+
+
+        [HttpGet("DeleteAllCache")]
+        public async Task<IActionResult> DeleteAllCache()
+        {
+            if (!_cacheExtension.IsConnected)
+                return Ok(new ResultMessageResponse()
+                {
+                    data = "Không kết nối được tới Redis",
+                    success = false
+
+                });
+            var res = await _cacheExtension.RemoveAll();
+            return Ok(new ResultMessageResponse()
+            {
+                data = "Xóa thành công !",
+                success = !res.IsNull
+
+            });
         }
     }
 }
