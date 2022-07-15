@@ -6,5 +6,6 @@ namespace WareHouse.API.Application.Commands.Models
     {
         public string WareHouseId { get; set; }
         public string ItemId { get; set; }
+        public string UnitId { get; set; }
     }
 }

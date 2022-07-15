@@ -56,8 +56,8 @@ export class WareHouseBookService {
     );
   }
 
-  CheckQuantityIdItem(itemId: string,wareHouseId:string): Observable<ResultMessageResponse<UnitDTO>> {
-    var url = this.baseUrl + `/check-ui-quantity?WareHouseId=`+wareHouseId+`&ItemId=`+itemId+``;
+  CheckQuantityIdItem(itemId: string,wareHouseId:string,unitId:string): Observable<ResultMessageResponse<UnitDTO>> {
+    var url = this.baseUrl + `/check-ui-quantity?WareHouseId=`+wareHouseId+`&ItemId=`+itemId+`&UnitId=`+unitId+``;
     return this.http.get<ResultMessageResponse<UnitDTO>>(url, this.httpOptions).pipe(
       tap(_ => console.log(`create`)),
 

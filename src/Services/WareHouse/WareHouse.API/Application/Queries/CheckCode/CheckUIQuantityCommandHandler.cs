@@ -51,7 +51,7 @@ namespace WareHouse.API.Application.Querie.CheckCode
             sb.Append("    INNER JOIN InwardDetail id ");
             sb.Append("      ON i.id = id.InwardId ");
             sb.Append("  WHERE id.ItemId = @p1 and id.OnDelete=0 and i.OnDelete=0 ");
-            sb.Append("  AND i.VoucherDate <= '" + ConvertDateTimeToDateTimeSql(date) + " 12:0:0 AM' ");
+          //  sb.Append("  AND i.VoucherDate <= '" + ConvertDateTimeToDateTimeSql(date) + " 12:0:0 AM' ");
             sb.Append("  UNION ALL ");
             sb.Append("  SELECT ");
             sb.Append("    od.ItemId, ");
@@ -61,7 +61,8 @@ namespace WareHouse.API.Application.Querie.CheckCode
             sb.Append("    INNER JOIN OutwardDetail od ");
             sb.Append("      ON o.Id = od.OutwardId ");
             sb.Append("  WHERE od.ItemId =@p1  and od.OnDelete=0 and o.OnDelete=0  ");
-            sb.Append("  AND o.VoucherDate <= '" + ConvertDateTimeToDateTimeSql(date) + " 12:0:0 AM') d1 ");
+            //  sb.Append("  AND o.VoucherDate <= '" + ConvertDateTimeToDateTimeSql(date) + " 12:0:0 AM'");
+            sb.Append(" ) d1  ");
             sb.Append("  INNER JOIN WareHouse wh ");
             sb.Append("    ON d1.WarehouseId = wh.Id ");
             sb.Append("    WHERE d1.WareHouseId=@p2  and wh.OnDelete=0 ");

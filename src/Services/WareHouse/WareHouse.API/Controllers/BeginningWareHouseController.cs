@@ -197,6 +197,7 @@ namespace WareHouse.API.Controllers
                     success = false,
                     message = "Vật tư đã có tồn trong kho !"
                 });
+            command.CreatedDate=DateTime.Now;
             var data = await _mediat.Send(
                 new CreateBeginningWareHouseCommand() { BeginningWareHouseCommands = command });
             var result = new ResultMessageResponse()

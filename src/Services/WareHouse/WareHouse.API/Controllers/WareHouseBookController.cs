@@ -143,10 +143,13 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CheckUiQuantity([FromQuery] CheckUIQuantityCommands checkUIQuantityCommands)
         {
+            // trả về số theo đơn vị tính chính
             var data = await _mediat.Send(new CheckUIQuantityCommand() { ItemId = checkUIQuantityCommands.ItemId, WareHouseId = checkUIQuantityCommands.WareHouseId });
+            int convertRate = await _mediat.Send(new GetConvertRateByIdItemCommand() { IdItem = checkUIQuantityCommands.ItemId, IdUnit = checkUIQuantityCommands.UnitId });
             var result = new ResultMessageResponse()
             {
-                data = data,
+                // trả về số tồn theo đơn vị đang chọn
+                data = data*convertRate,
                 success = true,
             };
             return Ok(result);
