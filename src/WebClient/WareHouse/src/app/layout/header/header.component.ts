@@ -14,8 +14,8 @@ import isOnline from 'is-online';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  networkStatus: boolean = false;
-  speedTest: string = '0';
+  networkStatus: boolean = true;
+  speedTest: number=0;
   userName: string | undefined;
   activeNoticaonList: boolean = false;
   listBefor!: HistoryNoticationDT0;
@@ -56,19 +56,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   checkNetworkStatus() {
     if (this.networkStatus)
-      this.speedTestService.getMbps(
+      this.speedTestService.getBps(
         {
           iterations: 1,
           retryDelay: 1500,
         }
       ).subscribe(
         (speed) => {
-          this.speedTest = speed.toFixed(2).toString();
+          console.log(speed);
+          this.speedTest = speed==null?0:speed;
           console.log('Your speed is ' + this.speedTest);
         }
       );
     else
-      this.speedTest = '0';
+      this.speedTest = 0;
   }
   ngOnDestroy(): void {
     // tắt phương thức vừa gọi để tránh bị gọi lại nhiều lần
