@@ -19,10 +19,15 @@ export class ErrorIntercept implements HttpInterceptor {
         private httpCancelService: HttpCancelService
     ) {
         router.events.subscribe(event => {
-            // An event triggered at the end of the activation part of the Resolve phase of routing.
-            // if (event instanceof ActivationEnd) {
+            //An event triggered at the end of the activation part of the Resolve phase of routing.
+            if (event instanceof ActivationEnd) {
+              // Cancel pending calls
+              this.httpCancelService.cancelPendingRequests();
+            }
+            // if (event instanceof NavigationStart ) {
+            //    console
             //   // Cancel pending calls
-            //   this.httpCancelService.cancelPendingRequests(window.location.href);
+            //   this.httpCancelService.cancelPendingRequests();
             // }
         });
     }
@@ -106,12 +111,14 @@ export class ErrorIntercept implements HttpInterceptor {
                 }
                 return evt;
             }))
-        //.pipe(takeUntil(this.httpCancelService.onCancelPendingRequests()));
+            .pipe(takeUntil(this.httpCancelService.onCancelPendingRequests()));
+
+        
     }
     private logRequestTime(startTime: number, url: string, method: string) {
         const requestDuration = `${performance.now() - startTime}`;
         console.log(`HTTP ${method} ${url} - ${requestDuration} milliseconds`);
-        this.notife.notify('info', `${requestDuration} milliseconds`);
+       // this.notife.notify('info', `${requestDuration} milliseconds`);
         // this.notife.show({
         //     type: 'success',
         //     message: `${requestDuration} milliseconds`,

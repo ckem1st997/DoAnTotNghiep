@@ -25,6 +25,8 @@
     "angular-split": "^13.1.0",
     "echarts": "^5.3.1",
     "fluentvalidation-ts": "^2.2.2",
+    "is-online": "^10.0.0",
+    "ng-speed-test": "^2.2.0",
     "ngx-chips": "^3.0.0",
     "ngx-countup": "^13.0.0",
     "ngx-echarts": "^8.0.1",

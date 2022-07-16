@@ -116,6 +116,7 @@ import { HttpCancelService } from './extension/HttpCancel.service';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { SpeedTestModule } from 'ng-speed-test';
 const customNotifierOptions: NotifierOptions = {
   position: {
     horizontal: {
@@ -274,6 +275,7 @@ const customNotifierOptions: NotifierOptions = {
     CountUpModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
+    SpeedTestModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
     }),
