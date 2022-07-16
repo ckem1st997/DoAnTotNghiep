@@ -63,10 +63,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
       ).subscribe(
         (speed) => {
-          this.speedTest=speed.toFixed(2).toString();
+          this.speedTest = speed.toFixed(2).toString();
           console.log('Your speed is ' + this.speedTest);
         }
       );
+    else
+      this.speedTest = '0';
   }
   ngOnDestroy(): void {
     // tắt phương thức vừa gọi để tránh bị gọi lại nhiều lần
