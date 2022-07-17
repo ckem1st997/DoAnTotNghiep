@@ -98,8 +98,10 @@ services:
       - "5341:80"
     volumes:
       - ./storage/seq:/seq
+
+  #ALTER SERVICE MASTER KEY FORCE REGENERATE;
   sqlserver:
-    build: ./deploy/sqlreplication/master
+    build: ./deploy/sqlreplication/slade-1
     container_name: sqlServer
     environment:
             SA_PASSWORD: "Aa!012345679"
@@ -113,22 +115,30 @@ services:
       - replication
 
   sqlserver-slade-1:
-    build: ./deploy/sqlreplication/master
+    build: ./deploy/sqlreplication/slade-1
     hostname: sqlserver-slade-1
     container_name: sqlserver-slade-1
     environment:
             SA_PASSWORD: "Aa!012345679"
             ACCEPT_EULA: "Y"
             MSSQL_AGENT_ENABLED: "true"
+# SP_CONFIGURE 'SHOW ADVANCE',1
+# GO
+# RECONFIGURE WITH OVERRIDE
+# GO
+# SP_CONFIGURE 'AGENT XPs',1
+# GO
+# RECONFIGURE WITH OVERRIDE
+# GO
     ports:
       - "5434:1433"
-    # volumes:
-    #   - ./storage/sqlserver-slade-1:/var/opt/mssql/data
+    volumes:
+      - ./storage/sqlserver-slade-1:/var/opt/mssql/data
     networks:
       - replication
 
   sqlserver-slade-2:
-    build: ./deploy/sqlreplication/master
+    build: ./deploy/sqlreplication/slade-1
     hostname: sqlserver-slade-2
     container_name: sqlserver-slade-2
     environment:
@@ -137,8 +147,8 @@ services:
             MSSQL_AGENT_ENABLED: "true"
     ports:
       - "5435:1433"
-    # volumes:
-    #   - ./storage/sqlserver-slade-2:/var/opt/mssql/data
+    volumes:
+      - ./storage/sqlserver-slade-2:/var/opt/mssql/data
     networks:
       - replication
 
