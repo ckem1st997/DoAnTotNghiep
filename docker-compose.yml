@@ -99,7 +99,7 @@ services:
     volumes:
       - ./storage/seq:/seq
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest 
+    build: ./deploy/sqlreplication/master
     container_name: sqlServer
     environment:
             SA_PASSWORD: "Aa!0977751021"
