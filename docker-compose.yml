@@ -102,8 +102,9 @@ services:
     build: ./deploy/sqlreplication/master
     container_name: sqlServer
     environment:
-            SA_PASSWORD: "Aa!0977751021"
+            SA_PASSWORD: "Aa!012345679"
             ACCEPT_EULA: "Y"
+            MSSQL_AGENT_ENABLED: "true"
     ports:
       - "5433:1433"
     volumes:
@@ -113,10 +114,12 @@ services:
 
   sqlserver-slade-1:
     build: ./deploy/sqlreplication/master
+    hostname: sqlserver-slade-1
     container_name: sqlserver-slade-1
     environment:
             SA_PASSWORD: "Aa!012345679"
             ACCEPT_EULA: "Y"
+            MSSQL_AGENT_ENABLED: "true"
     ports:
       - "5434:1433"
     # volumes:
@@ -126,10 +129,12 @@ services:
 
   sqlserver-slade-2:
     build: ./deploy/sqlreplication/master
+    hostname: sqlserver-slade-2
     container_name: sqlserver-slade-2
     environment:
             SA_PASSWORD: "Aa!012345679"
             ACCEPT_EULA: "Y"
+            MSSQL_AGENT_ENABLED: "true"
     ports:
       - "5435:1433"
     # volumes:
