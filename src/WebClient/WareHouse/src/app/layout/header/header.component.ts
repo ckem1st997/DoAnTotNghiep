@@ -56,16 +56,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   checkNetworkStatus() {
     if (this.networkStatus)
-      this.speedTestService.getBps(
+      this.speedTestService.getMbps(
         {
           iterations: 1,
           retryDelay: 1500,
         }
       ).subscribe(
         (speed) => {
-          console.log(speed);
           this.speedTest = speed==null?0:speed;
-          console.log('Your speed is ' + this.speedTest);
         }
       );
     else

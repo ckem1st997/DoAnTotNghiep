@@ -11,3 +11,9 @@ FROM mcr.microsoft.com/mssql/server:2019-latest
 # CMD /opt/mssql/bin/sqlservr
 
 # docker exec -it container1 mkdir /var/opt/mssql/data/ReplData/
+
+
+COPY . /
+USER root
+RUN  chmod +x /db-init.sh
+CMD /bin/bash ./entrypoint.sh

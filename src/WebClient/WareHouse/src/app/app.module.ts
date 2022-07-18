@@ -275,11 +275,11 @@ const customNotifierOptions: NotifierOptions = {
     CountUpModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
-    SpeedTestModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
     }),
-    MatSelectModule
+    MatSelectModule,
+    SpeedTestModule,
 
   ],
   providers: [VendorService,WareHouseItemService,{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, {
