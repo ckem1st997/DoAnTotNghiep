@@ -1,0 +1,54 @@
+_format_version: "1.1"
+#https://github.com/tuannguyenssu/kong-examples
+# Ví dụ cấu hình một APIs đơn giản với Kong
+
+
+# Cấu hình các Services và Routes
+
+services:
+- name: api-mt
+  url : http://host.docker.internal:50001/
+  routes:
+    - name: api-mt
+      methods: 
+      - OPTIONS
+      - GET    
+      - POST   
+      - PUT
+      - HEAD
+      - DELETE 
+      paths:
+        - /api-mt
+      tags:
+        - api-mt
+      protocols:
+      - http
+      - https
+      regex_priority: 0
+      strip_path: true
+      preserve_host: false 
+      path_handling: v1
+
+- name: api-wh
+  url : http://host.docker.internal:5005/
+  tags: 
+    - api-wh
+  retries: 5
+  write_timeout: 60000  
+  routes:
+    - name: api-wh
+      methods: 
+      - OPTIONS
+      - GET    
+      - POST   
+      - PUT
+      - HEAD
+      - DELETE 
+      paths:
+        - /api-wh
+      protocols:
+      - http
+      - https
+      regex_priority: 0
+      strip_path: true
+      preserve_host: false 
