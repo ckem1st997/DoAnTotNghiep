@@ -6,13 +6,16 @@ import { ResultDataResponse } from 'src/app/model/ResultDataResponse';
 import { ResultMessageResponse } from 'src/app/model/ResultMessageResponse';
 import { AuthozireService } from 'src/app/service/Authozire.service';
 import { SignalRService } from 'src/app/service/SignalR.service';
-
+import { SpeedTestService } from 'ng-speed-test';
+import isOnline from 'is-online';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  networkStatus: boolean = true;
+  speedTest: number=0;
   userName: string | undefined;
   activeNoticaonList: boolean = false;
   listBefor!: HistoryNoticationDT0;
@@ -30,7 +33,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     redirectUrl: '',
     errors: {}
   };
-  constructor(public signalRService: SignalRService, private service: AuthenticationService, private serviceAuthozire: AuthozireService) { }
+  constructor(private speedTestService: SpeedTestService, public signalRService: SignalRService, private service: AuthenticationService, private serviceAuthozire: AuthozireService) { }
 
   ngOnInit() {
     this.userName = this.service.userValue.username;
@@ -43,13 +46,37 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
       }
     });
+    setInterval(() => {
+      (async () => {
+        this.networkStatus = await isOnline();
+        this.checkNetworkStatus();
+      })();
+    }, 3000);
+  }
+
+  checkNetworkStatus() {
+    if (this.networkStatus)
+      this.speedTestService.getBps(
+        {
+          iterations: 1,
+          retryDelay: 1500,
+        }
+      ).subscribe(
+        (speed) => {
+          console.log(speed);
+          this.speedTest = speed==null?0:speed;
+          console.log('Your speed is ' + this.speedTest);
+        }
+      );
+    else
+      this.speedTest = 0;
   }
   ngOnDestroy(): void {
     // tắt phương thức vừa gọi để tránh bị gọi lại nhiều lần
     this.signalRService.hubConnection.off(this.signalRService.HistoryTrachking);
   }
   getHistory() {
-    this.serviceAuthozire.getListHistoryByUser().subscribe(res => { this.listHistory = res; this.listBefor = res.data[0]; this.listAfter = res.data.slice(1); this.countHistory = res.data.filter(x => x.userNameRead==null || !x.userNameRead.includes(this.service.userValue.username)).length; });
+    this.serviceAuthozire.getListHistoryByUser().subscribe(res => { this.listHistory = res; this.listBefor = res.data[0]; this.listAfter = res.data.slice(1); this.countHistory = res.data.filter(x => x.userNameRead == null || !x.userNameRead.includes(this.service.userValue.username)).length; });
 
   }
 
@@ -108,10 +135,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
           ids.push(element.id);
         }
         this.serviceAuthozire.ActiveRead(ids).subscribe(res => {
-          if(res)
-          this.getHistory();
+          if (res)
+            this.getHistory();
         });
-    }
+      }
       //    if (this.activeNoticaonList)
       //     this.serviceAuthozire.getListHistoryByUser().subscribe(res => { this.listHistory = res; this.listBefor = res.data[0]; this.listAfter = res.data.slice(1); });
     }

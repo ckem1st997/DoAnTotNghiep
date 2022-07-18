@@ -1,6 +1,6 @@
 <div class="container-fluid" style="margin-top: 179px;">
   <div class="row">
-    <div class="col-6 container">
+    <div class="col-5 container">
       <div class="row align-items-center">
         <div class="col-1">
           <mat-icon class="me-3 icon-format ">data_usage</mat-icon>
@@ -19,16 +19,16 @@
 
     </div>
 
-    <div class="col-6 container">
+    <div class="col-7 container">
       <div class="row align-items-center">
         <div class="col-1">
           <mat-icon class="icon-format me-3">delete_forever</mat-icon>
         </div>
-        <div class="menu-header-title text-capitalize col-5">Xóa tất cả bộ nhớ Cache</div>
+        <div class="menu-header-title text-capitalize col-4">Xóa tất cả bộ nhớ Cache</div>
         <div class="col-2">
           <button (click)="DeleteAllCache()" mat-raised-button color="primary" class="ms-5">Xóa</button>
         </div>
-        <div class="col-2" >
+        <div class="col-3" >
           <mat-slide-toggle class="example-margin" [color]="color" [checked]="checkedRedis" [disabled]="disabled">
           {{GetStatus(checkedRedis)}}  
           </mat-slide-toggle>
@@ -39,7 +39,7 @@
       </div>
 
     </div>
-    <div class="col-6 container">
+    <div class="col-5 container">
       <div class="row align-items-center">
         <div class="col-1">
           <mat-icon class="icon-format me-3">gps_not_fixed</mat-icon>
@@ -59,16 +59,16 @@
       </div>
 
     </div>
-    <div class="col-6 container">
+    <div class="col-7 container">
       <div class="row align-items-center">
         <div class="col-1">
           <mat-icon class="icon-format me-3">import_export</mat-icon>
         </div>
-        <div class="menu-header-title text-capitalize col-5">Xóa tất cả dữ liệu Elastic</div>
+        <div class="menu-header-title text-capitalize col-4">Xóa tất cả dữ liệu Elastic</div>
         <div class="col-2">
           <button (click)="DeleteAllElastic()" mat-raised-button color="primary" class="ms-5">Xóa</button>
         </div>
-        <div class="col-2">
+        <div class="col-3">
           <mat-slide-toggle class="example-margin" [color]="color" [checked]="checkElastic" [disabled]="disabled">
             {{GetStatus(checkElastic)}}  
           </mat-slide-toggle>

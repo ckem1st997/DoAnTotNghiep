@@ -69,6 +69,14 @@
           <i class="bi bi-github icon-link"></i>
           GitHub
         </a>
+        <a class="link-icon">
+          <i class="bi bi-bar-chart icon-link"></i>
+          {{ networkStatus ? 'Online' : 'Office' }}
+        </a>
+        <a *ngIf="speedTest>0" class="link-icon">
+          <i class="bi bi-hdd-network icon-link"></i>
+          {{speedTest.toFixed(2)}} Mbps
+        </a>
         <a id="QuanLyReport" #createPlanmenuTriggerLogin="matMenuTrigger" [matMenuTriggerFor]="menuLogin"
           (click)="createPlanmenuTriggerLogin.openMenu()" class="link-icon header-a" (click)="changActive($event)">
           <mat-icon class="icon-link" aria-hidden="false" aria-label="Example home icon">login</mat-icon>
@@ -98,8 +106,8 @@
         <h2>Mới</h2>
         <div class="notication-card">
           <i class="bi bi-newspaper notication-icon color-new"></i>
-          <div class="notication-card" >
-          
+          <div class="notication-card">
+
             <div class="notication-list-card">
               <div class="notication-list-card-title">
                 Tài khoản <strong>{{listBefor.userName}}</strong> {{listBefor.body}}

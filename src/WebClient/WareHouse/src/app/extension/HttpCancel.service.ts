@@ -13,14 +13,15 @@ export class HttpCancelService {
   ) { }
 
   // Cancel Pending HTTP calls
-  public cancelPendingRequests(url: string) {
+  public cancelPendingRequests() {
+    console.log('Cancel Pending HTTP calls');
     this.pendingHTTPRequests$.next();
-    this._loading.setLoading(false, url);
 
   }
 
   public onCancelPendingRequests() {
     return this.pendingHTTPRequests$.asObservable();
+
   }
 
 }
