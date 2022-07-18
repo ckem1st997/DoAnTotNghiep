@@ -14,7 +14,9 @@ USER root
 RUN  chmod +x /db-init.sh
 CMD /bin/bash ./entrypoint.sh
 RUN /opt/mssql/bin/mssql-conf set sqlagent.enabled true 
-
+RUN mkdir /var/opt/mssql/ReplData/
+RUN chown mssql /var/opt/mssql/ReplData/
+RUN chgrp mssql /var/opt/mssql/ReplData/
 
 
 
