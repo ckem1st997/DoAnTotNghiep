@@ -1,3 +1,8 @@
+# if want use kong to database instead of db-less then un comment and set comment KONG_DATABASE: "off"
+# and un comment the library relate to kong
+# default kong gate use db-less by cache of the kong gate
+
+
 version: '3.4'
 
 services:
@@ -80,15 +85,15 @@ services:
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
 
-  manager:
-    image: sheepkiller/kafka-manager
-    container_name: managerKafka
-    ports:
-      - 9000:9000
-    environment:
-      - ZK_HOSTS=zookeeper:2181
-    depends_on:
-      - zookeeper
+  # manager:
+  #   image: sheepkiller/kafka-manager
+  #   container_name: managerKafka
+  #   ports:
+  #     - 9000:9000
+  #   environment:
+  #     - ZK_HOSTS=zookeeper:2181
+  #   depends_on:
+  #     - zookeeper
   # seq:
   #   image: datalust/seq:latest
   #   container_name: seqLogs
@@ -195,37 +200,37 @@ services:
       - "50001:50001"
       - "50000:50000"
    
-  kong-database:
-    image: postgres:9.6
-    container_name: kong-database
-    environment:
-        POSTGRES_USER: kong
-        POSTGRES_DB: kong
-        POSTGRES_PASSWORD: kong
-    ports:
-        - "5432:5432"
-    volumes:
-        - ./storage/kong-database:/var/lib/postgresql/data
-    networks:
-        - kong-net 
+  # kong-database:
+  #   image: postgres:9.6
+  #   container_name: kong-database
+  #   environment:
+  #       POSTGRES_USER: kong
+  #       POSTGRES_DB: kong
+  #       POSTGRES_PASSWORD: kong
+  #   ports:
+  #       - "5432:5432"
+  #   volumes:
+  #       - ./storage/kong-database:/var/lib/postgresql/data
+  #   networks:
+  #       - kong-net 
     
-  kong-migrations:
-    image: kong:latest
-    container_name: kong-migrations
-    restart: on-failure
-    depends_on:
-        - kong-database
-    links:
-        - kong-database:kong-database
-    environment:
-        KONG_DATABASE: postgres
-        KONG_PG_HOST: kong-database
-        KONG_PG_USER: kong
-        KONG_PG_PASSWORD: kong
-        KONG_CASSANDRA_CONTACT_POINTS: kong-database
-    entrypoint: sh -c "sleep 100 && kong migrations bootstrap --vv"
-    networks:
-        - kong-net
+  # kong-migrations:
+  #   image: kong:latest
+  #   container_name: kong-migrations
+  #   restart: on-failure
+  #   depends_on:
+  #       - kong-database
+  #   links:
+  #       - kong-database:kong-database
+  #   environment:
+  #       KONG_DATABASE: postgres
+  #       KONG_PG_HOST: kong-database
+  #       KONG_PG_USER: kong
+  #       KONG_PG_PASSWORD: kong
+  #       KONG_CASSANDRA_CONTACT_POINTS: kong-database
+  #   entrypoint: sh -c "sleep 100 && kong migrations bootstrap --vv"
+  #   networks:
+  #       - kong-net
             
   kong:
     image: kong:latest
@@ -272,41 +277,41 @@ services:
     # - ./deploy/kong/config/nginx.conf:/usr/local/kong/nginx.conf       
     # - ./deploy/kong/config/nginx-kong.conf:/usr/local/kong/nginx-kong.conf 
     
-  konga-prepare:
-      image: pantsel/konga
-      container_name: konga-prepare
-      command: "-c prepare -a postgres -u postgresql://kong:kong@kong-database:5432/konga"
-      networks:
-          - kong-net
-      restart: on-failure
-      links:
-          - kong-database:kong-database
-      depends_on:
-          - kong-database
+  # konga-prepare:
+  #     image: pantsel/konga
+  #     container_name: konga-prepare
+  #     command: "-c prepare -a postgres -u postgresql://kong:kong@kong-database:5432/konga"
+  #     networks:
+  #         - kong-net
+  #     restart: on-failure
+  #     links:
+  #         - kong-database:kong-database
+  #     depends_on:
+  #         - kong-database
   
-  konga:
-      image: pantsel/konga
-      container_name: kongaManager
-      restart: on-failure
-      links:
-          - kong-database:kong-database
-      depends_on:
-          - kong-database
-      networks:
-          - kong-net
-      environment:
-          DB_ADAPTER: postgres
-          DB_HOST: kong-database
-          DB_PORT: 5432
-          DB_USER: kong
-          DB_PASSWORD: kong
-          DB_DATABASE: konga
-          KONGA_HOOK_TIMEOUT: 120000
-          NODE_ENV: production  
-      ports:
-          - "1337:1337"
-      volumes:
-          - ./storage/konga:/konga
+  # konga:
+  #     image: pantsel/konga
+  #     container_name: kongaManager
+  #     restart: on-failure
+  #     links:
+  #         - kong-database:kong-database
+  #     depends_on:
+  #         - kong-database
+  #     networks:
+  #         - kong-net
+  #     environment:
+  #         DB_ADAPTER: postgres
+  #         DB_HOST: kong-database
+  #         DB_PORT: 5432
+  #         DB_USER: kong
+  #         DB_PASSWORD: kong
+  #         DB_DATABASE: konga
+  #         KONGA_HOOK_TIMEOUT: 120000
+  #         NODE_ENV: production  
+  #     ports:
+  #         - "1337:1337"
+  #     volumes:
+  #         - ./storage/konga:/konga
           
   angular:
        image: warehouse
@@ -331,4 +336,5 @@ networks:
     name: replication
     driver: bridge
         
+    
 
