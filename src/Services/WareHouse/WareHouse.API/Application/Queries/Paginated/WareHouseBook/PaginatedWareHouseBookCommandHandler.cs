@@ -126,7 +126,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
 
                 if (request.TypeWareHouseBook.Equals(TypeWareHouseBook.In) || request.TypeWareHouseBook.Equals(TypeWareHouseBook.Out))
                 {
-                    queryContainers.Add(descriptor.Match(x => x.Field(v => v.Type).Query(request.TypeWareHouseBook)));
+                    queryContainers.Add(descriptor.MatchPhrase(x => x.Field(v => v.Type).Query(request.TypeWareHouseBook)));
                 }
 
                 if (!request.WareHouseId.HasValue() && user.RoleNumber < 3)

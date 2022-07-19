@@ -204,8 +204,8 @@ export class ReportDetalisComponent implements OnInit,OnDestroy {
         this.model.keySearch = res.keySearch;
         this.model.wareHouseId = res.wareHouseId;
         this.model.itemId = res.itemId;
-        this.model.start = res.end !== null ? new Date(res.start).toLocaleDateString() : '';
-        this.model.end = res.start !== null ? new Date(res.end).toLocaleDateString() : '';
+        this.model.start = res.end !== null ? new Date(res.start).toLocaleDateString('en-US') : '';
+        this.model.end = res.start !== null ? new Date(res.end).toLocaleDateString('en-US') : '';
         this.GetData();
       }
       // else

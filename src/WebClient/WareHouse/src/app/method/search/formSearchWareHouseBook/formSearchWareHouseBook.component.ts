@@ -38,8 +38,8 @@ export class FormSearchWareHouseBookComponent implements OnInit {
     this.dialogRef.close(false);
   }
   onSubmit() {
-    this.form.value.start = this.form.value.start != null ? new Date(this.form.value.start).toLocaleDateString() : null;
-    this.form.value.end = this.form.value.end != null ? new Date(this.form.value.end).toLocaleDateString() : null;
+    this.form.value.start = this.form.value.start != null ? new Date(this.form.value.start).toLocaleDateString('en-US') : null;
+    this.form.value.end = this.form.value.end != null ? new Date(this.form.value.end).toLocaleDateString('en-US') : null;
     this.dialogRef.close(this.form.value)
   }
 }
