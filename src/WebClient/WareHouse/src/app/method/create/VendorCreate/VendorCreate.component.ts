@@ -13,7 +13,7 @@ import { VendorValidator } from 'src/app/validator/VendorValidator';
   styleUrls: ['./VendorCreate.component.scss']
 })
 export class VendorCreateComponent implements OnInit {
-  title = "Chỉnh sửa nhà cung cấp";
+  title = "Tạo mới nhà cung cấp";
   private readonly notifier!: NotifierService;
   success = false;
   form!: FormGroup;
