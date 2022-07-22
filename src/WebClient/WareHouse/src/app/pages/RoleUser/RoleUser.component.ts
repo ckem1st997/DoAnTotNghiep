@@ -34,7 +34,7 @@ import { WarehouseService } from 'src/app/service/warehouse.service';
 
 })
 export class RoleUserComponent implements OnInit {
-  
+
   ///
   //
   listDelete: UserMaster[] = [];
@@ -54,10 +54,10 @@ export class RoleUserComponent implements OnInit {
   pageSize = 15;
   currentPage = 0;
   pageSizeOptions: number[] = [15, 50, 100];
-  displayedColumns: string[] = ['select', 'id', 'userName','role','read','create', 'edit', 'delete', 'inActive', 'method'];
+  displayedColumns: string[] = ['select', 'id', 'userName', 'role', 'read', 'create', 'edit', 'delete', 'inActive', 'method'];
   dataSourceRole = new MatTableDataSource<UserMaster>();
   model: RoleSearchModel = {
-    key:'',
+    key: '',
     whId: '',
     num: 15,
     pages: 0
@@ -80,7 +80,7 @@ export class RoleUserComponent implements OnInit {
   sort!: MatSort;
 
   constructor(private service: AuthozireService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService, private serviceW: WarehouseService) {
-   
+
     this.notifier = notifierService;
 
   }
@@ -90,7 +90,7 @@ export class RoleUserComponent implements OnInit {
     this.getScreenHeight = window.innerHeight;
     this.selection.clear();
   }
-  
+
   ngAfterViewInit() {
     this.dataSourceRole.paginator = this.paginator;
     this.dataSourceRole.sort = this.sort;
@@ -107,7 +107,7 @@ export class RoleUserComponent implements OnInit {
       this.checkSizeWindows = true;
   }
   GetData() {
-    this.service.getList(this.model.key,this.model.whId,this.model.pages,this.model.num).subscribe(list => {
+    this.service.getList(this.model.key, this.model.whId, this.model.pages, this.model.num).subscribe(list => {
       this.dataSourceRole.data = list.data; setTimeout(() => {
         this.paginator.pageIndex = this.currentPage;
         this.paginator.length = list.totalCount;
@@ -127,25 +127,24 @@ export class RoleUserComponent implements OnInit {
   pageChanged(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex;
-    this.model.pages = event.pageIndex 
+    this.model.pages = event.pageIndex
     this.model.num = event.pageSize;
     this.GetData();
   }
   searchQuery() {
     var val = document.getElementById("searchInput") as HTMLInputElement;
     this.model.key = val.value;
- //   this.model.active = this.checkedl;
+    //   this.model.active = this.checkedl;
     this.GetData();
   }
   openDialog(model: UserMaster): void {
-    this.service.EditIndex(model.id).subscribe(x=>{
-      if(x.success)
-      {
+    this.service.EditIndex(model.id).subscribe(x => {
+      if (x.success) {
         const dialogRef = this.dialog.open(RoleEditComponent, {
           width: '550px',
           data: x.data,
         });
-    
+
         dialogRef.afterClosed().subscribe(result => {
           var res = result;
           if (res) {
@@ -154,9 +153,9 @@ export class RoleUserComponent implements OnInit {
           }
         });
       }
-    //  else
-     // this.notifier.notify('warn', x.message);
-    
+      //  else
+      // this.notifier.notify('warn', x.message);
+
 
     });
 
@@ -186,7 +185,7 @@ export class RoleUserComponent implements OnInit {
   }
 
   openDialogDelelte(model: UnitDTO): void {
-   // this.listDelete.push(model);
+    // this.listDelete.push(model);
     const dialogRef = this.dialog.open(UnitDeleteComponent, {
       width: '550px',
       data: this.listDelete
@@ -230,9 +229,10 @@ export class RoleUserComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       var res = result;
-      this.model.key = res.key;
-    //  this.model.active = res.inactive;
-      this.GetData();
+      if (result) {
+        this.model.key = res.key;
+        this.GetData();
+      }
     });
   }
   /** Whether the number of selected elements matches the total number of rows. */

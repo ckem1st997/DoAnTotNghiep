@@ -263,10 +263,12 @@ export class WareHouseComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      var res = result;
-      this.model.keySearch = res.key;
-      this.model.active = res.inactive;
-      this.GetData();
+      if (result) {
+        var res = result;
+        this.model.keySearch = res.key;
+        this.model.active = res.inactive;
+        this.GetData();
+      }
     });
   }
   /** Whether the number of selected elements matches the total number of rows. */

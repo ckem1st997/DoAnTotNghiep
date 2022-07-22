@@ -33,7 +33,7 @@ import { WareHouseItemCategoryService } from 'src/app/service/WareHouseItemCateg
   styleUrls: ['./WareHouseItem.component.scss']
 })
 export class WareHouseItemComponent implements OnInit {
-  
+
   //
   modelCreate: WareHouseItemDTO[] = [];
   //
@@ -139,7 +139,7 @@ export class WareHouseItemComponent implements OnInit {
       const dialogRef = this.dialog.open(WareHouseItemEditComponent, {
         width: '550px',
         data: this.modelCreate,
-        height:'auto'
+        height: 'auto'
       });
 
       dialogRef.afterClosed().subscribe(result => {
@@ -161,7 +161,7 @@ export class WareHouseItemComponent implements OnInit {
       const dialogRef = this.dialog.open(WareHouseItemDetailsComponent, {
         width: '550px',
         data: this.modelCreate,
-        height:'auto'
+        height: 'auto'
       });
 
     });
@@ -171,7 +171,7 @@ export class WareHouseItemComponent implements OnInit {
       this.modelCreate = x.data;
       const dialogRef = this.dialog.open(WareHouseItemCreateComponent, {
         width: '550px',
-        height:'auto',
+        height: 'auto',
         data: this.modelCreate
       });
 
@@ -231,10 +231,12 @@ export class WareHouseItemComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      var res = result;
-      this.model.keySearch = res.key;
-      this.model.active = res.inactive;
-      this.GetData();
+      if (result) {
+        var res = result;
+        this.model.keySearch = res.key;
+        this.model.active = res.inactive;
+        this.GetData();
+      }
     });
   }
   /** Whether the number of selected elements matches the total number of rows. */

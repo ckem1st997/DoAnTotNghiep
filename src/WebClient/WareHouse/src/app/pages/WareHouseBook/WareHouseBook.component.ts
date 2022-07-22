@@ -179,7 +179,9 @@ export class WareHouseBookComponent implements OnInit, OnDestroy {
   }
   GetData(): void {
     this.service.getList(this.model).subscribe(list => {
-      this.dataSource.data = list.data; setTimeout(() => {
+      console.log(list);
+      this.dataSource.data = list.data==null?[]:list.data; 
+      setTimeout(() => {
         this.paginator.pageIndex = this.currentPage;
         this.paginator.length = list.totalCount;
         this.paginator._intl.getRangeLabel = (page: number, pageSize: number, length: number) => {
@@ -355,8 +357,8 @@ export class WareHouseBookComponent implements OnInit, OnDestroy {
   }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length == null ? 0 : this.dataSource.data.length;
+    const numSelected = this.selection?.selected.length;
+    const numRows = this.dataSource.data?.length == undefined ? 0 : this.dataSource.data.length;
     return numSelected === numRows;
   }
 

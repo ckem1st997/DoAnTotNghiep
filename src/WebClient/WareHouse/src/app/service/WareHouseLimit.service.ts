@@ -72,7 +72,6 @@ export class WareHouseLimitService {
      
     );
   }
-
  Delete(ids:string[]): Observable<ResultMessageResponse<WareHouseLimit>> {
     var url = this.baseUrl + `/delete`;
     return this.http.post<ResultMessageResponse<WareHouseLimit>>(url, ids, this.httpOptions).pipe(

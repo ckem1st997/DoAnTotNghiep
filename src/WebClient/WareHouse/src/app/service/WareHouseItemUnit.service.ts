@@ -16,8 +16,6 @@ export class WareHouseItemUnitService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
   constructor(private http: HttpClient) { }
-
-
   getById(id:string): Observable<ResultMessageResponse<WareHouseItemUnitDTO>> {
     var url = this.baseUrl + `/get-list?`;
     return this.http.get<ResultMessageResponse<WareHouseItemUnitDTO>>(url, this.httpOptions).pipe(

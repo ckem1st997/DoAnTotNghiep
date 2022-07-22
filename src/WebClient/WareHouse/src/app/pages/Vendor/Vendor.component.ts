@@ -244,10 +244,11 @@ export class VendorComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       var res = result;
-      console.log(res);
-      this.model.keySearch = res.key;
-      this.model.active = res.inactive;
-      this.GetData();
+      if (result) {
+        this.model.keySearch = res.key;
+        this.model.active = res.inactive;
+        this.GetData();
+      }
     });
   }
   /** Whether the number of selected elements matches the total number of rows. */

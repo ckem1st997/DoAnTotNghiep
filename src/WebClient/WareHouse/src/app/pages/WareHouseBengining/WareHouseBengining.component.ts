@@ -67,7 +67,7 @@ export class WareHouseBenginingComponent implements OnInit {
     keySearch: '',
     skip: this.currentPage * this.pageSize,
     take: this.pageSize,
-    wareHouseId:null
+    wareHouseId: null
   };
   list: ResultMessageResponse<BeginningWareHouseDTO> = {
     success: false,
@@ -269,10 +269,12 @@ export class WareHouseBenginingComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      var res = result;
-      this.model.keySearch = res.key;
-      this.model.active = res.inactive;
-      this.GetData();
+      if (result) {
+        var res = result;
+        this.model.keySearch = res.key;
+        this.model.active = res.inactive;
+        this.GetData();
+      }
     });
   }
   isAllSelected() {
@@ -298,7 +300,7 @@ export class WareHouseBenginingComponent implements OnInit {
       element.className = element.className.replace("activeButtonTreeView", " ");
     });
     select.className += " activeButtonTreeView";
-    this.model.wareHouseId=e.key;
+    this.model.wareHouseId = e.key;
     this.GetData();
   }
 
@@ -307,7 +309,7 @@ export class WareHouseBenginingComponent implements OnInit {
     selectDelete.forEach(element => {
       element.className = element.className.replace("activeButtonTreeView", " ");
     });
-    this.model.wareHouseId=null;
+    this.model.wareHouseId = null;
     this.GetData();
   }
   /** The label for the checkbox on the passed row */

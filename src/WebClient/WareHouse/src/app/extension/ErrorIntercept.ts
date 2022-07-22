@@ -20,10 +20,10 @@ export class ErrorIntercept implements HttpInterceptor {
     ) {
         router.events.subscribe(event => {
             //An event triggered at the end of the activation part of the Resolve phase of routing.
-            if (event instanceof ActivationEnd) {
-              // Cancel pending calls
-              this.httpCancelService.cancelPendingRequests();
-            }
+            // if (event instanceof ActivationEnd) {
+            //   // Cancel pending calls
+            //   this.httpCancelService.cancelPendingRequests();
+            // }
             // if (event instanceof NavigationStart ) {
             //    console
             //   // Cancel pending calls
@@ -111,7 +111,7 @@ export class ErrorIntercept implements HttpInterceptor {
                 }
                 return evt;
             }))
-            .pipe(takeUntil(this.httpCancelService.onCancelPendingRequests()));
+          //  .pipe(takeUntil(this.httpCancelService.onCancelPendingRequests()));
 
         
     }

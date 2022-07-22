@@ -34,7 +34,7 @@ interface ExampleFlatNode {
   styleUrls: ['./WareHouseLimit.component.scss']
 })
 export class WareHouseLimitComponent implements OnInit {
- //
+  //
   //
   listDelete: WareHouseLimitDTO[] = [];
   //select
@@ -53,14 +53,14 @@ export class WareHouseLimitComponent implements OnInit {
   pageSize = 15;
   currentPage = 0;
   pageSizeOptions: number[] = [15, 50, 100];
-  displayedColumns: string[] = ['select', 'id', 'wareHouseName', 'itemName', 'unitName', 'minQuantity','maxQuantity', 'method'];
+  displayedColumns: string[] = ['select', 'id', 'wareHouseName', 'itemName', 'unitName', 'minQuantity', 'maxQuantity', 'method'];
   dataSource = new MatTableDataSource<WareHouseLimitDTO>();
   model: WareHouseLimitSearchModel = {
     active: null,
     keySearch: '',
     skip: this.currentPage * this.pageSize,
     take: this.pageSize,
-    wareHouseId:null
+    wareHouseId: null
   };
   list: ResultMessageResponse<WareHouseLimitDTO> = {
     success: false,
@@ -262,10 +262,12 @@ export class WareHouseLimitComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      var res = result;
-      this.model.keySearch = res.key;
-      this.model.active = res.inactive;
-      this.GetData();
+      if (result) {
+        var res = result;
+        this.model.keySearch = res.key;
+        this.model.active = res.inactive;
+        this.GetData();
+      }
     });
   }
   /** Whether the number of selected elements matches the total number of rows. */
@@ -292,7 +294,7 @@ export class WareHouseLimitComponent implements OnInit {
       element.className = element.className.replace("activeButtonTreeView", " ");
     });
     select.className += " activeButtonTreeView";
-    this.model.wareHouseId=e.key;
+    this.model.wareHouseId = e.key;
     this.GetData();
   }
 
@@ -301,7 +303,7 @@ export class WareHouseLimitComponent implements OnInit {
     selectDelete.forEach(element => {
       element.className = element.className.replace("activeButtonTreeView", " ");
     });
-    this.model.wareHouseId=null;
+    this.model.wareHouseId = null;
     this.GetData();
   }
   /** The label for the checkbox on the passed row */

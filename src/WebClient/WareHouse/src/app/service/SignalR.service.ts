@@ -52,7 +52,6 @@ export class SignalRService {
   //     this.msgSignalrSource.next(data);
   //   });
   // }
-
   // send message to server
 
   public SendWareHouseBookTrachking(id: string) {

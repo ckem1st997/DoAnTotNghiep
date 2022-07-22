@@ -70,7 +70,6 @@ export class WareHouseBookService {
   //    
   //   );
   // }
-
   EditInwardIndex(id: string): Observable<ResultDataResponse<InwardDTO>> {
     var url = this.baseUrlInward + `/edit?id=` + id;
     return this.http.get<ResultDataResponse<InwardDTO>>(url, this.httpOptions).pipe(

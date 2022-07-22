@@ -20,7 +20,6 @@ export class WareHouseItemService {
   };
   constructor(private http: HttpClient) { }
 
-
   getById(id:string): Observable<ResultMessageResponse<WareHouseItemDTO>> {
     var url = this.baseUrl + `/get-list?`;
     return this.http.get<ResultMessageResponse<WareHouseItemDTO>>(url, this.httpOptions).pipe(
