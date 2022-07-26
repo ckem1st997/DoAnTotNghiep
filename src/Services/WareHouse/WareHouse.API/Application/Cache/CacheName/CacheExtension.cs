@@ -57,6 +57,7 @@ namespace WareHouse.API.Application.Cache.CacheName
             try
             {
                 return ConnectionMultiplexer.Connect($"{_connectString},abortConnect=false,allowAdmin=true");
+               // return lazyConnection.Value;
             }
             catch (Exception ex)
             {
@@ -66,6 +67,9 @@ namespace WareHouse.API.Application.Cache.CacheName
             }
 
         }
+        private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() => {
+            return ConnectionMultiplexer.Connect($"{_connectString},abortConnect=false,allowAdmin=true");
+        });
 
         public IEnumerable<string> GetAllNameKeyByContains(string contains)
         {
