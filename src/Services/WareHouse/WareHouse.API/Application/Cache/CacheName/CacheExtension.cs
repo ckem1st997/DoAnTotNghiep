@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EasyCaching.Core;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -17,11 +18,13 @@ namespace WareHouse.API.Application.Cache.CacheName
         private readonly IDistributedCache _cache;
         private readonly ConnectionMultiplexer _connectionMultiplexer;
         private readonly IDatabase _db;
+        private static string _connectString = "";
         public CacheExtension(IConfiguration configuration, IDistributedCache cache, ILogger<CacheExtension> logger)
         {
             _configuration = configuration;
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _connectString = _configuration.GetSection("Redis")["ConnectionString"];
             _connectionMultiplexer = GetConnectRedis();
             _db = _connectionMultiplexer != null ? _connectionMultiplexer.GetDatabase() : null;
         }
@@ -49,12 +52,11 @@ namespace WareHouse.API.Application.Cache.CacheName
         /// connect to redis
         /// </summary>
         /// <returns></returns>
-        private  ConnectionMultiplexer GetConnectRedis()
+        private ConnectionMultiplexer GetConnectRedis()
         {
             try
             {
-                var getConnectString = _configuration.GetSection("Redis")["ConnectionString"];
-                return ConnectionMultiplexer.Connect($"{getConnectString},allowAdmin=true");
+                return ConnectionMultiplexer.Connect($"{_connectString},abortConnect=false,allowAdmin=true");
             }
             catch (Exception ex)
             {
