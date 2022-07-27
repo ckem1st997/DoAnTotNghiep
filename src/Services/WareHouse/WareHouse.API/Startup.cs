@@ -94,9 +94,11 @@ namespace WareHouse.API
                 var settings = new ConnectionSettings(connectionPool, (builtInSerializer, connectionSettings) =>
                     new JsonNetSerializer(builtInSerializer, connectionSettings, () => new JsonSerializerSettings
                     {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+
                     })).DefaultIndex(Configuration.GetValue<string>("Elastic:Index")).DisableDirectStreaming()
                     .PrettyJson()
+                    .RequestTimeout(TimeSpan.FromSeconds(2))
                     .OnRequestCompleted(apiCallDetails =>
                 {
                     var list = new List<string>();
@@ -123,35 +125,6 @@ namespace WareHouse.API
                         Log.Information($"Status: {apiCallDetails.HttpStatusCode}");
                     }
                 });
-                //var settings = new ConnectionSettings(new SingleNodeConnectionPool(new Uri("http://localhost:9200")), new InMemoryConnection())
-                //.DefaultIndex("mssql-warehouse")
-                //.DisableDirectStreaming()
-                //.OnRequestCompleted(apiCallDetails =>
-                //{
-                //    var list = new List<string>();
-                //    // log out the request and the request body, if one exists for the type of request
-                //    if (apiCallDetails.RequestBodyInBytes != null)
-                //    {
-                //        Log.Information(
-                //            $"{apiCallDetails.HttpMethod} {apiCallDetails.Uri} " +
-                //            $"{Encoding.UTF8.GetString(apiCallDetails.RequestBodyInBytes)}");
-                //    }
-                //    else
-                //    {
-                //        Log.Information($"{apiCallDetails.HttpMethod} {apiCallDetails.Uri}");
-                //    }
-
-                //    // log out the response and the response body, if one exists for the type of response
-                //    if (apiCallDetails.ResponseBodyInBytes != null)
-                //    {
-                //        Log.Information($"Status: {apiCallDetails.HttpStatusCode}" +
-                //                    $"{Encoding.UTF8.GetString(apiCallDetails.ResponseBodyInBytes)}");
-                //    }
-                //    else
-                //    {
-                //        Log.Information($"Status: {apiCallDetails.HttpStatusCode}");
-                //    }
-                //});
                 return new ElasticClient(settings);
             });
 

@@ -92,8 +92,9 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
                 if (user.RoleNumber < 3)
                     departmentIds = departmentIds.Where(x => user.WarehouseId.Contains(x)).ToList();
             }
+
             // sẽ search lâu vì sẽ dính exception
-            var check = await _elasticClient.Cluster.HealthAsync();
+            var check = await _elasticClient.PingAsync();
             if (check.IsValid)
             {
                 #region Elastic

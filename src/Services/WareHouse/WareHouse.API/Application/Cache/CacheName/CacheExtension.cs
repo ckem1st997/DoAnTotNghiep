@@ -16,22 +16,18 @@ namespace WareHouse.API.Application.Cache.CacheName
         IConfiguration _configuration { get; set; }
         private readonly ILogger<CacheExtension> _logger;
         private readonly IDistributedCache _cache;
-        private readonly ConnectionMultiplexer _connectionMultiplexer;
         private readonly IDatabase _db;
-        private static string _connectString = "";
-        public CacheExtension(IConfiguration configuration, IDistributedCache cache, ILogger<CacheExtension> logger)
+        public CacheExtension(IConfiguration configuration, IDistributedCache cache, ILogger<CacheExtension> logger, IDatabase db)
         {
             _configuration = configuration;
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _connectString = _configuration.GetSection("Redis")["ConnectionString"];
-            _connectionMultiplexer = GetConnectRedis();
-            _db = _connectionMultiplexer != null ? _connectionMultiplexer.GetDatabase() : null;
+            _db = db;
         }
 
         public bool IsConnected
         {
-            get { return _connectionMultiplexer != null && _connectionMultiplexer != null && _db != null && _connectionMultiplexer.IsConnected; }
+            get { return _db.Multiplexer.IsConnected; }
         }
 
 
@@ -41,7 +37,8 @@ namespace WareHouse.API.Application.Cache.CacheName
             List<string> listKeys = new List<string>();
             if (IsConnected)
             {
-                var keys = _connectionMultiplexer.GetServer(_connectionMultiplexer.GetEndPoints().FirstOrDefault()).Keys();
+              //  var keys = _connectionMultiplexer.GetServer(_connectionMultiplexer.GetEndPoints().FirstOrDefault()).Keys();
+                var keys = _db.Multiplexer.GetServer(_db.Multiplexer.GetEndPoints().FirstOrDefault()).Keys();
                 listKeys.AddRange(keys.Select(key => (string)key).ToList());
             }
             return listKeys;
@@ -52,24 +49,23 @@ namespace WareHouse.API.Application.Cache.CacheName
         /// connect to redis
         /// </summary>
         /// <returns></returns>
-        private ConnectionMultiplexer GetConnectRedis()
-        {
-            try
-            {
-                return ConnectionMultiplexer.Connect($"{_connectString},abortConnect=false,allowAdmin=true");
-               // return lazyConnection.Value;
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Can not connect to Redis server !");
-                Log.Error("Info: " + ex.Message);
-                return null;
-            }
+        //private ConnectionMultiplexer GetConnectRedis()
+        //{
+        //    try
+        //    {
+        //        return ConnectionMultiplexer.Connect($"{_connectString},abortConnect=false,allowAdmin=true");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.Error("Can not connect to Redis server !");
+        //        Log.Error("Info: " + ex.Message);
+        //        return null;
+        //    }
 
-        }
-        private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() => {
-            return ConnectionMultiplexer.Connect($"{_connectString},abortConnect=false,allowAdmin=true");
-        });
+        //}
+        //private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() => {
+        //    return ConnectionMultiplexer.Connect($"{_connectString},abortConnect=false,allowAdmin=true");
+        //});
 
         public IEnumerable<string> GetAllNameKeyByContains(string contains)
         {

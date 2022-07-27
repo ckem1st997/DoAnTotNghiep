@@ -19,21 +19,19 @@ namespace WareHouse.API.Application.Cache
             {
                 Password = configuration.GetSection("Redis")["Password"],
                 EndPoints = { stringConnect },
-                ConnectTimeout = 3000
+                AbortOnConnectFail = false,
+                ConnectTimeout = 1000
             };
             services.AddStackExchangeRedisCache(options =>
             {
-                // options.Configuration = configuration.GetSection("Redis")["ConnectionString"];
                 options.ConfigurationOptions = connect;
             });
-            //Important step for Redis Caching       
-            //services.AddEasyCaching(option =>
-            //{
-            //    option.UseRedis(config =>
-            //    {
-            //        config.DBConfig.Endpoints.Add(new ServerEndPoint(configuration.GetSection("Redis")["Server"], configuration.GetValue<int>("Redis:Port")));
-            //    }, "rediswarehouse");
-            //});
+            //Configure other services up here
+            services.AddScoped<IDatabase>(cfg =>
+            {
+                IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(connect);
+                return multiplexer.GetDatabase();
+            });
             services.Configure<CacheSettings>(configuration.GetSection("CacheSettings"));
             services.AddScoped<ICacheExtension, CacheExtension>();
             // nếu dùng Singleton thì sẽ run hàm khởi tạo một lần duy nhất cho đến khi service được khởi động lại
