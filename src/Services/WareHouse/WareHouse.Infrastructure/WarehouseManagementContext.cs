@@ -104,14 +104,13 @@ namespace WareHouse.Infrastructure
             // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
             // performed through the DbContext will be committed
             var result = await base.SaveChangesAsync(cancellationToken);
-            if (result > 0)
-                return true;
-            return false;
+            return result > 0;
         }
 
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
-            if (_currentTransaction != null) return null;
+            if (_currentTransaction != null)
+                return null;
 
             _currentTransaction = await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
 
@@ -128,34 +127,34 @@ namespace WareHouse.Infrastructure
             try
             {
                 await SaveChangesAsync();
-                transaction.Commit();
+                await transaction.CommitAsync();
             }
             catch
             {
-                RollbackTransaction();
+                await RollbackTransaction();
                 throw;
             }
             finally
             {
                 if (_currentTransaction != null)
                 {
-                    _currentTransaction.Dispose();
+                    await _currentTransaction.DisposeAsync();
                     _currentTransaction = null;
                 }
             }
         }
 
-        public void RollbackTransaction()
+        public async Task RollbackTransaction()
         {
             try
             {
-                _currentTransaction?.Rollback();
+                await _currentTransaction?.RollbackAsync();
             }
             finally
             {
                 if (_currentTransaction != null)
                 {
-                    _currentTransaction.Dispose();
+                    await _currentTransaction.DisposeAsync();
                     _currentTransaction = null;
                 }
             }
