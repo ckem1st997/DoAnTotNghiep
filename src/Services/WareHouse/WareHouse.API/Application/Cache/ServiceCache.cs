@@ -1,5 +1,4 @@
-﻿using EasyCaching.Core.Configurations;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using WareHouse.API.Application.Cache.CacheName;
