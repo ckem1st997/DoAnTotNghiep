@@ -259,6 +259,7 @@ namespace WareHouse.API.Controllers
                     VoucherCode = inwardCommands.VoucherCode,
                     VoucherDate = inwardCommands.VoucherDate,
                     WareHouseId = inwardCommands.WareHouseId,
+                    WareHouseName=await _elasticSearchClient.GetNameWareHouse(inwardCommands.WareHouseId)
                 });
             }    
 
@@ -409,6 +410,7 @@ namespace WareHouse.API.Controllers
                     VoucherCode = inwardCommands.VoucherCode,
                     VoucherDate = inwardCommands.VoucherDate,
                     WareHouseId = inwardCommands.WareHouseId,
+                    WareHouseName = await _elasticSearchClient.GetNameWareHouse(inwardCommands.WareHouseId)
                 });
             }
 

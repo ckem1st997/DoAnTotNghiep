@@ -8,16 +8,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Serilog;
+using WareHouse.API.Application.Queries.GetAll.WareHouses;
+using WareHouse.API.Application.Cache.CacheName;
+using MediatR;
+using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
 
 namespace WareHouse.API.Infrastructure.ElasticSearch
 {
     public class ElasticSearchClient<T> : IElasticSearchClient<T> where T : BaseModel, new()
     {
         private readonly IElasticClient _elasticClient;
+        private readonly IMediator _mediat;
 
-        public ElasticSearchClient(IElasticClient elasticClient)
+        public ElasticSearchClient(IElasticClient elasticClient, IMediator mediat)
         {
             _elasticClient = elasticClient ?? throw new ArgumentNullException(nameof(elasticClient));
+            _mediat = mediat;
         }
 
         public async Task<long> CountAllAsync()
@@ -38,13 +44,25 @@ namespace WareHouse.API.Infrastructure.ElasticSearch
             return res.IsValid;
         }
 
+        public async Task<string> GetNameWareHouse(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new ArgumentException($"'{nameof(id)}' cannot be null or empty.", nameof(id));
+            }
+            var getListWh = new WareHouseGetFirstCommand();
+            getListWh.Id = id;
+            var data = await _mediat.Send(getListWh);
+            return data.Name;
+        }
+
         public bool InsertOrUpdate(T entity)
         {
             if (entity is null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
-            var res =  _elasticClient.IndexDocument<T>(entity);
+            var res = _elasticClient.IndexDocument<T>(entity);
             Log.Information($"InsertOrUpdate {nameof(T)} width result {res.IsValid}");
             return res.IsValid;
         }

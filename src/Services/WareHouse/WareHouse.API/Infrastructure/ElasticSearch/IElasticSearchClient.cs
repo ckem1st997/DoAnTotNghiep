@@ -13,5 +13,7 @@ namespace WareHouse.API.Infrastructure.ElasticSearch
         public Task<bool> InsertOrUpdateManyAsync(IEnumerable<T> lists);
         public Task<bool> DeleteManyAsync(IEnumerable<string> ids);
         public Task<long> CountAllAsync();
+
+        public Task<string> GetNameWareHouse(string id);
     }
 }
