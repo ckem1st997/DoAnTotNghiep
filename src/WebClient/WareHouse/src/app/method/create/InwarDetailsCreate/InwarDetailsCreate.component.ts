@@ -5,6 +5,8 @@ import { NotifierService } from 'angular-notifier';
 import { Guid } from 'src/app/extension/Guid';
 import { AutoCompleteModel } from 'src/app/model/AutoCompleteModel';
 import { InwardDetailDTO } from 'src/app/model/InwardDetailDTO';
+import { WareHouseDTO } from 'src/app/model/WareHouseDTO';
+import { WareHouseItemDTO } from 'src/app/model/WareHouseItemDTO';
 import { WareHouseBookService } from 'src/app/service/WareHouseBook.service';
 import { InwardDetailsValidator } from 'src/app/validator/InwardDetailsValidator';
 import { VendorValidator } from 'src/app/validator/VendorValidator';
@@ -16,6 +18,7 @@ import { VendorValidator } from 'src/app/validator/VendorValidator';
 })
 export class InwarDetailsCreateComponent implements OnInit {
   title = "Thêm mới vật tư phiếu nhập kho";
+  keyword = 'name';
   // itemsAsObjects: AutoCompleteModel[] = [];
   private readonly notifier!: NotifierService;
   success = false;
@@ -61,6 +64,23 @@ export class InwarDetailsCreateComponent implements OnInit {
   onNoClick(): void {
     this.dialogRef.close(false);
   }
+
+  selectEvent(item: WareHouseItemDTO) {
+    this.form.patchValue({ itemId: item.id ?? null });
+    this.service.GetUnitByIdItem(item.id).subscribe(res => {
+      this.dt.unitDTO = res.data;
+      this.form.patchValue({ unitId: this.dt.wareHouseItemDTO?.find(x => x.id === item.id)?.unitId ?? null });
+    })
+  }
+
+  onChangeSearch(val: string) {
+    console.log(val);
+  }
+
+  onFocused(e: any) {
+    console.log(e);
+  }
+
   changAmount() {
     var getUiQuantity = this.form.value['uiquantity'];
     var getUiPrice = this.form.value['uiprice'];
@@ -98,7 +118,7 @@ export class InwarDetailsCreateComponent implements OnInit {
 
       const serialWareHouses = this.form.value["serialWareHouses"];
       //???
-      if (serialWareHouses !== undefined && serialWareHouses !== null) 
+      if (serialWareHouses !== undefined && serialWareHouses !== null)
         serialWareHouses.forEach((element: { id: string; itemId: string; serial: string; inwardDetailId: string; isOver: boolean } | null) => {
           if (element !== null) {
             element.id = Guid.newGuid();
@@ -109,7 +129,7 @@ export class InwarDetailsCreateComponent implements OnInit {
         });
 
       this.dialogRef.close(this.form.value);
-     // this.notifier.notify('success', 'Thêm thành công !');
+      // this.notifier.notify('success', 'Thêm thành công !');
     }
     else {
       var message = '';

@@ -245,3 +245,9 @@ select {
   opacity: 0;
   z-index: -999;
 }
+.autocomplete-container {
+  height: 28px !important;
+}
+.autocomplete-container .input-container input{
+  height: 28px !important;
+}
