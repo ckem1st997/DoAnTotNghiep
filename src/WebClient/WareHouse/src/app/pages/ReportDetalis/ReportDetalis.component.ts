@@ -35,7 +35,6 @@ interface ExampleFlatNode {
   styleUrls: ['./ReportDetalis.component.scss']
 })
 export class ReportDetalisComponent implements OnInit,OnDestroy {
-  nameItem: string='';
   //select
   selection = new SelectionModel<ReportDetailsDTO>(true, []);
   //noti
@@ -161,7 +160,6 @@ export class ReportDetalisComponent implements OnInit,OnDestroy {
       this.service.getListDetails(this.model.keySearch, this.model.wareHouseId, this.model.itemId == null ? '' : this.model.itemId, this.model.start, this.model.end, 0, 15).subscribe(list => {
         if (list.data && !list.message) {
           this.dataSource.data = list.data;
-          this.nameItem=list.data==null?'':list.data[0].name;
           setTimeout(() => {
             this.paginator.pageIndex = this.currentPage;
             this.paginator.length = list.totalCount;
