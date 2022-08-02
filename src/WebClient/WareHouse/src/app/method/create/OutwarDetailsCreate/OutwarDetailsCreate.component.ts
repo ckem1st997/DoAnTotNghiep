@@ -8,6 +8,10 @@ import { WareHouseBookService } from 'src/app/service/WareHouseBook.service';
 import { InwarDetailsCreateComponent } from '../InwarDetailsCreate/InwarDetailsCreate.component';
 import { OutwardDetailsValidator } from './../../../validator/OutwardDetailsValidator';
 import { InwardService } from './../../../service/Inward.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SearchwarehouseitemComponent } from './../../search/searchwarehouseitem/searchwarehouseitem.component';
+import { WareHouseItemDTO } from 'src/app/model/WareHouseItemDTO';
+import { WareHouseItemService } from 'src/app/service/WareHouseItem.service';
 
 @Component({
   selector: 'app-OutwarDetailsCreate',
@@ -18,6 +22,7 @@ export class OutwarDetailsCreateComponent implements OnInit {
   title = "Thêm mới vật tư phiếu xuất kho";
   // itemsAsObjects: AutoCompleteModel[] = [];
   private readonly notifier!: NotifierService;
+  modelCreate: WareHouseItemDTO[] = [];
   success = false;
   form!: FormGroup;
   dt!: OutwardDetailDTO;
@@ -28,7 +33,9 @@ export class OutwarDetailsCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     notifierService: NotifierService,
     private service: WareHouseBookService,
-    private serviceIn: InwardService
+    private serviceIn: InwardService,
+    public dialog: MatDialog,
+    private serviceitem: WareHouseItemService, 
   ) { this.notifier = notifierService; }
   ngOnInit() {
     this.dt = this.data;
@@ -66,11 +73,11 @@ export class OutwarDetailsCreateComponent implements OnInit {
   changAmount() {
     var getUiQuantity = this.form.value['uiquantity'];
     var getUiPrice = this.form.value['uiprice'];
-    let unitId=this.form.value['unitId'];
+    let unitId = this.form.value['unitId'];
     this.form.patchValue({ amount: getUiPrice * getUiQuantity });
     var idSelect = this.form.value['itemId'];
     if (this.data.outward != null && this.data.outward.wareHouseId && idSelect)
-      this.service.CheckQuantityIdItem(idSelect, this.data.outward?.wareHouseId,unitId).subscribe(
+      this.service.CheckQuantityIdItem(idSelect, this.data.outward?.wareHouseId, unitId).subscribe(
         (data) => {
           if (data) {
             if (data.data < getUiQuantity)
@@ -83,6 +90,29 @@ export class OutwarDetailsCreateComponent implements OnInit {
     }
 
   }
+
+
+  seachwhitem() {
+    this.serviceitem.AddIndex().subscribe(x => {
+      this.modelCreate = x.data;
+      const dialogRef = this.dialog.open(SearchwarehouseitemComponent, {
+        width: '550px',
+        height: 'auto',
+        data: this.modelCreate
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        var res = result;
+        if (res) {
+
+        }
+      });
+
+    });
+   
+  }
+
+
   changItem(e: any) {
     var idSelect = e.target.value.split(" ")[1];
     if (this.data.outward != null && this.data.outward.wareHouseId && idSelect)

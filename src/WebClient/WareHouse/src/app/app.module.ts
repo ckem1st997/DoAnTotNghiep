@@ -117,6 +117,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { SpeedTestModule } from 'ng-speed-test';
+import { SearchwarehouseitemComponent } from './method/search/searchwarehouseitem/searchwarehouseitem.component';
 const customNotifierOptions: NotifierOptions = {
   position: {
     horizontal: {
@@ -238,7 +239,7 @@ const customNotifierOptions: NotifierOptions = {
     SelectWareHouseComponent,
     PagesHomeCenterComponent,
     RegistrationComponent,
-
+    SearchwarehouseitemComponent
   ],
   imports: [
     BrowserModule,
