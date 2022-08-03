@@ -6,6 +6,7 @@ import { Guid } from 'src/app/extension/Guid';
 import { InwardDetailDTO } from 'src/app/model/InwardDetailDTO';
 import { WareHouseBookService } from 'src/app/service/WareHouseBook.service';
 import { InwardDetailsValidator } from 'src/app/validator/InwardDetailsValidator';
+import { WareHouseItemDTO } from 'src/app/model/WareHouseItemDTO';
 @Component({
   selector: 'app-InwarDetailsEdit',
   templateUrl: './InwarDetailsEdit.component.html',
@@ -13,6 +14,7 @@ import { InwardDetailsValidator } from 'src/app/validator/InwardDetailsValidator
 })
 export class InwarDetailsEditComponent implements OnInit {
   title = "Chỉnh sửa vật tư phiếu nhập kho";
+  keyword = 'name';
   private readonly notifier!: NotifierService;
   success = false;
   form!: FormGroup;
@@ -52,13 +54,35 @@ export class InwarDetailsEditComponent implements OnInit {
       accountMore: this.dt.accountMore,
       accountYes: this.dt.accountYes,
       status: this.dt.status,
-      serialWareHouses: this.dt.serialWareHouses
+      serialWareHouses: this.dt.serialWareHouses,
+      nameItem: this.dt.wareHouseItemDTO?.find(x => x.id ===this.dt.itemId)?.name ?? null,
     });
   }
   get f() { return this.form.controls; }
   onNoClick(): void {
     this.dialogRef.close(false);
   }
+  selectEvent(item: WareHouseItemDTO) {
+    this.form.patchValue({ itemId: item.id ?? null });
+    this.service.GetUnitByIdItem(item.id).subscribe(res => {
+      this.dt.unitDTO = res.data;
+      this.form.patchValue({ unitId: this.dt.wareHouseItemDTO?.find(x => x.id === item.id)?.unitId ?? null });
+    })
+  }
+  getName() {
+    var idSelect = this.form.value['itemId'];
+    console.log(this.dt.wareHouseItemDTO?.find(x => x.id === idSelect)?.name ?? null);
+    return this.dt.wareHouseItemDTO?.find(x => x.id === idSelect)?.name ?? '';
+  }
+
+  onChangeSearch(val: string) {
+    console.log(val);
+  }
+
+  onFocused(e: any) {
+    console.log(e);
+  }
+
   changAmount() {
     var getUiQuantity = this.form.value['uiquantity'];
     var getUiPrice = this.form.value['uiprice'];
@@ -82,14 +106,16 @@ export class InwarDetailsEditComponent implements OnInit {
       this.form.value["stationName"] = this.dt.getStationDTO.find(x => x.id === this.form.value["stationId"])?.name;
       this.form.value["customerName"] = this.dt.getCustomerDTO.find(x => x.id === this.form.value["customerId"])?.name;
       this.form.value["projectName"] = this.dt.getProjectDTO.find(x => x.id === this.form.value["projectId"])?.name;
+      this.form.value["nameItem"] = this.dt.wareHouseItemDTO?.find(x => x.id ===this.dt.itemId)?.name ?? null;
       //
-      // this.form.value["unitDTO"] = [];
-      // this.form.value["wareHouseItemDTO"] = [];
-      // this.form.value["getDepartmentDTO"] = [];
-      // this.form.value["getEmployeeDTO"] = [];
-      // this.form.value["getStationDTO"] = [];
-      // this.form.value["getProjectDTO"] = [];
-      // this.form.value["getCustomerDTO"] = [];
+      this.form.value["unitDTO"] = [];
+      this.form.value["wareHouseItemDTO"] = [];
+      this.form.value["getDepartmentDTO"] = [];
+      this.form.value["getEmployeeDTO"] = [];
+      this.form.value["getStationDTO"] = [];
+      this.form.value["getProjectDTO"] = [];
+      this.form.value["getCustomerDTO"] = [];
+      this.form.value["getAccountDTO"] = [];
       //
       var serialWareHouses = this.form.value["serialWareHouses"];
       if (serialWareHouses !== undefined && serialWareHouses !== null)
@@ -102,7 +128,7 @@ export class InwarDetailsEditComponent implements OnInit {
           }
         });
       this.dialogRef.close(this.form.value);
-    //  this.notifier.notify('success', 'Chỉnh sửa thành công !');
+      //  this.notifier.notify('success', 'Chỉnh sửa thành công !');
     }
     else {
       var message = '';

@@ -11,12 +11,25 @@
     </div>
     <div class="form-group row mb-1" style="position: relative;">
       <mat-label class="form-label col-3">Vật tư</mat-label>
-      <select (change)="changItem($event)" formControlName="itemId" class="form-select col" required>
+      <!-- <select (change)="changItem($event)" formControlName="itemId" class="form-select col" required>
         <option class="s-c option" *ngFor="let state of dt.wareHouseItemDTO" [ngValue]="state.id">
           {{ state.name }}
         </option>
-      </select>
-
+      </select> -->
+      <div class="ng-autocomplete col" style="width:auto;padding: 0;">
+        <ng-autocomplete  [data]="dt.wareHouseItemDTO" [searchKeyword]="keyword" placeholder="Chọn vật tư"
+          (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)' (inputFocused)='onFocused($event)'
+          [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+        </ng-autocomplete>
+      
+        <ng-template #itemTemplate let-item>
+          <a [innerHTML]="item.name"></a>
+        </ng-template>
+      
+        <ng-template #notFoundTemplate let-notFound>
+          <div>Không tìm thấy !</div>
+        </ng-template>
+      </div>
     </div>
     <div class="form-group row mb-1" style="position: relative;">
       <mat-label class="form-label col-3">Đơn vị tính</mat-label>
@@ -111,7 +124,7 @@
     </div>
 
     <div style="margin-top: 10px;float: right;">
-      <button type="button" (click)="seachwhitem()" mat-button mat-raised-button cdkFocusInitial color="primary">Tìm kiếm</button>
+      <!-- <button type="button" (click)="seachwhitem()" mat-button mat-raised-button cdkFocusInitial color="primary">Tìm kiếm</button> -->
       <button type="submit" mat-button mat-raised-button cdkFocusInitial color="primary">Save</button>
       <button style="margin-left: 20px;" mat-button type="button" mat-raised-button (click)="onNoClick()">Huỷ
         bỏ</button>

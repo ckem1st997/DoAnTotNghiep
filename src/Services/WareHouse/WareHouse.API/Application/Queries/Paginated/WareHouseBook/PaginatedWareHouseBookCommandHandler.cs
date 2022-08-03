@@ -133,15 +133,9 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
                 if (!request.WareHouseId.HasValue() && user.RoleNumber < 3)
                 {
                     var list = new List<string>();
-                    // QueryContainer q = new QueryContainer();
-
                     var split = user.WarehouseId.Split(',').ToList();
                     if (split.Any())
                     {
-                        //for (int i = 0; i < split.Length; i++)
-                        //{
-                        //    q |= descriptor.Match(x => x.Field(v => v.WareHouseId).Query(split[i]));
-                        //}
                         QueryContainer q = GetQueryByWareHouseId(split, descriptor);
                         queryContainers.Add(q);
                     }
@@ -294,7 +288,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
                 parameter.Add("@skip", request.Skip);
                 parameter.Add("@take", request.Take);
                 _list.Result = await _repository.GetList<WareHouseBookDTO>(sb.ToString(), parameter, CommandType.Text);
-                _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text);
+                _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text) - 1;
                 #endregion
             }
 

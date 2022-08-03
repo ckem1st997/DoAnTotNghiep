@@ -186,16 +186,17 @@ export class InwardCreateComponent implements OnInit, OnDestroy {
   openDialogedit(id: string): void {
 
     const model = this.listDetails.find(x => x.id === id);
+    console.log(model);
     if (model !== undefined) {
       // gán data từ biến tạm gán vào biến model, để tránh gọi sang api lấy lại data
-      if (model.wareHouseItemDTO.length < 1) this.listItem.forEach(element => { model.wareHouseItemDTO.push(element) });
-      if (model.unitDTO.length < 1) this.listUnit.forEach(element => { model.unitDTO.push(element) });
-      if (model.getCustomerDTO.length < 1) this.getCustomerDTO.forEach(element => { model.getCustomerDTO.push(element) });
-      if (model.getDepartmentDTO.length < 1) this.getDepartmentDTO.forEach(element => { model.getDepartmentDTO.push(element) });
-      if (model.getEmployeeDTO.length < 1) this.getEmployeeDTO.forEach(element => { model.getEmployeeDTO.push(element) });
-      if (model.getProjectDTO.length < 1) this.getProjectDTO.forEach(element => { model.getProjectDTO.push(element) });
-      if (model.getStationDTO.length < 1) this.getStationDTO.forEach(element => { model.getStationDTO.push(element) });
-      if (model.getAccountDTO.length < 1) this.getAccountDTO.forEach(element => { model.getAccountDTO.push(element) });
+      if (model.wareHouseItemDTO?.length < 1) this.listItem.forEach(element => { model.wareHouseItemDTO.push(element) });
+      if (model.unitDTO?.length < 1) this.listUnit.forEach(element => { model.unitDTO.push(element) });
+      if (model.getCustomerDTO?.length < 1) this.getCustomerDTO.forEach(element => { model.getCustomerDTO.push(element) });
+      if (model.getDepartmentDTO?.length < 1) this.getDepartmentDTO.forEach(element => { model.getDepartmentDTO.push(element) });
+      if (model.getEmployeeDTO?.length < 1) this.getEmployeeDTO.forEach(element => { model.getEmployeeDTO.push(element) });
+      if (model.getProjectDTO?.length < 1) this.getProjectDTO.forEach(element => { model.getProjectDTO.push(element) });
+      if (model.getStationDTO?.length < 1) this.getStationDTO.forEach(element => { model.getStationDTO.push(element) });
+      if (model.getAccountDTO?.length < 1) this.getAccountDTO.forEach(element => { model.getAccountDTO.push(element) });
 
       const dialogRef = this.dialog.open(InwarDetailsEditComponent, {
         width: '550px',
