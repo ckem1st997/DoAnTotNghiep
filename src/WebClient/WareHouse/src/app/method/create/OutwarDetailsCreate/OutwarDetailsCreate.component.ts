@@ -21,6 +21,8 @@ import { WareHouseItemService } from 'src/app/service/WareHouseItem.service';
 export class OutwarDetailsCreateComponent implements OnInit {
   title = "Thêm mới vật tư phiếu xuất kho";
   // itemsAsObjects: AutoCompleteModel[] = [];
+  keyword = 'name';
+
   private readonly notifier!: NotifierService;
   modelCreate: WareHouseItemDTO[] = [];
   success = false;
@@ -70,6 +72,22 @@ export class OutwarDetailsCreateComponent implements OnInit {
   onNoClick(): void {
     this.dialogRef.close(false);
   }
+  selectEvent(item: WareHouseItemDTO) {
+    this.form.patchValue({ itemId: item.id ?? null });
+    this.service.GetUnitByIdItem(item.id).subscribe(res => {
+      this.dt.unitDTO = res.data;
+      this.form.patchValue({ unitId: this.dt.wareHouseItemDTO?.find(x => x.id === item.id)?.unitId ?? null });
+    })
+  }
+
+  onChangeSearch(val: string) {
+    console.log(val);
+  }
+
+  onFocused(e: any) {
+    console.log(e);
+  }
+
   changAmount() {
     var getUiQuantity = this.form.value['uiquantity'];
     var getUiPrice = this.form.value['uiprice'];

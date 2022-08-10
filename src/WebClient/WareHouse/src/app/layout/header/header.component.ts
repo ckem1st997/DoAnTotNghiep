@@ -15,7 +15,7 @@ import isOnline from 'is-online';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   networkStatus: boolean = true;
-  speedTest: number=0;
+  speedTest: number = 0;
   userName: string | undefined;
   activeNoticaonList: boolean = false;
   listBefor!: HistoryNoticationDT0;
@@ -33,6 +33,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     redirectUrl: '',
     errors: {}
   };
+  countTime: any;
   constructor(private speedTestService: SpeedTestService, public signalRService: SignalRService, private service: AuthenticationService, private serviceAuthozire: AuthozireService) { }
 
   ngOnInit() {
@@ -40,18 +41,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.getHistory();
     this.signalRService.hubConnection.on(this.signalRService.HistoryTrachking, (data: ResultDataResponse<string>) => {
       if (data.success) {
-        console.log(data);
         if (this.service.userValue.username === data.data || this.service.userValue.role === 3) {
           this.getHistory();
         }
       }
     });
-    setInterval(() => {
+    this.countTime = setInterval(() => {
       (async () => {
         this.networkStatus = await isOnline();
         this.checkNetworkStatus();
       })();
-    }, 3000);
+    }, 5000);
   }
 
   checkNetworkStatus() {
@@ -59,11 +59,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.speedTestService.getMbps(
         {
           iterations: 1,
-          retryDelay: 1500,
+          retryDelay: 5000,
         }
       ).subscribe(
         (speed) => {
-          this.speedTest = speed==null?0:speed;
+          this.speedTest = speed == null ? 0 : speed;
         }
       );
     else
@@ -72,6 +72,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     // tắt phương thức vừa gọi để tránh bị gọi lại nhiều lần
     this.signalRService.hubConnection.off(this.signalRService.HistoryTrachking);
+    console.log("ngOnDestroy");
+    if (this.countTime) {
+      clearInterval(this.countTime);
+    }
   }
   getHistory() {
     this.serviceAuthozire.getListHistoryByUser().subscribe(res => { this.listHistory = res; this.listBefor = res.data[0]; this.listAfter = res.data.slice(1); this.countHistory = res.data.filter(x => x.userNameRead == null || !x.userNameRead.includes(this.service.userValue.username)).length; });

@@ -6,6 +6,7 @@ import { OutwardDetailDTO } from 'src/app/model/OutwardDetailDTO';
 import { InwardService } from 'src/app/service/Inward.service';
 import { WareHouseBookService } from 'src/app/service/WareHouseBook.service';
 import { OutwardDetailsValidator } from 'src/app/validator/OutwardDetailsValidator';
+import { WareHouseItemDTO } from 'src/app/model/WareHouseItemDTO';
 
 @Component({
   selector: 'app-OutwardetailsEditByService',
@@ -15,6 +16,7 @@ import { OutwardDetailsValidator } from 'src/app/validator/OutwardDetailsValidat
 export class OutwardetailsEditByServiceComponent implements OnInit {
   title = "Chỉnh sửa vật tư phiếu xuất kho";
   private readonly notifier!: NotifierService;
+  keyword = 'name';
   success = false;
   form!: FormGroup;
   dt!: OutwardDetailDTO;
@@ -55,12 +57,34 @@ export class OutwardetailsEditByServiceComponent implements OnInit {
       accountMore: this.dt.accountMore,
       accountYes: this.dt.accountYes,
       status: this.dt.status,
-      serialWareHouses: this.dt.serialWareHouses
+      serialWareHouses: this.dt.serialWareHouses,
+      nameItem: this.dt.wareHouseItemDTO?.find(x => x.id ===this.dt.itemId)?.name ?? null,
+
     });
   }
   get f() { return this.form.controls; }
   onNoClick(): void {
     this.dialogRef.close(false);
+  }
+  selectEvent(item: WareHouseItemDTO) {
+    this.form.patchValue({ itemId: item.id ?? null });
+    this.service.GetUnitByIdItem(item.id).subscribe(res => {
+      this.dt.unitDTO = res.data;
+      this.form.patchValue({ unitId: this.dt.wareHouseItemDTO?.find(x => x.id === item.id)?.unitId ?? null });
+    })
+  }
+  getName() {
+    var idSelect = this.form.value['itemId'];
+    console.log(this.dt.wareHouseItemDTO?.find(x => x.id === idSelect)?.name ?? null);
+    return this.dt.wareHouseItemDTO?.find(x => x.id === idSelect)?.name ?? '';
+  }
+
+  onChangeSearch(val: string) {
+    console.log(val);
+  }
+
+  onFocused(e: any) {
+    console.log(e);
   }
   // changAmount() {
   //   var getUiQuantity = this.form.value['uiquantity'];
@@ -130,7 +154,16 @@ export class OutwardetailsEditByServiceComponent implements OnInit {
       this.form.value["stationName"] = this.dt.getStationDTO.find(x => x.id === this.form.value["stationId"])?.name;
       this.form.value["customerName"] = this.dt.getCustomerDTO.find(x => x.id === this.form.value["customerId"])?.name;
       this.form.value["projectName"] = this.dt.getProjectDTO.find(x => x.id === this.form.value["projectId"])?.name;
-
+      this.form.value["nameItem"] = this.dt.wareHouseItemDTO?.find(x => x.id ===this.dt.itemId)?.name ?? null;
+      //
+      this.form.value["unitDTO"] = [];
+      this.form.value["wareHouseItemDTO"] = [];
+      this.form.value["getDepartmentDTO"] = [];
+      this.form.value["getEmployeeDTO"] = [];
+      this.form.value["getStationDTO"] = [];
+      this.form.value["getProjectDTO"] = [];
+      this.form.value["getCustomerDTO"] = [];
+      this.form.value["getAccountDTO"] = [];
       var serialWareHouses = this.form.value["serialWareHouses"];
       if (serialWareHouses !== undefined && serialWareHouses !== null)
         serialWareHouses.forEach((element: { id: string; itemId: string; serial: string; outwardDetailId: string; isOver: boolean } | null) => {
