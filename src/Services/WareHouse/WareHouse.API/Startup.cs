@@ -38,6 +38,7 @@ using Serilog;
 using static Nest.ConnectionSettings;
 using Newtonsoft.Json;
 using Nest.JsonNetSerializer;
+using Core.Extensions;
 
 namespace WareHouse.API
 {
@@ -190,6 +191,8 @@ namespace WareHouse.API
                 endpoints.MapControllers();
             });
             app.ConfigureEventBus();
+            app.ConfigureRequestPipeline();
+
         }
 
 

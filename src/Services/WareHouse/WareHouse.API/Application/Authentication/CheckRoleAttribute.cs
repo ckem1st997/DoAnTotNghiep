@@ -1,5 +1,6 @@
 ﻿
 
+using Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -38,9 +39,10 @@ namespace WareHouse.API.Application.Authentication
             }
             // create instance of IUserService not contractor
 
-            _userService = GetServiceByInterface<IUserSevice>.GetService();
-            if (_userService == null)
-                _userService = context.HttpContext.RequestServices.GetService<IUserSevice>();
+           // _userService = GetServiceByInterface<IUserSevice>.GetService();
+            _userService = EngineContext.Current.Resolve<IUserSevice>();
+            //if (_userService == null)
+            //    _userService = context.HttpContext.RequestServices.GetService<IUserSevice>();
             var checkRole = false;
             bool isRedirect = false;
             var mes403 = "Bạn chưa có quyền thực hiện thao tác này !";
