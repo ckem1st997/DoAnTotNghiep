@@ -210,7 +210,7 @@ namespace WareHouse.API.Controllers
             {
                 item.Amount = item.Uiquantity * item.Uiprice;
                 int convertRate = await _mediat.Send(new GetConvertRateByIdItemCommand() { IdItem = item.ItemId, IdUnit = item.UnitId });
-                item.Quantity = (decimal)item.Uiquantity/convertRate;
+                item.Quantity = (decimal)item.Uiquantity / convertRate;
                 item.Price = item.Amount;
             }
             var data = await _mediat.Send(new UpdateInwardCommand() { InwardCommands = inwardCommands });
@@ -231,16 +231,23 @@ namespace WareHouse.API.Controllers
                 {
                     Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel})");
                     if (_eventBus.IsConnectedProducer())
-                        _eventBus.Publish(kafkaModel);
+                    {
+                        for (int i = 0; i < 10000; i++)
+                        {
+                            kafkaModel.Id = Guid.NewGuid().ToString();
+                            await _eventBus.PublishAsync(kafkaModel);
+
+                        }
+                    }
                     else
                         await _userSevice.CreateHistory(kafkaModel);
                     Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel}) done...");
 
                 }
-               
+
 
             }
-            if(data)
+            if (data)
             {
                 var resElastic = await _elasticSearchClient.InsertOrUpdateAsync(new WareHouseBookDTO()
                 {
@@ -259,9 +266,9 @@ namespace WareHouse.API.Controllers
                     VoucherCode = inwardCommands.VoucherCode,
                     VoucherDate = inwardCommands.VoucherDate,
                     WareHouseId = inwardCommands.WareHouseId,
-                    WareHouseName=await _elasticSearchClient.GetNameWareHouse(inwardCommands.WareHouseId)
+                    WareHouseName = await _elasticSearchClient.GetNameWareHouse(inwardCommands.WareHouseId)
                 });
-            }    
+            }
 
             var result = new ResultMessageResponse()
             {
@@ -461,8 +468,8 @@ namespace WareHouse.API.Controllers
                     var check = await _mediat.Send(new InwardGetFirstCommand() { Id = item });
                     if (check == null)
                         listIdDelete.Add(item);
-                }    
-                if(listIdDelete.Count > 0)
+                }
+                if (listIdDelete.Count > 0)
                     await _elasticSearchClient.DeleteManyAsync(listIdDelete);
             }
 

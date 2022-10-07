@@ -1,5 +1,5 @@
 ﻿using KafKa.Net.Events;
-
+using System.Threading.Tasks;
 
 namespace KafKa.Net.Abstractions
 {
@@ -10,6 +10,7 @@ namespace KafKa.Net.Abstractions
         /// </summary>
         /// <param name="event"></param>
         void Publish(IntegrationEvent @event);
+        Task PublishAsync(IntegrationEvent @event);
 
         bool IsConnectedConsumer();
         bool IsConnectedProducer();

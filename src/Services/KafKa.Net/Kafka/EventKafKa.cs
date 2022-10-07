@@ -78,10 +78,35 @@ namespace KafKa.Net.Kafka
 
         }
 
+
+
+        /// <summary>
+        /// Xuất bản một tin nhắn.
+        /// </summary>
+        /// <param name="event"></param>
+        public async Task PublishAsync(IntegrationEvent @event)
+        {
+            if (_persistentConnection.IsConnectedProducer)
+            {
+                var eventName = @event.GetType().Name;
+
+                Log.Information($"Creating KafKa Topic by EventBus to publish event: {@event.Id} ({eventName})");
+                var producer = _persistentConnection.ProducerConfig;
+                var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+                await producer.ProduceAsync(_topicName, new Message<string, byte[]> { Key = eventName, Value = body });
+                producer.Flush(timeout: TimeSpan.FromSeconds(5));
+            }
+
+        }
+
+
         public void SubscribeDynamic<TH>(string eventName)
             where TH : IDynamicIntegrationEventHandler
         {
-            Log.Information($"Subscribing to dynamic event {eventName} with {typeof(TH).GetGenericTypeName()}" );
+            Log.Information($"Subscribing to dynamic event {eventName} with {typeof(TH).GetGenericTypeName()}");
             _subsManager.AddDynamicSubscription<TH>(eventName);
         }
 
@@ -90,7 +115,7 @@ namespace KafKa.Net.Kafka
             where TH : IIntegrationEventHandler<T>
         {
             var eventName = _subsManager.GetEventKey<T>();
-            Log.Information($"Subscribing to event {eventName} width {typeof(TH).GetGenericTypeName()}" );
+            Log.Information($"Subscribing to event {eventName} width {typeof(TH).GetGenericTypeName()}");
             _subsManager.AddSubscription<T, TH>();
         }
 
