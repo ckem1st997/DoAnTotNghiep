@@ -90,9 +90,29 @@ namespace WareHouse.Infrastructure
             //   optionsBuilder.AddInterceptors(new SqlInterceptor(), new AadAuthenticationInterceptor());
 
         }
-
+        
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            //override
+           // var entities = ChangeTracker.Entries().Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
+            //foreach (var entry in ChangeTracker.Entries<BaseEntity>())
+            //{
+            //    if (entry.State == EntityState.Added)
+            //    {
+            //        entry.Entity.OnDelete = false;
+            //    }
+
+            //    if ( entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
+            //    {
+            //        entry.Entity.OnDelete = false;
+            //    }
+            //    if (entry.State == EntityState.Deleted)
+            //    {
+            //        entry.Entity.OnDelete = true;
+            //    }
+            //}
+
+
             // Dispatch Domain Events collection. 
             // Choices:
             // A) Right BEFORE committing data (EF SaveChanges) into the DB will make a single transaction including  
