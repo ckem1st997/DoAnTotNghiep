@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using MediatR;
+using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
 using WareHouse.Domain.IRepositories;
@@ -53,6 +54,9 @@ namespace WareHouse.API.Application.Queries.Paginated.Unit
             parameter.Add("@skip", request.Skip);
             parameter.Add("@take", request.Take);
             parameter.Add("@active", request.Active==true ? 1 : 0);
+            //Console.WriteLine(sbCount.ToString());
+            //string jj = ValidatorString.GetSqlCount(sb.ToString());
+            //Console.WriteLine(jj);
             _list.Result = await _repository.GetList<UnitDTO>(sb.ToString(), parameter, CommandType.Text);
             _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text);
             return _list;

@@ -8,7 +8,20 @@ namespace WareHouse.API.Application.Extensions
     public static class ValidatorString
     {
 
-
+        /// <summary>
+        /// countBy: Id, p.Id
+        /// sql: sql query
+        /// </summary>
+        public static string GetSqlCount(string sql, string countBy = "*")
+        {
+            if (string.IsNullOrEmpty(sql))
+            {
+                throw new ArgumentException($"'{nameof(sql)}' cannot be null or empty.", nameof(sql));
+            }
+            int lastIndexOf = sql.LastIndexOf("from", StringComparison.OrdinalIgnoreCase);
+            string sqlCoutn = $" select count({countBy}) " + sql.Substring(lastIndexOf) + "";
+            return sqlCoutn;
+        }
 
         /// <summary>
         ///  Get Message to check null or empty
@@ -17,11 +30,11 @@ namespace WareHouse.API.Application.Extensions
         /// <returns></returns>
         public static string GetMessageNotNull(string Query)
         {
-            if(string.IsNullOrEmpty(Query))
+            if (string.IsNullOrEmpty(Query))
                 throw new ArgumentException("Parameter cannot be null", nameof(Query));
             return $"{Query} không thể bỏ trống !";
-        }       
-        
+        }
+
         /// <summary>
         /// Get Message to check min
         /// </summary>
@@ -33,7 +46,7 @@ namespace WareHouse.API.Application.Extensions
         {
             return $"Giá trị không thể nhỏ hơn {min} !";
         }
-        
+
         /// <summary>
         /// Get Message to check max
         /// </summary>
