@@ -9,6 +9,7 @@ using Dapper;
 using MediatR;
 using StackExchange.Profiling.Internal;
 using WareHouse.API.Application.Authentication;
+using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;
@@ -128,7 +129,7 @@ namespace WareHouse.API.Application.Queries.Paginated
             parameter.Add("@skip", request.Skip);
             parameter.Add("@take", request.Take);
             _list.Result = await _repository.GetList<BeginningWareHouseDTO>(sb.ToString(), parameter, CommandType.Text);
-            _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text);
+            _list.totalCount = await _repository.GetAyncFirst<int>(ValidatorString.GetSqlCount(sb.ToString(), SqlEnd: "order"), parameter, CommandType.Text);
             return _list;
         }
     }

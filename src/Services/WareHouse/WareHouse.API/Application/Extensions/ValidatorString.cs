@@ -12,13 +12,15 @@ namespace WareHouse.API.Application.Extensions
         /// countBy: Id, p.Id
         /// sql: sql query
         /// </summary>
-        public static string GetSqlCount(string sql, string countBy = "*")
+        public static string GetSqlCount(string sql, string countBy = "*", string SqlEnd="")
         {
             if (string.IsNullOrEmpty(sql))
             {
                 throw new ArgumentException($"'{nameof(sql)}' cannot be null or empty.", nameof(sql));
             }
             int lastIndexOf = sql.LastIndexOf("from", StringComparison.OrdinalIgnoreCase);
+            int lastIndexOfEnd = string.IsNullOrEmpty(SqlEnd) ? sql.Length : sql.LastIndexOf(SqlEnd, StringComparison.OrdinalIgnoreCase);
+            sql = sql.Split(SqlEnd)[0] ?? "";
             string sqlCoutn = $" select count({countBy}) " + sql.Substring(lastIndexOf) + "";
             return sqlCoutn;
         }
