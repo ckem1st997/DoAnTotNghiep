@@ -27,9 +27,7 @@ namespace Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
-               entity.Property(e => e.UserNameRead)
-                .HasDefaultValueSql("('')")
-                .HasMaxLength(250);
+            entity.Property(e => e.UserNameRead).HasMaxLength(250);
 
             OnConfigurePartial(entity);
         }

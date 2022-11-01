@@ -3,8 +3,6 @@ using Infrastructure.Configurations;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore;
 using System;
-using Serilog;
-using Microsoft.Extensions.Logging;
 #nullable disable
 
 #nullable disable
@@ -20,20 +18,23 @@ namespace Infrastructure
         public MasterdataContext(DbContextOptions<MasterdataContext> options)
             : base(options)
         {
-            System.Diagnostics.Debug.WriteLine("MasterdataContext::ctor ->" + this.GetHashCode());
         }
 
         public virtual DbSet<HistoryNotication> HistoryNotications { get; set; }
+        public virtual DbSet<ListApp> ListApps { get; set; }
+        public virtual DbSet<ListAuthozire> ListAuthozires { get; set; }
+        public virtual DbSet<ListAuthozireRoleByUser> ListAuthozireRoleByUsers { get; set; }
+        public virtual DbSet<ListRole> ListRoles { get; set; }
+        public virtual DbSet<ListRoleByUser> ListRoleByUsers { get; set; }
         public virtual DbSet<UserMaster> UserMasters { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //if (!optionsBuilder.IsConfigured)
-            //{
-            //    optionsBuilder.UseSqlServer("Data Source=localhost,5433;Initial Catalog=MasterData;Persist Security Info=True;User ID=sa;Password=Aa!0977751021");
-            //}
-            optionsBuilder.LogTo(Log.Information, LogLevel.Information).EnableSensitiveDataLogging();
-
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Data Source=localhost,5433;Initial Catalog=MasterData;Persist Security Info=True;User ID=sa;Password=Aa!012345679");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -41,6 +42,11 @@ namespace Infrastructure
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.ApplyConfiguration(new Configurations.HistoryNoticationConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.ListAppConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.ListAuthozireConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.ListAuthozireRoleByUserConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.ListRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.ListRoleByUserConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.UserMasterConfiguration());
             OnModelCreatingPartial(modelBuilder);
         }

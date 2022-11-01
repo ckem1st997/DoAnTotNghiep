@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace Infrastructure
 {
-    public partial class UserMaster : BaseEntity
+    public partial class UserMaster:BaseEntity
     {
         public string UserName { get; set; }
         public string Password { get; set; }
-        public bool InActive { get; set; }
+        public bool? InActive { get; set; }
         public string Role { get; set; }
         public int RoleNumber { get; set; }
         public bool Read { get; set; }

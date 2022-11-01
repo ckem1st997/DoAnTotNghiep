@@ -8,6 +8,7 @@
    "ModelNamespace": null,
    "OutputContextPath": null,
    "OutputPath": null,
+   "PreserveCasingWithRegex": true,
    "ProjectRootNamespace": "Infrastructure",
    "Schemas": null,
    "SelectedHandlebarsLanguage": 0,
@@ -18,11 +19,31 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[ListApp]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ListAuthozire]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ListAuthozireRoleByUser]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ListRole]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ListRoleByUser]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[UserMaster]",
          "ObjectType": 0
       }
    ],
-   "UiHint": "3ab570e0a026.MasterData",
+   "UiHint": "644dc33f7399.MasterData",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": true,
    "UseDbContextSplitting": true,
@@ -39,5 +60,6 @@
    "UseNodaTime": false,
    "UseNullableReferences": false,
    "UseSchemaFolders": true,
-   "UseSpatial": false
+   "UseSpatial": false,
+   "UseT4": false
 }

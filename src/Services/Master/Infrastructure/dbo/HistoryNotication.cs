@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Infrastructure
 {
-    public partial class HistoryNotication:BaseEntity
+    public partial class HistoryNotication : BaseEntity
     {
         public string UserName { get; set; }
         public string Method { get; set; }
