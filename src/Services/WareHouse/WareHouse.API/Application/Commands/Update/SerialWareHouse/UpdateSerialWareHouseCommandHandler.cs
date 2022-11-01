@@ -25,7 +25,8 @@ namespace WareHouse.API.Application.Commands.Update
                 return false;
             var result = _mapper.Map<Domain.Entity.SerialWareHouse>(request.SerialWareHouseCommands);
             await _repository.AddAsync(result);
-            return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            return await _repository.UnitOfWork.SaveChangesAsync(cancellationToken) > 0;
+
         }
     }
 }

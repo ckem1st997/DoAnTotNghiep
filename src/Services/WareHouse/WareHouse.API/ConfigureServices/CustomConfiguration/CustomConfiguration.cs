@@ -28,6 +28,15 @@ using Microsoft.AspNetCore.Authorization;
 using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.SignalRService;
 using WareHouse.API.Infrastructure.ElasticSearch;
+using Autofac.Builder;
+using Autofac.Core;
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
+using Core;
+using EasyCaching.Core;
+using Nest;
+using Aspose.Diagram;
+using Core.Extensions;
 
 namespace WareHouse.API.ConfigureServices.CustomConfiguration
 {
@@ -69,7 +78,12 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             },
                        ServiceLifetime.Scoped  //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
                    );
+
+            // Register dynamic dbContext
             services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
+            services.AddScoped<DbContext, WarehouseManagementContext>();
+
+
             services.AddScoped(typeof(IElasticSearchClient<>), typeof(ElasticSearchClient<>));
             services.AddScoped<IDapper, Dapperr>(sp =>
             {
@@ -89,6 +103,34 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
 
         }
 
+        public static void ConfigureDBContext(this IServiceCollection application, WebApplicationBuilder web)
+        {
+            web.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
+            web.Host.ConfigureContainer<ContainerBuilder>(builder =>
+            {
+                // Declare your services with proper lifetime
+
+                builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().InstancePerLifetimeScope();
+                builder.RegisterType<BaseEngine>().As<IEngine>().SingleInstance();
+              //  //  builder.RegisterType<WarehouseManagementContext>().AsSelf().As<DbContext>().InstancePerLifetimeScope();
+              //  // truyền vào tên service và giá trịc cần truyền vào trong hàm khởi tạo
+              //  //builder.RegisterGeneric(typeof(RepositoryEF<>)).Named(DataConnectionHelper.ConnectionStringNames.Warehouse, typeof(IRepositoryEF<>)).
+              //  //WithParameter<object, ReflectionActivatorData, DynamicRegistrationStyle>
+              //  //(new ResolvedParameter((Func<ParameterInfo, IComponentContext, bool>)
+              //  //((pi, ctx) => pi.ParameterType == typeof(DbContext) && pi.Name == DataConnectionHelper.ConnectionStringNames.Warehouse), (Func<ParameterInfo, IComponentContext, object>)
+              //  //((pi, ctx) => EngineContext.Current.Resolve<WarehouseManagementContext>()))).InstancePerLifetimeScope();
+              //  //  builder.RegisterGeneric(typeof(RepositoryEF<>)).As(typeof(IRepositoryEF<>)).InstancePerLifetimeScope();
+              //  //
+              //  builder.RegisterGeneric(typeof(RepositoryEF<>)).Named(DataConnectionHelper.ConnectionStringNames.Warehouse, typeof(IRepositoryEF<>))
+              //  .WithParameter<object, ReflectionActivatorData, DynamicRegistrationStyle>
+              //  (new ResolvedParameter((Func<ParameterInfo, IComponentContext, bool>)(
+              //  (pi, ctx) => pi.ParameterType == typeof(WarehouseManagementContext) && pi.Name == "key"), 
+              //  (Func<ParameterInfo, IComponentContext, object>)
+              //  ((pi, ctx) => EngineContext.Current.Resolve<WarehouseManagementContext>()))).InstancePerLifetimeScope();
+              ////  builder.RegisterGeneric(typeof(RepositoryEF<>)).As(typeof(IRepositoryEF<>)).InstancePerLifetimeScope();
+            });
+        }
 
         //public static ILoggingBuilder UseSerilog(this ILoggingBuilder builder, IConfiguration configuration)
         //{

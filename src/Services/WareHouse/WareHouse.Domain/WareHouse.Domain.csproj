@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.90" />
     <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
     <PackageReference Include="Seq.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.1-dev-00296" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.2-dev-00890" />

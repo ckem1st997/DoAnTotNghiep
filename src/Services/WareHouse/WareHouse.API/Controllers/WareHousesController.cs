@@ -182,7 +182,7 @@ namespace WareHouse.API.Controllers
                     Name = "Kho tạm " + i,
                 });
             }
-            var res = await _repository.UnitOfWork.SaveEntitiesAsync();
+            var res = await _repository.UnitOfWork.SaveChangesAsync();
             return Ok(res);
         }
 
@@ -297,7 +297,7 @@ namespace WareHouse.API.Controllers
                 }
 
             }
-            await _repository1.UnitOfWork.SaveEntitiesAsync();
+            await _repository1.UnitOfWork.SaveChangesAsync();
 
 
             return Ok(1);

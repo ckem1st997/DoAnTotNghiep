@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace WareHouse.Domain.IRepositories
 {
     public partial interface IRepositoryEF<T> where T : BaseEntity
     {
-        public IUnitOfWork UnitOfWork { get; }
+        public DbContext UnitOfWork { get; }
 
         public IEnumerable<T> Get(
             Expression<Func<T, bool>> filter = null,

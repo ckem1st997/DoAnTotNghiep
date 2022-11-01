@@ -6,6 +6,8 @@ using Master.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -22,6 +24,7 @@ namespace Master.Controllers
 
         [CheckRole(LevelCheck.CREATE)]
         [HttpGet]
+        [Route("create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Create()
@@ -29,13 +32,14 @@ namespace Master.Controllers
             return Ok(new ResultMessageResponse()
             {
                 success = true,
-                data=new ListApp()
+                data = new ListApp()
             });
         }
 
 
         [CheckRole(LevelCheck.CREATE)]
         [HttpPost]
+        [Route("create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(ListApp list)
@@ -49,16 +53,17 @@ namespace Master.Controllers
                 });
             }
             list.Id = Guid.NewGuid().ToString();
-            var res = await _context.ListApps.AddAsync(list);
+            await _context.ListApps.AddAsync(list);
             return Ok(new ResultMessageResponse()
             {
-                success = res != null
+                success = await _context.SaveChangesAsync() > 0
             });
         }
 
 
 
         [HttpGet]
+        [Route("edit")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Edit(string id)
@@ -72,17 +77,16 @@ namespace Master.Controllers
                 });
             }
 
-            var res = await _context.ListApps.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            await _context.ListApps.FirstOrDefaultAsync(x => x.Id.Equals(id));
             return Ok(new ResultMessageResponse()
             {
-                success = true,
-                data = res,
-                message = res == null ? "Không tìm thấy !" : ""
+                success = await _context.SaveChangesAsync() > 0
             }); ;
         }
 
 
         [HttpPost]
+        [Route("edit")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Edit(ListApp list)
@@ -103,6 +107,28 @@ namespace Master.Controllers
         }
 
 
+
+        [CheckRole(LevelCheck.DELETE)]
+        [Route("delete")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Delete(IEnumerable<string> listIds)
+        {
+            bool res = false;
+            var get = _context.ListApps.Where(x => x.Id.Equals(listIds));
+            if (get != null)
+            {
+                _context.ListApps.RemoveRange(get);
+                res = await _context.SaveChangesAsync() > 0;
+            }
+
+            var result = new ResultMessageResponse()
+            {
+                success = res
+            };
+            return Ok(result);
+        }
 
     }
 }

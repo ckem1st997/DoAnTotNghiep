@@ -39,7 +39,7 @@ namespace WareHouse.API.Application.Commands.Create
                 list.Add(result);
             }
             await _repository.BulkInsertOrUpdateAsync(list);
-            return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            return await _repository.UnitOfWork.SaveChangesAsync(cancellationToken) > 0;
         }
     }
 }

@@ -31,7 +31,7 @@ namespace WareHouse.API.Application.Commands.Create
                 var serialWareHouse = _mapper.Map<SerialWareHouse>(item);
                 await _repository.AddAsync(serialWareHouse);
             }
-            return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            return await _repository.UnitOfWork.SaveChangesAsync(cancellationToken) > 0;
         }
     }
 }

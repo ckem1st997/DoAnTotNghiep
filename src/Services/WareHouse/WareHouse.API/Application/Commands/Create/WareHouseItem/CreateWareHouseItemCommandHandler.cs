@@ -25,7 +25,7 @@ namespace WareHouse.API.Application.Commands.Create
                 return false;
             var result = _mapper.Map<Domain.Entity.WareHouseItem>(request.WareHouseItemCommands);
             await _repository.AddAsync(result);
-            return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            return await _repository.UnitOfWork.SaveChangesAsync(cancellationToken) > 0;
         }
     }
 }

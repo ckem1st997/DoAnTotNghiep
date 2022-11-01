@@ -13,17 +13,18 @@ using WareHouse.Domain.SeeWork;
 
 namespace WareHouse.Infrastructure.Repositories
 {
-    public class RepositoryEF<T> : IRepositoryEF<T> where T : BaseEntity, new()
+    public class RepositoryEF<T> : IRepositoryEF<T>
+        where T : BaseEntity, new()
     {
-        private readonly WarehouseManagementContext _context;
+        private readonly DbContext _context;
         private readonly DbSet<T> _dbSet;
 
-        public IUnitOfWork UnitOfWork
+        public DbContext UnitOfWork
         {
             get { return _context; }
         }
 
-        public RepositoryEF(WarehouseManagementContext context)
+        public RepositoryEF(DbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _dbSet = _context.Set<T>() ?? throw new ArgumentNullException(nameof(_context));

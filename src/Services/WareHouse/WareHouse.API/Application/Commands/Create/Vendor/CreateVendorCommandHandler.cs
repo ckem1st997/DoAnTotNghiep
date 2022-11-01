@@ -27,7 +27,7 @@ namespace WareHouse.API.Application.Commands.Create
             var res = await _repository.AddAsync(result);
             // var TestEditDomainEventAfterCreateVendor =
             //     new TestEditDomainEventAfterCreateVendor("test nhe 1111111", res.Id);
-            return await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            return await _repository.UnitOfWork.SaveChangesAsync(cancellationToken)>0;
         }
     }
 }

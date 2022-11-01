@@ -12,12 +12,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WareHouse.Domain.Entity;
+using WareHouse.Domain.IRepositories;
 using WareHouse.Domain.SeeWork;
 using WareHouse.Infrastructure.EntityConfigurations;
 
 namespace WareHouse.Infrastructure
 {
-    public class WarehouseManagementContext : DbContext, IUnitOfWork
+    public class WarehouseManagementContext : DbContext
     {
         public const string DEFAULT_SCHEMA = "WarehouseManagement";
         public const string STRING_CONNECT = @"Server=sqlserver;Initial Catalog=WarehouseManagement;Persist Security Info=True;User ID=sa;Password=Aa!0977751021;MultipleActiveResultSets = true";
@@ -91,41 +92,41 @@ namespace WareHouse.Infrastructure
 
         }
         
-        public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
-        {
-            //override
-           // var entities = ChangeTracker.Entries().Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
-            //foreach (var entry in ChangeTracker.Entries<BaseEntity>())
-            //{
-            //    if (entry.State == EntityState.Added)
-            //    {
-            //        entry.Entity.OnDelete = false;
-            //    }
+        //public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    //override
+        //   // var entities = ChangeTracker.Entries().Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
+        //    //foreach (var entry in ChangeTracker.Entries<BaseEntity>())
+        //    //{
+        //    //    if (entry.State == EntityState.Added)
+        //    //    {
+        //    //        entry.Entity.OnDelete = false;
+        //    //    }
 
-            //    if ( entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
-            //    {
-            //        entry.Entity.OnDelete = false;
-            //    }
-            //    if (entry.State == EntityState.Deleted)
-            //    {
-            //        entry.Entity.OnDelete = true;
-            //    }
-            //}
+        //    //    if ( entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
+        //    //    {
+        //    //        entry.Entity.OnDelete = false;
+        //    //    }
+        //    //    if (entry.State == EntityState.Deleted)
+        //    //    {
+        //    //        entry.Entity.OnDelete = true;
+        //    //    }
+        //    //}
 
 
-            // Dispatch Domain Events collection. 
-            // Choices:
-            // A) Right BEFORE committing data (EF SaveChanges) into the DB will make a single transaction including  
-            // side effects from the domain event handlers which are using the same DbContext with "InstancePerLifetimeScope" or "scoped" lifetime
-            // B) Right AFTER committing data (EF SaveChanges) into the DB will make multiple transactions. 
-            // You will need to handle eventual consistency and compensatory actions in case of failures in any of the Handlers. 
-            //   await _mediator.DispatchDomainEventsAsync(this);
+        //    // Dispatch Domain Events collection. 
+        //    // Choices:
+        //    // A) Right BEFORE committing data (EF SaveChanges) into the DB will make a single transaction including  
+        //    // side effects from the domain event handlers which are using the same DbContext with "InstancePerLifetimeScope" or "scoped" lifetime
+        //    // B) Right AFTER committing data (EF SaveChanges) into the DB will make multiple transactions. 
+        //    // You will need to handle eventual consistency and compensatory actions in case of failures in any of the Handlers. 
+        //    //   await _mediator.DispatchDomainEventsAsync(this);
 
-            // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
-            // performed through the DbContext will be committed
-            var result = await base.SaveChangesAsync(cancellationToken);
-            return result > 0;
-        }
+        //    // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
+        //    // performed through the DbContext will be committed
+        //    var result = await base.SaveChangesAsync(cancellationToken);
+        //    return result > 0;
+        //}
 
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
