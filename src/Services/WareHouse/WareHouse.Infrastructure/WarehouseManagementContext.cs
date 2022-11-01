@@ -15,11 +15,12 @@ using WareHouse.Domain.Entity;
 using WareHouse.Domain.IRepositories;
 using WareHouse.Domain.SeeWork;
 using WareHouse.Infrastructure.EntityConfigurations;
-
+using Microsoft.Extensions.DependencyInjection;
 namespace WareHouse.Infrastructure
 {
     public class WarehouseManagementContext : DbContext
     {
+        private readonly string _connectionString;
         public const string DEFAULT_SCHEMA = "WarehouseManagement";
         public const string STRING_CONNECT = @"Server=sqlserver;Initial Catalog=WarehouseManagement;Persist Security Info=True;User ID=sa;Password=Aa!0977751021;MultipleActiveResultSets = true";
         public virtual DbSet<Audit> Audits { get; set; }
@@ -40,26 +41,26 @@ namespace WareHouse.Infrastructure
         public virtual DbSet<WareHouseItemUnit> WareHouseItemUnits { get; set; }
         public virtual DbSet<WareHouseLimit> WareHouseLimits { get; set; }
         public virtual DbSet<WarehouseBalance> WarehouseBalances { get; set; }
-
-
-        private readonly IMediator _mediator;
         private IDbContextTransaction _currentTransaction;
 
+
+        // đăng ký ở starup
         public WarehouseManagementContext(DbContextOptions<WarehouseManagementContext> options)
             : base(options)
         {
+            System.Diagnostics.Debug.WriteLine("WarehouseManagementContext::ctor ->" + this.GetHashCode());
         }
-
+        public WarehouseManagementContext(string connectionString)
+        {
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentException($"'{nameof(connectionString)}' cannot be null or empty.", nameof(connectionString));
+            }
+            _connectionString = connectionString;
+        }
         public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
 
         public bool HasActiveTransaction => _currentTransaction != null;
-
-        public WarehouseManagementContext(DbContextOptions<WarehouseManagementContext> options, IMediator mediator) : base(options)
-        {
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            System.Diagnostics.Debug.WriteLine("WarehouseManagementContext::ctor ->" + this.GetHashCode());
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new VendorEntityTypeConfiguration());
@@ -89,9 +90,13 @@ namespace WareHouse.Infrastructure
             //optionsBuilder.UseSqlite($"Data Source={databasePath}");
             optionsBuilder.LogTo(Log.Information, LogLevel.Information).EnableSensitiveDataLogging();
             //   optionsBuilder.AddInterceptors(new SqlInterceptor(), new AadAuthenticationInterceptor());
-
+            optionsBuilder.UseSqlServer(_connectionString,
+                  sqlServerOptionsAction: sqlOptions =>
+                  {
+                      sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                  });
         }
-        
+
         //public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
         //{
         //    //override
