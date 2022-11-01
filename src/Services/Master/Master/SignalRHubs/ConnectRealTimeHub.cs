@@ -1,4 +1,4 @@
-﻿using Master.Application.Message;
+﻿using Core.Extensions;
 using Master.Extension;
 using Master.Service;
 using Microsoft.AspNetCore.Authorization;

@@ -1,6 +1,6 @@
-﻿using Grpc.Core;
+﻿using Core.Extensions;
+using Grpc.Core;
 using Infrastructure;
-using Master.Application.Message;
 using Master.Extension;
 using Master.Service;
 using Master.SignalRHubs;

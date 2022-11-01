@@ -63,6 +63,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\Core\Core.csproj" />
 	  <ProjectReference Include="..\..\Base\Base\Base.csproj" />
 	  <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
 	</ItemGroup>

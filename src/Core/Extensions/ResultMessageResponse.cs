@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Master.Application.Message
+namespace Core.Extensions
 {
     [Serializable]
     public partial class ResultMessageResponse

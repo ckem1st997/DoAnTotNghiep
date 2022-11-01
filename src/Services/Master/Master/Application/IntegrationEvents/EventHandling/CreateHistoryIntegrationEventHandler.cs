@@ -1,8 +1,8 @@
 ﻿using Base.Events;
+using Core.Extensions;
 using Infrastructure;
 using KafKa.Net.Abstractions;
 using KafKa.Net.Events;
-using Master.Application.Message;
 using Master.Service;
 using Master.SignalRHubs;
 using Microsoft.AspNetCore.SignalR;

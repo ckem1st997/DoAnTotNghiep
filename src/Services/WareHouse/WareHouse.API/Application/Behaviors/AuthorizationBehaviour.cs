@@ -35,8 +35,6 @@ namespace WareHouse.API.Application.Behaviors
 
                 if (authorizeAttributesWithRoles.Any())
                 {
-                    var authorized = false;
-
                     foreach (var roles in authorizeAttributesWithRoles.Select(a => a.Roles.Split(',')))
                     {
                         foreach (var role in roles)

@@ -1,6 +1,6 @@
-﻿using Infrastructure;
+﻿using Core.Extensions;
+using Infrastructure;
 using Master.Application.Authentication;
-using Master.Application.Message;
 using Master.Controllers.BaseController;
 using Master.Service;
 using Microsoft.AspNetCore.Authorization;

@@ -21,7 +21,7 @@ namespace Core
         /// Get IServiceProvider
         /// </summary>
         /// <returns>IServiceProvider</returns>
-        protected IServiceProvider GetServiceProvider(IServiceScope scope = null)
+        protected IServiceProvider GetServiceProvider(IServiceScope scope=null)
         {
             if (scope == null)
             {

@@ -1,4 +1,4 @@
-﻿using Master.Application.Message;
+﻿using Core.Extensions;
 using Master.Controllers.BaseController;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;

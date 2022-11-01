@@ -34,6 +34,7 @@ namespace KafKa.Net
         private readonly ILifetimeScope _autofac;
         const string BROKER_NAME = "event_bus";
         const string AUTOFAC_SCOPE_NAME = "event_bus";
+
         public RequestTimeConsumer(IKafKaConnection kafKaConnection, ILogger<EventKafKa> logger,
             ILifetimeScope autofac, IEventBusSubscriptionsManager subsManager)
         {
@@ -44,22 +45,21 @@ namespace KafKa.Net
             _subsManager = subsManager;
             _logger = logger;
         }
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            var policy = RetryPolicy.Handle<SocketException>()
-                   .Or<KafkaRetriableException>()
-                   .WaitAndRetry(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
-                   {
-                       Log.Warning(ex, "Kafka Client could not connect after {TimeOut}s ({ExceptionMessage})", $"{time.TotalSeconds:n1}", ex.Message);
-                   }
-               );
-            
-            policy.Execute(() =>
-            {
-                new Thread(() => StartConsumerLoop(stoppingToken)).Start();
 
-            });
-            return Task.CompletedTask;
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            var policy = Policy.Handle<SocketException>()
+                .Or<KafkaRetriableException>()
+                .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                    (ex, time) =>
+                    {
+                        Log.Warning(ex, "Kafka Client could not connect after {TimeOut}s ({ExceptionMessage})",
+                            $"{time.TotalSeconds:n1}", ex.Message);
+                    }
+                );
+
+            await policy.ExecuteAsync(() => { new Thread(() => StartConsumerLoop(stoppingToken)).Start(); return Task.CompletedTask; });
+            // return Task.CompletedTask;
         }
 
         [Obsolete]
@@ -83,8 +83,8 @@ namespace KafKa.Net
                         {
                             var message = Encoding.UTF8.GetString(cr.Value);
                             await ProcessEvent(cr.Key, message);
-
                         }
+
                         kafkaConsumer.StoreOffset(cr);
                     }
                     catch (ConsumeException e)
@@ -97,10 +97,11 @@ namespace KafKa.Net
                         }
                     }
                 }
+
                 this.kafkaConsumer.Close();
             }
-
         }
+
         private async Task ProcessEvent(string eventName, string message)
         {
             _logger.LogTrace("Processing KafKa event: {EventName}", eventName);
@@ -114,7 +115,8 @@ namespace KafKa.Net
                     {
                         if (subscription.IsDynamic)
                         {
-                            var handler = scope.ResolveOptional(subscription.HandlerType) as IDynamicIntegrationEventHandler;
+                            var handler =
+                                scope.ResolveOptional(subscription.HandlerType) as IDynamicIntegrationEventHandler;
                             if (handler == null) continue;
                             using dynamic eventData = JsonDocument.Parse(message);
                             await Task.Yield();
@@ -125,11 +127,13 @@ namespace KafKa.Net
                             var handler = scope.ResolveOptional(subscription.HandlerType);
                             if (handler == null) continue;
                             var eventType = _subsManager.GetEventTypeByName(eventName);
-                            var integrationEvent = JsonSerializer.Deserialize(message, eventType, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                            var integrationEvent = JsonSerializer.Deserialize(message, eventType,
+                                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
                             var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
 
                             await Task.Yield();
-                            await (Task)concreteType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
+                            await (Task)concreteType.GetMethod("Handle")
+                                .Invoke(handler, new object[] { integrationEvent });
                         }
                     }
                 }
@@ -146,9 +150,5 @@ namespace KafKa.Net
             this.kafkaConsumer.Dispose();
             base.Dispose();
         }
-
-
     }
-
-
 }

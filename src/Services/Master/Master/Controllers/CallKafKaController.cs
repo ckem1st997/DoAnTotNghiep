@@ -2,7 +2,6 @@
 using KafKa.Net;
 using KafKa.Net.Abstractions;
 using Master.Application.Authentication;
-using Master.Application.Message;
 using Master.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

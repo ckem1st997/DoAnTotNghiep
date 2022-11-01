@@ -1,6 +1,6 @@
-﻿using Infrastructure;
+﻿using Core.Extensions;
+using Infrastructure;
 using Master.Application.Authentication;
-using Master.Application.Message;
 using Master.Controllers.BaseController;
 using Master.Models;
 using Master.Service;
