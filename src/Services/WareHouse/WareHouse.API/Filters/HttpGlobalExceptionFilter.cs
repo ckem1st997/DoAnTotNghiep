@@ -45,15 +45,15 @@ namespace WareHouse.API.Filters
                     Detail = "Please refer to the errors property for additional details."
                 };
 
-                problemDetails.Errors.Add("DomainValidations", new string[] { context.Exception.Message.ToString() });
+                problemDetails.Errors.Add("DomainValidations", new string[] { context.Exception.Message });
 
                 context.Result = new BadRequestObjectResult(problemDetails);
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
-            else if (context.Exception.GetType() == typeof(RedisConnectionException))
+            else if (context.Exception is RedisConnectionException)
             {
                 Log.Error("Redis not connected width HttpGlobalExceptionFilter!");
-                Log.Error(context.Exception.Message.ToString());
+                Log.Error(context.Exception.Message);
                 var problemDetails = new ValidationProblemDetails()
                 {
                     Instance = context.HttpContext.Request.Path,
@@ -86,13 +86,6 @@ namespace WareHouse.API.Filters
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
             context.ExceptionHandled = true;
-        }
-
-        private class JsonErrorResponse
-        {
-            public string[] Messages { get; set; }
-
-            public object DeveloperMessage { get; set; }
         }
     }
 }
