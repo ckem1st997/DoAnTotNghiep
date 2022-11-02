@@ -111,10 +111,10 @@ namespace Share.BaseCore.Repositories
         {
             if (entity is null)
                 throw new NotImplementedException(nameof(entity));
-            if (_context.Entry(entity).State == EntityState.Detached)
-            {
-                _dbSet.Attach(entity);
-            }
+            //if (_context.Entry(entity).State == EntityState.Detached)
+            //{
+            //    _dbSet.Attach(entity);
+            //}
 
             _dbSet.Remove(entity);
         }
@@ -146,9 +146,9 @@ namespace Share.BaseCore.Repositories
         {
             if (entity is null)
                 throw new NotImplementedException(nameof(entity));
-            //  return _dbSet.Update(entity).Entity;
-            _dbSet.Attach(entity);
-            _context.Entry(entity).State = EntityState.Modified;
+            _dbSet.Update(entity);
+            //_dbSet.Attach(entity);
+            //_context.Entry(entity).State = EntityState.Modified;
         }
 
         public void BulkInsert(IList<T> listEntity)
