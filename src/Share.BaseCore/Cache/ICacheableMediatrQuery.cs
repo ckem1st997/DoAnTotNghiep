@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WareHouse.API.Application.Cache
+namespace Share.BaseCore.Cache
 {
     public interface ICacheableMediatrQuery
     {

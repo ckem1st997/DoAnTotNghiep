@@ -18,12 +18,12 @@ using WareHouse.API.Application.Queries.BaseModel;
 using WareHouse.API.Application.Queries.GetAll.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.Paginated.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.Paginated.WareHouses;
-using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Querie.CheckCode;
 using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
 using WareHouse.API.Application.Queries.GetFisrt;
 using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Model;
+using Share.BaseCore.Cache.CacheName;
 
 namespace WareHouse.API.Controllers
 {

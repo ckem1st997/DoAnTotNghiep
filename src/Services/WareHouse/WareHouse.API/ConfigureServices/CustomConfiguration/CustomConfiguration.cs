@@ -11,7 +11,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Controllers;
-using WareHouse.API.Filters;
 using WareHouse.Infrastructure;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
@@ -36,6 +35,8 @@ using Share.BaseCore.Repositories;
 using Share.BaseCore.Extensions;
 using Share.BaseCore;
 using Infrastructure;
+using Share.BaseCore.Filters;
+using Share.BaseCore.Behaviors;
 
 namespace WareHouse.API.ConfigureServices.CustomConfiguration
 {
@@ -143,6 +144,22 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             //          (pi, ctx) => pi.ParameterType == typeof(DbContext) && pi.Name == DataConnectionHelper.ParameterName,
             //          (pi, ctx) => EngineContext.Current.Resolve<DbContext>(DataConnectionHelper.ConnectionStringNames.Master)))
             //      .InstancePerLifetimeScope();
+            // Behavior
+            builder.RegisterGeneric(typeof(LoggingBehavior<,>))
+         .Named(DataConnectionHelper.ConnectionStringNames.Warehouse, typeof(IPipelineBehavior<,>))
+         .WithParameter(new ResolvedParameter(
+             // kiểu truyền vào và tên biến truyền vào qua hàm khởi tạo
+             (pi, ctx) => pi.ParameterType == typeof(DbContext) && pi.Name == DataConnectionHelper.ParameterName,
+             (pi, ctx) => EngineContext.Current.Resolve<DbContext>(DataConnectionHelper.ConnectionStringNames.Warehouse)))
+         .InstancePerLifetimeScope();
+            builder.RegisterGeneric(typeof(TransactionBehaviour<,>))
+.Named(DataConnectionHelper.ConnectionStringNames.Warehouse, typeof(IPipelineBehavior<,>))
+.WithParameter(new ResolvedParameter(
+ // kiểu truyền vào và tên biến truyền vào qua hàm khởi tạo
+ (pi, ctx) => pi.ParameterType == typeof(DbContext) && pi.Name == DataConnectionHelper.ParameterName,
+ (pi, ctx) => EngineContext.Current.Resolve<DbContext>(DataConnectionHelper.ConnectionStringNames.Warehouse)))
+.InstancePerLifetimeScope();
+
         }
     }
 }

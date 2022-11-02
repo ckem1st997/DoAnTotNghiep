@@ -2,11 +2,11 @@
 using Confluent.Kafka;
 using KafKa.Net.Abstractions;
 using KafKa.Net.Events;
-using KafKa.Net.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Polly.Retry;
 using Serilog;
+using Share.BaseCore.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

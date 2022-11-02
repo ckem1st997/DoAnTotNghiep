@@ -26,7 +26,7 @@ namespace Share.BaseCore.Repositories
         public RepositoryEF(DbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _dbSet = _context.Set<T>() ?? throw new ArgumentNullException(nameof(_context));
+            _dbSet = _context.Set<T>();
         }
 
 

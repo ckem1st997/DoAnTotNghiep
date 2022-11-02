@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Share.BaseCore.Cache.CacheName;
 using StackExchange.Redis;
-using WareHouse.API.Application.Cache.CacheName;
 
-namespace WareHouse.API.Application.Cache
+namespace Share.BaseCore.Cache
 {
     public static class ServiceCache
     {
-
         public static void AddCache(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDistributedMemoryCache();
@@ -31,7 +30,6 @@ namespace WareHouse.API.Application.Cache
                 IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(connect);
                 return multiplexer.GetDatabase();
             });
-            services.Configure<CacheSettings>(configuration.GetSection("CacheSettings"));
             services.AddScoped<ICacheExtension, CacheExtension>();
             // nếu dùng Singleton thì sẽ run hàm khởi tạo một lần duy nhất cho đến khi service được khởi động lại
             // mà nếu như vậy thì lúc đầu connect thế nào thì suốt quá trình chạy service sẽ connect kiểu đó

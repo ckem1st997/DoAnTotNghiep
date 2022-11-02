@@ -18,7 +18,6 @@ using WareHouse.API.Application.Queries.Paginated.WareHouseItem;
 using WareHouse.API.Application.Queries.Paginated.WareHouseItemCategory;
 using WareHouse.API.Application.Queries.Paginated.WareHouses;
 using WareHouse.API.Application.Querie.CheckCode;
-using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Queries.GetAll.Unit;
 using WareHouse.API.Application.Queries.GetAll;
 using WareHouse.API.Application.Queries.GetAll.WareHouseItemCategory;
@@ -26,10 +25,11 @@ using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
 using WareHouse.API.Application.Queries.Paginated.WareHouseItemUnit;
 using WareHouse.API.Application.Authentication;
+using Share.BaseCore.Cache.CacheName;
 
 namespace WareHouse.API.Controllers
 {
-    
+
     public class WareHouseItemController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;

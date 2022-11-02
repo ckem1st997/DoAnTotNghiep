@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace WareHouse.API.Application.Cache.CacheName
+namespace Share.BaseCore.Cache.CacheName
 {
     public static class CacheGetAllValue
     {

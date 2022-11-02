@@ -16,4 +16,12 @@
     <PackageReference Include="Serilog" Version="2.10.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="EventBus\Extensions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Share.BaseCore\Share.BaseCore.csproj" />
+  </ItemGroup>
+
 </Project>

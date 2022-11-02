@@ -13,8 +13,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WareHouse.API.Application.AutoMapper.ConfigureServices;
-using WareHouse.API.Application.Behaviors.ConfigureServices;
-using WareHouse.API.Application.Cache;
 using WareHouse.API.Application.Validations.ConfigureServices;
 using WareHouse.API.ConfigureServices.CustomConfiguration;
 using Grpc.Net.Client.Web;
@@ -22,7 +20,6 @@ using GrpcGetDataToMaster;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
-using WareHouse.API.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -41,6 +38,9 @@ using Nest.JsonNetSerializer;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Share.BaseCore.Extensions;
+using Share.BaseCore.Filters;
+using Share.BaseCore.Cache;
+using Share.BaseCore.Behaviors.ConfigureServices;
 
 namespace WareHouse.API
 {

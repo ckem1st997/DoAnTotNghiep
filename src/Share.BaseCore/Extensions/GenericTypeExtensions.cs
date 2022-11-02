@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KafKa.Net.Extensions
+namespace Share.BaseCore.Extensions
 {
     public static class GenericTypeExtensions
     {

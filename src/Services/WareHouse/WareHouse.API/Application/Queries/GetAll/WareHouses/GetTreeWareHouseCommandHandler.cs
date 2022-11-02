@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Share.BaseCore.Extensions;
 using Share.BaseCore;
 using WareHouse.API.Application.Authentication;
-using WareHouse.API.Application.Cache;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;
 using WareHouse.Domain.Entity;

@@ -1,6 +1,4 @@
-﻿
-
-namespace WareHouse.API.Application.Cache.CacheName
+﻿namespace Share.BaseCore.Cache.CacheName
 {
     public static class WareHouseCacheName
     {
@@ -24,13 +22,13 @@ namespace WareHouse.API.Application.Cache.CacheName
         public const string Prefix = "WareHouseItem-3-";
     }
 
-        public static class UnitCacheName
+    public static class UnitCacheName
     {
         public const string UnitCacheNameTreeView = "Unit-4-TreeView-{0}";
         public const string UnitCacheNameDropDown = "Unit-4-DropDown-{0}";
         public const string Prefix = "Unit-4-";
     }
-       public static class VendorCacheName
+    public static class VendorCacheName
     {
         public const string VendorCacheNameTreeView = "Vendor-5-TreeView-{0}";
         public const string VendorCacheNameDropDown = "Vendor-5-DropDown-{0}";

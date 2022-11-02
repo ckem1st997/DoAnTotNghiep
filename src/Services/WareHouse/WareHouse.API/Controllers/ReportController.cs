@@ -1,13 +1,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Report.API.Application.Queries.GetAll.Reports;
+using Share.BaseCore.Cache.CacheName;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Authentication;
-using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Commands.Create;
 using WareHouse.API.Application.Commands.Delete;
 using WareHouse.API.Application.Commands.Models;

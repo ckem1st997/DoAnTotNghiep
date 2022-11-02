@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace WareHouse.API.Application.Cache.CacheName
+namespace Share.BaseCore.Cache.CacheName
 {
     /// <summary>
     /// Extension Cache Redis

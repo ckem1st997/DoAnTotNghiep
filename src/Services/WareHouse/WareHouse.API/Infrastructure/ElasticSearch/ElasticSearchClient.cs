@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Serilog;
 using WareHouse.API.Application.Queries.GetAll.WareHouses;
-using WareHouse.API.Application.Cache.CacheName;
 using MediatR;
 using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
 

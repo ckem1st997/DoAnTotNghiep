@@ -14,7 +14,6 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Authentication;
-using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Model;

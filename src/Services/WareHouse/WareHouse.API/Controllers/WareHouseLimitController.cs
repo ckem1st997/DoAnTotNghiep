@@ -13,7 +13,6 @@ using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Queries.GetAll.Unit;
 using WareHouse.API.Application.Queries.Paginated.Unit;
 using WareHouse.API.Controllers.BaseController;
-using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Queries.Paginated;
 using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
 using WareHouse.API.Application.Model;
@@ -25,10 +24,11 @@ using WareHouse.API.Application.Queries.GetAll.WareHouseItem;
 using WareHouse.API.Application.Queries.GetFisrt;
 using WareHouse.Domain.Entity;
 using WareHouse.API.Application.Authentication;
+using Share.BaseCore.Cache.CacheName;
 
 namespace WareHouse.API.Controllers
 {
-    
+
     [CheckRole(LevelCheck.WAREHOUSE)]
     public class WareHouseLimitController : BaseControllerWareHouse
     {

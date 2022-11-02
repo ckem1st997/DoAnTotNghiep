@@ -15,6 +15,7 @@ using WareHouse.Domain.Entity;
 using WareHouse.Domain.SeeWork;
 using WareHouse.Infrastructure.EntityConfigurations;
 using Microsoft.Extensions.DependencyInjection;
+
 namespace WareHouse.Infrastructure
 {
     public class WarehouseManagementContext : DbContext
@@ -39,7 +40,6 @@ namespace WareHouse.Infrastructure
         public virtual DbSet<WareHouseItemUnit> WareHouseItemUnits { get; set; }
         public virtual DbSet<WareHouseLimit> WareHouseLimits { get; set; }
         public virtual DbSet<WarehouseBalance> WarehouseBalances { get; set; }
-        private IDbContextTransaction _currentTransaction;
 
 
         // đăng ký ở starup
@@ -48,9 +48,7 @@ namespace WareHouse.Infrastructure
         {
             System.Diagnostics.Debug.WriteLine("WarehouseManagementContext::ctor ->" + this.GetHashCode());
         }
-        public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
 
-        public bool HasActiveTransaction => _currentTransaction != null;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new VendorEntityTypeConfiguration());
@@ -123,58 +121,5 @@ namespace WareHouse.Infrastructure
         //    var result = await base.SaveChangesAsync(cancellationToken);
         //    return result > 0;
         //}
-
-        public async Task<IDbContextTransaction> BeginTransactionAsync()
-        {
-            if (_currentTransaction != null)
-                return null;
-
-            _currentTransaction = await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
-
-            return _currentTransaction;
-        }
-
-        public async Task CommitTransactionAsync(IDbContextTransaction transaction)
-        {
-            if (transaction == null)
-                throw new ArgumentNullException(nameof(transaction));
-            if (transaction != _currentTransaction)
-                throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");
-
-            try
-            {
-                await SaveChangesAsync();
-                await transaction.CommitAsync();
-            }
-            catch
-            {
-                await RollbackTransaction();
-                throw;
-            }
-            finally
-            {
-                if (_currentTransaction != null)
-                {
-                    await _currentTransaction.DisposeAsync();
-                    _currentTransaction = null;
-                }
-            }
-        }
-
-        public async Task RollbackTransaction()
-        {
-            try
-            {
-                await _currentTransaction?.RollbackAsync();
-            }
-            finally
-            {
-                if (_currentTransaction != null)
-                {
-                    await _currentTransaction.DisposeAsync();
-                    _currentTransaction = null;
-                }
-            }
-        }
     }
 }

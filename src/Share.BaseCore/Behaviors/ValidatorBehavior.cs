@@ -7,9 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WareHouse.Domain.Exceptions;
 
-namespace WareHouse.API.Application.Behaviors
+namespace Share.BaseCore.Behaviors
 {
     // xử lí validator trước khi đến điểm cuối, tức là xử lí trong đường ống trước khi đến điểm cuối MediatR để xử lí
     public class ValidatorBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
@@ -42,7 +41,7 @@ namespace WareHouse.API.Application.Behaviors
                 {
                     error = error + " " + item.PropertyName + " " + item.ErrorMessage;
                 }
-                throw new WareHouseDomainException(
+                throw new BaseException(
                     $"Command Validation Errors for type (Models Validator) {typeof(TRequest).Name} .Message:{error} ", new ValidationException("Validation exception", failures));
             }
 

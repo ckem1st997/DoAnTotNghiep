@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using StackExchange.Redis;
 
-namespace WareHouse.API.Application.Cache.CacheName
+namespace Share.BaseCore.Cache.CacheName
 {
     public class CacheExtension : ICacheExtension
     {
@@ -36,7 +36,7 @@ namespace WareHouse.API.Application.Cache.CacheName
             List<string> listKeys = new List<string>();
             if (IsConnected)
             {
-              //  var keys = _connectionMultiplexer.GetServer(_connectionMultiplexer.GetEndPoints().FirstOrDefault()).Keys();
+                //  var keys = _connectionMultiplexer.GetServer(_connectionMultiplexer.GetEndPoints().FirstOrDefault()).Keys();
                 var keys = _db.Multiplexer.GetServer(_db.Multiplexer.GetEndPoints().FirstOrDefault()).Keys();
                 listKeys.AddRange(keys.Select(key => (string)key).ToList());
             }

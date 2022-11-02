@@ -3,25 +3,21 @@ using Grpc.Core.Interceptors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Identity.Web;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-namespace WareHouse.API.Filters
+
+namespace Share.BaseCore.Filters
 {
     public class GrpcExceptionInterceptor : Interceptor
     {
-        private readonly ILogger<GrpcExceptionInterceptor> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IConfiguration _configuration;
 
-        public GrpcExceptionInterceptor(ILogger<GrpcExceptionInterceptor> logger, IHttpContextAccessor httpContextAccesso, IConfiguration configuration)
+        public GrpcExceptionInterceptor(IHttpContextAccessor httpContextAccesso)
         {
-            _logger = logger;
             _httpContextAccessor = httpContextAccesso;
-            _configuration = configuration;
         }
 
         public override AsyncUnaryCall<TResponse> AsyncUnaryCall<TRequest, TResponse>(

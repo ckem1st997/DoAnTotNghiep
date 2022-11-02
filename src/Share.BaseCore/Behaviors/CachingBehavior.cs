@@ -9,10 +9,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Serilog;
-using WareHouse.API.Application.Cache;
-using WareHouse.API.Application.Cache.CacheName;
+using Share.BaseCore.Cache;
+using Share.BaseCore.Cache.CacheName;
 
-namespace WareHouse.API.Application.Behaviors
+namespace Share.BaseCore.Behaviors
 {
     public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : ICacheableMediatrQuery

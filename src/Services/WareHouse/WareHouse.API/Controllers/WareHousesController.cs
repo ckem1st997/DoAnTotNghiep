@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using StackExchange.Redis;
-using WareHouse.API.Application.Cache.CacheName;
 using WareHouse.API.Application.Commands.Create;
 using WareHouse.API.Application.Commands.Delete;
 using WareHouse.API.Application.Commands.Models;
@@ -29,6 +28,7 @@ using WareHouse.API.Application.Interface;
 using WareHouse.API.Infrastructure.ElasticSearch;
 using Share.BaseCore.Extensions;
 using Share.BaseCore;
+using Share.BaseCore.Cache.CacheName;
 
 namespace WareHouse.API.Controllers
 {
