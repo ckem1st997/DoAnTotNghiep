@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Share.BaseCore;
 #nullable disable
 
 namespace WareHouse.Domain.Entity
 {
     /// trigger
-     public partial class WareHouseItem:BaseEntity
+    public partial class WareHouseItem:BaseEntity
     {
         public WareHouseItem()
         {

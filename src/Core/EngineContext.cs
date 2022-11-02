@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace Core
+namespace Base.Core
 {
     /// <summary>
     /// Provides access to the singleton instance of the Nop engine.

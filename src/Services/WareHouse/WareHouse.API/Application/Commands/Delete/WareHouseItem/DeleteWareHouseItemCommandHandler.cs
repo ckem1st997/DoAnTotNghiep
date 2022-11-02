@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Model;
 using WareHouse.Domain.Entity;
-using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Delete
 {

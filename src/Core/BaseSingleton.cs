@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Core
+namespace Base.Core
 {
     /// <summary>
     /// Provides access to all "singletons" stored by <see cref="Singleton{T}"/>.

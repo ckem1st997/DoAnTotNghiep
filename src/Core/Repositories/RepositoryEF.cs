@@ -6,12 +6,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Base.Core.IRepositories;
 using EFCore.BulkExtensions;
-using WareHouse.Domain.Entity;
-using WareHouse.Domain.IRepositories;
-using WareHouse.Domain.SeeWork;
 
-namespace WareHouse.Infrastructure.Repositories
+namespace Base.Core.Repositories
 {
     public class RepositoryEF<T> : IRepositoryEF<T>
         where T : BaseEntity, new()

@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WareHouse.API.Application.Cache;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.GetAll.WareHouses;
-using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Queries.GetAll
 {

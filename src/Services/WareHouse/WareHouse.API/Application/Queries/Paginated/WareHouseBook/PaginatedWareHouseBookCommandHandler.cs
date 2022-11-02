@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Share.BaseCore.IRepositories;
 using Dapper;
 using MediatR;
 using Nest;
@@ -14,7 +15,6 @@ using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;
-using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
 {

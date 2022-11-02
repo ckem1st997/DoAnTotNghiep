@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WareHouse.Domain.IRepositories
+namespace Share.BaseCore.IRepositories
 {
     public interface IDapper : IDisposable
     {

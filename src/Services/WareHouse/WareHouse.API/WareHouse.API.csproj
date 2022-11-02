@@ -33,7 +33,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
@@ -63,9 +62,9 @@
     <Folder Include="Application\HealthChecks\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\Core.csproj" />
     <ProjectReference Include="..\..\Base\Base\Base.csproj" />
     <ProjectReference Include="..\..\KafKa.Net\KafKa.Net.csproj" />
+    <ProjectReference Include="..\..\Master\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\WareHouse.Domain\WareHouse.Domain.csproj" />
     <ProjectReference Include="..\WareHouse.Infrastructure\WareHouse.Infrastructure.csproj" />
   </ItemGroup>

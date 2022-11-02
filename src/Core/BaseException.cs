@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Core
+namespace Base.Core
 {
     /// <summary>
     /// Represents errors that occur during application execution

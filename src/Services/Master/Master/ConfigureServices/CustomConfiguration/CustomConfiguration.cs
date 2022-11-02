@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -21,7 +20,7 @@ using Master.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Master.SignalRHubs;
-
+using MediatR;
 namespace Master.ConfigureServices.CustomConfiguration
 {
     public static class CustomConfiguration
@@ -46,8 +45,7 @@ namespace Master.ConfigureServices.CustomConfiguration
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MASTER.API", Version = "v1" });
             });
-            var sqlConnect =  configuration.GetConnectionString("MasterdataContext");
-            Console.WriteLine(sqlConnect);
+            var sqlConnect = configuration.GetConnectionString("MasterdataContext");
             services.AddDbContext<MasterdataContext>(options =>
             {
                 options.UseSqlServer(sqlConnect,

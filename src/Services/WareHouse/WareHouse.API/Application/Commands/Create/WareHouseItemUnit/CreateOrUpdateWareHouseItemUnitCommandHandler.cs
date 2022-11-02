@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using WareHouse.API.Application.Commands.Models;
-using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {

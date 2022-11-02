@@ -12,7 +12,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WareHouse.Domain.Entity;
-using WareHouse.Domain.IRepositories;
 using WareHouse.Domain.SeeWork;
 using WareHouse.Infrastructure.EntityConfigurations;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +19,6 @@ namespace WareHouse.Infrastructure
 {
     public class WarehouseManagementContext : DbContext
     {
-        private readonly string _connectionString;
         public const string DEFAULT_SCHEMA = "WarehouseManagement";
         public const string STRING_CONNECT = @"Server=sqlserver;Initial Catalog=WarehouseManagement;Persist Security Info=True;User ID=sa;Password=Aa!0977751021;MultipleActiveResultSets = true";
         public virtual DbSet<Audit> Audits { get; set; }
@@ -49,14 +47,6 @@ namespace WareHouse.Infrastructure
             : base(options)
         {
             System.Diagnostics.Debug.WriteLine("WarehouseManagementContext::ctor ->" + this.GetHashCode());
-        }
-        public WarehouseManagementContext(string connectionString)
-        {
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new ArgumentException($"'{nameof(connectionString)}' cannot be null or empty.", nameof(connectionString));
-            }
-            _connectionString = connectionString;
         }
         public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
 
@@ -88,13 +78,14 @@ namespace WareHouse.Infrastructure
         {
             //string databasePath = $"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}WHSqliteDatabase.db";
             //optionsBuilder.UseSqlite($"Data Source={databasePath}");
-            optionsBuilder.LogTo(Log.Information, LogLevel.Information).EnableSensitiveDataLogging();
+            // if using dbcontextpoll then not use options
+            //   optionsBuilder.LogTo(Log.Information, LogLevel.Information).EnableSensitiveDataLogging();
             //   optionsBuilder.AddInterceptors(new SqlInterceptor(), new AadAuthenticationInterceptor());
-            optionsBuilder.UseSqlServer(_connectionString,
-                  sqlServerOptionsAction: sqlOptions =>
-                  {
-                      sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                  });
+            //optionsBuilder.UseSqlServer(_connectionString,
+            //      sqlServerOptionsAction: sqlOptions =>
+            //      {
+            //          sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+            //      });
         }
 
         //public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
@@ -186,38 +177,4 @@ namespace WareHouse.Infrastructure
             }
         }
     }
-
-    //public class WarehouseManagementContextDesignFactory : IDesignTimeDbContextFactory<WarehouseManagementContext>
-    //{
-    //    public WarehouseManagementContext CreateDbContext(string[] args)
-    //    {
-    //        var optionsBuilder = new DbContextOptionsBuilder<WarehouseManagementContext>()
-    //            .UseSqlServer(WarehouseManagementContext.STRING_CONNECT);
-
-    //        return new WarehouseManagementContext(optionsBuilder.Options, new NoMediator());
-    //    }
-
-    //    class NoMediator : IMediator
-    //    {
-    //        public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default(CancellationToken)) where TNotification : INotification
-    //        {
-    //            return Task.CompletedTask;
-    //        }
-
-    //        public Task Publish(object notification, CancellationToken cancellationToken = default)
-    //        {
-    //            return Task.CompletedTask;
-    //        }
-
-    //        public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default(CancellationToken))
-    //        {
-    //            return Task.FromResult<TResponse>(default(TResponse));
-    //        }
-
-    //        public Task<object> Send(object request, CancellationToken cancellationToken = default)
-    //        {
-    //            return Task.FromResult(default(object));
-    //        }
-    //    }
-    //}
 }

@@ -12,7 +12,6 @@ using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Cache;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;
-using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Queries.GetAll.WareHouses
 {

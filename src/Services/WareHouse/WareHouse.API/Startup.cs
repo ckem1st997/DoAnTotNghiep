@@ -38,7 +38,9 @@ using Serilog;
 using static Nest.ConnectionSettings;
 using Newtonsoft.Json;
 using Nest.JsonNetSerializer;
-using Core.Extensions;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Share.BaseCore.Extensions;
 
 namespace WareHouse.API
 {
@@ -51,7 +53,7 @@ namespace WareHouse.API
         }
 
         public IConfiguration Configuration { get; }
-
+        public ILifetimeScope AutofacContainer { get; private set; }
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -166,12 +168,20 @@ namespace WareHouse.API
             services.AddHttpContextAccessor();
             // services.AddSingleton<IHostedService, RequestTimeConsumer>();
         }
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            // Register your own things directly with Autofac here. Don't
+            // call builder.Populate(), that happens in AutofacServiceProviderFactory
+            // for you.
+            builder.ConfigureDBContext();
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // if (env.IsDevelopment())
             // {
+            this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WareHouse.API v1"));

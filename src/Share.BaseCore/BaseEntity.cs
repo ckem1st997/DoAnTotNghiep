@@ -1,22 +1,15 @@
 ﻿using MediatR;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WareHouse.Domain.Entity
+namespace Share.BaseCore
 {
-    public class BaseEntity
+    public class BaseEntity : BaseEntityGeneric<string>
     {
         int? _requestedHashCode;
-
-        [Key]
-       // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
 
         public bool OnDelete { get; set; }
 
@@ -47,7 +40,7 @@ namespace WareHouse.Domain.Entity
         public bool IsTransient()
         {
             // return this.Id == Guid.NewGuid();
-            return string.IsNullOrEmpty(this.Id);
+            return string.IsNullOrEmpty(Id);
         }
 
         public override bool Equals(object obj)
@@ -55,18 +48,18 @@ namespace WareHouse.Domain.Entity
             if (obj == null || !(obj is BaseEntity))
                 return false;
 
-            if (Object.ReferenceEquals(this, obj))
+            if (ReferenceEquals(this, obj))
                 return true;
 
-            if (this.GetType() != obj.GetType())
+            if (GetType() != obj.GetType())
                 return false;
 
             BaseEntity item = (BaseEntity)obj;
 
-            if (item.IsTransient() || this.IsTransient())
+            if (item.IsTransient() || IsTransient())
                 return false;
             else
-                return item.Id == this.Id;
+                return item.Id == Id;
         }
 
         public override int GetHashCode()
@@ -74,7 +67,7 @@ namespace WareHouse.Domain.Entity
             if (!IsTransient())
             {
                 if (!_requestedHashCode.HasValue)
-                    _requestedHashCode = this.Id.GetHashCode() ^ 31; // XOR for random distribution (http://blogs.msdn.com/b/ericlippert/archive/2011/02/28/guidelines-and-rules-for-gethashcode.aspx)
+                    _requestedHashCode = Id.GetHashCode() ^ 31; // XOR for random distribution (http://blogs.msdn.com/b/ericlippert/archive/2011/02/28/guidelines-and-rules-for-gethashcode.aspx)
 
                 return _requestedHashCode.Value;
             }
@@ -84,8 +77,8 @@ namespace WareHouse.Domain.Entity
         }
         public static bool operator ==(BaseEntity left, BaseEntity right)
         {
-            if (Object.Equals(left, null))
-                return (Object.Equals(right, null)) ? true : false;
+            if (Equals(left, null))
+                return Equals(right, null) ? true : false;
             else
                 return left.Equals(right);
         }

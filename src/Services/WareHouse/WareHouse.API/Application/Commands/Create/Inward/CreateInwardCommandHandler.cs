@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+
 using MediatR;
-using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {

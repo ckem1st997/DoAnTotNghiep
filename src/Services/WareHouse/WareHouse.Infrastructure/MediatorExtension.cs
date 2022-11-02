@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using WareHouse.Domain.Entity;
+using Share.BaseCore;
 
 namespace WareHouse.Infrastructure
 {

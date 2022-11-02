@@ -1,10 +1,11 @@
-﻿using Core.Extensions;
+﻿
 using Infrastructure;
 using Master.Application.Authentication;
 using Master.Controllers.BaseController;
 using Master.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Share.BaseCore.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

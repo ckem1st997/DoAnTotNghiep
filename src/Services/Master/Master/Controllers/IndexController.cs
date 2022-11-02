@@ -1,4 +1,4 @@
-﻿using Core.Extensions;
+﻿using Share.BaseCore.Extensions;
 using Master.Controllers.BaseController;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;

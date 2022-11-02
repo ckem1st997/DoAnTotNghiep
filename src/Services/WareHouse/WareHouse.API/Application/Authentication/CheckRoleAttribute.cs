@@ -1,10 +1,10 @@
 ﻿
 
-using Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
+using Share.BaseCore;
 using System;
 using System.Linq;
 using System.Net;

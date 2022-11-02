@@ -2,9 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using Share.BaseCore.IRepositories;
 using MediatR;
 using WareHouse.API.Application.Model;
-using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Queries.GetFisrt.WareHouses
 {

@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Core
+namespace Base.Core
 {
     /// <summary>
     /// Represents a common helper
@@ -335,7 +335,7 @@ namespace Core
 
         public static List<string> ApplicationParts { get; set; } = new List<string>();
 
-     //   public static HostingConfig HostingConfig { get; set; }
+        //   public static HostingConfig HostingConfig { get; set; }
 
         public static BaseConfig BaseConfig { get; set; }
 

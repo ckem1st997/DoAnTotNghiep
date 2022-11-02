@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Commands.Models;
-using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Update
 {

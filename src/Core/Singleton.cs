@@ -1,4 +1,4 @@
-﻿namespace Core
+﻿namespace Base.Core
 {
     /// <summary>
     /// A statically compiled "singleton" used to store objects throughout the 

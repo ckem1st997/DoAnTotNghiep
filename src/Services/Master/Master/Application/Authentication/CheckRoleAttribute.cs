@@ -1,5 +1,5 @@
 ﻿
-using Core.Extensions;
+using Share.BaseCore.Extensions;
 using Master.Extension;
 using Master.Models;
 using Master.Service;

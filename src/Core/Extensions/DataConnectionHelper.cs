@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Extensions
+namespace Base.Core.Extensions
 {
     public static class DataConnectionHelper
     {
@@ -19,6 +19,6 @@ namespace Core.Extensions
             public const string Notify = "Notify";
         }
 
-        public const string ParameterName = "dataConnection";
+        public const string ParameterName = "DbContext";
     }
 }

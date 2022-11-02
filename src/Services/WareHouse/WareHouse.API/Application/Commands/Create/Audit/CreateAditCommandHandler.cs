@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
-using WareHouse.Domain.IRepositories;
+using Share.BaseCore.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {

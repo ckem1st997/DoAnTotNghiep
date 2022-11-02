@@ -1,4 +1,4 @@
-﻿namespace WareHouse.Domain.SeeWork
+﻿namespace Base.Core.Repositories
 {
     public class DapperParamsQueryCommand
     {

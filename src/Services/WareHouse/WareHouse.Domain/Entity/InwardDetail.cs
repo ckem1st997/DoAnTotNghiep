@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Share.BaseCore;
 #nullable disable
 
 namespace WareHouse.Domain.Entity

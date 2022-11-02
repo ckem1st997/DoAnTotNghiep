@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 using Dapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Share.BaseCore.Extensions;
+using Share.BaseCore;
 using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Cache;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;
-using WareHouse.Domain.IRepositories;
+using WareHouse.Domain.Entity;
 
 namespace WareHouse.API.Application.Queries.GetAll.WareHouses
 {
@@ -31,10 +33,10 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
         private readonly IRepositoryEF<Domain.Entity.WareHouse> _rep;
         public readonly IUserSevice _context;
 
-        public GetTreeWareHouseCommandHandler(IUserSevice context, IDapper repository, IRepositoryEF<Domain.Entity.WareHouse> rep)
+        public GetTreeWareHouseCommandHandler(IUserSevice context, IDapper repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            _rep = rep ?? throw new ArgumentNullException(nameof(rep));
+            _rep = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
             _context = context;
         }
 

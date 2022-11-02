@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿global using Share.BaseCore.IRepositories;
+using Dapper;
 using MediatR;
 using System;
 using System.Data;
@@ -7,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
-using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
 {

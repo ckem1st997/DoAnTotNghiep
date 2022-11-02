@@ -1,4 +1,4 @@
-﻿using Core.Extensions;
+﻿using Share.BaseCore.Extensions;
 using Grpc.Core;
 using Infrastructure;
 using Master.Extension;

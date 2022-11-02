@@ -8,7 +8,6 @@ using Dapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WareHouse.API.Application.Queries.BaseModel;
-using WareHouse.Domain.IRepositories;
 
 namespace Report.API.Application.Queries.GetAll.Reports
 {

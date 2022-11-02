@@ -6,7 +6,7 @@ using System.Net;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 
-namespace Core.Extensions
+namespace Base.Core.Extensions
 {
     /// <summary>
     /// Represents extensions of IApplicationBuilder

@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core
+namespace Base.Core
 {
     public class SecureRandomNumberGenerator : RandomNumberGenerator
     {
@@ -31,7 +31,7 @@ namespace Core
         {
             var data = new byte[sizeof(int)];
             _rng.GetBytes(data);
-            return BitConverter.ToInt32(data, 0) & (int.MaxValue - 1);
+            return BitConverter.ToInt32(data, 0) & int.MaxValue - 1;
         }
 
         public int Next(int maxValue)

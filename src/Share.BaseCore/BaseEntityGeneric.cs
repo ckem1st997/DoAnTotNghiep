@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure
+namespace Share.BaseCore
 {
-    public class BaseEntity
+    public class BaseEntityGeneric<T>
     {
+        /// <summary>
+        /// Gets or sets the entity identifier
+        /// </summary>
         [Key]
-        public string Id { get; set; }
-        public bool OnDelete { get; set; }
+        public T Id { get; set; }
     }
 }

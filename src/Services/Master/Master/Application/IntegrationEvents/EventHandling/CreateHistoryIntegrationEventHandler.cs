@@ -1,5 +1,5 @@
 ﻿using Base.Events;
-using Core.Extensions;
+using Share.BaseCore.Extensions;
 using Infrastructure;
 using KafKa.Net.Abstractions;
 using KafKa.Net.Events;

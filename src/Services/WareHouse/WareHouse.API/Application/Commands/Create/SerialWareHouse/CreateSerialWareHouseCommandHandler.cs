@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using Share.BaseCore.IRepositories;
 using MediatR;
 using WareHouse.Domain.Entity;
-using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Create
 {

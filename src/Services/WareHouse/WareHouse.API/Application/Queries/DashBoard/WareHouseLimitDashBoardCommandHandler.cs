@@ -10,7 +10,6 @@ using MediatR;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;
-using WareHouse.Domain.IRepositories;
 
 
 namespace WareHouse.API.Application.Queries.DashBoard

@@ -1,4 +1,4 @@
-﻿using Core.Extensions;
+﻿using Share.BaseCore.Extensions;
 using Infrastructure;
 using Master.Application.Authentication;
 using Master.Service;

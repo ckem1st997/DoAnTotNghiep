@@ -8,7 +8,6 @@ using MediatR;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.GetAll.WareHouses;
 using WareHouse.Domain.Entity;
-using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Queries.GetAll.Unit
 {

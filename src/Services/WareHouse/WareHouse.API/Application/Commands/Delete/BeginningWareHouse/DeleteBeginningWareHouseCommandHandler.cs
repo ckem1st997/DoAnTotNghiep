@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using Share.BaseCore.IRepositories;
 using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WareHouse.Domain.IRepositories;
 
 namespace WareHouse.API.Application.Commands.Delete
 {

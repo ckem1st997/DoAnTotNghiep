@@ -21,13 +21,14 @@ using WareHouse.API.Controllers.BaseController;
 using WareHouse.API.Application.Querie.CheckCode;
 using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Model;
-using WareHouse.Domain.IRepositories;
 using Microsoft.AspNetCore.Authorization;
 using WareHouse.Domain.Entity;
 using Nest;
 using WareHouse.API.Application.Queries.Paginated.WareHouseBook;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Infrastructure.ElasticSearch;
+using Share.BaseCore.Extensions;
+using Share.BaseCore;
 
 namespace WareHouse.API.Controllers
 {
@@ -42,13 +43,13 @@ namespace WareHouse.API.Controllers
         private readonly IElasticSearchClient<WareHouseBookDTO> _elasticSearchClient;
 
 
-        public WareHousesController(IMediator mediat, ICacheExtension cacheExtension, IRepositoryEF<Domain.Entity.WareHouse> repository, IRepositoryEF<Domain.Entity.Outward> repository1, IRepositoryEF<Inward> repository2, IElasticClient elasticClient, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient)
+        public WareHousesController(IMediator mediat, ICacheExtension cacheExtension, IElasticClient elasticClient, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
-            _repository = repository;
-            _repository1 = repository1;
-            _repository2 = repository2;
+            _repository = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse); ;
+            _repository1 = EngineContext.Current.Resolve<IRepositoryEF<Outward>>(DataConnectionHelper.ConnectionStringNames.Warehouse); ;
+            _repository2 = EngineContext.Current.Resolve<IRepositoryEF<Inward>>(DataConnectionHelper.ConnectionStringNames.Warehouse); ;
             _elasticClient = elasticClient;
             _elasticSearchClient = elasticSearchClient;
         }

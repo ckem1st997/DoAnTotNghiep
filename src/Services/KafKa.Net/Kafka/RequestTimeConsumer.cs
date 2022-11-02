@@ -28,7 +28,7 @@ namespace KafKa.Net
         private readonly IKafKaConnection _kafKaConnection;
         private readonly string topic;
         private readonly IConsumer<string, byte[]> kafkaConsumer;
-        private string Topic = "WareHouse-KafKa";
+        private readonly string Topic = "WareHouse-KafKa";
         private readonly ILogger<EventKafKa> _logger;
         private readonly IEventBusSubscriptionsManager _subsManager;
         private readonly ILifetimeScope _autofac;
@@ -115,7 +115,7 @@ namespace KafKa.Net
                     {
                         if (subscription.IsDynamic)
                         {
-                            var handler =
+                            IDynamicIntegrationEventHandler handler =
                                 scope.ResolveOptional(subscription.HandlerType) as IDynamicIntegrationEventHandler;
                             if (handler == null) continue;
                             using dynamic eventData = JsonDocument.Parse(message);

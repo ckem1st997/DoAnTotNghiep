@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Extensions
+namespace Base.Core.Extensions
 {
     [Serializable]
     public partial class ResultMessageResponse
@@ -31,23 +31,23 @@ namespace Core.Extensions
 
         public ResultMessageResponse()
         {
-            this.success = true;
-            this.httpStatusCode = 200;
-            this.errors = new Dictionary<string, IEnumerable<string>>();
+            success = true;
+            httpStatusCode = 200;
+            errors = new Dictionary<string, IEnumerable<string>>();
         }
 
         public ResultMessageResponse(ResultMessageResponse obj)
         {
-            this.success = obj.success;
-            this.code = obj.code;
-            this.httpStatusCode = obj.httpStatusCode;
-            this.title = obj.title;
-            this.message = obj.message;
-            this.data = obj.data;
-            this.totalCount = obj.totalCount;
-            this.isRedirect = obj.isRedirect;
-            this.redirectUrl = obj.redirectUrl;
-            this.errors = obj.errors;
+            success = obj.success;
+            code = obj.code;
+            httpStatusCode = obj.httpStatusCode;
+            title = obj.title;
+            message = obj.message;
+            data = obj.data;
+            totalCount = obj.totalCount;
+            isRedirect = obj.isRedirect;
+            redirectUrl = obj.redirectUrl;
+            errors = obj.errors;
         }
     }
 }

@@ -9,10 +9,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Core
+namespace Base.Core
 {
     /// <summary>
-   /// </summary>
+    /// </summary>
     public class BaseEngine : IEngine
     {
         #region Utilities
@@ -21,7 +21,7 @@ namespace Core
         /// Get IServiceProvider
         /// </summary>
         /// <returns>IServiceProvider</returns>
-        protected IServiceProvider GetServiceProvider(IServiceScope scope=null)
+        protected IServiceProvider GetServiceProvider(IServiceScope scope = null)
         {
             if (scope == null)
             {

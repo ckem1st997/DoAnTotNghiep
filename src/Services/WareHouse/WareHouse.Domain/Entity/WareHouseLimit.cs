@@ -1,11 +1,11 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
-
+using Share.BaseCore;
 #nullable disable
 
 namespace WareHouse.Domain.Entity
 {
-    public partial class WareHouseLimit:BaseEntity
+    public partial class WareHouseLimit : BaseEntity
     {
         public string WareHouseId { get; set; }
         public string ItemId { get; set; }

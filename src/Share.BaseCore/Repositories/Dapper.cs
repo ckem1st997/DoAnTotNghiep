@@ -9,20 +9,20 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WareHouse.Domain.Entity;
-using WareHouse.Domain.IRepositories;
-using WareHouse.Domain.SeeWork;
-using Serilog;
-namespace WareHouse.Infrastructure.Repositories
+using Share.BaseCore.IRepositories;
+using Share.BaseCore;
+
+namespace Share.BaseCore.Repositories
 {
     public class Dapperr : IDapper
     {
         private readonly IConfiguration _config;
-        private string Connectionstring = "WarehouseManagementContext";
+        private readonly string Connectionstring;
 
-        public Dapperr(IConfiguration config)
+        public Dapperr(IConfiguration config, string connectionstring)
         {
             _config = config;
+            Connectionstring = connectionstring;
         }
 
         public void Dispose()
@@ -33,21 +33,17 @@ namespace WareHouse.Infrastructure.Repositories
         public async Task<T> GetAyncFirst<T>(string sp, DynamicParameters parms, CommandType commandType)
         {
             using var connection = new SqlConnection(_config.GetConnectionString(Connectionstring));
-            Log.Information("Dapper query: " + sp);
             return await connection.QueryFirstOrDefaultAsync<T>(sp, parms, commandType: commandType);
         }
 
 
         public async Task<IEnumerable<T>> GetAllAync<T>(string sp, DynamicParameters parms, CommandType commandType)
         {
-            Log.Information("Dapper query: " + sp);
             using var connection = new SqlConnection(_config.GetConnectionString(Connectionstring));
             return await connection.QueryAsync<T>(sp, parms, commandType: commandType);
         }
         public async Task<IEnumerable<T>> GetList<T>(string sp, DynamicParameters parms, CommandType commandType)
         {
-            Log.Information("Dapper query: " + sp);
-
             using var connection = new SqlConnection(_config.GetConnectionString(Connectionstring));
             return await connection.QueryAsync<T>(sp, parms, commandType: commandType);
         }
@@ -57,10 +53,8 @@ namespace WareHouse.Infrastructure.Repositories
 
             using var connection = new SqlConnection(_config.GetConnectionString(Connectionstring));
             var sp = "select * from " + nameEntity + " where " + nameof(BaseEntity.Id) + " in @ids";
-            DynamicParameters parameter = new DynamicParameters();
+            DynamicParameters parameter = new();
             parameter.Add("@ids", listId);
-            Log.Information("Dapper query: " + sp);
-
             return await connection.QueryAsync<T>(sp, parameter, commandType: commandType);
         }
         public DbConnection GetDbconnection()
@@ -72,10 +66,8 @@ namespace WareHouse.Infrastructure.Repositories
         {
             using var connection = new SqlConnection(_config.GetConnectionString(Connectionstring));
             var sp = "select Id from " + nameEntity + " where Code = @code";
-            DynamicParameters parameter = new DynamicParameters();
+            DynamicParameters parameter = new();
             parameter.Add("@code", code);
-            Log.Information("Dapper query: " + sp);
-
             var res = await connection.QueryAsync<T>(sp, parameter, commandType: CommandType.Text);
             return res.Count();
         }
@@ -89,8 +81,8 @@ namespace WareHouse.Infrastructure.Repositories
         /// <returns></returns>
         public async Task<int> CheckCode<T>(List<DapperParamsQueryCommand> LstParams, string nameEntity)
         {
-            StringBuilder sBuider = new StringBuilder();
-            if (LstParams.Count() > 0)
+            StringBuilder sBuider = new();
+            if (LstParams.Count > 0)
             {
                 sBuider.Append("WHERE ");
                 foreach (var item in LstParams)
@@ -107,8 +99,6 @@ namespace WareHouse.Infrastructure.Repositories
             }
             using var connection = new SqlConnection(_config.GetConnectionString(Connectionstring));
             string sSQL = string.Format("SELECT TOP 1 * FROM {0} (NOLOCK) {1}", nameEntity, sBuider.ToString());
-            Log.Information("Dapper query: "+sSQL);
-
             var res = await connection.QueryAsync<T>(sSQL, commandType: CommandType.Text);
             return res.Count();
         }

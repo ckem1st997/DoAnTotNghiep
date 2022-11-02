@@ -6,7 +6,6 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Model;
-using WareHouse.Domain.IRepositories;
 using Dapper;
 using System.Collections.Generic;
 using Newtonsoft.Json;
