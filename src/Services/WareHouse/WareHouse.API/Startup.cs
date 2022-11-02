@@ -28,7 +28,6 @@ using Grpc.Net.ClientFactory;
 using GrpcGetDataToWareHouse;
 using WareHouse.API.IntegrationEvents;
 using KafKa.Net;
-using WareHouse.API.Application.Extensions;
 using Nest;
 using Elasticsearch.Net;
 using Serilog;
@@ -37,16 +36,18 @@ using Newtonsoft.Json;
 using Nest.JsonNetSerializer;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Share.BaseCore.Extensions;
 using Share.BaseCore.Filters;
 using Share.BaseCore.Cache;
 using Share.BaseCore.Behaviors.ConfigureServices;
+using WareHouse.API.Infrastructure;
+using Share.BaseCore;
 
 namespace WareHouse.API
 {
     //Scaffold-DbContext "Server=tcp:127.0.0.1,5433;Initial Catalog=WarehouseManagement;Persist Security Info=True;User ID=sa;Password=Aa!0977751021;MultipleActiveResultSets = true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -173,7 +174,8 @@ namespace WareHouse.API
             // Register your own things directly with Autofac here. Don't
             // call builder.Populate(), that happens in AutofacServiceProviderFactory
             // for you.
-            builder.ConfigureDBContext();
+            //   builder.ConfigureDBContext();
+            builder.RegisterModule(new WareHouseModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

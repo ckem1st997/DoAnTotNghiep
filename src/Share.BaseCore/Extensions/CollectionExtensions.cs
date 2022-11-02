@@ -8,7 +8,7 @@ using System.Collections;
 using System.Threading;
 using NetTopologySuite.Utilities;
 
-namespace WareHouse.API.Application.Extensions
+namespace Share.BaseCore.Extensions
 {
     public static class CollectionExtensions
     {
@@ -27,7 +27,7 @@ namespace WareHouse.API.Application.Extensions
             }
         }
 
-        public static SyncedCollection<T> AsSynchronized<T>(this ICollection<T> source) => source.AsSynchronized<T>(new object());
+        public static SyncedCollection<T> AsSynchronized<T>(this ICollection<T> source) => source.AsSynchronized(new object());
 
         public static SyncedCollection<T> AsSynchronized<T>(
           this ICollection<T> source,
@@ -60,10 +60,10 @@ namespace WareHouse.API.Application.Extensions
 
         public SyncedCollection(ICollection<T> wrappedCollection, object syncRoot)
         {
-            Guard.IsNotNull((object)wrappedCollection, nameof(wrappedCollection));
+            Guard.IsNotNull(wrappedCollection, nameof(wrappedCollection));
             Guard.IsNotNull(syncRoot, nameof(syncRoot));
-            this._col = wrappedCollection;
-            this.SyncRoot = syncRoot;
+            _col = wrappedCollection;
+            SyncRoot = syncRoot;
         }
 
         public object SyncRoot { get; }
@@ -72,12 +72,12 @@ namespace WareHouse.API.Application.Extensions
 
         public void AddRange(IEnumerable<T> collection)
         {
-            object syncRoot = this.SyncRoot;
+            object syncRoot = SyncRoot;
             bool lockTaken = false;
             try
             {
                 Monitor.Enter(syncRoot, ref lockTaken);
-                this._col.AddRange<T>(collection);
+                _col.AddRange(collection);
             }
             finally
             {
@@ -88,9 +88,9 @@ namespace WareHouse.API.Application.Extensions
 
         public void Insert(int index, T item)
         {
-            if (this._col is List<T> col)
+            if (_col is List<T> col)
             {
-                object syncRoot = this.SyncRoot;
+                object syncRoot = SyncRoot;
                 bool lockTaken = false;
                 try
                 {
@@ -108,9 +108,9 @@ namespace WareHouse.API.Application.Extensions
 
         public void InsertRange(int index, IEnumerable<T> values)
         {
-            if (this._col is List<T> col)
+            if (_col is List<T> col)
             {
-                object syncRoot = this.SyncRoot;
+                object syncRoot = SyncRoot;
                 bool lockTaken = false;
                 try
                 {
@@ -129,14 +129,14 @@ namespace WareHouse.API.Application.Extensions
         public int RemoveRange(IEnumerable<T> values)
         {
             int num = 0;
-            object syncRoot = this.SyncRoot;
+            object syncRoot = SyncRoot;
             bool lockTaken = false;
             try
             {
                 Monitor.Enter(syncRoot, ref lockTaken);
                 foreach (T obj in values)
                 {
-                    if (this._col.Remove(obj))
+                    if (_col.Remove(obj))
                         ++num;
                 }
             }
@@ -150,9 +150,9 @@ namespace WareHouse.API.Application.Extensions
 
         public void RemoveRange(int index, int count)
         {
-            if (this._col is List<T> col)
+            if (_col is List<T> col)
             {
-                object syncRoot = this.SyncRoot;
+                object syncRoot = SyncRoot;
                 bool lockTaken = false;
                 try
                 {
@@ -170,20 +170,20 @@ namespace WareHouse.API.Application.Extensions
 
         public void RemoveAt(int index)
         {
-            object syncRoot = this.SyncRoot;
+            object syncRoot = SyncRoot;
             bool lockTaken = false;
             try
             {
                 Monitor.Enter(syncRoot, ref lockTaken);
-                if (this._col is List<T> col2)
+                if (_col is List<T> col2)
                 {
                     col2.RemoveAt(index);
                 }
                 else
                 {
-                    T obj = this._col.ElementAtOrDefault<T>(index);
-                    if ((object)obj != null)
-                        this._col.Remove(obj);
+                    T obj = _col.ElementAtOrDefault(index);
+                    if (obj != null)
+                        _col.Remove(obj);
                 }
             }
             finally
@@ -197,14 +197,14 @@ namespace WareHouse.API.Application.Extensions
         {
             get
             {
-                if (this.ReadLockFree)
-                    return this._col.ElementAt<T>(index);
-                object syncRoot = this.SyncRoot;
+                if (ReadLockFree)
+                    return _col.ElementAt(index);
+                object syncRoot = SyncRoot;
                 bool lockTaken = false;
                 try
                 {
                     Monitor.Enter(syncRoot, ref lockTaken);
-                    return this._col.ElementAt<T>(index);
+                    return _col.ElementAt(index);
                 }
                 finally
                 {
@@ -218,14 +218,14 @@ namespace WareHouse.API.Application.Extensions
         {
             get
             {
-                if (this.ReadLockFree)
-                    return this._col.Count<T>();
-                object syncRoot = this.SyncRoot;
+                if (ReadLockFree)
+                    return _col.Count();
+                object syncRoot = SyncRoot;
                 bool lockTaken = false;
                 try
                 {
                     Monitor.Enter(syncRoot, ref lockTaken);
-                    return this._col.Count<T>();
+                    return _col.Count();
                 }
                 finally
                 {
@@ -235,16 +235,16 @@ namespace WareHouse.API.Application.Extensions
             }
         }
 
-        public bool IsReadOnly => this._col.IsReadOnly;
+        public bool IsReadOnly => _col.IsReadOnly;
 
         public void Add(T item)
         {
-            object syncRoot = this.SyncRoot;
+            object syncRoot = SyncRoot;
             bool lockTaken = false;
             try
             {
                 Monitor.Enter(syncRoot, ref lockTaken);
-                this._col.Add(item);
+                _col.Add(item);
             }
             finally
             {
@@ -255,12 +255,12 @@ namespace WareHouse.API.Application.Extensions
 
         public void Clear()
         {
-            object syncRoot = this.SyncRoot;
+            object syncRoot = SyncRoot;
             bool lockTaken = false;
             try
             {
                 Monitor.Enter(syncRoot, ref lockTaken);
-                this._col.Clear();
+                _col.Clear();
             }
             finally
             {
@@ -271,14 +271,14 @@ namespace WareHouse.API.Application.Extensions
 
         public bool Contains(T item)
         {
-            if (this.ReadLockFree)
-                return this._col.Contains(item);
-            object syncRoot = this.SyncRoot;
+            if (ReadLockFree)
+                return _col.Contains(item);
+            object syncRoot = SyncRoot;
             bool lockTaken = false;
             try
             {
                 Monitor.Enter(syncRoot, ref lockTaken);
-                return this._col.Contains(item);
+                return _col.Contains(item);
             }
             finally
             {
@@ -289,12 +289,12 @@ namespace WareHouse.API.Application.Extensions
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            object syncRoot = this.SyncRoot;
+            object syncRoot = SyncRoot;
             bool lockTaken = false;
             try
             {
                 Monitor.Enter(syncRoot, ref lockTaken);
-                this._col.CopyTo(array, arrayIndex);
+                _col.CopyTo(array, arrayIndex);
             }
             finally
             {
@@ -305,12 +305,12 @@ namespace WareHouse.API.Application.Extensions
 
         public bool Remove(T item)
         {
-            object syncRoot = this.SyncRoot;
+            object syncRoot = SyncRoot;
             bool lockTaken = false;
             try
             {
                 Monitor.Enter(syncRoot, ref lockTaken);
-                return this._col.Remove(item);
+                return _col.Remove(item);
             }
             finally
             {
@@ -319,18 +319,18 @@ namespace WareHouse.API.Application.Extensions
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => (IEnumerator)this.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public IEnumerator<T> GetEnumerator()
         {
-            if (this.ReadLockFree)
-                return this._col.GetEnumerator();
-            object syncRoot = this.SyncRoot;
+            if (ReadLockFree)
+                return _col.GetEnumerator();
+            object syncRoot = SyncRoot;
             bool lockTaken = false;
             try
             {
                 Monitor.Enter(syncRoot, ref lockTaken);
-                return this._col.GetEnumerator();
+                return _col.GetEnumerator();
             }
             finally
             {

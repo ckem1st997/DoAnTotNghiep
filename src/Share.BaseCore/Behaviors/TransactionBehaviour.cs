@@ -25,18 +25,15 @@ namespace Share.BaseCore.Behaviors
     //check connect db khi có request xuống lấy db
     public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
-        private readonly ILogger<TransactionBehaviour<TRequest, TResponse>> _logger;
         private readonly DbContext _dbContext;
         private IDbContextTransaction _currentTransaction;
 
         public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
 
         public bool HasActiveTransaction => _currentTransaction != null;
-        public TransactionBehaviour(DbContext context,
-            ILogger<TransactionBehaviour<TRequest, TResponse>> logger)
+        public TransactionBehaviour(DbContext context)
         {
             _dbContext = context ?? throw new ArgumentException(nameof(DbContext));
-            _logger = logger ?? throw new ArgumentException(nameof(Microsoft.Extensions.Logging.ILogger));
         }
 
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)

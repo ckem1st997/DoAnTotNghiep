@@ -20,7 +20,6 @@ using WareHouse.API.Application.Querie.CheckCode;
 using WareHouse.API.Application.Queries.GetFisrt;
 using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.SignalRService;
-using WareHouse.API.Application.Extensions;
 using KafKa.Net.Abstractions;
 using Serilog.Context;
 using Base.Events;

@@ -1,6 +1,5 @@
 using FluentValidation;
 using WareHouse.API.Application.Commands.Models;
-using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.Queries.Report;
 
 namespace WareHouse.API.Application.Validations

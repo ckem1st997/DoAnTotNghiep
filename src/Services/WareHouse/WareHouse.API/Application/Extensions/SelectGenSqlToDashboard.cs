@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.Queries.DashBoard;
 
-namespace WareHouse.API.Application.Extensions
+namespace Share.BaseCore.Extensions
 {
     public static class SoftStatic
     {

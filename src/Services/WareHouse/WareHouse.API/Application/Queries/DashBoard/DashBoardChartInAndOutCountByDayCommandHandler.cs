@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Dapper;
 using MediatR;
 using WareHouse.API.Application.Commands.Models;
-using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;

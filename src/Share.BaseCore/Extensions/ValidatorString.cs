@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WareHouse.API.Application.Extensions
+namespace Share.BaseCore.Extensions
 {
     public static class ValidatorString
     {
@@ -12,7 +12,7 @@ namespace WareHouse.API.Application.Extensions
         /// countBy: Id, p.Id
         /// sql: sql query
         /// </summary>
-        public static string GetSqlCount(string sql, string countBy = "*", string SqlEnd="")
+        public static string GetSqlCount(string sql, string countBy = "*", string SqlEnd = "")
         {
             if (string.IsNullOrEmpty(sql))
             {

@@ -9,7 +9,6 @@ using Dapper;
 using MediatR;
 using StackExchange.Profiling.Internal;
 using WareHouse.API.Application.Authentication;
-using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;

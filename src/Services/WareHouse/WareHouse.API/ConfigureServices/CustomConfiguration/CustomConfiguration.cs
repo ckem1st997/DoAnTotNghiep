@@ -22,7 +22,6 @@ using Microsoft.Identity.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Authorization;
-using WareHouse.API.Application.Extensions;
 using WareHouse.API.Application.SignalRService;
 using WareHouse.API.Infrastructure.ElasticSearch;
 using Autofac.Builder;
@@ -32,11 +31,11 @@ using Autofac;
 using EasyCaching.Core;
 using Aspose.Diagram;
 using Share.BaseCore.Repositories;
-using Share.BaseCore.Extensions;
 using Share.BaseCore;
 using Infrastructure;
 using Share.BaseCore.Filters;
 using Share.BaseCore.Behaviors;
+using Microsoft.Extensions.Logging;
 
 namespace WareHouse.API.ConfigureServices.CustomConfiguration
 {
@@ -92,6 +91,8 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
                 return new Dapperr(config, "WarehouseManagementContext");
 
             });
+            // services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
+
             services.AddScoped<IFakeData, FakeData>();
             services.AddScoped<IUserSevice, UserSevice>();
             services.AddScoped<ISignalRService, SignalRService>();
@@ -106,60 +107,7 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
 
         public static void ConfigureDBContext(this ContainerBuilder builder)
         {
-            // Declare your services with proper lifetime
-            builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().InstancePerLifetimeScope();
-            builder.RegisterType<BaseEngine>().As<IEngine>().SingleInstance();
-            //
-            builder.RegisterType<WarehouseManagementContext>()
-                 .Named<DbContext>(DataConnectionHelper.ConnectionStringNames.Warehouse)
-                 .InstancePerDependency();
-
-            // mulplite connect to dbcontext
-            //builder.RegisterType<MasterdataContext>()
-            //    .Named<DbContext>(DataConnectionHelper.ConnectionStringNames.Master)
-            //    .InstancePerDependency();
-            // Register resolving delegate 
-            builder.Register<Func<string, DbContext>>(c =>
-            {
-                var cc = c.Resolve<IComponentContext>();
-                return connectionStringName => cc.ResolveNamed<DbContext>(connectionStringName);
-            });
-            builder.Register<Func<string, Lazy<DbContext>>>(c =>
-            {
-                var cc = c.Resolve<IComponentContext>();
-                return connectionStringName => cc.ResolveNamed<Lazy<DbContext>>(connectionStringName);
-            });
-            //
-            builder.RegisterGeneric(typeof(RepositoryEF<>))
-                  .Named(DataConnectionHelper.ConnectionStringNames.Warehouse, typeof(IRepositoryEF<>))
-                  .WithParameter(new ResolvedParameter(
-                      // kiểu truyền vào và tên biến truyền vào qua hàm khởi tạo
-                      (pi, ctx) => pi.ParameterType == typeof(DbContext) && pi.Name == DataConnectionHelper.ParameterName,
-                      (pi, ctx) => EngineContext.Current.Resolve<DbContext>(DataConnectionHelper.ConnectionStringNames.Warehouse)))
-                  .InstancePerLifetimeScope();
-            // mulplite connect to dbcontext
-            //builder.RegisterGeneric(typeof(RepositoryEF<>))
-            //      .Named(DataConnectionHelper.ConnectionStringNames.Master, typeof(IRepositoryEF<>))
-            //      .WithParameter(new ResolvedParameter(
-            //          (pi, ctx) => pi.ParameterType == typeof(DbContext) && pi.Name == DataConnectionHelper.ParameterName,
-            //          (pi, ctx) => EngineContext.Current.Resolve<DbContext>(DataConnectionHelper.ConnectionStringNames.Master)))
-            //      .InstancePerLifetimeScope();
-            // Behavior
-            builder.RegisterGeneric(typeof(LoggingBehavior<,>))
-         .Named(DataConnectionHelper.ConnectionStringNames.Warehouse, typeof(IPipelineBehavior<,>))
-         .WithParameter(new ResolvedParameter(
-             // kiểu truyền vào và tên biến truyền vào qua hàm khởi tạo
-             (pi, ctx) => pi.ParameterType == typeof(DbContext) && pi.Name == DataConnectionHelper.ParameterName,
-             (pi, ctx) => EngineContext.Current.Resolve<DbContext>(DataConnectionHelper.ConnectionStringNames.Warehouse)))
-         .InstancePerLifetimeScope();
-            builder.RegisterGeneric(typeof(TransactionBehaviour<,>))
-.Named(DataConnectionHelper.ConnectionStringNames.Warehouse, typeof(IPipelineBehavior<,>))
-.WithParameter(new ResolvedParameter(
- // kiểu truyền vào và tên biến truyền vào qua hàm khởi tạo
- (pi, ctx) => pi.ParameterType == typeof(DbContext) && pi.Name == DataConnectionHelper.ParameterName,
- (pi, ctx) => EngineContext.Current.Resolve<DbContext>(DataConnectionHelper.ConnectionStringNames.Warehouse)))
-.InstancePerLifetimeScope();
-
+           
         }
     }
 }

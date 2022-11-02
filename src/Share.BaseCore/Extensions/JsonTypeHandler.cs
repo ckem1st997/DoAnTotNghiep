@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Data;
 
-namespace WareHouse.API.Application.Extensions
+namespace Share.BaseCore.Extensions
 {
     public class JsonTypeHandler<T> : SqlMapper.TypeHandler<T>
     {
@@ -18,7 +18,7 @@ namespace WareHouse.API.Application.Extensions
                 return JsonConvert.DeserializeObject<T>(json);
             }
 
-            return  JsonConvert.DeserializeObject<T>(default);
+            return JsonConvert.DeserializeObject<T>(default);
         }
     }
 }

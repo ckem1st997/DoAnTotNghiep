@@ -1,8 +1,6 @@
-
-
 using System;
 
-namespace WareHouse.API.Application.Extensions
+namespace Share.BaseCore.Extensions
 {
     public static class ExtensionFull
     {
