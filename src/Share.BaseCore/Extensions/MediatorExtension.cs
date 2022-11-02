@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using WareHouse.Domain.Entity;
 using Share.BaseCore;
 
-namespace WareHouse.Infrastructure
+namespace Share.BaseCore.Extensions
 {
     static class MediatorExtension
     {
