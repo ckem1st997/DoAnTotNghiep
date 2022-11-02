@@ -40,7 +40,7 @@ namespace Share.BaseCore.Behaviors
         {
             var response = default(TResponse);
             var typeName = request.GetGenericTypeName();
-
+          //  bool count= _dbContext.ChangeTracker.Entries<BaseEntity>().Any();
             try
             {
 
