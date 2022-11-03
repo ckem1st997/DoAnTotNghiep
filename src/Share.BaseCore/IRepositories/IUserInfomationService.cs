@@ -10,6 +10,7 @@ namespace Share.BaseCore.IRepositories
     {
         /// <summary>
         /// check from cache: key: iduser, key: listKey
+        /// Get width or Grpc, form class implement 
         /// </summary>
         /// <param name="idUser"></param>
         /// <param name="Key"></param>
