@@ -1,15 +1,5 @@
-﻿using Infrastructure;
-using KafKa.Net;
-using KafKa.Net.Abstractions;
-using Master.Application.Authentication;
-using Master.Service;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿
+
 
 namespace Master.Controllers
 {

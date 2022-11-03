@@ -118,6 +118,9 @@ import {MatSliderModule} from '@angular/material/slider';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { SpeedTestModule } from 'ng-speed-test';
 import { SearchwarehouseitemComponent } from './method/search/searchwarehouseitem/searchwarehouseitem.component';
+import { ListAppComponent } from './pages/ListApp/ListApp.component';
+import { ListAppCreateComponent } from './method/create/ListAppCreate/ListAppCreate.component';
+import { ListAppEditComponent } from './method/edit/ListAppEdit/ListAppEdit.component';
 const customNotifierOptions: NotifierOptions = {
   position: {
     horizontal: {
@@ -239,7 +242,10 @@ const customNotifierOptions: NotifierOptions = {
     SelectWareHouseComponent,
     PagesHomeCenterComponent,
     RegistrationComponent,
-    SearchwarehouseitemComponent
+    SearchwarehouseitemComponent,
+    ListAppComponent,
+    ListAppCreateComponent,
+    ListAppEditComponent
   ],
   imports: [
     BrowserModule,

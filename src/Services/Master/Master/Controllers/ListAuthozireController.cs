@@ -2,15 +2,14 @@
 
 namespace Master.Controllers
 {
-    public class ListAppController : BaseControllerMaster
+    public class ListAuthozireController : BaseControllerMaster
     {
         private readonly MasterdataContext _context;
 
-        public ListAppController(MasterdataContext context)
+        public ListAuthozireController(MasterdataContext context)
         {
             _context = context;
         }
-
 
         [HttpGet]
         [Route("get-list")]
@@ -18,17 +17,13 @@ namespace Master.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetList()
         {
-            var list = _context.ListApps.Where(x => x.Id != null);
+            var list = _context.ListAuthozires.Where(x => x.Id != null);
             return Ok(new ResultMessageResponse()
             {
                 data = list,
                 totalCount = list.Count()
             });
         }
-
-
-
-        [CheckRole(LevelCheck.CREATE)]
         [HttpGet]
         [Route("create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -38,17 +33,16 @@ namespace Master.Controllers
             return Ok(new ResultMessageResponse()
             {
                 success = true,
-                data = new ListApp()
+                data = new ListAuthozire()
             });
         }
 
 
-        [CheckRole(LevelCheck.CREATE)]
         [HttpPost]
         [Route("create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Create(ListApp list)
+        public async Task<IActionResult> Create(ListAuthozire list)
         {
             if (list is null)
             {
@@ -59,7 +53,7 @@ namespace Master.Controllers
                 });
             }
             list.Id = Guid.NewGuid().ToString();
-            await _context.ListApps.AddAsync(list);
+            await _context.ListAuthozires.AddAsync(list);
             return Ok(new ResultMessageResponse()
             {
                 success = await _context.SaveChangesAsync() > 0
@@ -83,12 +77,12 @@ namespace Master.Controllers
                 });
             }
 
-            var res = await _context.ListApps.FirstOrDefaultAsync(x => x.Id.Equals(id));
+          var res=  await _context.ListAuthozires.FirstOrDefaultAsync(x => x.Id.Equals(id));
             return Ok(new ResultMessageResponse()
             {
                 success = res != null,
                 data = res
-            });
+            }); ;
         }
 
 
@@ -96,7 +90,7 @@ namespace Master.Controllers
         [Route("edit")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Edit(ListApp list)
+        public async Task<IActionResult> Edit(ListAuthozire list)
         {
             if (list is null)
             {
@@ -106,7 +100,7 @@ namespace Master.Controllers
                     data = "Không nhận được dữ liệu"
                 });
             }
-            _context.ListApps.Update(list);
+            _context.ListAuthozires.Update(list);
             var res = await _context.SaveChangesAsync();
             return Ok(new ResultMessageResponse()
             {
@@ -116,7 +110,6 @@ namespace Master.Controllers
 
 
 
-        [CheckRole(LevelCheck.DELETE)]
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -124,10 +117,10 @@ namespace Master.Controllers
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
             bool res = false;
-            var get = _context.ListApps.Where(x => listIds.Contains(x.Id));
-            if (get != null && get.Count()>0)
+            var get = _context.ListAuthozires.Where(x => listIds.Contains(x.Id));
+            if (get != null)
             {
-                _context.ListApps.RemoveRange(get);
+                _context.ListAuthozires.RemoveRange(get);
                 res = await _context.SaveChangesAsync() > 0;
             }
 

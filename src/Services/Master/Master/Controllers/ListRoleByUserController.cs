@@ -1,16 +1,15 @@
-﻿
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Master.Controllers
 {
-    public class ListAppController : BaseControllerMaster
+    public class ListRoleByUserController : BaseControllerMaster
     {
         private readonly MasterdataContext _context;
 
-        public ListAppController(MasterdataContext context)
+        public ListRoleByUserController(MasterdataContext context)
         {
             _context = context;
         }
-
 
         [HttpGet]
         [Route("get-list")]
@@ -18,7 +17,7 @@ namespace Master.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetList()
         {
-            var list = _context.ListApps.Where(x => x.Id != null);
+            var list = _context.ListRoleByUsers.Where(x => x.Id != null);
             return Ok(new ResultMessageResponse()
             {
                 data = list,
@@ -38,7 +37,7 @@ namespace Master.Controllers
             return Ok(new ResultMessageResponse()
             {
                 success = true,
-                data = new ListApp()
+                data = new ListRoleByUser()
             });
         }
 
@@ -48,7 +47,7 @@ namespace Master.Controllers
         [Route("create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Create(ListApp list)
+        public async Task<IActionResult> Create(ListRoleByUser list)
         {
             if (list is null)
             {
@@ -59,7 +58,7 @@ namespace Master.Controllers
                 });
             }
             list.Id = Guid.NewGuid().ToString();
-            await _context.ListApps.AddAsync(list);
+            await _context.ListRoleByUsers.AddAsync(list);
             return Ok(new ResultMessageResponse()
             {
                 success = await _context.SaveChangesAsync() > 0
@@ -83,12 +82,12 @@ namespace Master.Controllers
                 });
             }
 
-            var res = await _context.ListApps.FirstOrDefaultAsync(x => x.Id.Equals(id));
+           var res= await _context.ListRoleByUsers.FirstOrDefaultAsync(x => x.Id.Equals(id));
             return Ok(new ResultMessageResponse()
             {
                 success = res != null,
                 data = res
-            });
+            }); 
         }
 
 
@@ -96,7 +95,7 @@ namespace Master.Controllers
         [Route("edit")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Edit(ListApp list)
+        public async Task<IActionResult> Edit(ListRoleByUser list)
         {
             if (list is null)
             {
@@ -106,7 +105,7 @@ namespace Master.Controllers
                     data = "Không nhận được dữ liệu"
                 });
             }
-            _context.ListApps.Update(list);
+            _context.ListRoleByUsers.Update(list);
             var res = await _context.SaveChangesAsync();
             return Ok(new ResultMessageResponse()
             {
@@ -124,10 +123,10 @@ namespace Master.Controllers
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
             bool res = false;
-            var get = _context.ListApps.Where(x => listIds.Contains(x.Id));
-            if (get != null && get.Count()>0)
+            var get = _context.ListRoleByUsers.Where(x => listIds.Contains(x.Id));
+            if (get != null)
             {
-                _context.ListApps.RemoveRange(get);
+                _context.ListRoleByUsers.RemoveRange(get);
                 res = await _context.SaveChangesAsync() > 0;
             }
 

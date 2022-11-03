@@ -2,11 +2,11 @@
 
 namespace Master.Controllers
 {
-    public class ListAppController : BaseControllerMaster
+    public class ListAuthozireRoleByUserController : BaseControllerMaster
     {
         private readonly MasterdataContext _context;
 
-        public ListAppController(MasterdataContext context)
+        public ListAuthozireRoleByUserController(MasterdataContext context)
         {
             _context = context;
         }
@@ -18,7 +18,7 @@ namespace Master.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetList()
         {
-            var list = _context.ListApps.Where(x => x.Id != null);
+            var list = _context.ListAuthozireRoleByUsers.Where(x => x.Id != null);
             return Ok(new ResultMessageResponse()
             {
                 data = list,
@@ -27,8 +27,6 @@ namespace Master.Controllers
         }
 
 
-
-        [CheckRole(LevelCheck.CREATE)]
         [HttpGet]
         [Route("create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -38,17 +36,16 @@ namespace Master.Controllers
             return Ok(new ResultMessageResponse()
             {
                 success = true,
-                data = new ListApp()
+                data = new ListAuthozireRoleByUser()
             });
         }
 
 
-        [CheckRole(LevelCheck.CREATE)]
         [HttpPost]
         [Route("create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Create(ListApp list)
+        public async Task<IActionResult> Create(ListAuthozireRoleByUser list)
         {
             if (list is null)
             {
@@ -59,7 +56,7 @@ namespace Master.Controllers
                 });
             }
             list.Id = Guid.NewGuid().ToString();
-            await _context.ListApps.AddAsync(list);
+            await _context.ListAuthozireRoleByUsers.AddAsync(list);
             return Ok(new ResultMessageResponse()
             {
                 success = await _context.SaveChangesAsync() > 0
@@ -83,12 +80,12 @@ namespace Master.Controllers
                 });
             }
 
-            var res = await _context.ListApps.FirstOrDefaultAsync(x => x.Id.Equals(id));
+         var res=   await _context.ListAuthozireRoleByUsers.FirstOrDefaultAsync(x => x.Id.Equals(id));
             return Ok(new ResultMessageResponse()
             {
                 success = res != null,
                 data = res
-            });
+            }); 
         }
 
 
@@ -96,7 +93,7 @@ namespace Master.Controllers
         [Route("edit")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Edit(ListApp list)
+        public async Task<IActionResult> Edit(ListAuthozireRoleByUser list)
         {
             if (list is null)
             {
@@ -106,7 +103,7 @@ namespace Master.Controllers
                     data = "Không nhận được dữ liệu"
                 });
             }
-            _context.ListApps.Update(list);
+            _context.ListAuthozireRoleByUsers.Update(list);
             var res = await _context.SaveChangesAsync();
             return Ok(new ResultMessageResponse()
             {
@@ -116,7 +113,6 @@ namespace Master.Controllers
 
 
 
-        [CheckRole(LevelCheck.DELETE)]
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -124,10 +120,10 @@ namespace Master.Controllers
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
             bool res = false;
-            var get = _context.ListApps.Where(x => listIds.Contains(x.Id));
-            if (get != null && get.Count()>0)
+            var get = _context.ListAuthozireRoleByUsers.Where(x => listIds.Contains(x.Id));
+            if (get != null)
             {
-                _context.ListApps.RemoveRange(get);
+                _context.ListAuthozireRoleByUsers.RemoveRange(get);
                 res = await _context.SaveChangesAsync() > 0;
             }
 

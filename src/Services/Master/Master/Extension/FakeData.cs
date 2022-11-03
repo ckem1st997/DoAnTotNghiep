@@ -1,5 +1,6 @@
 ﻿using Master.Models;
 using System.Collections.Generic;
+using BaseSelectDTO = Master.Models.BaseSelectDTO;
 
 namespace Master.Extension
 {

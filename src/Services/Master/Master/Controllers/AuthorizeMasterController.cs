@@ -1,13 +1,6 @@
-﻿using Share.BaseCore.Extensions;
-using Infrastructure;
-using Master.Application.Authentication;
-using Master.Controllers.BaseController;
-using Master.Models;
-using Master.Service;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using System.Threading.Tasks;
+﻿
+
+
 
 namespace Master.Controllers
 {

@@ -21,9 +21,12 @@
           Phân quyền
           <mat-menu #menu="matMenu">
             <span data-active="QuanLyDanhMucLink" (click)="createPlanmenuTrigger.closeMenu()">
-              <a (click)="changActive($event)" routerLink="/master/role" mat-menu-item>Danh sách</a>
-              <!-- <a (click)="changActive($event)" routerLink="/warehouse-limit" mat-menu-item>Định mức tồn kho</a>
-              <a (click)="changActive($event)" routerLink="/warehouse-benging" mat-menu-item>Tồn kho đầu kì</a> -->
+              <a (click)="changActive($event)" routerLink="/master/role" mat-menu-item>Danh sách người dùng</a>
+              <a (click)="changActive($event)" routerLink="/master/app" mat-menu-item>Danh sách App</a>
+              <a (click)="changActive($event)" routerLink="/warehouse-limit" mat-menu-item>Danh sách quyền</a>
+              <a (click)="changActive($event)" routerLink="/warehouse-benging" mat-menu-item>Danh sách định danh quyền</a>
+              <a (click)="changActive($event)" routerLink="/warehouse-limit" mat-menu-item>Phân quyền theo chức năng</a>
+              <a (click)="changActive($event)" routerLink="/warehouse-benging" mat-menu-item>Phân quyền theo định danh</a>
             </span>
 
           </mat-menu>

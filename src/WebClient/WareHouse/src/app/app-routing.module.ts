@@ -31,6 +31,7 @@ import { MasterUserComponent } from './layout/MasterUser/MasterUser.component';
 import { MasterhomeComponent } from './pages/masterhome/masterhome.component';
 import { PagesHomeCenterComponent } from './pages/PagesHomeCenter/PagesHomeCenter.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
+import { ListAppComponent } from './pages/ListApp/ListApp.component';
 const DEFAULT_ROUTES: Routes = [
 
   { path: 'warehouse-limit', component: WareHouseLimitComponent, data: { state: 'wh-limit' }, canActivate: [AuthGuard] },
@@ -62,6 +63,7 @@ export const Authozire_LAYOUT: Routes = [
 
 export const Master_LAYOUT: Routes = [
   { path: 'role', component: RoleUserComponent, data: { state: 'role', canActivate: [AuthGuard] } },
+  { path: 'app', component: ListAppComponent, data: { state: 'app', canActivate: [AuthGuard] } },
   { path: '', component: MasterhomeComponent, data: { state: '', canActivate: [AuthGuard] } },
 ]
 const routes: Routes = [
@@ -79,6 +81,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+exports: [RouterModule]
 })
 export class AppRoutingModule { }

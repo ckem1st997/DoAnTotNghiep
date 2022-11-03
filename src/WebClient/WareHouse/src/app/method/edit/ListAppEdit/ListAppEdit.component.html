@@ -1,0 +1,39 @@
+<div mat-dialog-title>{{title}}</div>
+<div>
+  <form class="container" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group d-none">
+      <mat-label class="form-label">Id</mat-label>
+      <input type="text" formControlName="id" class="form-control" /> 
+    </div>
+    <div class="form-group row mb-1">
+      <mat-label class="form-label col-3">Tên</mat-label>
+      <input type="text" formControlName="name" class="form-control col" /> 
+    </div>
+    <div class="form-group row mb-1">
+      <mat-label class="form-label col-3">Mô tả</mat-label>
+      <input type="text" formControlName="description" class="form-control col" /> 
+    </div>
+    <div class="form-group row mb-1">
+      <mat-label class="form-label col-3">Thứ tự</mat-label>
+      <input type="text" formControlName="softShow" class="form-control col" /> 
+    </div>
+    <div class="form-group row mb-1 d-none">
+      <mat-label class="form-label col-3 ">Trạng thái</mat-label>
+      <mat-checkbox style="padding-left: 0;" class="example-margin col"formControlName="parentId"></mat-checkbox>
+    </div>
+    <div class="form-group row mb-1 ">
+      <mat-label class="form-label col-3 ">API</mat-label>
+      <mat-checkbox style="padding-left: 0;" class="example-margin col"formControlName="isAPI"></mat-checkbox>
+    </div>
+    <div class="form-group row mb-1 ">
+      <mat-label class="form-label col-3 ">Trạng thái</mat-label>
+      <mat-checkbox style="padding-left: 0;" class="example-margin col"formControlName="inActive"></mat-checkbox>
+    </div>
+    <div  style="margin-top: 10px;float: right;">
+      <button type="submit" mat-button  mat-raised-button cdkFocusInitial color="primary">Save</button>
+      <button style="margin-left: 20px;" mat-button type="button"  mat-raised-button  (click)="onNoClick()">Huỷ bỏ</button>
+     
+    </div>
+  </form>
+</div>
+
