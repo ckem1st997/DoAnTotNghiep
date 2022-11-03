@@ -121,6 +121,9 @@ import { SearchwarehouseitemComponent } from './method/search/searchwarehouseite
 import { ListAppComponent } from './pages/ListApp/ListApp.component';
 import { ListAppCreateComponent } from './method/create/ListAppCreate/ListAppCreate.component';
 import { ListAppEditComponent } from './method/edit/ListAppEdit/ListAppEdit.component';
+import { ListRoleComponent } from './pages/ListRole/ListRole.component';
+import { ListRoleCreateComponent } from './method/create/ListRoleCreate/ListRoleCreate.component';
+import { ListRoleEditComponent } from './method/edit/ListRoleEdit/ListRoleEdit.component';
 const customNotifierOptions: NotifierOptions = {
   position: {
     horizontal: {
@@ -245,7 +248,10 @@ const customNotifierOptions: NotifierOptions = {
     SearchwarehouseitemComponent,
     ListAppComponent,
     ListAppCreateComponent,
-    ListAppEditComponent
+    ListAppEditComponent,
+    ListRoleComponent,
+    ListRoleCreateComponent,
+    ListRoleEditComponent
   ],
   imports: [
     BrowserModule,

@@ -15,8 +15,6 @@ namespace Master.Controllers
     {
         private readonly MasterdataContext _context;
         private readonly IUserService _userService;
-
-
         public ListHistoryController(MasterdataContext context, IUserService userService)
         {
             _context = context;

@@ -5,6 +5,7 @@ using System.Net;
 
 namespace Master.Controllers
 {
+
     public class IndexController : BaseControllerMaster
     {
         [Route("role")]
