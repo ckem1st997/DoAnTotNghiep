@@ -20,16 +20,26 @@ namespace Share.BaseCore.Authozire
         {
             throw new NotImplementedException();
         }
-     
-        public string GetUserNameByClaims()
+
+        public string GetIpAddressClaims()
         {
-            var identity = _contextAccessor.HttpContext.User.Identity as ClaimsIdentity;
+            return GetClaimsByType("IpAddress");
+        }
+
+        private string GetClaimsByType(string type)
+        {
+            ClaimsIdentity identity = _contextAccessor.HttpContext.User.Identity as ClaimsIdentity;
             if (identity != null)
             {
                 IEnumerable<Claim> claims = identity.Claims;
-                return identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
+                return identity.Claims.FirstOrDefault(c => c.Type.Equals(type)).Value;
             }
             return string.Empty;
+        }
+
+        public string GetUserNameByClaims()
+        {
+            return GetClaimsByType(ClaimTypes.Name);
         }
     }
 }

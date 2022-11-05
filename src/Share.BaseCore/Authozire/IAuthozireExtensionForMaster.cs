@@ -11,6 +11,10 @@ namespace Share.BaseCore.Authozire
     /// </summary>
     public partial interface IAuthozireExtensionForMaster
     {
-        public Task<string> GenerateJWT(string username, string password, bool remember=true);
+        /// <summary>
+        /// implemention in service master manager authozire : GenerateJWT
+        /// </summary>
+        public Task<string> GenerateJWT(string username, string password, bool remember = true);
+       // public Task<string> GenerateRefreshToken();
     }
 }

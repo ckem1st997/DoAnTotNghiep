@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,11 @@ namespace Share.BaseCore.Authozire
     public class AuthozireExtensionForMaster : IAuthozireExtensionForMaster
     {
         private readonly IAuthenForMaster _authenForMaster;
-        public AuthozireExtensionForMaster(IAuthenForMaster authenForMaster)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public AuthozireExtensionForMaster(IAuthenForMaster authenForMaster, IHttpContextAccessor contextAccessor)
         {
             _authenForMaster = authenForMaster;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<string> GenerateJWT(string username, string password, bool remember = true)
@@ -27,7 +30,7 @@ namespace Share.BaseCore.Authozire
                 List<Claim> authClaims = new List<Claim>
                             {
                                 new Claim(ClaimTypes.Name, username),
-                                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                                new Claim("IpAddress", _contextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString())
                             };
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthozireStringHelper.JWT.Secret));
 

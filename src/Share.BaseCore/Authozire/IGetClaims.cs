@@ -10,7 +10,8 @@ namespace Share.BaseCore.Authozire
 {
     public interface IGetClaims
     {
-        public Task<string> GetIdUserByClaims();
+        public string GetIdUserByClaims();
+        public string GetIpAddressClaims();
         public string GetUserNameByClaims();
       
     }
