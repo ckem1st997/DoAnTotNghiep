@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Share.BaseCore.Behaviors.ConfigureServices
 {
-    public static class ServiceBehavior
+    public static class ServiceAuthorize
     {
         public static void AddBehavior(this IServiceCollection services)
         {

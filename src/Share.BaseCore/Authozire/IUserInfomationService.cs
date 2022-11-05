@@ -4,8 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.IRepositories
+namespace Share.BaseCore.Authozire
 {
+    /// <summary>
+    /// call get info width grpc in service khác service master
+    /// service master then write one service check to call in class implement equal get info user at cache or database
+    /// implement in service
+    /// </summary>
     public interface IUserInfomationService
     {
         /// <summary>
@@ -15,7 +20,8 @@ namespace Share.BaseCore.IRepositories
         /// <param name="idUser"></param>
         /// <param name="Key"></param>
         /// <returns></returns>
-        public Task<bool> GetAuthozireByUserIdToKey(string idUser, string Key);
+        public Task<bool> GetAuthozireByUserIdToKey(string iduser, string Key);
+        public Task<bool> GetAuthozireByUserNameToKey(string username, string Key);
         public Task<bool> GetAuthozireByUserIdToAuthorizeRole(string idUser, string authRole);
 
         public void GetInfoUserByClaims();

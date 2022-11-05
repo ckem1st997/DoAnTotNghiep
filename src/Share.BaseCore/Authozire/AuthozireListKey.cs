@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Extensions
+namespace Share.BaseCore.Authozire
 {
-    public static class ListAuthozireKey
+    public static class AuthozireListKey
     {
         public static class GlobalKey
         {
