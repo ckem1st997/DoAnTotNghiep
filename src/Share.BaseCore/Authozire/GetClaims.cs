@@ -16,7 +16,7 @@ namespace Share.BaseCore.Authozire
             _contextAccessor = contextAccessor;
         }
 
-        public Task<string> GetIdUserByClaims()
+        public string GetIdUserByClaims()
         {
             throw new NotImplementedException();
         }

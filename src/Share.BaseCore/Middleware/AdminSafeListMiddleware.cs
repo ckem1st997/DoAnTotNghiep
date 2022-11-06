@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,10 @@ namespace Share.BaseCore.Middleware
     public class AdminSafeListMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<AdminSafeListMiddleware> _logger;
         private readonly byte[][] _safelist;
 
         public AdminSafeListMiddleware(
             RequestDelegate next,
-            ILogger<AdminSafeListMiddleware> logger,
             string safelist)
         {
             var ips = safelist.Split(';');
@@ -31,7 +30,6 @@ namespace Share.BaseCore.Middleware
             }
 
             _next = next;
-            _logger = logger;
         }
 
         public async Task Invoke(HttpContext context)
@@ -39,7 +37,7 @@ namespace Share.BaseCore.Middleware
             if (context.Request.Method != HttpMethod.Get.Method)
             {
                 var remoteIp = context.Connection.RemoteIpAddress;
-                _logger.LogDebug("Request from Remote IP address: {RemoteIp}", remoteIp);
+                Log.Debug("Request from Remote IP address: {RemoteIp}", remoteIp);
 
                 var bytes = remoteIp.GetAddressBytes();
                 var badIp = true;
@@ -54,7 +52,7 @@ namespace Share.BaseCore.Middleware
 
                 if (badIp)
                 {
-                    _logger.LogWarning(
+                    Log.Debug(
                         "Forbidden Request from Remote IP address: {RemoteIp}", remoteIp);
                     context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                     return;

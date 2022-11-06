@@ -22,20 +22,12 @@
 		<PackageReference Include="Abp" Version="7.1.0" />
 		<PackageReference Include="Autofac" Version="6.3.0" />
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
 		<PackageReference Include="Grpc.Net.Client.Web" Version="2.44.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
 
-		<PackageReference Include="Google.Protobuf" Version="3.20.0" />
-		<PackageReference Include="Google.Protobuf.Tools" Version="3.20.0" />
-		<PackageReference Include="Grpc.AspNetCore" Version="2.44.0" />
-		<PackageReference Include="Grpc.AspNetCore.Server" Version="2.44.0" />
-		<PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.44.0" />
-		<PackageReference Include="Grpc.AspNetCore.Web" Version="2.44.0" />
-		<PackageReference Include="Grpc.Tools" Version="2.45.0">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
+		
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="6.0.4" />
@@ -53,17 +45,36 @@
 		<PackageReference Include="Serilog.Sinks.Seq" Version="5.1.1" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<!--<ItemGroup>
 		<Protobuf Include="Proto\getdata.proto" GrpcServices="Server" Generator="MSBuild:Compile" />
 		<Protobuf Include="Proto\getdatawh.proto" GrpcServices="Client">
 		</Protobuf>
 
-	</ItemGroup>
+	</ItemGroup>-->
+	<!--<ItemGroup>
+		<Protobuf Include="..\share\Proto\greet.proto" GrpcServices="Client">
+			<Link>Protos\greet.proto</Link>
+		</Protobuf>
+	</ItemGroup>-->
+
+
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\Share.BaseCore\Share.BaseCore.csproj" />
+	  <ProjectReference Include="..\..\..\Share.Grpc\Share.Grpc.csproj" />
 	  <ProjectReference Include="..\..\Base\Base\Base.csproj" />
 	  <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+	</ItemGroup>
+
+
+
+	<ItemGroup>
+	  <Protobuf Include="..\..\..\Share.Grpc\Proto\getdata.proto" GrpcServices="Server">
+	    <Link>Protos\getdata.proto</Link>
+	  </Protobuf>
+	  <Protobuf Include="..\..\..\Share.Grpc\Proto\getdatawh.proto" GrpcServices="Client">
+	    <Link>Protos\getdatawh.proto</Link>
+	  </Protobuf>
 	</ItemGroup>
 
 </Project>
