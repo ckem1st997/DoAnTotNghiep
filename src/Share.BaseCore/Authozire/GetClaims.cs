@@ -18,7 +18,7 @@ namespace Share.BaseCore.Authozire
 
         public string GetIdUserByClaims()
         {
-            throw new NotImplementedException();
+            return GetClaimsByType("id");
         }
 
         public string GetIpAddressClaims()
