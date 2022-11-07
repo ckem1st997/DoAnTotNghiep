@@ -7,21 +7,17 @@ import { LoadingService } from '../service/Loading.service';
 })
 export class HttpCancelService {
 
-  private pendingHTTPRequests$ = new Subject<void>();
+  private cancelPendingRequests$ = new Subject<void>()
 
-  constructor(private _loading: LoadingService,
-  ) { }
+  constructor() { }
 
-  // Cancel Pending HTTP calls
+  /** Cancels all pending Http requests. */
   public cancelPendingRequests() {
-    console.log('Cancel Pending HTTP calls');
-    this.pendingHTTPRequests$.next();
-
+    this.cancelPendingRequests$.next()
   }
 
   public onCancelPendingRequests() {
-    return this.pendingHTTPRequests$.asObservable();
-
+    return this.cancelPendingRequests$.asObservable()
   }
 
 }

@@ -8,6 +8,8 @@ import { SignalRService } from './service/SignalR.service';
 import { AuthenticationService } from './extension/Authentication.service';
 import { SpeedTestService } from 'ng-speed-test';
 import isOnline from 'is-online';
+import { ActivationEnd, Router } from '@angular/router';
+import { HttpCancelService } from './extension/HttpCancel.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -34,7 +36,9 @@ export class AppComponent {
     private notifierService: NotifierService,
     private signalRService: SignalRService,
     private auth: AuthenticationService,
-    private speedTestService: SpeedTestService
+    private speedTestService: SpeedTestService,
+    private router: Router,
+    private httpCancelService: HttpCancelService
   ) {
   }
   @HostListener('window:resize', ['$event'])
@@ -51,6 +55,11 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    this.router.events.subscribe(event => {
+      if (event instanceof ActivationEnd) {
+        this.httpCancelService.cancelPendingRequests()
+      }
+    })
     this.listenToLoading();
     this.signalRService.startConnection();
     //  this.signalRService.CallMethodToServiceByInwardChange('SendMessageToCLient');

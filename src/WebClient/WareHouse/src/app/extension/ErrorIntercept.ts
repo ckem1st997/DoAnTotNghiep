@@ -111,7 +111,7 @@ export class ErrorIntercept implements HttpInterceptor {
                 }
                 return evt;
             }))
-          //  .pipe(takeUntil(this.httpCancelService.onCancelPendingRequests()));
+            .pipe(takeUntil(this.httpCancelService.onCancelPendingRequests()));
 
         
     }
