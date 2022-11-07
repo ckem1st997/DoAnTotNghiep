@@ -21,7 +21,6 @@
 
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
 		<PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.6" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.4" />
 		<PackageReference Include="Microsoft.Identity.Web" Version="1.23.1" />

@@ -25,6 +25,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Share.BaseCore.Authozire.ConfigureServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,14 +49,6 @@ namespace Master
         {
             services.AddControllers();
             services.AddCustomConfiguration(Configuration);
-            services.AddApiVersioning(x =>
-            {
-                // setup ApiVersion v1 
-                x.DefaultApiVersion = new ApiVersion(1, 0);
-                x.AssumeDefaultVersionWhenUnspecified = true;
-                x.ReportApiVersions = true;
-                //    x.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
-            });
             services.AddTransient<GrpcExceptionInterceptor>();
             services.AddGrpc(options =>
             {
@@ -84,61 +77,10 @@ namespace Master
                 option.IterationCount = 12000;
             });
 
-            // Adding Authentication  
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-
-            // Adding Jwt Bearer  
-            .AddJwtBearer(options =>
-            {
-                options.SaveToken = true;
-                options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidAudience = Configuration["JWT:ValidAudience"],
-                    ValidIssuer = Configuration["JWT:ValidIssuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
-                };
-                options.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        var accessToken = context.Request.Query["access_token"];
-
-                        // If the request is for our hub...
-                        var path = context.HttpContext.Request.Path;
-                        if (!string.IsNullOrEmpty(accessToken) &&
-                            (path.StartsWithSegments("/signalr")))
-                        {
-                            // Read the token out of the query string
-                            context.Token = accessToken;
-                        }
-                        return Task.CompletedTask;
-                    }
-                };
-            });
+            
             services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddCors(o => o.AddPolicy("AllowAll", builder =>
-            {
-                //builder.AllowAnyOrigin()
-                //.WithOrigins("http://localhost:4200,http://localhost:8000,http://host.docker.internal:8000,http://angular:4200,http://kong:8000")
-                //       .AllowAnyMethod()
-                //       .AllowAnyHeader()
-                //       .SetIsOriginAllowed(host => true)
-                //       .AllowCredentials()
-                //       .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
-                builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader()
-                   .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
-            }));
+            services.AddApiAuthentication();
+            services.AddApiCors();
             services.AddSignalR(options =>
             {
                 // Global filters will run first

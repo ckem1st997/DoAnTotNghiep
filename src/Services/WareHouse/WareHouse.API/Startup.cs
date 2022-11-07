@@ -41,6 +41,7 @@ using Share.BaseCore.Cache;
 using Share.BaseCore.Behaviors.ConfigureServices;
 using WareHouse.API.Infrastructure;
 using Share.BaseCore;
+using Share.BaseCore.Authozire.ConfigureServices;
 
 namespace WareHouse.API
 {
@@ -64,20 +65,6 @@ namespace WareHouse.API
             services.AddValidator();
             services.AddBehavior();
             services.AddCache(Configuration);
-            services.AddApiVersioning(x =>
-            {
-                x.DefaultApiVersion = new ApiVersion(1, 0);
-                x.AssumeDefaultVersionWhenUnspecified = true;
-                x.ReportApiVersions = true;
-            });
-            services.AddCors(o => o.AddPolicy("AllowAll", builder =>
-            {
-                builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
-            }));
-
             services.AddLogging(loggingBuilder =>
             {
                 //   loggingBuilder.UseSerilog(Configuration);
@@ -145,28 +132,9 @@ namespace WareHouse.API
                 }).AddInterceptor<GrpcExceptionInterceptor>(InterceptorScope.Client)
                 .ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(httpHandler));
             // Adding Authentication  
-            services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
+            services.AddApiAuthentication();
+            services.AddApiCors();
 
-                // Adding Jwt Bearer  
-                .AddJwtBearer(options =>
-                {
-                    options.SaveToken = true;
-                    options.RequireHttpsMetadata = false;
-                    options.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidAudience = Configuration["JWT:ValidAudience"],
-                        ValidIssuer = Configuration["JWT:ValidIssuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
-                    };
-                });
-            services.AddHttpContextAccessor();
             // services.AddSingleton<IHostedService, RequestTimeConsumer>();
         }
         public void ConfigureContainer(ContainerBuilder builder)

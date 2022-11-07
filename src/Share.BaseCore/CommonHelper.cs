@@ -1,4 +1,5 @@
-﻿using Share.BaseCore.Extensions;
+﻿using Microsoft.Extensions.Configuration;
+using Share.BaseCore.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -330,7 +331,7 @@ namespace Share.BaseCore
         /// </summary>
         public static IBaseFileProvider DefaultFileProvider { get; set; }
 
-        //public static IConfiguration Configuration { get; set; }
+        public static IConfiguration Configuration { get; set; }
 
         //public static IWebHostEnvironment WebHostEnvironment { get; set; }
 
@@ -338,7 +339,7 @@ namespace Share.BaseCore
 
         //   public static HostingConfig HostingConfig { get; set; }
 
-        public static BaseConfig BaseConfig { get; set; }
+        public static BaseSsoConfig BaseConfig { get; set; }
 
         //public static SsoConfig SsoConfig { get; set; }
 

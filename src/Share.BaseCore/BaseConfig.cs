@@ -6,32 +6,65 @@ using System.Threading.Tasks;
 
 namespace Share.BaseCore
 {
-    public class BaseConfig
+    public class BaseSsoConfig
     {
-        public const string Base = "Base";
 
-        /// <summary>
-        /// Gets or sets a value indicating whether to display the full error in production environment.
-        /// It's ignored (always enabled) in development environment
-        /// </summary>
-        public bool DisplayFullErrorStack { get; set; }
+        public const string Sso = "Sso";
 
-        /// <summary>
-        /// Loại Project App (AppProjectType)
-        /// </summary>
-        public string AppProjectType { get; set; }
+        public string Realm { get; set; }
 
-        /// <summary>
-        /// App Type (AppHelperBase)
-        /// </summary>
-        public string AppType { get; set; }
+        public string Authority { get; set; }
 
-        public bool UseAuthentication { get; set; }
+        public bool RequireHttpsMetadata { get; set; }
 
-        public string RedisDataProtectionConnection { get; set; }
+        public string ClientId { get; set; }
 
-        public string RedisSessionConnection { get; set; }
+        public string ClientSecret { get; set; }
 
-        public string AppAssembliesPath { get; set; } = "/wwwroot/AppData/AppAssemblies";
+        public string ResponseType { get; set; }
+
+        public string RedirectUri { get; set; }
+
+        public string CallbackPath { get; set; }
+
+        public string RemoteSignOutPath { get; set; }
+
+        public string SignedOutRedirectUri { get; set; }
+
+        public string SignedOutCallbackPath { get; set; }
+
+        public string AccessDeniedPath { get; set; }
+
+        public bool GetClaimsFromUserInfoEndpoint { get; set; }
+
+        public bool SaveTokens { get; set; }
+
+        public ServiceAccount ServiceAccount { get; set; }
+
+        public IList<string> Scopes { get; set; }
+
+        public BaseSsoConfig()
+        {
+            this.RequireHttpsMetadata = false;
+            this.ResponseType = "code";
+            this.SignedOutRedirectUri = "/";
+            this.AccessDeniedPath = "/MvcError/Forbidden";
+            this.GetClaimsFromUserInfoEndpoint = true;
+            this.SaveTokens = true;
+            this.Scopes = (IList<string>)new List<string>()
+      {
+        "openid",
+        "email",
+        "profile",
+        "offline_access",
+        "roles"
+      };
+        }
+    }
+    public class ServiceAccount
+    {
+        public string ClientId { get; set; }
+
+        public string ClientSecret { get; set; }
     }
 }
