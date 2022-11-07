@@ -327,8 +327,51 @@ services:
            - 4200:80
 
 
+# keyclosk sso
 
+  keycloak_db_sso:
+    image: postgres:11.2-alpine
+    environment:
+        - POSTGRES_DB=keycloak_sso
+        - POSTGRES_USER=keycloak_sso
+        - POSTGRES_PASSWORD=password
+        - POSTGRES_ROOT_PASSWORD=password
+    networks:
+      service_sso_net:
+    ports:
+      - "5432:5432"
+    volumes:
+      - keycloak_sso_vol:/var/lib/postgresql/data
+
+  keycloak:
+    image: jboss/keycloak:15.0.2
+    hostname: keycloak
+    environment:
+      - DB_VENDOR=POSTGRES
+      - DB_ADDR=keycloak_db_sso
+      - DB_DATABASE=keycloak_sso
+      - DB_PORT=5432
+      - DB_USER=keycloak_sso
+      - DB_SCHEMA=public
+      - DB_PASSWORD=password
+      - PROXY_ADDRESS_FORWARDING=true
+      - KEYCLOAK_LOGLEVEL=INFO
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+    networks:
+      service_sso_net:
+    ports:
+      - "2080:8080"
+    volumes:
+      - ./themes/demo:/opt/jboss/keycloak/themes/demo
+    depends_on: 
+      - keycloak_db_sso
+
+
+volumes: 
+  keycloak_sso_vol:
 networks:
+  service_sso_net:
   kong-net:
     name: kong-net
     driver: bridge
