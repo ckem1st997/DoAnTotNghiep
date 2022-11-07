@@ -18,7 +18,7 @@ namespace Share.BaseCore.Authozire.ConfigureServices
 {
     public static class ServiceAuthorize
     {
-        public static void InitAppSettings(this IServiceCollection services,IConfiguration configuration)
+        public static void InitAppSettings(this IServiceCollection services, IConfiguration configuration)
         {
             CommonHelper.BaseConfig = configuration.GetSection("JWT").Get<BaseSsoConfig>();
         }
@@ -34,8 +34,6 @@ namespace Share.BaseCore.Authozire.ConfigureServices
             services.AddHttpContextAccessor();
             services.AddScoped<IGetClaims, GetClaims>();
             services.AddScoped<IAuthozireExtensionForMaster, AuthozireExtensionForMaster>();
-            var ssoConfig = CommonHelper.BaseConfig;
-
 
             // Adding Authentication  
             services.AddAuthentication(options =>
@@ -48,22 +46,15 @@ namespace Share.BaseCore.Authozire.ConfigureServices
             // Adding Jwt Bearer  
             .AddJwtBearer(options =>
             {
-                options.Authority = ssoConfig.Authority;
-                options.RequireHttpsMetadata = ssoConfig.RequireHttpsMetadata;
-
-                options.Audience = ssoConfig.ClientId;
-
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                   // ValidateIssuer = false,
-
-                    ValidateAudience = false,
-
-                    //ValidAudience = AuthozireStringHelper.JWT.ValidAudience,
-                    //ValidIssuer = AuthozireStringHelper.JWT.ValidAudience,
-                    //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthozireStringHelper.JWT.Secret))
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = AuthozireStringHelper.JWT.ValidAudience,
+                    ValidIssuer = AuthozireStringHelper.JWT.ValidIssuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthozireStringHelper.JWT.Secret))
                 };
                 options.Events = new JwtBearerEvents
                 {

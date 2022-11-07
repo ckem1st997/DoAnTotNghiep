@@ -49,7 +49,6 @@ namespace Master
         {
             services.AddControllers();
             services.AddCustomConfiguration(Configuration);
-            services.InitAppSettings(Configuration);
             services.AddTransient<GrpcExceptionInterceptor>();
             services.AddGrpc(options =>
             {

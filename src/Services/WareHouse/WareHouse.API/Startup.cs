@@ -65,7 +65,6 @@ namespace WareHouse.API
             services.AddValidator();
             services.AddBehavior();
             services.AddCache(Configuration);
-            services.InitAppSettings(Configuration);
             services.AddLogging(loggingBuilder =>
             {
                 //   loggingBuilder.UseSerilog(Configuration);
