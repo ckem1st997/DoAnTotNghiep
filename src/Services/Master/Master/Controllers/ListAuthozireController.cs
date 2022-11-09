@@ -24,6 +24,9 @@ namespace Master.Controllers
                 totalCount = list.Count()
             });
         }
+
+
+
         [HttpGet]
         [Route("create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]

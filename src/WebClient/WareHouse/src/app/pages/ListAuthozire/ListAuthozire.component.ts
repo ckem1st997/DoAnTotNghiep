@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ListApp, ListAuthozire } from 'src/app/model/ListApp';
 import { FormSearchWareHouseComponent } from './../../method/search/FormSearchWareHouse/FormSearchWareHouse.component';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -17,6 +18,7 @@ import { UnitDeleteComponent } from 'src/app/method/delete/UnitDelete/UnitDelete
 import { UnitDetailsComponent } from 'src/app/method/details/UnitDetails/UnitDetails.component';
 import { RoleEditComponent } from 'src/app/method/edit/RoleEdit/RoleEdit.component';
 import { UnitEditComponent } from 'src/app/method/edit/UnitEdit/UnitEdit.component';
+import { ExampleFlatNode } from 'src/app/model/ExampleFlatNode';
 import { ResultMessageResponse } from 'src/app/model/ResultMessageResponse';
 import { RoleSearchModel } from 'src/app/model/RoleSearchModel';
 import { UnitDTO } from 'src/app/model/UnitDTO';
@@ -25,42 +27,24 @@ import { WareHouseSearchModel } from 'src/app/model/WareHouseSearchModel';
 import { AuthozireService } from 'src/app/service/Authozire.service';
 import { UnitService } from 'src/app/service/Unit.service';
 import { WarehouseService } from 'src/app/service/warehouse.service';
-import { ListRoleService } from './../../service/ListRole.service';
-import { ListRoleCreateComponent } from 'src/app/method/create/ListRoleCreate/ListRoleCreate.component';
-import { ListRoleEditComponent } from 'src/app/method/edit/ListRoleEdit/ListRoleEdit.component';
-import { ListRole } from 'src/app/model/ListApp';
-import { ListApp } from 'src/app/model/ListApp';
-import { TreeView } from 'src/app/model/TreeView';
-import { ListAppService } from 'src/app/service/ListApp.service';
-
-
-interface ExampleFlatNode {
-  expandable: boolean;
-  level: number;
-  name: string
-  key: string;
-  inActive: boolean;
-  description: string;
-  isAPI: boolean;
-  id: string;
-}
-
+import { ListAppService } from './../../service/ListApp.service';
+import { ListAppCreateComponent } from 'src/app/method/create/ListAppCreate/ListAppCreate.component';
+import { ListAppEditComponent } from 'src/app/method/edit/ListAppEdit/ListAppEdit.component';
+import { ListAuthozireService } from 'src/app/service/ListAuthozire.service';
+import { ListAuthozireCreateComponentComponent } from 'src/app/method/create/ListAuthozireCreateComponent/ListAuthozireCreateComponent.component';
+import { ListAuthozireEditComponent } from 'src/app/method/edit/ListAuthozireEdit/ListAuthozireEdit.component';
 @Component({
-  selector: 'app-ListRole',
-  templateUrl: './ListRole.component.html',
-  styleUrls: ['./ListRole.component.scss']
+  selector: 'app-ListAuthozire',
+  templateUrl: './ListAuthozire.component.html',
+  styleUrls: ['./ListAuthozire.component.scss']
 })
-export class ListRoleComponent implements OnInit {
-  ///
-  selectedValue: string = '';
-  selectedCar: string = '';
+export class ListAuthozireComponent implements OnInit {
 
-  foods: ListApp[] = [];
-
+ ///
   //
-  listDelete: ListRole[] = [];
+  listDelete: ListAuthozire[] = [];
   //select
-  selection = new SelectionModel<ListRole>(true, []);
+  selection = new SelectionModel<ListAuthozire>(true, []);
   //noti
   private readonly notifier!: NotifierService;
   //tree-view
@@ -75,43 +59,15 @@ export class ListRoleComponent implements OnInit {
   pageSize = 15;
   currentPage = 0;
   pageSizeOptions: number[] = [15, 50, 100];
-  displayedColumns: string[] = ['select', 'id', 'name', 'key', 'description', 'isAPI', 'inActive', 'method'];
-  //
-
-  private _transformer = (node: ListRole, level: number) => {
-    return {
-      expandable: !!node.children && node.children.length > 0,
-      name: node.name,
-      level: level,
-      key: node.key,
-      inActive: node.inActive,
-      description: node.description,
-      isAPI: node.isAPI,
-      id: node.id
-    };
-  };
-  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
-  treeControl = new FlatTreeControl<ExampleFlatNode>(
-    node => node.level,
-    node => node.expandable
-  );
-
-  treeFlattener = new MatTreeFlattener(
-    this._transformer,
-    node => node.level,
-    node => node.expandable,
-    node => node.children
-  );
-
-  dataSourceRole = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-  // dataSourceRole = new MatTableDataSource<ListRole>();
+  displayedColumns: string[] = ['select', 'id', 'name', 'description', 'inActive', 'method'];
+  dataSourceRole = new MatTableDataSource<ListAuthozire>();
   model: RoleSearchModel = {
     key: '',
     whId: '',
     num: 15,
     pages: 0
   };
-  list: ResultMessageResponse<ListRole> = {
+  list: ResultMessageResponse<ListAuthozire> = {
     success: false,
     code: '',
     httpStatusCode: 0,
@@ -128,13 +84,12 @@ export class ListRoleComponent implements OnInit {
   @ViewChild(MatSort)
   sort!: MatSort;
 
-  constructor(private serviceapp: ListAppService, private service: ListRoleService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService) {
+  constructor(private service: ListAuthozireService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService) {
 
     this.notifier = notifierService;
 
   }
   ngOnInit() {
-    this.serviceapp.getList().subscribe(x => this.foods = x.data);
     this.GetData();
     this.getScreenWidth = window.innerWidth;
     this.getScreenHeight = window.innerHeight;
@@ -142,8 +97,8 @@ export class ListRoleComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    // this.dataSourceRole.paginator = this.paginator;
-    // this.dataSourceRole.sort = this.sort;
+    this.dataSourceRole.paginator = this.paginator;
+    this.dataSourceRole.sort = this.sort;
   }
 
   @HostListener('window:resize', ['$event'])
@@ -156,20 +111,13 @@ export class ListRoleComponent implements OnInit {
     else
       this.checkSizeWindows = true;
   }
-
-  selectEvent($event:any) {
-    console.log($event)
-    this.GetData();
-  }
-
   GetData() {
-    if (this.selectedValue != undefined && this.selectedValue.length > 0)
-      this.service.getList(this.selectedValue).subscribe(list => {
-        this.dataSourceRole.data = list.data; setTimeout(() => {
-          this.paginator.pageIndex = this.currentPage;
-          this.paginator.length = list.totalCount;
-        });
+    this.service.getList().subscribe(list => {
+      this.dataSourceRole.data = list.data; setTimeout(() => {
+        this.paginator.pageIndex = this.currentPage;
+        this.paginator.length = list.totalCount;
       });
+    });
     this.listDelete = [];
     this.selection.clear();
   }
@@ -188,11 +136,10 @@ export class ListRoleComponent implements OnInit {
     this.model.num = event.pageSize;
     this.GetData();
   }
-  openDialog(model: ListRole): void {
-    console.log(model)
+  openDialog(model: ListAuthozire): void {
     this.service.EditIndex(model.id).subscribe(x => {
       if (x.success) {
-        const dialogRef = this.dialog.open(ListRoleEditComponent, {
+        const dialogRef = this.dialog.open(ListAuthozireEditComponent, {
           width: '550px',
           data: x.data,
         });
@@ -210,10 +157,8 @@ export class ListRoleComponent implements OnInit {
   }
 
   openDialogCreate(): void {
-    console.log(this.selectedValue)
-    const dialogRef = this.dialog.open(ListRoleCreateComponent, {
-      width: '550px',
-      data:this.selectedValue
+    const dialogRef = this.dialog.open(ListAuthozireCreateComponentComponent, {
+      width: '550px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -227,16 +172,17 @@ export class ListRoleComponent implements OnInit {
 
   openDialogDeleteAll(): void {
     var model = this.selection.selected;
-    console.log(model)
     if (model.length > 0) {
+      this.listDelete = model;
       var ids = Array<string>();
-      for (let index = 0; index < model.length; index++) {
-        const element = model[index];
+      for (let index = 0; index < this.listDelete.length; index++) {
+        const element = this.listDelete[index];
         ids.push(element.id);
       }
-      if (model !== undefined && model.length > 0) {
+      if (this.listDelete !== undefined && this.listDelete.length > 0) {
         this.service.Delete(ids).subscribe(x => {
-          if (x.success) {
+          if (x.success)
+          {
             this.notifier.notify('success', 'Xóa thành công !');
             this.GetData();
           }
@@ -266,11 +212,12 @@ export class ListRoleComponent implements OnInit {
   }
 
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: ListRole): string {
+  checkboxLabel(row?: ListAuthozire): string {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id}`;
   }
 }
+
 

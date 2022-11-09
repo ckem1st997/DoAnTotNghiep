@@ -1,4 +1,5 @@
 export interface TreeView {
+    id:         string;
     code:         string;
     name:         string;
     address:      null;

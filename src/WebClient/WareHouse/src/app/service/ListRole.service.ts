@@ -7,6 +7,7 @@ import { HistoryNoticationDT0 } from '../model/HistoryNoticationDT0';
 import { ListRole } from '../model/ListApp';
 import { ResultDataResponse } from '../model/ResultDataResponse';
 import { ResultMessageResponse } from '../model/ResultMessageResponse';
+import { TreeView } from './../model/TreeView';
 
 @Injectable({
   providedIn: 'root'
@@ -22,14 +23,23 @@ export class ListRoleService {
     this.notifier = notifierService;
   }
 
-  //get list user master
-  getList(): Observable<ResultMessageResponse<ListRole>> {
-    var url = this.baseUrlMaster + `/get-list`;
+  //get list user masterget-list-tree
+  getList(id:string): Observable<ResultMessageResponse<ListRole>> {
+    var url = this.baseUrlMaster + `/get-list?appId=`+id;
     return this.http.get<ResultMessageResponse<ListRole>>(url, this.httpOptions).pipe(
       retry(1), // retry a failed request up to 3 times
 
     );
   }
+
+  getListTree(id:string): Observable<ResultMessageResponse<ListRole>> {
+    var url = this.baseUrlMaster + `/get-list-tree?appId=`+id;
+    return this.http.get<ResultMessageResponse<ListRole>>(url, this.httpOptions).pipe(
+      retry(1), // retry a failed request up to 3 times
+
+    );
+  }
+
 
   EditIndex(iduser: string | null): Observable<ResultDataResponse<ListRole>> {
     var url = this.baseUrlMaster + `/edit?id=` + iduser;

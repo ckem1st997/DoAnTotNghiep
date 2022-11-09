@@ -34,7 +34,9 @@ export interface ListRole extends BaseModel {
     key: string;
     parentId: boolean | null;
     softShow: number | null;
-    isAPI: boolean | null;
+    isAPI: boolean;
+    children:     ListRole[];
+
 }
 
 

@@ -183,7 +183,7 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
 
 
             var res = new List<WareHouseDTO>();
-            if (wareHouses?.Count() > 0)
+            if (wareHouses?.Count > 0)
             {
                 foreach (var x in wareHouses)
                 {

@@ -32,6 +32,8 @@ import { MasterhomeComponent } from './pages/masterhome/masterhome.component';
 import { PagesHomeCenterComponent } from './pages/PagesHomeCenter/PagesHomeCenter.component';
 import { RegistrationComponent } from './pages/registration/registration.component';
 import { ListAppComponent } from './pages/ListApp/ListApp.component';
+import { ListRoleComponent } from './pages/ListRole/ListRole.component';
+import { ListAuthozireComponent } from './pages/ListAuthozire/ListAuthozire.component';
 const DEFAULT_ROUTES: Routes = [
 
   { path: 'warehouse-limit', component: WareHouseLimitComponent, data: { state: 'wh-limit' }, canActivate: [AuthGuard] },
@@ -62,8 +64,10 @@ export const Authozire_LAYOUT: Routes = [
 ]
 
 export const Master_LAYOUT: Routes = [
-  { path: 'role', component: RoleUserComponent, data: { state: 'role', canActivate: [AuthGuard] } },
+  { path: 'user', component: RoleUserComponent, data: { state: 'user', canActivate: [AuthGuard] } },
   { path: 'app', component: ListAppComponent, data: { state: 'app', canActivate: [AuthGuard] } },
+  { path: 'role', component: ListRoleComponent, data: { state: 'app', canActivate: [AuthGuard] } },
+  { path: 'authozire', component: ListAuthozireComponent, data: { state: 'authozire', canActivate: [AuthGuard] } },
   { path: '', component: MasterhomeComponent, data: { state: '', canActivate: [AuthGuard] } },
 ]
 const routes: Routes = [

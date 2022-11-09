@@ -124,6 +124,9 @@ import { ListAppEditComponent } from './method/edit/ListAppEdit/ListAppEdit.comp
 import { ListRoleComponent } from './pages/ListRole/ListRole.component';
 import { ListRoleCreateComponent } from './method/create/ListRoleCreate/ListRoleCreate.component';
 import { ListRoleEditComponent } from './method/edit/ListRoleEdit/ListRoleEdit.component';
+import { ListAuthozireCreateComponentComponent } from './method/create/ListAuthozireCreateComponent/ListAuthozireCreateComponent.component';
+import { ListAuthozireComponent } from './pages/ListAuthozire/ListAuthozire.component';
+import { ListAuthozireEditComponent } from './method/edit/ListAuthozireEdit/ListAuthozireEdit.component';
 const customNotifierOptions: NotifierOptions = {
   position: {
     horizontal: {
@@ -251,7 +254,10 @@ const customNotifierOptions: NotifierOptions = {
     ListAppEditComponent,
     ListRoleComponent,
     ListRoleCreateComponent,
-    ListRoleEditComponent
+    ListRoleEditComponent,
+    ListAuthozireCreateComponentComponent,
+    ListAuthozireComponent,
+    ListAuthozireEditComponent
   ],
   imports: [
     BrowserModule,
