@@ -4,7 +4,7 @@ import { WareHouseBookComponent } from './pages/WareHouseBook/WareHouseBook.comp
 import { WareHouseBenginingComponent } from './pages/WareHouseBengining/WareHouseBengining.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {AutocompleteLibModule} from 'angular-ng-autocomplete';
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -67,12 +67,12 @@ import { WareHouseLimitCreateComponent } from './method/create/WareHouseLimitCre
 import { WareHouseLimitEditComponent } from './method/edit/WareHouseLimitEdit/WareHouseLimitEdit.component';
 import { WareHouseLimitDeleteComponent } from './method/delete/WareHouseLimitDelete/WareHouseLimitDelete.component';
 import { FormSearchBeginningComponent } from './method/search/formSearchBeginning/formSearchBeginning.component';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule, MAT_DATE_LOCALE} from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { FormSearchWareHouseBookComponent } from './method/search/formSearchWareHouseBook/formSearchWareHouseBook.component';
 import { InwardCreateComponent } from './method/create/InwardCreate/InwardCreate.component';
 import { InwarDetailsCreateComponent } from './method/create/InwarDetailsCreate/InwarDetailsCreate.component';
-import {MatChipsModule} from '@angular/material/chips';
+import { MatChipsModule } from '@angular/material/chips';
 import { InwarDetailsEditComponent } from './method/edit/InwarDetailsEdit/InwarDetailsEdit.component';
 import { TagInputModule } from 'ngx-chips';
 import { InwardEditComponent } from './method/edit/InwardEdit/InwardEdit.component';
@@ -93,13 +93,13 @@ import { ReportTotalComponent } from './pages/ReportTotal/ReportTotal.component'
 import { FormSearchReportTotalComponent } from './method/search/FormSearchReportTotal/FormSearchReportTotal.component';
 import { ReportDetalisComponent } from './pages/ReportDetalis/ReportDetalis.component';
 import { FormSearchReportDetailsComponent } from './method/search/FormSearchReportDetails/FormSearchReportDetails.component';
-import {MatSelectModule} from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { LoginComponent } from './pages/login/login.component';
 import { RoleUserComponent } from './pages/RoleUser/RoleUser.component';
 import { CountUpModule } from 'ngx-countup';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DefaultLayoutComponent } from './layout/Default-Layout/Default-Layout.component';
 import { AuthozireComponent } from './layout/Authozire/Authozire.component';
 import { PagesForbieComponent } from './pages/PagesForbie/PagesForbie.component';
@@ -113,9 +113,9 @@ import { PagesHomeCenterComponent } from './pages/PagesHomeCenter/PagesHomeCente
 import { RegistrationComponent } from './pages/registration/registration.component';
 import { SignalRService } from './service/SignalR.service';
 import { HttpCancelService } from './extension/HttpCancel.service';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatSliderModule} from '@angular/material/slider';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SpeedTestModule } from 'ng-speed-test';
 import { SearchwarehouseitemComponent } from './method/search/searchwarehouseitem/searchwarehouseitem.component';
 import { ListAppComponent } from './pages/ListApp/ListApp.component';
@@ -127,6 +127,20 @@ import { ListRoleEditComponent } from './method/edit/ListRoleEdit/ListRoleEdit.c
 import { ListAuthozireCreateComponentComponent } from './method/create/ListAuthozireCreateComponent/ListAuthozireCreateComponent.component';
 import { ListAuthozireComponent } from './pages/ListAuthozire/ListAuthozire.component';
 import { ListAuthozireEditComponent } from './method/edit/ListAuthozireEdit/ListAuthozireEdit.component';
+import { ListRoleShowToAuthozireComponent } from './method/details/ListRoleShowToAuthozire/ListRoleShowToAuthozire.component';
+import { TreeNode, MessageService } from 'primeng/api';
+import {CascadeSelectModule} from 'primeng/cascadeselect';
+import {PaginatorModule} from 'primeng/paginator';
+import { TreeTableModule } from 'primeng/treetable';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { InputTextModule } from 'primeng/inputtext';
+import { ToastModule } from 'primeng/toast';
+import { ContextMenuModule } from 'primeng/contextmenu';
+import { CheckboxModule } from 'primeng/checkbox';
+import { Table, TableModule, TableService } from 'primeng/table';
+import { DialogService } from 'primeng/dynamicdialog';
 const customNotifierOptions: NotifierOptions = {
   position: {
     horizontal: {
@@ -257,10 +271,22 @@ const customNotifierOptions: NotifierOptions = {
     ListRoleEditComponent,
     ListAuthozireCreateComponentComponent,
     ListAuthozireComponent,
-    ListAuthozireEditComponent
+    ListAuthozireEditComponent,
+    ListRoleShowToAuthozireComponent
   ],
   imports: [
+    PaginatorModule,
+    CascadeSelectModule,
+    TableModule,
+    CheckboxModule,
     BrowserModule,
+    TreeTableModule,
+    ToastModule,
+    DialogModule,
+    ButtonModule,
+    MultiSelectModule,
+    InputTextModule,
+    ContextMenuModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MatToolbarModule,
@@ -301,11 +327,11 @@ const customNotifierOptions: NotifierOptions = {
     SpeedTestModule,
     AutocompleteLibModule
   ],
-  providers: [VendorService,WareHouseItemService,{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, {
+  providers: [VendorService, WareHouseItemService, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, {
     provide: HTTP_INTERCEPTORS,
     useClass: ErrorIntercept,
     multi: true
-  },HeaderComponent,SignalRService,HttpCancelService],
+  }, HeaderComponent, SignalRService, HttpCancelService, Table, TableService, MessageService, DialogService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

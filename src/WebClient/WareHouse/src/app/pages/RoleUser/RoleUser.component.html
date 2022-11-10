@@ -97,9 +97,15 @@
           <!-- <button style="margin:5px;" mat-raised-button color="accent" (click)="openDialogCreate()">
             Chi tiết
           </button> -->
-          <button style="margin:5px;" mat-raised-button color="success" (click)="openDialog(element)">
-            <mat-icon class="mat-18">edit</mat-icon>Phân quyền
+          <button style="margin:5px;" mat-raised-button color="success" (click)="openDialogByAuthozire(element)">
+            <mat-icon class="mat-18">edit</mat-icon>Phân quyền theo định danh
           </button>
+          <button style="margin:5px;" mat-raised-button color="success" (click)="openDialog(element)">
+            <mat-icon class="mat-18">edit</mat-icon>Phân quyền theo chức năng (key)
+          </button>
+          <!-- <button style="margin:5px;" mat-raised-button color="success" (click)="openDialog(element)">
+            <mat-icon class="mat-18">edit</mat-icon>Phân quyền
+          </button> -->
           <button style="margin:5px;" mat-raised-button color="warn" (click)="openDialogCreate()">
            Xoá
           </button>

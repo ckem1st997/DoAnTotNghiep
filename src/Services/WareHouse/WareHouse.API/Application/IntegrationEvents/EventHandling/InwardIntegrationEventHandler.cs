@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using KafKa.Net.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;

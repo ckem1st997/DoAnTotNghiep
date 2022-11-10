@@ -1,4 +1,5 @@
 ﻿using AutoMapper.Configuration;
+using Elasticsearch.Net;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -7,6 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Nest;
+using Nest.JsonNetSerializer;
+using Newtonsoft.Json;
+using Serilog;
+using Share.BaseCore.Extensions;
+using Share.BaseCore.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,6 +91,64 @@ namespace Share.BaseCore.Authozire.ConfigureServices
                     .AllowAnyHeader()
                     .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
             }));
+        }     
+        
+        public static void AddApiElastic(this IServiceCollection services, IConfiguration Configuration)
+        {
+
+            services.AddScoped<IElasticClient, ElasticClient>(sp =>
+            {
+                var connectionPool = new SingleNodeConnectionPool(new Uri(Configuration.GetValue<string>("Elastic:Url")));
+                var settings = new ConnectionSettings(connectionPool, (builtInSerializer, connectionSettings) =>
+                    new JsonNetSerializer(builtInSerializer, connectionSettings, () => new JsonSerializerSettings
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+
+                    })).DefaultIndex(Configuration.GetValue<string>("Elastic:Index")).DisableDirectStreaming()
+                    .PrettyJson()
+                    .RequestTimeout(TimeSpan.FromSeconds(2))
+                    .OnRequestCompleted(apiCallDetails =>
+                    {
+                        var list = new List<string>();
+                        // log out the request and the request body, if one exists for the type of request
+                        if (apiCallDetails.RequestBodyInBytes != null)
+                        {
+                            Log.Information(
+                                $"{apiCallDetails.HttpMethod} {apiCallDetails.Uri} " +
+                                $"{Encoding.UTF8.GetString(apiCallDetails.RequestBodyInBytes)}");
+                        }
+                        else
+                        {
+                            Log.Information($"{apiCallDetails.HttpMethod} {apiCallDetails.Uri}");
+                        }
+
+                        // log out the response and the response body, if one exists for the type of response
+                        if (apiCallDetails.ResponseBodyInBytes != null)
+                        {
+                            Log.Information($"Status: {apiCallDetails.HttpStatusCode}" +
+                                        $"{Encoding.UTF8.GetString(apiCallDetails.ResponseBodyInBytes)}");
+                        }
+                        else
+                        {
+                            Log.Information($"Status: {apiCallDetails.HttpStatusCode}");
+                        }
+                    });
+                return new ElasticClient(settings);
+            });
+
         }
+
+
+        public static void AddApiLogging(this IServiceCollection services, IConfiguration configuration)
+        {
+            //services.AddLogging(loggingBuilder =>
+            //{
+            //    var seqServerUrl = configuration["Serilog:SeqServerUrl"];
+
+            //    loggingBuilder.AddSeq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl,
+            //        apiKey: "0QEfAbE4THZTcUu6I7bQ");
+            //});
+        }
+
     }
 }

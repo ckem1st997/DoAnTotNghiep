@@ -1,11 +1,14 @@
 ﻿
 
 
+using Share.BaseCore.EventBus.Abstractions;
+using Share.BaseCore.Kafka;
+
 namespace Master.Controllers
 {
-   // [Authorize(Roles = "User,Admin,Manager")]
-   // [CheckRole(LevelCheck.CREATE)]
-   // [CheckRole(LevelCheck.WAREHOUSE)]
+    // [Authorize(Roles = "User,Admin,Manager")]
+    // [CheckRole(LevelCheck.CREATE)]
+    // [CheckRole(LevelCheck.WAREHOUSE)]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     public class CallKafKaController : ControllerBase

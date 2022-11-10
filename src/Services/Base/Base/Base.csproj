@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\KafKa.Net\KafKa.Net.csproj" />
+    <ProjectReference Include="..\..\..\Share.BaseCore\Share.BaseCore.csproj" />
   </ItemGroup>
 
 </Project>

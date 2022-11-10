@@ -55,7 +55,7 @@ export class ListRoleCreateComponent implements OnInit {
       key:'',
       appId:''
     });
-    this.service.getListTree(this.data).subscribe(x=>this.listDropDown.data=x.data)
+    this.service.getList(this.data).subscribe(x=>this.listDropDown.data=x.data)
 
   }
   get f() { return this.form.controls; }

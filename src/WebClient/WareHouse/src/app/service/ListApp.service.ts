@@ -7,6 +7,7 @@ import { HistoryNoticationDT0 } from '../model/HistoryNoticationDT0';
 import { ResultDataResponse } from '../model/ResultDataResponse';
 import { ResultMessageResponse } from '../model/ResultMessageResponse';
 import { ListApp } from '../model/ListApp';
+import { TreeNode } from 'primeng/api';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,8 @@ export class ListAppService {
 
     );
   }
+
+   
 
   EditIndex(iduser: string | null): Observable<ResultDataResponse<ListApp>> {
     var url = this.baseUrlMaster + `/edit?id=` + iduser;

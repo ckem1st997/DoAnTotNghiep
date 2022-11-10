@@ -1,11 +1,11 @@
 ﻿using Base.Events;
-using KafKa.Net.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Nest;
 using Serilog;
 using Serilog.Context;
 using Share.BaseCore.Cache.CacheName;
+using Share.BaseCore.EventBus.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Authentication;

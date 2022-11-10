@@ -1,11 +1,11 @@
 ﻿using Autofac;
-using KafKa.Net;
-using KafKa.Net.Abstractions;
-using KafKa.Net.Kafka;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Share.BaseCore.EventBus;
+using Share.BaseCore.EventBus.Abstractions;
+using Share.BaseCore.Kafka;
 using System;
 using System.Collections.Generic;
 using System.Linq;

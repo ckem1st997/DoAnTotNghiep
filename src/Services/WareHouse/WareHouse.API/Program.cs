@@ -24,88 +24,40 @@ namespace WareHouse.API
     {
         public static void Main(string[] args)
         {
-            var configuration = GetConfiguration();
+            var configuration = HostAPI.GetConfiguration();
 
-            Log.Logger = CreateSerilogLogger(configuration);
-            Log.Information("Starting up");
-            Log.Information(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
-            CreateHostBuilder(args).Build().Run();
-            WebApplication.CreateBuilder(new WebApplicationOptions
-            {
-                EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
-            });
+            Log.Logger = HostAPI.CreateSerilogLogger(configuration, "WareHouse");
+            HostAPI.LogStartUp<Startup>(args, 5005, 5006);
         }
 
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-                 Host.CreateDefaultBuilder(args)
-            //.UseSerilog()
-                         .ConfigureLogging(logging =>
-                         {
-                             logging.AddFilter("Grpc", LogLevel.Debug);
-                         })
-                  .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-                     .ConfigureWebHostDefaults(webBuilder =>
-                     {
-                         //webBuilder.ConfigureKestrel(options =>
-                         //{
-                         //    options.ConfigureEndpointDefaults(defaults =>defaults.Protocols = HttpProtocols.Http2);
-                         //});
-                         //   if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                         //   {
-                         webBuilder.ConfigureKestrel(options =>
-                         {
-                             options.Listen(IPAddress.Any, 5005, listenOptions =>
-                                 {
-                                     listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
-                                 });
+        //public static IHostBuilder CreateHostBuilder(string[] args) =>
+        //         Host.CreateDefaultBuilder(args)
+        //                 .ConfigureLogging(logging =>
+        //                 {
+        //                     logging.AddFilter("Grpc", LogLevel.Debug);
+        //                 })
+        //          .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+        //             .ConfigureWebHostDefaults(webBuilder =>
+        //             {
+        //                 webBuilder.ConfigureKestrel(options =>
+        //                 {
+        //                     options.Listen(IPAddress.Any, 5005, listenOptions =>
+        //                         {
+        //                             listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+        //                         });
 
-                             options.Listen(IPAddress.Any, 5006, listenOptions =>
-                             {
-                                 listenOptions.Protocols = HttpProtocols.Http2;
-                             });
-                         });
-                         //     }
-                         webBuilder.UseStartup<Startup>();
-                     });
+        //                     options.Listen(IPAddress.Any, 5006, listenOptions =>
+        //                     {
+        //                         listenOptions.Protocols = HttpProtocols.Http2;
+        //                     });
+        //                 });
+        //                 //     }
+        //                 webBuilder.UseStartup<Startup>();
+        //             });
 
 
-        static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
-        {
 
-            var seqServerUrl = configuration["Serilog:SeqServerUrl"];
-            var logstashUrl = configuration["Serilog:LogstashgUrl"];
-            Console.WriteLine(seqServerUrl + " " + logstashUrl);
-            return new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .Enrich.WithProperty("ApplicationContext", "WareHouse")
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl, apiKey: "0QEfAbE4THZTcUu6I7bQ")
-               //.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl))
-               //{
-               //    ModifyConnectionSettings = x => x.BasicAuthentication("logstash_internal", "changeme"),
-               //    AutoRegisterTemplate = true,
-               //    IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name.ToLower()}-{DateTime.UtcNow:yyyy-MM}"
-               //})
-               // cần phải connect đến logstash trước khi create index to kibana
-               .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl)
-               .ReadFrom.Configuration(configuration)
-                .CreateLogger();
-        }
-
-        static IConfiguration GetConfiguration()
-        {
-            var appjon = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals(Environments.Production) ? "appsettings.Production.json" : "appsettings.Development.json";
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-          .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
-                .AddEnvironmentVariables();
-
-            var config = builder.Build();
-            return builder.Build();
-        }
     }
 }
 //input

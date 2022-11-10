@@ -1,8 +1,6 @@
 ﻿using Base.Events;
 using Share.BaseCore.Extensions;
 using Infrastructure;
-using KafKa.Net.Abstractions;
-using KafKa.Net.Events;
 using Master.Service;
 using Master.SignalRHubs;
 using Microsoft.AspNetCore.SignalR;
@@ -14,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Share.BaseCore.EventBus.Abstractions;
 
 namespace Master.IntegrationEvents
 {

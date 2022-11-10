@@ -15,5 +15,4 @@ global using Grpc.Core;
 global using GrpcGetDataToMaster;
 global using Microsoft.AspNetCore.Authorization;
 global using KafKa.Net;
-global using KafKa.Net.Abstractions;
 global using Microsoft.Extensions.Logging;

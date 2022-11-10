@@ -10,6 +10,7 @@ import { SpeedTestService } from 'ng-speed-test';
 import isOnline from 'is-online';
 import { ActivationEnd, Router } from '@angular/router';
 import { HttpCancelService } from './extension/HttpCancel.service';
+import { PrimeNGConfig } from 'primeng/api';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -38,7 +39,8 @@ export class AppComponent {
     private auth: AuthenticationService,
     private speedTestService: SpeedTestService,
     private router: Router,
-    private httpCancelService: HttpCancelService
+    private httpCancelService: HttpCancelService,
+    private primengConfig: PrimeNGConfig
   ) {
   }
   @HostListener('window:resize', ['$event'])
@@ -55,6 +57,7 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    this.primengConfig.ripple = true;
     this.router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {
         this.httpCancelService.cancelPendingRequests()

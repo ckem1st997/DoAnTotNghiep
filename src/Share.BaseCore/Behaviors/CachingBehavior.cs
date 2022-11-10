@@ -36,7 +36,9 @@ namespace Share.BaseCore.Behaviors
             TResponse response;
             // nếu không cache thì sẽ chạy đến request tiếp theo, ở đây là Handle Mediatr
             // nếu không connect được thì lấy data ở dưới db
-            if (request.BypassCache || !_cacheExtension.IsConnected)
+            if (request.BypassCache)
+                return await next();
+            if (!_cacheExtension.IsConnected)
             {
                 Log.Information("Redis not connected !");
                 return await next();

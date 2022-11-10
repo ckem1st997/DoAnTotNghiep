@@ -20,13 +20,13 @@ using WareHouse.API.Application.Querie.CheckCode;
 using WareHouse.API.Application.Queries.GetFisrt;
 using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.SignalRService;
-using KafKa.Net.Abstractions;
 using Serilog.Context;
 using Base.Events;
 using Microsoft.Extensions.Logging;
 using WareHouse.API.Infrastructure.ElasticSearch;
 using Serilog;
 using Share.BaseCore.Cache.CacheName;
+using Share.BaseCore.EventBus.Abstractions;
 
 namespace WareHouse.API.Controllers
 {

@@ -11,13 +11,12 @@ namespace Infrastructure
 {
     public partial class MasterdataContext : DbContext
     {
-        public MasterdataContext()
-        {
-        }
 
         public MasterdataContext(DbContextOptions<MasterdataContext> options)
             : base(options)
         {
+            System.Diagnostics.Debug.WriteLine("MasterdataContext::ctor ->" + this.GetHashCode());
+
         }
 
         public virtual DbSet<HistoryNotication> HistoryNotications { get; set; }
@@ -31,14 +30,14 @@ namespace Infrastructure
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // nếu không setup trong startup
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Data Source=localhost,5433;Initial Catalog=MasterData;Persist Security Info=True;User ID=sa;Password=Aa!012345679",
-                     sqlServerOptionsAction: sqlOptions =>
-                     {
-                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                     });
-            }
+            //if (!optionsBuilder.IsConfigured)
+            //{
+            //    optionsBuilder.UseSqlServer("Data Source=localhost,5433;Initial Catalog=MasterData;Persist Security Info=True;User ID=sa;Password=Aa!012345679",
+            //         sqlServerOptionsAction: sqlOptions =>
+            //         {
+            //             sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+            //         });
+            //}
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

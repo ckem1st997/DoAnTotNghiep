@@ -1,0 +1,63 @@
+<div class=" ">
+  <!-- <p-multiSelect [options]="foods" defaultLabel="Select a App" optionValue="id" (selectionChange)='selectEvent($event)'
+    [(ngModel)]="selectedValue" optionLabel="name"></p-multiSelect> -->
+  <p-cascadeSelect [(ngModel)]="selectedValue" [options]="foods" (onChange)='selectEvent($event)' optionLabel="name"
+    optionGroupLabel="name" [optionGroupChildren]="['states', 'cities']" placeholder="Select a App"
+    [style]="{'minWidth': '14rem'}"></p-cascadeSelect>
+  <button style="margin:5px;" mat-raised-button color="success" (click)="openDialogAuthozire()">
+    <mat-icon class="mat-18">add</mat-icon>Phân quyền
+  </button>
+</div>
+
+<div id="viewcheck" [hidden]="!checkSizeWindows">
+
+  <p-treeTable  (onPage)="setMyPagination($event)" [totalRecords]="totalRows" [first]="first" scrollHeight="50vh" [scrollable]="true" [value]="files5"
+    [columns]="cols" selectionMode="checkbox" [(selection)]="selectedNodes3" [paginator]="true" [rows]="10"
+    [resizableColumns]="true" styleClass="p-datatable-gridlines p-datatable-striped"
+    [tableStyle]="{'min-width': '50rem'}"
+    currentPageReportTemplate="Hiển thị từ {first} tới {last} của {totalRecords} kết quả"
+    [rowsPerPageOptions]="[10,25,50]" [showCurrentPageReport]="true">
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <p-treeTableHeaderCheckbox></p-treeTableHeaderCheckbox>
+        <span class="ml-2">Chọn tất cả</span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns">
+          {{col.header}}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+      <tr>
+        <td>
+          <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+          <p-treeTableCheckbox [value]="rowNode"></p-treeTableCheckbox>
+        </td>
+        <td>{{rowData.name}}</td>
+        <td>{{rowData.key}}</td>
+        <td>
+          <p-checkbox [(ngModel)]="rowData.isAPI" [binary]="true"></p-checkbox>
+        </td>
+        <td>
+          <p-checkbox [(ngModel)]="rowData.inActive" [binary]="true"></p-checkbox>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="mb-3">
+        <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [disabled]="isFirstPage()"
+          styleClass="p-button-text"></p-button>
+        <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
+        <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [disabled]="isLastPage()"
+          styleClass="p-button-text"></p-button>
+      </div>
+    </ng-template>
+  </p-treeTable>
+</div>
+
+<div [hidden]="checkSizeWindows">
+  Màn hình của bạn chưa đủ yêu cầu !
+</div>

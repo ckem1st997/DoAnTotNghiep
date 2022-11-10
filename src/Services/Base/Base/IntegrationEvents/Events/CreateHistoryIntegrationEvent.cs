@@ -1,4 +1,5 @@
-﻿using KafKa.Net.Events;
+﻿
+using Share.BaseCore.EventBus.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;

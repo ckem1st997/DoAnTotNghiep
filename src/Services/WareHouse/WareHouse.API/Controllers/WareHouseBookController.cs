@@ -25,12 +25,12 @@ using WareHouse.API.Application.Querie.CheckCode;
 using Microsoft.AspNetCore.Authorization;
 using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Extensions;
-using KafKa.Net.Abstractions;
 using Microsoft.Extensions.Logging;
 using Base.Events;
 using Serilog.Context;
 using WareHouse.API.Infrastructure.ElasticSearch;
 using Share.BaseCore.Cache.CacheName;
+using Share.BaseCore.EventBus.Abstractions;
 
 namespace WareHouse.API.Controllers
 {

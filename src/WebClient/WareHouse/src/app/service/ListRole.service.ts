@@ -1,6 +1,7 @@
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
+import { TreeNode } from 'primeng/api';
 import { Observable, retry, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HistoryNoticationDT0 } from '../model/HistoryNoticationDT0';
@@ -31,7 +32,14 @@ export class ListRoleService {
 
     );
   }
+ //get list user master
+ getListTreeTable(id:string): Observable<ResultMessageResponse<TreeNode>> {
+  var url = this.baseUrlMaster + `/get-list?appId=`+id;
+  return this.http.get<ResultMessageResponse<TreeNode>>(url, this.httpOptions).pipe(
+    retry(1), // retry a failed request up to 3 times
 
+  );
+}
   getListTree(id:string): Observable<ResultMessageResponse<ListRole>> {
     var url = this.baseUrlMaster + `/get-list-tree?appId=`+id;
     return this.http.get<ResultMessageResponse<ListRole>>(url, this.httpOptions).pipe(

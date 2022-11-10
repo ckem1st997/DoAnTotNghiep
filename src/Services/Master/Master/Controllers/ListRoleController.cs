@@ -1,5 +1,4 @@
-﻿using Abp.Domain.Repositories;
-using Dapper;
+﻿using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Share.BaseCore;
 using System.Data;
@@ -27,10 +26,14 @@ namespace Master.Controllers
             var list = _context.ListRoles.Where(x => x.Id != null && x.AppId.Equals(appId));
             //  var res = GetWareHouseTreeModel(list);
             var res1 = await GetWareHouseTree(2, list);
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    res1.AddRange(res1);
+            //}
             return Ok(new ResultMessageResponse()
             {
                 data = res1,
-                totalCount = list.Count()
+                totalCount = 10
             });
         }
 
@@ -43,21 +46,26 @@ namespace Master.Controllers
         {
             var list = _context.ListRoles.Where(x => x.Id != null && x.AppId.Equals(appId));
             var res = GetWareHouseTreeModel(list);
+            res.Add(new ListRole()
+            {
+                Id="",
+                Name="Không có !"
+            });
             
             return Ok(new ResultMessageResponse()
             {
                 data = res,
-                totalCount = list.Count()
+                totalCount =10
             });
         }
 
-        class ListRoleTreeModel :ListRole
+        class ListRoleTreeModel
         {
             public ListRoleTreeModel()
             {
                 children = new List<ListRoleTreeModel>();
             }
-
+            public ListRole Data { get; set; }
             public new IList<ListRoleTreeModel> children { get; set; }
         }
         async Task<IList<ListRoleTreeModel>> GetWareHouseTree(int? expandLevel, IEnumerable<ListRole> ListRoles = null)
@@ -73,20 +81,23 @@ namespace Master.Controllers
                 var tem = new ListRoleTreeModel
                 {
                     children = new List<ListRoleTreeModel>(),
-                    Id = s.Id,
-                    Description = s.Description,
-                    ParentId = s.ParentId,
-                    Name = s.Name,
-                    IsAPI= s.IsAPI,
-                    Key = s.Key,    
-                    InActive= s.InActive,
+                    Data = new ListRole()
+                    {
+                        Id = s.Id,
+                        Description = s.Description,
+                        ParentId = s.ParentId,
+                        Name = s.Name,
+                        IsAPI = s.IsAPI,
+                        Key = s.Key,
+                        InActive = s.InActive,
+                    }
                 };
                 convertToRoot.Add(tem);
             }
 
             var roots = convertToRoot
-                .Where(w => string.IsNullOrEmpty(w.ParentId))
-                .OrderBy(o => o.Name);
+                .Where(w => string.IsNullOrEmpty(w.Data.ParentId))
+                .OrderBy(o => o.Data.Name);
 
             foreach (var root in roots)
             {
@@ -101,20 +112,20 @@ namespace Master.Controllers
             while (qq.Any())
             {
                 var cur = qq.Dequeue();
-                if (lstCheck.All(a => a.Id != cur.Id))
+                if (lstCheck.All(a => a.Data.Id != cur.Data.Id))
                     result.Add(cur);
 
                 var childs = convertToRoot
-                    .Where(w => !string.IsNullOrEmpty(w.ParentId) && w.ParentId == cur.Id)
-                    .OrderBy(o => o.Name);
+                    .Where(w => !string.IsNullOrEmpty(w.Data.ParentId) && w.Data.ParentId == cur.Data.Id)
+                    .OrderBy(o => o.Data.Name);
 
                 if (childs != null && !childs.Any())
                     continue;
 
-               // var childLevel = cur.level + 1;
+                // var childLevel = cur.level + 1;
                 foreach (var child in childs)
                 {
-                    if (lstCheck.Any(a => a.Id == child.Id))
+                    if (lstCheck.Any(a => a.Data.Id == child.Data.Id))
                         continue;
 
                     //child.level = childLevel;
@@ -128,6 +139,86 @@ namespace Master.Controllers
 
             return result;
         }
+
+
+
+
+        //class ListRoleTreeModel :ListRole
+        //{
+        //    public ListRoleTreeModel()
+        //    {
+        //        children = new List<ListRoleTreeModel>();
+        //    }
+        //    public new IList<ListRoleTreeModel> children { get; set; }
+        //}
+        //async Task<IList<ListRoleTreeModel>> GetWareHouseTree(int? expandLevel, IEnumerable<ListRole> ListRoles = null)
+        //{
+        //    expandLevel ??= 1;
+        //    var qq = new Queue<ListRoleTreeModel>();
+        //    var lstCheck = new List<ListRoleTreeModel>();
+        //    var result = new List<ListRoleTreeModel>();
+        //    var convertToRoot = new List<ListRoleTreeModel>();
+        //    var wareHouseModels = ListRoles;
+        //    foreach (var s in wareHouseModels)
+        //    {
+        //        var tem = new ListRoleTreeModel
+        //        {
+        //            children = new List<ListRoleTreeModel>(),
+        //            Id = s.Id,
+        //            Description = s.Description,
+        //            ParentId = s.ParentId,
+        //            Name = s.Name,
+        //            IsAPI= s.IsAPI,
+        //            Key = s.Key,    
+        //            InActive= s.InActive,
+        //        };
+        //        convertToRoot.Add(tem);
+        //    }
+
+        //    var roots = convertToRoot
+        //        .Where(w => string.IsNullOrEmpty(w.ParentId))
+        //        .OrderBy(o => o.Name);
+
+        //    foreach (var root in roots)
+        //    {
+        //        //root.level = 1;
+        //        //root.expanded = root.level <= expandLevel.Value;
+        //        //root.folder = true;
+        //        qq.Enqueue(root);
+        //        lstCheck.Add(root);
+        //        result.Add(root);
+        //    }
+
+        //    while (qq.Any())
+        //    {
+        //        var cur = qq.Dequeue();
+        //        if (lstCheck.All(a => a.Id != cur.Id))
+        //            result.Add(cur);
+
+        //        var childs = convertToRoot
+        //            .Where(w => !string.IsNullOrEmpty(w.ParentId) && w.ParentId == cur.Id)
+        //            .OrderBy(o => o.Name);
+
+        //        if (childs != null && !childs.Any())
+        //            continue;
+
+        //       // var childLevel = cur.level + 1;
+        //        foreach (var child in childs)
+        //        {
+        //            if (lstCheck.Any(a => a.Id == child.Id))
+        //                continue;
+
+        //            //child.level = childLevel;
+        //            //child.expanded = !expandLevel.HasValue || child.level <= expandLevel.Value;
+
+        //            qq.Enqueue(child);
+        //            lstCheck.Add(child);
+        //            cur.children.Add(child);
+        //        }
+        //    }
+
+        //    return result;
+        //}
 
 
 

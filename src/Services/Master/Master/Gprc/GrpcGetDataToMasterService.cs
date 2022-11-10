@@ -26,7 +26,7 @@ namespace GrpcGetDataToMaster
 
 
 
-        public GrpcGetDataToMasterService(IHubContext<ConnectRealTimeHub> hubContext,IUserService userService, MasterdataContext masterdataContext, IDapper mediat, ILogger<GrpcGetDataToMasterService> logger)
+        public GrpcGetDataToMasterService(IHubContext<ConnectRealTimeHub> hubContext,IUserService userService, MasterdataContext masterdataContext,ILogger<GrpcGetDataToMasterService> logger)
         {
             _userService = userService;
             _logger = logger;

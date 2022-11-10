@@ -17,14 +17,14 @@ namespace Share.BaseCore.Behaviors
     public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
         private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
-       // private readonly IUserSevice _userSevice;
+        // private readonly IUserSevice _userSevice;
         private readonly DbContext _dbContext;
 
 
-        public LoggingBehavior(DbContext context,ILogger<LoggingBehavior<TRequest, TResponse>> logger)
+        public LoggingBehavior(DbContext context, ILogger<LoggingBehavior<TRequest, TResponse>> logger)
         {
             _logger = logger;
-           // _userSevice = userSevice;
+            // _userSevice = userSevice;
             _dbContext = context;
         }
 

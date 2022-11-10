@@ -42,6 +42,8 @@ using Share.BaseCore.Behaviors.ConfigureServices;
 using WareHouse.API.Infrastructure;
 using Share.BaseCore;
 using Share.BaseCore.Authozire.ConfigureServices;
+using Share.Grpc;
+using Share.BaseCore.Kafka;
 
 namespace WareHouse.API
 {
@@ -65,73 +67,10 @@ namespace WareHouse.API
             services.AddValidator();
             services.AddBehavior();
             services.AddCache(Configuration);
-            services.AddLogging(loggingBuilder =>
-            {
-                //   loggingBuilder.UseSerilog(Configuration);
-                var seqServerUrl = Configuration["Serilog:SeqServerUrl"];
-
-                loggingBuilder.AddSeq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl,
-                    apiKey: "0QEfAbE4THZTcUu6I7bQ");
-            });
-
-            services.AddTransient<GrpcExceptionInterceptor>();
-            services.AddGrpc(options => { options.EnableDetailedErrors = true; });
             services.AddSingleton<IKafKaConnection, KafKaConnection>();
             services.AddEventBus(Configuration);
-
-            services.AddScoped<IElasticClient, ElasticClient>(sp =>
-            {
-                var connectionPool = new SingleNodeConnectionPool(new Uri(Configuration.GetValue<string>("Elastic:Url")));
-                var settings = new ConnectionSettings(connectionPool, (builtInSerializer, connectionSettings) =>
-                    new JsonNetSerializer(builtInSerializer, connectionSettings, () => new JsonSerializerSettings
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-
-                    })).DefaultIndex(Configuration.GetValue<string>("Elastic:Index")).DisableDirectStreaming()
-                    .PrettyJson()
-                    .RequestTimeout(TimeSpan.FromSeconds(2))
-                    .OnRequestCompleted(apiCallDetails =>
-                {
-                    var list = new List<string>();
-                    // log out the request and the request body, if one exists for the type of request
-                    if (apiCallDetails.RequestBodyInBytes != null)
-                    {
-                        Log.Information(
-                            $"{apiCallDetails.HttpMethod} {apiCallDetails.Uri} " +
-                            $"{Encoding.UTF8.GetString(apiCallDetails.RequestBodyInBytes)}");
-                    }
-                    else
-                    {
-                        Log.Information($"{apiCallDetails.HttpMethod} {apiCallDetails.Uri}");
-                    }
-
-                    // log out the response and the response body, if one exists for the type of response
-                    if (apiCallDetails.ResponseBodyInBytes != null)
-                    {
-                        Log.Information($"Status: {apiCallDetails.HttpStatusCode}" +
-                                    $"{Encoding.UTF8.GetString(apiCallDetails.ResponseBodyInBytes)}");
-                    }
-                    else
-                    {
-                        Log.Information($"Status: {apiCallDetails.HttpStatusCode}");
-                    }
-                });
-                return new ElasticClient(settings);
-            });
-
-
-            AppContext.SetSwitch(
-  "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-            var httpHandler = new HttpClientHandler();
-            // Return `true` to allow certificates that are untrusted/invalid
-            httpHandler.ServerCertificateCustomValidationCallback =
-                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-            services.AddGrpcClient<GrpcGetData.GrpcGetDataClient>(o =>
-                {
-                    o.Address = new Uri(Configuration.GetValue<string>("Grpc:Port"));
-                }).AddInterceptor<GrpcExceptionInterceptor>(InterceptorScope.Client)
-                .ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(httpHandler));
-            // Adding Authentication  
+            services.AddApiElastic(Configuration);
+            services.AddApiGrpc<GrpcGetData.GrpcGetDataClient>(Configuration);
             services.AddApiAuthentication();
             services.AddApiCors();
 
@@ -170,7 +109,7 @@ namespace WareHouse.API
                 endpoints.MapGrpcService<GrpcGetDataWareHouseService>().EnableGrpcWeb();
                 endpoints.MapControllers();
             });
-            app.ConfigureEventBus();
+            app.ConfigureEventBusKafka();
             app.ConfigureRequestPipeline();
 
         }

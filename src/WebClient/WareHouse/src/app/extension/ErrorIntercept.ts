@@ -42,23 +42,23 @@ export class ErrorIntercept implements HttpInterceptor {
                 setHeaders: { Authorization: `Bearer ${this.service.userValue.token}` }
             });
         // get timestamp
-        const startTimestamp = new Date().getTime();
+        // const startTimestamp = new Date().getTime();
 
-        const newReq = request.clone({
-            headers: request.headers.set('startTimestamp', startTimestamp.toString())
-        });
+        // const newReq = request.clone({
+        //     headers: request.headers.set('startTimestamp', startTimestamp.toString())
+        // });
         return next.handle(request)
             .pipe(
                 tap(event => {
-                    // another timestamp
-                    const endTimestamp: number = new Date().getTime();
-                    const startTimestamp2: number = Number(
-                        request.headers.get('startTimestamp')
-                    );
+                    // // another timestamp
+                    // const endTimestamp: number = new Date().getTime();
+                    // const startTimestamp2: number = Number(
+                    //     request.headers.get('startTimestamp')
+                    // );
 
-                    // get the difference
-                    const responseTimes = endTimestamp - startTimestamp2;
-                    console.log("responseTimes:"+responseTimes);
+                    // // get the difference
+                    // const responseTimes = endTimestamp - startTimestamp2;
+                    // console.log("responseTimes:"+responseTimes);
 
                 }),
                 retry(1),
@@ -93,7 +93,7 @@ export class ErrorIntercept implements HttpInterceptor {
                     return throwError(error);
                 }),
                 finalize(() => {
-                    this.logRequestTime(begin, request.url, request.method);
+                    // this.logRequestTime(begin, request.url, request.method);
                 })
             ).pipe(map<HttpEvent<any>, any>((evt: HttpEvent<any>) => {
 
@@ -113,17 +113,17 @@ export class ErrorIntercept implements HttpInterceptor {
             }))
             .pipe(takeUntil(this.httpCancelService.onCancelPendingRequests()));
 
-        
-    }
-    private logRequestTime(startTime: number, url: string, method: string) {
-        const requestDuration = `${performance.now() - startTime}`;
-        console.log(`HTTP ${method} ${url} - ${requestDuration} milliseconds`);
-       // this.notife.notify('info', `${requestDuration} milliseconds`);
-        // this.notife.show({
-        //     type: 'success',
-        //     message: `${requestDuration} milliseconds`,
-        //     id: requestDuration, // Again, this is optional
-        //   });
 
     }
+    // private logRequestTime(startTime: number, url: string, method: string) {
+    //     const requestDuration = `${performance.now() - startTime}`;
+    //     console.log(`HTTP ${method} ${url} - ${requestDuration} milliseconds`);
+    //    // this.notife.notify('info', `${requestDuration} milliseconds`);
+    //     // this.notife.show({
+    //     //     type: 'success',
+    //     //     message: `${requestDuration} milliseconds`,
+    //     //     id: requestDuration, // Again, this is optional
+    //     //   });
+
+    // }
 }

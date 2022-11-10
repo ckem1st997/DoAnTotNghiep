@@ -32,6 +32,7 @@ import { ListRole } from 'src/app/model/ListApp';
 import { ListApp } from 'src/app/model/ListApp';
 import { TreeView } from 'src/app/model/TreeView';
 import { ListAppService } from 'src/app/service/ListApp.service';
+import { TreeNode } from 'primeng/api';
 
 
 interface ExampleFlatNode {
@@ -51,6 +52,10 @@ interface ExampleFlatNode {
   styleUrls: ['./ListRole.component.scss']
 })
 export class ListRoleComponent implements OnInit {
+  files5: TreeNode[] = [];
+  selectedNodes3: TreeNode[] = [];
+
+  cols: any[] = [];
   ///
   selectedValue: string = '';
   selectedCar: string = '';
@@ -136,9 +141,17 @@ export class ListRoleComponent implements OnInit {
   ngOnInit() {
     this.serviceapp.getList().subscribe(x => this.foods = x.data);
     this.GetData();
-    this.getScreenWidth = window.innerWidth;
-    this.getScreenHeight = window.innerHeight;
-    this.selection.clear();
+    this.cols = [
+      { field: 'name', header: 'Name' },
+      { field: 'key', header: 'Key' },
+      { field: 'description', header: 'Mô tả' },
+      { field: 'isAPI', header: 'API' },
+      { field: 'inActive', header: 'Hoạt động' }
+    ];
+
+    // this.getScreenWidth = window.innerWidth;
+    // this.getScreenHeight = window.innerHeight;
+    // this.selection.clear();
   }
 
   ngAfterViewInit() {
@@ -164,12 +177,9 @@ export class ListRoleComponent implements OnInit {
 
   GetData() {
     if (this.selectedValue != undefined && this.selectedValue.length > 0)
-      this.service.getList(this.selectedValue).subscribe(list => {
-        this.dataSourceRole.data = list.data; setTimeout(() => {
-          this.paginator.pageIndex = this.currentPage;
-          this.paginator.length = list.totalCount;
-        });
-      });
+    this.service.getListTreeTable(this.selectedValue).subscribe(list => {
+      this.files5 = list.data;
+    });
     this.listDelete = [];
     this.selection.clear();
   }
@@ -189,7 +199,6 @@ export class ListRoleComponent implements OnInit {
     this.GetData();
   }
   openDialog(model: ListRole): void {
-    console.log(model)
     this.service.EditIndex(model.id).subscribe(x => {
       if (x.success) {
         const dialogRef = this.dialog.open(ListRoleEditComponent, {

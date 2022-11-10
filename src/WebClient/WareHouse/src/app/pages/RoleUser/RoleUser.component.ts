@@ -12,6 +12,7 @@ import { NotifierService } from 'angular-notifier';
 import { BehaviorSubject } from 'rxjs';
 import { UnitCreateComponent } from 'src/app/method/create/UnitCreate/UnitCreate.component';
 import { UnitDeleteComponent } from 'src/app/method/delete/UnitDelete/UnitDelete.component';
+import { ListRoleShowToAuthozireComponent } from 'src/app/method/details/ListRoleShowToAuthozire/ListRoleShowToAuthozire.component';
 import { UnitDetailsComponent } from 'src/app/method/details/UnitDetails/UnitDetails.component';
 import { RoleEditComponent } from 'src/app/method/edit/RoleEdit/RoleEdit.component';
 import { UnitEditComponent } from 'src/app/method/edit/UnitEdit/UnitEdit.component';
@@ -25,7 +26,9 @@ import { WareHouseSearchModel } from 'src/app/model/WareHouseSearchModel';
 import { AuthozireService } from 'src/app/service/Authozire.service';
 import { UnitService } from 'src/app/service/Unit.service';
 import { WarehouseService } from 'src/app/service/warehouse.service';
-
+import { ListRoleComponent } from '../ListRole/ListRole.component';
+import { DialogService } from 'primeng/dynamicdialog';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-RoleUser',
@@ -79,7 +82,7 @@ export class RoleUserComponent implements OnInit {
   @ViewChild(MatSort)
   sort!: MatSort;
 
-  constructor(private service: AuthozireService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService, private serviceW: WarehouseService) {
+  constructor(private messageService: MessageService, public dialogService: DialogService, private service: AuthozireService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService, private serviceW: WarehouseService) {
 
     this.notifier = notifierService;
 
@@ -160,6 +163,38 @@ export class RoleUserComponent implements OnInit {
     });
 
   }
+
+  openDialogByAuthozire(model: UserMaster): void {
+    this.service.EditIndex(model.id).subscribe(x => {
+      if (x.success) {
+        const dialogRef = this.dialogService.open(ListRoleShowToAuthozireComponent, {
+          width: '90%',
+          data: {
+            id: model.id,
+            type: 1
+          },
+        });
+        dialogRef.onClose.subscribe((result) => {
+         // if (result) {
+            this.messageService.add({ severity: 'success', summary: 'Thông báo', detail: 'Phân quyền thành công !' });
+        //  }
+        });
+        // dialogRef.afterClosed().subscribe(result => {
+        //   var res = result;
+        //   if (res) {
+        //     this.notifier.notify('success', 'Phân quyền thành công !');
+        //     this.GetData();
+        //   }
+        // });
+      }
+      //  else
+      // this.notifier.notify('warn', x.message);
+
+
+    });
+
+  }
+
   openDialogDetals(model: UnitDTO): void {
     var val = document.getElementById("searchInput") as HTMLInputElement;
 

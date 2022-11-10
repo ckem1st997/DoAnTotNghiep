@@ -1,11 +1,11 @@
 ﻿using Base.Events;
-using KafKa.Net.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Context;
 using Share.BaseCore.Cache.CacheName;
+using Share.BaseCore.EventBus.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
