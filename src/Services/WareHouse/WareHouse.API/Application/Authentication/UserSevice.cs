@@ -1,5 +1,6 @@
 ﻿using Base.Events;
 using GrpcGetDataToMaster;
+//using GrpcGetDataToMaster;
 using Serilog;
 using System;
 using System.Threading.Tasks;
@@ -7,6 +8,9 @@ using WareHouse.API.Application.Model;
 
 namespace WareHouse.API.Application.Authentication
 {
+    // thử xoá connect service grpc, rồi import sharegrpcfull và chạy thử
+    // nếu được thì sẽ có một nơi chứa cả file server và client
+    // các service muốn dùng dạng nào thì có thể import vô mà cấu hình
     public class UserSevice : IUserSevice
     {
         private readonly GrpcGetData.GrpcGetDataClient _client;
@@ -14,7 +18,7 @@ namespace WareHouse.API.Application.Authentication
 
         public UserSevice(GrpcGetData.GrpcGetDataClient client)
         {
-            _client = client?? throw new ArgumentNullException(nameof(client));
+            _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
         public async Task<bool> ActiveHistory(string UserName)

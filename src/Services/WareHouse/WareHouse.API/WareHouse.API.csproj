@@ -40,6 +40,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\Share.Grpc\Share.Grpc.csproj" />
+		<!--<ProjectReference Include="..\..\..\ShareModelFull\ShareModelFull.csproj" />-->
 		<ProjectReference Include="..\..\Base\Base\Base.csproj" />
 		<ProjectReference Include="..\..\Master\Infrastructure\Infrastructure.csproj" />
 		<ProjectReference Include="..\WareHouse.Domain\WareHouse.Domain.csproj" />

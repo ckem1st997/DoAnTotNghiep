@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\Share.Grpc\Proto\getdata.proto" GrpcServices="Both">
+      <Link>Protos\getdata.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\Share.Grpc\Proto\getdatawh.proto" GrpcServices="Both">
+      <Link>Protos\getdatawh.proto</Link>
+    </Protobuf>
+  </ItemGroup>
+
+</Project>
