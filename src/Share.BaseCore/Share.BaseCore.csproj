@@ -5,6 +5,12 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="EasyCaching.Bus.Redis" Version="1.7.0" />
+		<PackageReference Include="EasyCaching.Core" Version="1.7.0" />
+		<PackageReference Include="EasyCaching.HybridCache" Version="1.7.0" />
+		<PackageReference Include="EasyCaching.InMemory" Version="1.7.0" />
+		<PackageReference Include="EasyCaching.Redis" Version="1.7.0" />
+		<PackageReference Include="EasyCaching.Serialization.Json" Version="1.7.0" />
 		<PackageReference Include="NEST" Version="7.17.4" />
 		<PackageReference Include="NEST.JsonNetSerializer" Version="7.17.4" />
 		<PackageReference Include="Elastic.Apm" Version="1.16.1" />
