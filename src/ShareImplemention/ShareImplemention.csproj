@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Share.BaseCore\Share.BaseCore.csproj" />
     <ProjectReference Include="..\ShareModelFull\ShareModelFull.csproj" />
+    <ProjectReference Include="..\ShareModels\ShareModels.csproj" />
   </ItemGroup>
 
 </Project>
