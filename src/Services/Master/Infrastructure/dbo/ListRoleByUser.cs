@@ -10,6 +10,7 @@ namespace Infrastructure
     {
         public string ListRoleId { get; set; }
         public string UserId { get; set; }
+        public string AppId { get; set; }
 
     }
 }

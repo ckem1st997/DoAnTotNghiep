@@ -133,7 +133,7 @@ namespace Master.Controllers
         [Route("edit-update")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Edit(IEnumerable<string> ids, string id)
+        public async Task<IActionResult> Edit(IEnumerable<string> ids, string id,string appId)
         {
             if (ids.Count() < 1 || id.IsNullOrEmpty())
             {
@@ -143,8 +143,9 @@ namespace Master.Controllers
                     data = "Không nhận được dữ liệu"
                 });
             }
+            // check appId
 
-            var listdelete = await _context.ListRoleByUsers.AsNoTracking().Where(x => x.UserId.Equals(id)).ToListAsync();
+            var listdelete = await _context.ListRoleByUsers.AsNoTracking().Where(x => x.UserId.Equals(id) && x.AppId.Equals(appId)).ToListAsync();
             if (listdelete.Any())
                 _context.ListRoleByUsers.RemoveRange(listdelete);
             foreach (var item in ids)
@@ -153,7 +154,8 @@ namespace Master.Controllers
                 {
                     Id = Guid.NewGuid().ToString(),
                     UserId = id,
-                    ListRoleId = item
+                    ListRoleId = item,
+                    AppId=appId
                 });
             }
             var res = await _context.SaveChangesAsync();

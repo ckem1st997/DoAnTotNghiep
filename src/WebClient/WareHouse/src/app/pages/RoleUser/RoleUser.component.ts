@@ -177,7 +177,7 @@ export class RoleUserComponent implements OnInit {
         });
         dialogRef.onClose.subscribe((result) => {
           console.log(result);
-          this.listrolebyuser.EditOrCreate(result, model.id).subscribe(x => {
+          this.listrolebyuser.EditOrCreate(result.idselect, model.id,result.appid).subscribe(x => {
             if (x.success)
               this.messageService.add({ severity: 'success', summary: 'Thông báo', detail: 'Phân quyền thành công !' });
             else

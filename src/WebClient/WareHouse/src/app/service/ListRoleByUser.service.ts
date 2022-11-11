@@ -54,8 +54,8 @@ export class ListRoleByUserService {
     );
   }
 
-  EditOrCreate(ids: Array<string>, id: string): Observable<ResultDataResponse<ListRoleByUser>> {
-    var url = this.baseUrlMaster + `/edit-update?id=`+id;
+  EditOrCreate(ids: Array<string>, id: string,appid:string): Observable<ResultDataResponse<ListRoleByUser>> {
+    var url = this.baseUrlMaster + `/edit-update?id=`+id+'&appId='+appid;
     return this.http.post<ResultDataResponse<ListRoleByUser>>(url, ids, this.httpOptions).pipe(
       tap(_ => console.log(`create`)),
     );

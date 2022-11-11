@@ -253,14 +253,16 @@ export class ListRoleShowToAuthozireComponent implements OnInit {
   }
 
   openDialogAuthozire() {
-    console.log(this.selectedNodes3);
     var idselect = Array<string>();
     for (let index = 0; index < this.selectedNodes3.length; index++) {
       const element = this.selectedNodes3[index];
       if (element.data?.id)
         idselect.push(element.data?.id);
     }
-    this.ref.close(idselect);
+    this.ref.close({
+      idselect:idselect,
+      appid:this.selectedValue?.id
+    });
     // this.selectedNodes3.forEach(e => {
     //   this.messageService.add({ severity: 'info', summary: e.data?.name, detail: e.data?.key });
     // });
