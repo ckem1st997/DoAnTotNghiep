@@ -34,11 +34,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Share.BaseCore", "src\Share
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Share.Grpc", "src\Share.Grpc\Share.Grpc.csproj", "{082812BF-A860-43CF-A168-D84B4CCE26B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareModelFull", "src\ShareModelFull\ShareModelFull.csproj", "{AF6F470D-6366-4A05-948E-19B967BF88D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareModelFull", "src\ShareModelFull\ShareModelFull.csproj", "{AF6F470D-6366-4A05-948E-19B967BF88D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareImplemention", "src\ShareImplemention\ShareImplemention.csproj", "{75F45B28-275A-48ED-BA3E-1952A57A312E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareImplemention", "src\ShareImplemention\ShareImplemention.csproj", "{75F45B28-275A-48ED-BA3E-1952A57A312E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareModels", "src\ShareModels\ShareModels.csproj", "{74E61B00-7C6B-44DE-9474-08A65FDF8B59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareModels", "src\ShareModels\ShareModels.csproj", "{74E61B00-7C6B-44DE-9474-08A65FDF8B59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
