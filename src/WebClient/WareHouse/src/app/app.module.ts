@@ -141,6 +141,7 @@ import { ContextMenuModule } from 'primeng/contextmenu';
 import { CheckboxModule } from 'primeng/checkbox';
 import { Table, TableModule, TableService } from 'primeng/table';
 import { DialogService } from 'primeng/dynamicdialog';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 const customNotifierOptions: NotifierOptions = {
   position: {
     horizontal: {
@@ -275,6 +276,7 @@ const customNotifierOptions: NotifierOptions = {
     ListRoleShowToAuthozireComponent
   ],
   imports: [
+    MatAutocompleteModule,
     PaginatorModule,
     CascadeSelectModule,
     TableModule,

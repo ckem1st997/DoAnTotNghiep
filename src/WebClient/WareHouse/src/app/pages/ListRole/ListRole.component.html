@@ -26,14 +26,13 @@
     [tableStyle]="{'min-width': '50rem'}"
     currentPageReportTemplate="Hiển thị từ {first} tới {last} của {totalRecords} kết quả"
     [rowsPerPageOptions]="[10,25,50]">
-    <ng-template pTemplate="caption">
-      <div class="flex">
-        <p-treeTableHeaderCheckbox></p-treeTableHeaderCheckbox>
-        <span class="ml-2">Chọn tất cả</span>
-      </div>
-    </ng-template>
+
     <ng-template pTemplate="header" let-columns>
       <tr>
+        <th>
+          <p-treeTableHeaderCheckbox></p-treeTableHeaderCheckbox>
+          <span class="">Chọn tất cả</span>
+        </th>
         <th *ngFor="let col of columns">
           {{col.header}}
         </th>
@@ -47,6 +46,8 @@
         </td>
         <td>{{rowData.name}}</td>
         <td>{{rowData.key}}</td>
+        <td >{{rowData.description}}</td>
+
         <td>
           <p-checkbox [disabled]="true" [(ngModel)]="rowData.isAPI" [binary]="true"></p-checkbox>
         </td>

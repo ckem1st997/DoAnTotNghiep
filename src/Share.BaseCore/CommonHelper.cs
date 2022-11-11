@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -348,5 +349,16 @@ namespace Share.BaseCore
         //public static LoggingConfig LoggingConfig { get; set; }
 
         #endregion
+    }
+    public static class TypeUtilities
+    {
+        public static List<T> GetAllPublicConstantValues<T>(this Type type)
+        {
+            return type
+                .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+                .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(T))
+                .Select(x => (T)x.GetRawConstantValue())
+                .ToList();
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Share.BaseCore;
+using Share.BaseCore.Authozire;
 using System.Data;
 using System.Text;
 
@@ -13,6 +14,22 @@ namespace Master.Controllers
         public ListRoleController(MasterdataContext context)
         {
             _context = context;
+        }
+
+
+        [Authorize(Roles =AuthozireListKey.MasterKey.MasterReadKey.Master)]
+        [HttpGet]
+        [Route("get-list-key")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public IActionResult GetList()
+        {
+            List<string> strings= AuthozireListKey.GetAllKey();
+            return Ok(new ResultMessageResponse()
+            {
+                data = strings,
+                totalCount = strings.Count
+            });
         }
 
 

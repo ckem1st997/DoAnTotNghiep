@@ -32,6 +32,13 @@ export class ListRoleService {
 
     );
   }
+
+  getListKey(): Observable<ResultMessageResponse<string>> {
+    var url = this.baseUrlMaster + `/get-list-key`;
+    return this.http.get<ResultMessageResponse<string>>(url, this.httpOptions).pipe(
+      retry(1), // retry a failed request up to 3 times
+    );
+  }
  //get list user master
  getListTreeTable(id:string): Observable<ResultMessageResponse<TreeNode>> {
   var url = this.baseUrlMaster + `/get-list?appId=`+id;

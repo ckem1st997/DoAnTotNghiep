@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NotifierService } from 'angular-notifier';
+import { map, Observable, startWith } from 'rxjs';
 import { Guid } from 'src/app/extension/Guid';
 import { ResultMessageResponse } from 'src/app/model/ResultMessageResponse';
 import { UnitDTO } from 'src/app/model/UnitDTO';
@@ -37,6 +38,8 @@ export class ListRoleEditComponent implements OnInit {
     redirectUrl: '',
     errors: {}
   }
+  optionsc: string[] = [];
+  filteredOptions!: Observable<string[]>;
   constructor(
     public dialogRef: MatDialogRef<ListRoleEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ListRole,
@@ -58,8 +61,17 @@ export class ListRoleEditComponent implements OnInit {
       appId:''
     });
     this.form.patchValue(this.data);
-    this.service.getListTree(this.data.appId).subscribe(x=>this.listDropDown.data=x.data)
+    this.service.getListTree(this.data.appId).subscribe(x => this.listDropDown.data = x.data);
+    this.service.getListKey().subscribe(x => this.optionsc = x.data);
+    this.filteredOptions = this.form.controls['key'].valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value || '')),
+    );
+  }
+  private _filter(value: any): string[] {
+    const filterValue = value.toLowerCase();
 
+    return this.optionsc.filter(option => option.toLowerCase().includes(filterValue));
   }
   get f() { return this.form.controls; }
   onNoClick(): void {

@@ -170,16 +170,16 @@ export class ListRoleComponent implements OnInit {
       this.checkSizeWindows = true;
   }
 
-  selectEvent($event:any) {
+  selectEvent($event: any) {
     console.log($event)
     this.GetData();
   }
 
   GetData() {
     if (this.selectedValue != undefined && this.selectedValue.length > 0)
-    this.service.getListTreeTable(this.selectedValue).subscribe(list => {
-      this.files5 = list.data;
-    });
+      this.service.getListTreeTable(this.selectedValue).subscribe(list => {
+        this.files5 = list.data;
+      });
     this.listDelete = [];
     this.selection.clear();
   }
@@ -219,28 +219,31 @@ export class ListRoleComponent implements OnInit {
   }
 
   openDialogCreate(): void {
-    console.log(this.selectedValue)
-    const dialogRef = this.dialog.open(ListRoleCreateComponent, {
-      width: '550px',
-      data:this.selectedValue
-    });
+    if (this.selectedValue != undefined && this.selectedValue.length > 0) {
+      const dialogRef = this.dialog.open(ListRoleCreateComponent, {
+        width: '550px',
+        data: this.selectedValue
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
-      var res = result;
-      if (res) {
-        this.notifier.notify('success', 'Thêm mới thành công !');
-        this.GetData();
-      }
-    });
+      dialogRef.afterClosed().subscribe(result => {
+        var res = result;
+        if (res) {
+          this.notifier.notify('success', 'Thêm mới thành công !');
+          this.GetData();
+        }
+      });
+    }
+    else
+      this.notifier.notify('info', 'Bạn chưa chọn App !');
+
   }
 
   openDialogDeleteAll(): void {
-    var model = this.selection.selected;
-    console.log(model)
+    var model = this.selectedNodes3;
     if (model.length > 0) {
       var ids = Array<string>();
       for (let index = 0; index < model.length; index++) {
-        const element = model[index];
+        const element = model[index].data;
         ids.push(element.id);
       }
       if (model !== undefined && model.length > 0) {
