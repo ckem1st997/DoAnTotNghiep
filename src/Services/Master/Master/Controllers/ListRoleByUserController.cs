@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Abp.Extensions;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Master.Controllers
 {
@@ -18,6 +19,20 @@ namespace Master.Controllers
         public IActionResult GetList()
         {
             var list = _context.ListRoleByUsers.Where(x => x.Id != null);
+            return Ok(new ResultMessageResponse()
+            {
+                data = list,
+                totalCount = list.Count()
+            });
+        }
+
+        [HttpGet]
+        [Route("get-list-id")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public IActionResult GetListId(string id)
+        {
+            var list = _context.ListRoleByUsers.Where(x => x.Id != null && x.UserId.Equals(id)).Select(x => x.ListRoleId);
             return Ok(new ResultMessageResponse()
             {
                 data = list,
@@ -82,12 +97,12 @@ namespace Master.Controllers
                 });
             }
 
-           var res= await _context.ListRoleByUsers.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            var res = await _context.ListRoleByUsers.FirstOrDefaultAsync(x => x.Id.Equals(id));
             return Ok(new ResultMessageResponse()
             {
                 success = res != null,
                 data = res
-            }); 
+            });
         }
 
 
@@ -112,6 +127,42 @@ namespace Master.Controllers
                 success = res > 0
             });
         }
+
+
+        [HttpPost]
+        [Route("edit-update")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Edit(IEnumerable<string> ids, string id)
+        {
+            if (ids.Count() < 1 || id.IsNullOrEmpty())
+            {
+                return Ok(new ResultMessageResponse()
+                {
+                    success = true,
+                    data = "Không nhận được dữ liệu"
+                });
+            }
+
+            var listdelete = await _context.ListRoleByUsers.AsNoTracking().Where(x => x.UserId.Equals(id)).ToListAsync();
+            if (listdelete.Any())
+                _context.ListRoleByUsers.RemoveRange(listdelete);
+            foreach (var item in ids)
+            {
+                await _context.ListRoleByUsers.AddAsync(new ListRoleByUser()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UserId = id,
+                    ListRoleId = item
+                });
+            }
+            var res = await _context.SaveChangesAsync();
+            return Ok(new ResultMessageResponse()
+            {
+                success = res > 0
+            });
+        }
+
 
 
 

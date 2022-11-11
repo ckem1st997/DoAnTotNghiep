@@ -1,5 +1,5 @@
 ﻿{
-   "CodeGenerationMode": 0,
+   "CodeGenerationMode": 2,
    "ContextClassName": "MasterdataContext",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
@@ -11,7 +11,7 @@
    "PreserveCasingWithRegex": true,
    "ProjectRootNamespace": "Infrastructure",
    "Schemas": null,
-   "SelectedHandlebarsLanguage": 0,
+   "SelectedHandlebarsLanguage": 2,
    "SelectedToBeGenerated": 0,
    "Tables": [
       {
@@ -61,5 +61,5 @@
    "UseNullableReferences": false,
    "UseSchemaFolders": true,
    "UseSpatial": false,
-   "UseT4": false
+   "UseT4": true
 }

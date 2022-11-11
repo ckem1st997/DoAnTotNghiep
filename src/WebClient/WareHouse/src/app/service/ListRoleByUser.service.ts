@@ -13,7 +13,7 @@ import { ResultMessageResponse } from '../model/ResultMessageResponse';
 })
 export class ListRoleByUserService {
 
-  private baseUrlMaster = environment.authorizeApi+'ListRoleByUser';
+  private baseUrlMaster = environment.authorizeApi + 'ListRoleByUser';
   private readonly notifier!: NotifierService;
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -26,6 +26,15 @@ export class ListRoleByUserService {
   getList(): Observable<ResultMessageResponse<ListRoleByUser>> {
     var url = this.baseUrlMaster + `/get-list`;
     return this.http.get<ResultMessageResponse<ListRoleByUser>>(url, this.httpOptions).pipe(
+      retry(1), // retry a failed request up to 3 times
+
+    );
+  }
+
+
+  getListByUserId(id: string): Observable<ResultMessageResponse<string>> {
+    var url = this.baseUrlMaster + `/get-list-id?id=` + id;
+    return this.http.get<ResultMessageResponse<string>>(url, this.httpOptions).pipe(
       retry(1), // retry a failed request up to 3 times
 
     );
@@ -45,6 +54,14 @@ export class ListRoleByUserService {
     );
   }
 
+  EditOrCreate(ids: Array<string>, id: string): Observable<ResultDataResponse<ListRoleByUser>> {
+    var url = this.baseUrlMaster + `/edit-update?id=`+id;
+    return this.http.post<ResultDataResponse<ListRoleByUser>>(url, ids, this.httpOptions).pipe(
+      tap(_ => console.log(`create`)),
+    );
+  }
+
+
   CreateIndex(iduser: string | null): Observable<ResultDataResponse<ListRoleByUser>> {
     var url = this.baseUrlMaster + `/create?id=` + iduser;
     return this.http.get<ResultDataResponse<ListRoleByUser>>(url, this.httpOptions).pipe(
@@ -59,11 +76,11 @@ export class ListRoleByUserService {
     );
   }
 
-  Delete(ids:string[]): Observable<ResultMessageResponse<ListRoleByUser>> {
+  Delete(ids: string[]): Observable<ResultMessageResponse<ListRoleByUser>> {
     var url = this.baseUrlMaster + `/delete`;
     return this.http.post<ResultMessageResponse<ListRoleByUser>>(url, ids, this.httpOptions).pipe(
       tap(_ => console.log(`delete  id=${ids}`)),
-     
+
     );
   }
 }

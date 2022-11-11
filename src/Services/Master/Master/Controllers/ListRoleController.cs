@@ -17,14 +17,13 @@ namespace Master.Controllers
         }
 
 
-        [Authorize(Roles =AuthozireListKey.MasterKey.MasterReadKey.Master)]
         [HttpGet]
         [Route("get-list-key")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetList()
         {
-            List<string> strings= AuthozireListKey.GetAllKey();
+            List<string> strings = AuthozireListKey.GetAllKey();
             return Ok(new ResultMessageResponse()
             {
                 data = strings,
@@ -38,11 +37,11 @@ namespace Master.Controllers
         [Route("get-list")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetList(string appId)
+        public IActionResult GetList(string appId)
         {
             var list = _context.ListRoles.Where(x => x.Id != null && x.AppId.Equals(appId));
             //  var res = GetWareHouseTreeModel(list);
-            var res1 = await GetWareHouseTree(2, list);
+            var res1 = GetWareHouseTree(2, list);
             //for (int i = 0; i < 5; i++)
             //{
             //    res1.AddRange(res1);
@@ -59,20 +58,20 @@ namespace Master.Controllers
         [Route("get-list-tree")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetListTree(string appId)
+        public IActionResult GetListTree(string appId)
         {
             var list = _context.ListRoles.Where(x => x.Id != null && x.AppId.Equals(appId));
             var res = GetWareHouseTreeModel(list);
             res.Add(new ListRole()
             {
-                Id="",
-                Name="Không có !"
+                Id = "",
+                Name = "Không có !"
             });
-            
+
             return Ok(new ResultMessageResponse()
             {
                 data = res,
-                totalCount =10
+                totalCount = 10
             });
         }
 
@@ -85,7 +84,7 @@ namespace Master.Controllers
             public ListRole Data { get; set; }
             public new IList<ListRoleTreeModel> children { get; set; }
         }
-        async Task<IList<ListRoleTreeModel>> GetWareHouseTree(int? expandLevel, IEnumerable<ListRole> ListRoles = null)
+        IList<ListRoleTreeModel> GetWareHouseTree(int? expandLevel, IEnumerable<ListRole> ListRoles = null)
         {
             expandLevel ??= 1;
             var qq = new Queue<ListRoleTreeModel>();

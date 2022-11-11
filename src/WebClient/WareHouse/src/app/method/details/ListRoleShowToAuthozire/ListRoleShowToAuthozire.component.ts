@@ -22,6 +22,7 @@ import { ListRoleService } from 'src/app/service/ListRole.service';
 import { MessageService, TreeNode } from 'primeng/api';
 import { ModelDialog } from 'src/app/model/ModelDialog';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ListRoleByUserService } from './../../../service/ListRoleByUser.service';
 
 
 interface ExampleFlatNode {
@@ -72,7 +73,7 @@ export class ListRoleShowToAuthozireComponent implements OnInit {
   panelOpenState = false;
   checkedl = false;
   //
-
+  listRoleByUser: Array<string> = [];
   // dataSourceRole = new MatTableDataSource<ListRole>();
   model: RoleSearchModel = {
     key: '',
@@ -92,26 +93,25 @@ export class ListRoleShowToAuthozireComponent implements OnInit {
     redirectUrl: '',
     errors: {}
   }
-  totalRows=100;
+  totalRows = 100;
   first = 0;
 
   rows = 10;
-  constructor(public ref: DynamicDialogRef, public config: DynamicDialogConfig, private messageService: MessageService, private serviceapp: ListAppService, private service: ListRoleService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService) {
+  constructor(private listrolebyusser: ListRoleByUserService, public ref: DynamicDialogRef, public config: DynamicDialogConfig, private messageService: MessageService, private serviceapp: ListAppService, private service: ListRoleService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService) {
 
     this.notifier = notifierService;
     this.isRowSelectable = this.isRowSelectable.bind(this);
 
   }
-  setMyPagination(event:any) {
+  setMyPagination(event: any) {
     //event.first: Index of first record being displayed 
     //event.rows: Number of rows to display in new page 
     //event.page: Index of the new page 
     //event.pageCount: Total number of pages
     let startRow = event.first + 1;
-    let endRow =  startRow + event.rows;
-this.totalRows=1000;
-console.log(event)
-}
+    let endRow = startRow + event.rows;
+    this.totalRows = 1000;
+  }
   next() {
     if (!this.isLastPage())
       this.first = this.first + this.rows;
@@ -154,6 +154,7 @@ console.log(event)
   }
   ngOnInit() {
     if (this.config.data.type == 1) {
+      this.listrolebyusser.getListByUserId(this.config.data.id).subscribe(x => this.listRoleByUser = x.data);
 
       this.serviceapp.getList().subscribe(x => this.foods = x.data);
       this.GetData();
@@ -199,8 +200,10 @@ console.log(event)
   }
 
   getElement(e: TreeNode<ListRole>[]) {
+    let model = this.listRoleByUser;
+    console.log(model);
     e.forEach(element => {
-      if (element.data != undefined && element.data.isAPI)
+      if (element.data != undefined && element.data.id != undefined && model.find(x => element.data?.id.includes(x)))
         this.selectedNodes3.push(element);
       if (element.children != undefined && element.children.length > 0)
         this.getElement(element.children);
@@ -251,9 +254,16 @@ console.log(event)
 
   openDialogAuthozire() {
     console.log(this.selectedNodes3);
-    this.selectedNodes3.forEach(e => {
-      this.messageService.add({ severity: 'info', summary: e.data?.name, detail: e.data?.key });
-    });
+    var idselect = Array<string>();
+    for (let index = 0; index < this.selectedNodes3.length; index++) {
+      const element = this.selectedNodes3[index];
+      if (element.data?.id)
+        idselect.push(element.data?.id);
+    }
+    this.ref.close(idselect);
+    // this.selectedNodes3.forEach(e => {
+    //   this.messageService.add({ severity: 'info', summary: e.data?.name, detail: e.data?.key });
+    // });
 
   }
 

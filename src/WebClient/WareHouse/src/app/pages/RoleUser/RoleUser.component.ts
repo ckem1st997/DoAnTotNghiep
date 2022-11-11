@@ -29,6 +29,7 @@ import { WarehouseService } from 'src/app/service/warehouse.service';
 import { ListRoleComponent } from '../ListRole/ListRole.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
+import { ListRoleByUserService } from './../../service/ListRoleByUser.service';
 
 @Component({
   selector: 'app-RoleUser',
@@ -82,7 +83,7 @@ export class RoleUserComponent implements OnInit {
   @ViewChild(MatSort)
   sort!: MatSort;
 
-  constructor(private messageService: MessageService, public dialogService: DialogService, private service: AuthozireService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService, private serviceW: WarehouseService) {
+  constructor(private listrolebyuser: ListRoleByUserService, private messageService: MessageService, public dialogService: DialogService, private service: AuthozireService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService, private serviceW: WarehouseService) {
 
     this.notifier = notifierService;
 
@@ -175,9 +176,16 @@ export class RoleUserComponent implements OnInit {
           },
         });
         dialogRef.onClose.subscribe((result) => {
-         // if (result) {
-            this.messageService.add({ severity: 'success', summary: 'Thông báo', detail: 'Phân quyền thành công !' });
-        //  }
+          console.log(result);
+          this.listrolebyuser.EditOrCreate(result, model.id).subscribe(x => {
+            if (x.success)
+              this.messageService.add({ severity: 'success', summary: 'Thông báo', detail: 'Phân quyền thành công !' });
+            else
+              this.messageService.add({ severity: 'error', summary: 'Thông báo', detail: 'Phân quyền thất bại !' });
+
+          })
+          // if (result) {
+          //  }
         });
         // dialogRef.afterClosed().subscribe(result => {
         //   var res = result;
