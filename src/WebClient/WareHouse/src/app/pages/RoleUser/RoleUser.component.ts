@@ -31,6 +31,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 import { ListRoleByUserService } from './../../service/ListRoleByUser.service';
 import { ListAuthozireShowToUserComponent } from 'src/app/method/details/ListAuthozireShowToUser/ListAuthozireShowToUser.component';
+import { ListAuthozireRoleByUserService } from 'src/app/service/ListAuthozireRoleByUser.service';
 
 @Component({
   selector: 'app-RoleUser',
@@ -84,7 +85,7 @@ export class RoleUserComponent implements OnInit {
   @ViewChild(MatSort)
   sort!: MatSort;
 
-  constructor(private listrolebyuser: ListRoleByUserService, private messageService: MessageService, public dialogService: DialogService, private service: AuthozireService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService, private serviceW: WarehouseService) {
+  constructor(private listrolebyusser: ListAuthozireRoleByUserService,private listrolebyuser: ListRoleByUserService, private messageService: MessageService, public dialogService: DialogService, private service: AuthozireService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService, private serviceW: WarehouseService) {
 
     this.notifier = notifierService;
 
@@ -217,7 +218,7 @@ openDialogByUser(model: UserMaster): void {
       });
       dialogRef.onClose.subscribe((result) => {
         console.log(result);
-        this.listrolebyuser.EditOrCreate(result.idselect, model.id,result.appid).subscribe(x => {
+        this.listrolebyusser.EditOrCreate(result.idselect, model.id).subscribe(x => {
           if (x.success)
             this.messageService.add({ severity: 'success', summary: 'Thông báo', detail: 'Phân quyền thành công !' });
           else

@@ -23,9 +23,9 @@ export class ListAuthozireRoleByUserService {
   }
 
   //get list user master
-  getList(): Observable<ResultMessageResponse<ListAuthozireRoleByUser>> {
-    var url = this.baseUrlMaster + `/get-list`;
-    return this.http.get<ResultMessageResponse<ListAuthozireRoleByUser>>(url, this.httpOptions).pipe(
+  getList(userId:string): Observable<ResultMessageResponse<string>> {
+    var url = this.baseUrlMaster + `/get-list?id=`+userId;
+    return this.http.get<ResultMessageResponse<string>>(url, this.httpOptions).pipe(
       retry(1), // retry a failed request up to 3 times
 
     );
@@ -37,8 +37,8 @@ export class ListAuthozireRoleByUserService {
       tap(_ => console.log(`create`)),
     );
   }
-  EditOrCreate(ids: Array<string>, id: string,appid:string): Observable<ResultDataResponse<ListAuthozireRoleByUser>> {
-    var url = this.baseUrlMaster + `/edit-update?id=`+id+'&appId='+appid;
+  EditOrCreate(ids: Array<string>, id: string): Observable<ResultDataResponse<ListAuthozireRoleByUser>> {
+    var url = this.baseUrlMaster + `/edit-update?id=`+id;
     return this.http.post<ResultDataResponse<ListAuthozireRoleByUser>>(url, ids, this.httpOptions).pipe(
       tap(_ => console.log(`create`)),
     );

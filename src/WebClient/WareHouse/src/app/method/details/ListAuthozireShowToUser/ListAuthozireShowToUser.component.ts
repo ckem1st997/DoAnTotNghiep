@@ -34,7 +34,7 @@ import { ListAuthozireService } from 'src/app/service/ListAuthozire.service';
 })
 export class ListAuthozireShowToUserComponent implements OnInit {
 
-  
+
 
 
   @Input() item: ModelDialog | undefined;
@@ -45,7 +45,6 @@ export class ListAuthozireShowToUserComponent implements OnInit {
   cols: any[] = [];
 
   ///
-  selectedValue: ListApp | undefined;
   selectedCar: string = '';
 
   foods: ListApp[] = [];
@@ -88,37 +87,11 @@ export class ListAuthozireShowToUserComponent implements OnInit {
   first = 0;
 
   rows = 10;
-  constructor(private authbyuser: ListAuthozireByListRoleService, private listrolebyusser: ListRoleByUserService, public ref: DynamicDialogRef, public config: DynamicDialogConfig, private messageService: MessageService, private serviceapp: ListAppService, private service: ListAuthozireService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService) {
+  constructor(private authbyuser: ListAuthozireByListRoleService, private listrolebyusser: ListAuthozireRoleByUserService, public ref: DynamicDialogRef, public config: DynamicDialogConfig, private messageService: MessageService, private serviceapp: ListAppService, private service: ListAuthozireService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService) {
 
     this.notifier = notifierService;
     this.isRowSelectable = this.isRowSelectable.bind(this);
 
-  }
-  setMyPagination(event: any) {
-    let startRow = event.first + 1;
-    let endRow = startRow + event.rows;
-    this.totalRows = 1000;
-  }
-  next() {
-    if (!this.isLastPage())
-      this.first = this.first + this.rows;
-  }
-
-  prev() {
-    if (!this.isFirstPage())
-      this.first = this.first - this.rows;
-  }
-
-  reset() {
-    this.first = 0;
-  }
-
-  isLastPage(): boolean {
-    return this.files5 ? this.first === (this.files5.length - this.rows) : true;
-  }
-
-  isFirstPage(): boolean {
-    return this.files5 ? this.first === 0 : true;
   }
 
   isRowSelectable(event: any): boolean {
@@ -130,20 +103,13 @@ export class ListAuthozireShowToUserComponent implements OnInit {
   }
   ngOnInit() {
 
-    this.serviceapp.getList().subscribe(x => this.foods = x.data);
     this.GetData();
-    // 'id', 'name', 'key', 'description', 'isAPI', 'inActive'
     this.cols = [
       { field: 'name', header: 'Name' },
       { field: 'description', header: 'Mô tả' },
       { field: 'isAPI', header: 'API' },
       { field: 'inActive', header: 'Hoạt động' }
     ];
-  }
-
-  ngAfterViewInit() {
-    // this.dataSourceRole.paginator = this.paginator;
-    // this.dataSourceRole.sort = this.sort;
   }
 
   @HostListener('window:resize', ['$event'])
@@ -157,24 +123,14 @@ export class ListAuthozireShowToUserComponent implements OnInit {
       this.checkSizeWindows = true;
   }
 
-  selectEvent($event: any) {
-    this.GetData();
-  }
-
   GetData() {
-    if (this.selectedValue != undefined) {
-      if (this.config.data.type == 1) {
-        this.listrolebyusser.getListByUserId(this.config.data.id, this.selectedValue.id).subscribe(x => this.listRoleByUser = x.data);
-      }
-      else if (this.config.data.type == 2)
-        this.authbyuser.getListByUserId(this.config.data.id, this.selectedValue.id).subscribe(x => this.listRoleByUser = x.data);
-
+    if (this.config.data.id != undefined) {
+      this.listrolebyusser.getList(this.config.data.id).subscribe(x => this.listRoleByUser = x.data);
       this.service.getList().subscribe(list => {
         this.files5 = list.data;
         this.getElement(list.data);
       });
     }
-
   }
 
   getElement(e: ListAuthozire[]) {
@@ -186,41 +142,6 @@ export class ListAuthozireShowToUserComponent implements OnInit {
     });
   }
 
-
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-    } else {
-      this._liveAnnouncer.announce('Sorting cleared');
-    }
-
-  }
-  pageChanged(event: PageEvent) {
-    this.model.pages = event.pageIndex
-    this.model.num = event.pageSize;
-    this.GetData();
-  }
-  openDialog(model: ListRole): void {
-    console.log(model)
-    this.service.EditIndex(model.id).subscribe(x => {
-      if (x.success) {
-        const dialogRef = this.dialog.open(ListRoleEditComponent, {
-          width: '550px',
-          data: x.data,
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-          var res = result;
-          if (res) {
-            this.notifier.notify('success', 'Phân quyền thành công !');
-            this.GetData();
-          }
-        });
-      }
-    });
-
-  }
-
   openDialogAuthozire() {
     var idselect = Array<string>();
     for (let index = 0; index < this.selectedNodes3.length; index++) {
@@ -229,31 +150,8 @@ export class ListAuthozireShowToUserComponent implements OnInit {
         idselect.push(element?.id);
     }
     this.ref.close({
-      idselect: idselect,
-      appid: this.selectedValue?.id
-    });
-    // this.selectedNodes3.forEach(e => {
-    //   this.messageService.add({ severity: 'info', summary: e.data?.name, detail: e.data?.key });
-    // });
-
-  }
-
-  openDialogCreate(): void {
-    console.log(this.selectedValue)
-    const dialogRef = this.dialog.open(ListRoleCreateComponent, {
-      width: '550px',
-      data: this.selectedValue
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      var res = result;
-      if (res) {
-        this.notifier.notify('success', 'Thêm mới thành công !');
-        this.GetData();
-      }
+      idselect: idselect
     });
   }
-
-
 }
 

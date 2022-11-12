@@ -203,7 +203,6 @@ export class ListRoleShowToAuthozireComponent implements OnInit {
 
   getElement(e: TreeNode<ListRole>[]) {
     let model = this.listRoleByUser;
-    console.log(model);
     e.forEach(element => {
       if (element.data != undefined && element.data.id != undefined && model.find(x => element.data?.id.includes(x)))
         this.selectedNodes3.push(element);

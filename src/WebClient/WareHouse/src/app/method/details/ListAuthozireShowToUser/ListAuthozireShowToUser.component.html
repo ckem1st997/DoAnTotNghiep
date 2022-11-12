@@ -1,9 +1,4 @@
 <div class=" ">
-  <!-- <p-multiSelect [options]="foods" defaultLabel="Select a App" optionValue="id" (selectionChange)='selectEvent($event)'
-    [(ngModel)]="selectedValue" optionLabel="name"></p-multiSelect> -->
-  <p-cascadeSelect [(ngModel)]="selectedValue" [options]="foods" (onChange)='selectEvent($event)' optionLabel="name"
-    optionGroupLabel="name" [optionGroupChildren]="['states', 'cities']" placeholder="Select a App"
-    [style]="{'minWidth': '14rem'}"></p-cascadeSelect>
   <button style="margin:5px;" mat-raised-button color="success" (click)="openDialogAuthozire()">
     <mat-icon class="mat-18">add</mat-icon>Phân quyền
   </button>
@@ -11,7 +6,7 @@
 
 <div id="viewcheck" [hidden]="!checkSizeWindows">
 
-  <p-table (onPage)="setMyPagination($event)" [totalRecords]="totalRows" [first]="first" scrollHeight="50vh"
+  <p-table [first]="first" scrollHeight="50vh"
     [scrollable]="true" [value]="files5" [columns]="cols" selectionMode="checkbox" [(selection)]="selectedNodes3"
     [paginator]="true" [rows]="10" [resizableColumns]="true" styleClass="p-datatable-gridlines p-datatable-striped"
     [tableStyle]="{'min-width': '50rem'}"

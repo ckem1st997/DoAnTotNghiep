@@ -16,9 +16,9 @@ namespace Master.Controllers
         [Route("get-list")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult GetList()
+        public IActionResult GetList(string id)
         {
-            var list = _context.ListAuthozireRoleByUsers.Where(x => x.Id != null);
+            var list = _context.ListAuthozireRoleByUsers.Where(x => x.Id != null && x.UserId.Equals(id)).Select(x=>x.ListAuthozireId);
             return Ok(new ResultMessageResponse()
             {
                 data = list,
@@ -63,6 +63,42 @@ namespace Master.Controllers
             });
         }
 
+
+        [HttpPost]
+        [Route("edit-update")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Edit(IEnumerable<string> ids, string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return Ok(new ResultMessageResponse()
+                {
+                    success = true,
+                    data = "Không nhận được dữ liệu"
+                });
+            }
+            // check appId
+
+            var listdelete = await _context.ListAuthozireRoleByUsers.AsNoTracking().Where(x => x.UserId.Equals(id)).ToListAsync();
+            if (listdelete.Any())
+                _context.ListAuthozireRoleByUsers.RemoveRange(listdelete);
+            if (ids.Any())
+                foreach (var item in ids)
+                {
+                    await _context.ListAuthozireRoleByUsers.AddAsync(new ListAuthozireRoleByUser()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        UserId = id,
+                        ListAuthozireId = item
+                    });
+                }
+            var res = await _context.SaveChangesAsync();
+            return Ok(new ResultMessageResponse()
+            {
+                success = res > 0
+            });
+        }
 
 
         [HttpGet]

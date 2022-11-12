@@ -130,7 +130,7 @@ namespace Master.Service
                 throw new ArgumentException($"'{nameof(id)}' cannot be null or empty.", nameof(id));
             }
             var res = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.Id.Equals(id) && x.OnDelete == false);
-           // res.Password = "";
+            // res.Password = "";
             return res;
         }
 
@@ -151,7 +151,7 @@ namespace Master.Service
             var id = _httpContext.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
             if (id is null)
                 return null;
-            var res = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.Id.Equals(id.Value) && x.OnDelete == false && x.InActive==true);
+            var res = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.Id.Equals(id.Value) && x.OnDelete == false && x.InActive == true);
             res.Password = "";
             return res;
         }
@@ -218,9 +218,9 @@ namespace Master.Service
 
         public async Task<bool> CheckActiveUser(string userName)
         {
-           if(string.IsNullOrEmpty(userName))
+            if (string.IsNullOrEmpty(userName))
                 throw new ArgumentNullException(nameof(userName));
-            var user = await _context.UserMasters.FirstOrDefaultAsync(x=>x.UserName.Equals(userName) && x.OnDelete==false);
+            var user = await _context.UserMasters.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && x.OnDelete == false);
             return user.InActive;
         }
 
@@ -241,13 +241,22 @@ namespace Master.Service
             {
                 throw new ArgumentException($"'{nameof(userId)}' or {nameof(roleKey)}' cannot be null or empty.", nameof(roleKey));
             }
-
+            // get id role
             var roleId = await _context.ListRoles.FirstOrDefaultAsync(x => x.Key.Equals(roleKey));
             if (roleId is null)
                 return false;
-            var checkListAuthozire = await _context.ListAuthozireRoleByUsers.FirstOrDefaultAsync(x => x.UserId.Equals(userId) && x.ListAuthozireId.Equals(roleId.Id));
+            // get listid authorize
+            var authozireId = _context.ListAuthozireByListRoles.Where(x => x.ListRoleId.Equals(roleId.Id)).Select(x=>x.AuthozireId);
+            if (authozireId is not null && await authozireId.AnyAsync())
+            {
+                // get user with userid and authzireid
+                var checkListAuthozire = await _context.ListAuthozireRoleByUsers.FirstOrDefaultAsync(x => x.UserId.Equals(userId) && authozireId.Contains(x.ListAuthozireId));
+                if (checkListAuthozire is not null)
+                    return true;
+            }
+            //check with role key
             var checkListRole = await _context.ListRoleByUsers.FirstOrDefaultAsync(x => x.UserId.Equals(userId) && x.ListRoleId.Equals(roleId.Id));
-            return true;
+            return checkListRole is not null;
         }
     }
 }
