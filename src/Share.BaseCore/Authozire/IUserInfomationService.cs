@@ -25,5 +25,6 @@ namespace Share.BaseCore.Authozire
         public Task<bool> GetAuthozireByUserIdToAuthorizeRole(string idUser, string authRole);
 
         public void GetInfoUserByClaims();
+
     }
 }

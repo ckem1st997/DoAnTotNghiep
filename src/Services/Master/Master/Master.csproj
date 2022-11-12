@@ -22,7 +22,6 @@
 		<PackageReference Include="Abp" Version="7.1.0" />
 		<PackageReference Include="Autofac" Version="6.3.0" />
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />
-		<PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
 		<PackageReference Include="Grpc.Net.Client.Web" Version="2.44.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
@@ -54,20 +53,10 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\Share.BaseCore\Share.BaseCore.csproj" />
-	  <ProjectReference Include="..\..\..\Share.Grpc\Share.Grpc.csproj" />
+	  <!--<ProjectReference Include="..\..\..\Share.Grpc\Share.Grpc.csproj" />-->
+	  <ProjectReference Include="..\..\..\ShareModelFull\ShareModelFull.csproj" />
 	  <ProjectReference Include="..\..\Base\Base\Base.csproj" />
 	  <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-	</ItemGroup>
-
-
-
-	<ItemGroup>
-	  <Protobuf Include="..\..\..\Share.Grpc\Proto\getdata.proto" GrpcServices="Server">
-	    <Link>Protos\getdata.proto</Link>
-	  </Protobuf>
-	  <Protobuf Include="..\..\..\Share.Grpc\Proto\getdatawh.proto" GrpcServices="Client">
-	    <Link>Protos\getdatawh.proto</Link>
-	  </Protobuf>
 	</ItemGroup>
 
 </Project>

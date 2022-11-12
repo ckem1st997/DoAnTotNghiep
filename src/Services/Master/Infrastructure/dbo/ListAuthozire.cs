@@ -11,7 +11,7 @@ namespace Infrastructure
         public string Name { get; set; }
         public bool InActive { get; set; }
         public string Description { get; set; }
-        public bool? ParentId { get; set; }
+        public string? ParentId { get; set; }
         public int? SoftShow { get; set; }
     }
 }

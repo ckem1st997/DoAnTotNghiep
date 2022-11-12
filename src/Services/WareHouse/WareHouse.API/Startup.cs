@@ -42,8 +42,9 @@ using Share.BaseCore.Behaviors.ConfigureServices;
 using WareHouse.API.Infrastructure;
 using Share.BaseCore;
 using Share.BaseCore.Authozire.ConfigureServices;
-using Share.Grpc;
 using Share.BaseCore.Kafka;
+using Share.BaseCore.Grpc;
+using ShareImplemention;
 
 namespace WareHouse.API
 {
@@ -73,6 +74,7 @@ namespace WareHouse.API
             services.AddApiGrpc<GrpcGetData.GrpcGetDataClient>(Configuration);
             services.AddApiAuthentication();
             services.AddApiCors();
+            services.AddServiceConfigImplementAPI();
 
             // services.AddSingleton<IHostedService, RequestTimeConsumer>();
         }

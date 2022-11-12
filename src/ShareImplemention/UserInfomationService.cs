@@ -25,13 +25,15 @@ namespace ShareImplemention
             // get user and cache reload userrole, return user after get and check role, return result check
             // resgister service di and resgister in service
             // easy cache
-            var cachedResponse = JsonConvert.DeserializeObject<UserListRoleModel>(Encoding.UTF8.GetString(await _cache.GetAsync(idUser)));
-            if (cachedResponse is not null)
-                return cachedResponse.ListKey.Contains(authRole);
-            var res = await _client.GetCreateByAsync(new Params());
-            if (res is null || !res.ListCreateBy_.Any())
-                return false;
-            return res.ListCreateBy_.FirstOrDefault(x => x.Name.Contains(authRole)) is not null;
+            //var cachedResponse = JsonConvert.DeserializeObject<UserListRoleModel>(Encoding.UTF8.GetString(await _cache.GetAsync(idUser)));
+            //if (cachedResponse is not null)
+            //    return cachedResponse.ListKey.Contains(authRole);
+            SaveChange res = await _client.CheckAuthozireByUserIdAndRoleKeyAsync(new CheckAuthozireByUserIdAndRoleKeyModel()
+            {
+                RoleKey = authRole,
+                UserId = idUser
+            });
+            return res is not null && res.Check;
         }
 
         public Task<bool> GetAuthozireByUserIdToKey(string iduser, string Key)

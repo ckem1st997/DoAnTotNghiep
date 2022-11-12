@@ -21,7 +21,15 @@ service GrpcGetData {
     // histoty
     rpc CreateHistory(HistotyModel) returns (SaveChange) {}
     rpc ActiveHistory(BaseId) returns (SaveChange) {}
+    rpc CheckAuthozireByUserIdAndRoleKey(CheckAuthozireByUserIdAndRoleKeyModel) returns (SaveChange) {}
+
 }
+
+message CheckAuthozireByUserIdAndRoleKeyModel{
+      string userId =1;
+      string roleKey  =2;
+}
+
 
 message HistotyModel{
       string userName =1;

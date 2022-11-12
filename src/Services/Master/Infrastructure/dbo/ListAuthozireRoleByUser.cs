@@ -10,5 +10,6 @@ namespace Infrastructure
     {
         public string ListAuthozireId { get; set; }
         public string UserId { get; set; }
+        public string AppId { get; set; }
     }
 }

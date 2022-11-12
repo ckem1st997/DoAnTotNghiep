@@ -9,11 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.Grpc
+namespace Share.BaseCore.Grpc
 {
     public static class ServiceAPIGrpc
     {
-        public static void AddApiGrpc<T>(this IServiceCollection services,IConfiguration configuration) where T : class
+        public static void AddApiGrpc<T>(this IServiceCollection services, IConfiguration configuration) where T : class
         {
             services.AddGrpc(options =>
             {

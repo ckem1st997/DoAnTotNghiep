@@ -26,7 +26,7 @@ namespace GrpcGetDataToMaster
 
 
 
-        public GrpcGetDataToMasterService(IHubContext<ConnectRealTimeHub> hubContext,IUserService userService, MasterdataContext masterdataContext,ILogger<GrpcGetDataToMasterService> logger)
+        public GrpcGetDataToMasterService(IHubContext<ConnectRealTimeHub> hubContext, IUserService userService, MasterdataContext masterdataContext, ILogger<GrpcGetDataToMasterService> logger)
         {
             _userService = userService;
             _logger = logger;
@@ -59,15 +59,15 @@ namespace GrpcGetDataToMaster
                 };
                 await _hubContext.Clients.All.SendAsync("HistoryTrachkingToCLient", ress, request.UserName);
             }
-            return new SaveChange() { Check = res>0 };
+            return new SaveChange() { Check = res > 0 };
         }
 
         public override async Task<SaveChange> ActiveHistory(BaseId request, ServerCallContext context)
         {
-           var model=_masterdataContext.HistoryNotications.FirstOrDefault(x=>x.UserName.Equals(request.Id));
+            var model = _masterdataContext.HistoryNotications.FirstOrDefault(x => x.UserName.Equals(request.Id));
             if (model == null)
-                await Task.FromResult(new SaveChange() { Check=false});
-            model.Read=true;
+                await Task.FromResult(new SaveChange() { Check = false });
+            model.Read = true;
             var res = await _masterdataContext.SaveChangesAsync();
             return new SaveChange() { Check = res > 0 };
         }
@@ -189,6 +189,17 @@ namespace GrpcGetDataToMaster
         public override Task<User> GetUserById(BaseId request, ServerCallContext context)
         {
             return base.GetUserById(request, context);
+        }
+
+        public override async Task<SaveChange> CheckAuthozireByUserIdAndRoleKey(CheckAuthozireByUserIdAndRoleKeyModel request, ServerCallContext context)
+        {
+            if (request is null || string.IsNullOrEmpty(request.UserId) || string.IsNullOrEmpty(request.RoleKey))
+                return new SaveChange() { Check = false };
+            var roleId = await _masterdataContext.ListRoles.FirstOrDefaultAsync(x => x.Key.Equals(request.RoleKey));
+            if (roleId is null)
+                return new SaveChange() { Check = false };
+            var check = await _masterdataContext.ListRoleByUsers.FirstOrDefaultAsync(x => x.UserId.Equals(request.UserId) && x.ListRoleId.Equals(roleId.Id));
+            return new SaveChange() { Check = check is not null };
         }
     }
 }

@@ -27,6 +27,7 @@ using WareHouse.API.Application.Interface;
 using WareHouse.API.Infrastructure.ElasticSearch;
 using Share.BaseCore;
 using Share.BaseCore.Cache.CacheName;
+using Share.BaseCore.Authozire;
 
 namespace WareHouse.API.Controllers
 {
@@ -66,7 +67,7 @@ namespace WareHouse.API.Controllers
                     await _elasticClient.IndexDocumentAsync(item);
                 }
             }
-          
+
             return Ok(new ResultMessageResponse()
             {
                 success = res.Result.Any()
@@ -100,7 +101,7 @@ namespace WareHouse.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("CreateDataWareHouseBook")]
-        public async Task<IActionResult> CreateDataWareHouseBook([FromBody]WareHouseBookDTO ware)
+        public async Task<IActionResult> CreateDataWareHouseBook([FromBody] WareHouseBookDTO ware)
         {
             ware.Id = Guid.NewGuid().ToString();
             var res = await _elasticSearchClient.InsertOrUpdateAsync(ware);
@@ -109,8 +110,8 @@ namespace WareHouse.API.Controllers
                 data = await _elasticClient.SearchAsync<WareHouseBookDTO>(s => s.From(0).Size(150))
             });
         }
-         
-        
+
+
         [AllowAnonymous]
         [HttpPost("UpdateDataWareHouseBook")]
         public async Task<IActionResult> UpdateDataWareHouseBook([FromBody] WareHouseBookDTO ware)
@@ -119,7 +120,7 @@ namespace WareHouse.API.Controllers
             return Ok(new ResultMessageResponse()
             {
                 data = await _elasticClient.SearchAsync<WareHouseBookDTO>(s => s.From(0).Size(150))
-        });
+            });
         }
 
         [AllowAnonymous]
@@ -163,7 +164,7 @@ namespace WareHouse.API.Controllers
 
 
 
-       
+
 
 
         [AllowAnonymous]
@@ -311,7 +312,7 @@ namespace WareHouse.API.Controllers
 
         #region R
 
-        [CheckRole(LevelCheck.READ)]
+        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -329,7 +330,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.READ)]
+        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
         [Route("get-by-id")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -346,7 +347,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.READ)]
+        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
         [Route("get-drop-tree")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -365,7 +366,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-        [CheckRole(LevelCheck.READ)]
+        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
         [Route("get-all")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -385,7 +386,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-        [CheckRole(LevelCheck.READ)]
+        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
         [Route("get-tree-view")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -415,7 +416,8 @@ namespace WareHouse.API.Controllers
 
         #region CUD
 
-        [CheckRole(LevelCheck.READ)]
+        // [CheckRole(LevelCheck.READ)]
+        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
         [Route("details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -452,7 +454,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.CREATE)]
+        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseCreateKey.Warehouse)]
         [Route("create")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -474,7 +476,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-        [CheckRole(LevelCheck.UPDATE)]
+        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseEditKey.Warehouse)]
         [Route("edit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -522,7 +524,7 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.UPDATE)]
+        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseEditKey.Warehouse)]
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -557,7 +559,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.CREATE)]
+        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseCreateKey.Warehouse)]
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -586,7 +588,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-        [CheckRole(LevelCheck.DELETE)]
+        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseDeleteKey.Warehouse)]
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

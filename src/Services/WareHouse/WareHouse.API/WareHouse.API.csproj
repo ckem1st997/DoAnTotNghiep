@@ -14,7 +14,6 @@
 		
 		<PackageReference Include="FluentValidation" Version="10.3.4" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="10.3.4" />
-		<PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
 
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
 		<PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.6" />
@@ -38,20 +37,14 @@
 		<Folder Include="Application\HealthChecks\" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\Share.Grpc\Share.Grpc.csproj" />
+		<!--<ProjectReference Include="..\..\..\Share.Grpc\Share.Grpc.csproj" />-->
+		<ProjectReference Include="..\..\..\ShareImplemention\ShareImplemention.csproj" />
+		<ProjectReference Include="..\..\..\ShareModelFull\ShareModelFull.csproj" />
 		<!--<ProjectReference Include="..\..\..\ShareModelFull\ShareModelFull.csproj" />-->
 		<ProjectReference Include="..\..\Base\Base\Base.csproj" />
 		<ProjectReference Include="..\..\Master\Infrastructure\Infrastructure.csproj" />
 		<ProjectReference Include="..\WareHouse.Domain\WareHouse.Domain.csproj" />
 		<ProjectReference Include="..\WareHouse.Infrastructure\WareHouse.Infrastructure.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Protobuf Include="..\..\..\Share.Grpc\Proto\getdata.proto" GrpcServices="Client">
-	    <Link>Protos\getdata.proto</Link>
-	  </Protobuf>
-	  <Protobuf Include="..\..\..\Share.Grpc\Proto\getdatawh.proto" GrpcServices="Server">
-	    <Link>Protos\getdatawh.proto</Link>
-	  </Protobuf>
 	</ItemGroup>
 	<!--<ItemGroup>
 	  <Protobuf Include="Proto\getdatawh.proto" GrpcServices="Server" Generator="MSBuild:Compile" />

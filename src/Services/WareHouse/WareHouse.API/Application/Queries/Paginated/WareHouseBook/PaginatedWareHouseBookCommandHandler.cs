@@ -94,8 +94,9 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
             }
 
             // sẽ search lâu vì sẽ dính exception
-            var check = await _elasticClient.PingAsync();
-            if (check.IsValid)
+          //  var check = await _elasticClient.PingAsync();
+            bool check = false;
+            if (check)
             {
                 #region Elastic
 

@@ -133,9 +133,9 @@ namespace Master.Controllers
         [Route("edit-update")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Edit(IEnumerable<string> ids, string id,string appId)
+        public async Task<IActionResult> Edit(IEnumerable<string> ids, string id, string appId)
         {
-            if (ids.Count() < 1 || id.IsNullOrEmpty())
+            if (id.IsNullOrEmpty())
             {
                 return Ok(new ResultMessageResponse()
                 {
@@ -148,16 +148,17 @@ namespace Master.Controllers
             var listdelete = await _context.ListRoleByUsers.AsNoTracking().Where(x => x.UserId.Equals(id) && x.AppId.Equals(appId)).ToListAsync();
             if (listdelete.Any())
                 _context.ListRoleByUsers.RemoveRange(listdelete);
-            foreach (var item in ids)
-            {
-                await _context.ListRoleByUsers.AddAsync(new ListRoleByUser()
+            if (ids.Any())
+                foreach (var item in ids)
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    UserId = id,
-                    ListRoleId = item,
-                    AppId=appId
-                });
-            }
+                    await _context.ListRoleByUsers.AddAsync(new ListRoleByUser()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        UserId = id,
+                        ListRoleId = item,
+                        AppId = appId
+                    });
+                }
             var res = await _context.SaveChangesAsync();
             return Ok(new ResultMessageResponse()
             {

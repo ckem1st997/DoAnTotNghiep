@@ -34,7 +34,7 @@ namespace Share.BaseCore.Authozire
             IGetClaims iAuthenForMaster = EngineContext.Current.Resolve<IGetClaims>();
             bool checkRole = false;
             if (_userService != null)
-                checkRole = await _userService.GetAuthozireByUserNameToKey(iAuthenForMaster.GetUserNameByClaims(), _keyRole);
+                checkRole = await _userService.GetAuthozireByUserIdToAuthorizeRole(iAuthenForMaster.GetIdUserByClaims(), _keyRole);
 
 
             if (!checkRole && _userService == null)
