@@ -20,6 +20,7 @@ namespace Master.Service
         public Task<bool> CheckActiveUser(string userName);
         public UserMaster GetUserById(string id);
         public UserMaster GetUserByUserName(string userName);
+        public Task<bool> CheckAuthozireByUserIdAndRoleKey(string userId, string roleKey);
         public Task<IPaginatedList<UserMaster>> GetListUserAsync(int pages, int number, string wareHouseId, string keyWords);
     }
 }

@@ -1,0 +1,50 @@
+<div class=" ">
+  <!-- <p-multiSelect [options]="foods" defaultLabel="Select a App" optionValue="id" (selectionChange)='selectEvent($event)'
+    [(ngModel)]="selectedValue" optionLabel="name"></p-multiSelect> -->
+  <p-cascadeSelect [(ngModel)]="selectedValue" [options]="foods" (onChange)='selectEvent($event)' optionLabel="name"
+    optionGroupLabel="name" [optionGroupChildren]="['states', 'cities']" placeholder="Select a App"
+    [style]="{'minWidth': '14rem'}"></p-cascadeSelect>
+  <button style="margin:5px;" mat-raised-button color="success" (click)="openDialogAuthozire()">
+    <mat-icon class="mat-18">add</mat-icon>Phân quyền
+  </button>
+</div>
+
+<div id="viewcheck" [hidden]="!checkSizeWindows">
+
+  <p-table (onPage)="setMyPagination($event)" [totalRecords]="totalRows" [first]="first" scrollHeight="50vh"
+    [scrollable]="true" [value]="files5" [columns]="cols" selectionMode="checkbox" [(selection)]="selectedNodes3"
+    [paginator]="true" [rows]="10" [resizableColumns]="true" styleClass="p-datatable-gridlines p-datatable-striped"
+    [tableStyle]="{'min-width': '50rem'}"
+    currentPageReportTemplate="Hiển thị từ {first} tới {last} của {totalRecords} kết quả"
+    [rowsPerPageOptions]="[10,25,50]" [showCurrentPageReport]="true">
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        <span class="ml-2">Chọn tất cả</span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns">
+          {{col.header}}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowNode let-columns="columns">
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="rowNode" ></p-tableCheckbox>
+        </td>
+        <td>{{rowNode.name}}</td>
+        <td>{{rowNode.description}}</td>
+        <td>
+          <p-checkbox [(ngModel)]="rowNode.inActive" [binary]="true"></p-checkbox>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<div [hidden]="checkSizeWindows">
+  Màn hình của bạn chưa đủ yêu cầu !
+</div>

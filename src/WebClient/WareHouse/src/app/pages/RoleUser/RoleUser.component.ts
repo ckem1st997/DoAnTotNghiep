@@ -30,6 +30,7 @@ import { ListRoleComponent } from '../ListRole/ListRole.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 import { ListRoleByUserService } from './../../service/ListRoleByUser.service';
+import { ListAuthozireShowToUserComponent } from 'src/app/method/details/ListAuthozireShowToUser/ListAuthozireShowToUser.component';
 
 @Component({
   selector: 'app-RoleUser',
@@ -202,6 +203,46 @@ export class RoleUserComponent implements OnInit {
     });
 
   }
+//openDialogByUser
+
+openDialogByUser(model: UserMaster): void {
+  this.service.EditIndex(model.id).subscribe(x => {
+    if (x.success) {
+      const dialogRef = this.dialogService.open(ListAuthozireShowToUserComponent, {
+        width: '90%',
+        data: {
+          id: model.id,
+          type: 1
+        },
+      });
+      dialogRef.onClose.subscribe((result) => {
+        console.log(result);
+        this.listrolebyuser.EditOrCreate(result.idselect, model.id,result.appid).subscribe(x => {
+          if (x.success)
+            this.messageService.add({ severity: 'success', summary: 'Thông báo', detail: 'Phân quyền thành công !' });
+          else
+            this.messageService.add({ severity: 'error', summary: 'Thông báo', detail: 'Phân quyền thất bại !' });
+
+        })
+        // if (result) {
+        //  }
+      });
+      // dialogRef.afterClosed().subscribe(result => {
+      //   var res = result;
+      //   if (res) {
+      //     this.notifier.notify('success', 'Phân quyền thành công !');
+      //     this.GetData();
+      //   }
+      // });
+    }
+    //  else
+    // this.notifier.notify('warn', x.message);
+
+
+  });
+
+}
+
 
   openDialogDetals(model: UnitDTO): void {
     var val = document.getElementById("searchInput") as HTMLInputElement;

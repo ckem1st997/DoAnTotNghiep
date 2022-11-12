@@ -37,6 +37,12 @@ export class ListAuthozireRoleByUserService {
       tap(_ => console.log(`create`)),
     );
   }
+  EditOrCreate(ids: Array<string>, id: string,appid:string): Observable<ResultDataResponse<ListAuthozireRoleByUser>> {
+    var url = this.baseUrlMaster + `/edit-update?id=`+id+'&appId='+appid;
+    return this.http.post<ResultDataResponse<ListAuthozireRoleByUser>>(url, ids, this.httpOptions).pipe(
+      tap(_ => console.log(`create`)),
+    );
+  }
 
   Edit(model: ListAuthozireRoleByUser): Observable<ResultDataResponse<ListAuthozireRoleByUser>> {
     var url = this.baseUrlMaster + `/edit`;

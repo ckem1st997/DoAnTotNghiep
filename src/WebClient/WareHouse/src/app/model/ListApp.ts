@@ -19,10 +19,16 @@ export interface ListAuthozire extends BaseModel {
     softShow: number | null;
 }
 
+export interface ListAuthozireByListRole extends BaseModel {
+    listRoleId: string;
+    puthozireId: string;
+    appId: string;
+}
 
 export interface ListAuthozireRoleByUser extends BaseModel {
     listAuthozireId: string;
     userId: string;
+    appId: string;
 }
 
 

@@ -1,16 +1,16 @@
-﻿using Abp.Extensions;
-using Microsoft.AspNetCore.Mvc;
+﻿
 
 namespace Master.Controllers
 {
-    public class ListRoleByUserController : BaseControllerMaster
+    public class ListAuthozireByListRoleController : BaseControllerMaster
     {
         private readonly MasterdataContext _context;
 
-        public ListRoleByUserController(MasterdataContext context)
+        public ListAuthozireByListRoleController(MasterdataContext context)
         {
             _context = context;
         }
+
 
         [HttpGet]
         [Route("get-list")]
@@ -18,7 +18,7 @@ namespace Master.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetList()
         {
-            var list = _context.ListRoleByUsers.Where(x => x.Id != null);
+            var list = _context.ListAuthozireByListRoles.Where(x => x.Id != null);
             return Ok(new ResultMessageResponse()
             {
                 data = list,
@@ -32,7 +32,7 @@ namespace Master.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetListId(string id,string appId)
         {
-            var list = _context.ListRoleByUsers.Where(x => x.Id != null && x.UserId.Equals(id) && x.AppId.Equals(appId)).Select(x => x.ListRoleId);
+            var list = _context.ListAuthozireByListRoles.Where(x => x.Id != null && x.AuthozireId.Equals(id) && x.AppId.Equals(appId)).Select(x => x.ListRoleId);
             return Ok(new ResultMessageResponse()
             {
                 data = list,
@@ -40,9 +40,6 @@ namespace Master.Controllers
             });
         }
 
-
-
-        [CheckRole(LevelCheck.CREATE)]
         [HttpGet]
         [Route("create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -52,17 +49,16 @@ namespace Master.Controllers
             return Ok(new ResultMessageResponse()
             {
                 success = true,
-                data = new ListRoleByUser()
+                data = new ListAuthozireByListRole()
             });
         }
 
 
-        [CheckRole(LevelCheck.CREATE)]
         [HttpPost]
         [Route("create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Create(ListRoleByUser list)
+        public async Task<IActionResult> Create(ListAuthozireByListRole list)
         {
             if (list is null)
             {
@@ -73,7 +69,7 @@ namespace Master.Controllers
                 });
             }
             list.Id = Guid.NewGuid().ToString();
-            await _context.ListRoleByUsers.AddAsync(list);
+            await _context.ListAuthozireByListRoles.AddAsync(list);
             return Ok(new ResultMessageResponse()
             {
                 success = await _context.SaveChangesAsync() > 0
@@ -97,7 +93,7 @@ namespace Master.Controllers
                 });
             }
 
-            var res = await _context.ListRoleByUsers.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            var res = await _context.ListAuthozireByListRoles.FirstOrDefaultAsync(x => x.Id.Equals(id));
             return Ok(new ResultMessageResponse()
             {
                 success = res != null,
@@ -110,7 +106,7 @@ namespace Master.Controllers
         [Route("edit")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Edit(ListRoleByUser list)
+        public async Task<IActionResult> Edit(ListAuthozireByListRole list)
         {
             if (list is null)
             {
@@ -120,7 +116,7 @@ namespace Master.Controllers
                     data = "Không nhận được dữ liệu"
                 });
             }
-            _context.ListRoleByUsers.Update(list);
+            _context.ListAuthozireByListRoles.Update(list);
             var res = await _context.SaveChangesAsync();
             return Ok(new ResultMessageResponse()
             {
@@ -128,14 +124,13 @@ namespace Master.Controllers
             });
         }
 
-
         [HttpPost]
         [Route("edit-update")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Edit(IEnumerable<string> ids, string id, string appId)
         {
-            if (id.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(id))
             {
                 return Ok(new ResultMessageResponse()
                 {
@@ -145,16 +140,16 @@ namespace Master.Controllers
             }
             // check appId
 
-            var listdelete = await _context.ListRoleByUsers.AsNoTracking().Where(x => x.UserId.Equals(id) && x.AppId.Equals(appId)).ToListAsync();
+            var listdelete = await _context.ListAuthozireByListRoles.AsNoTracking().Where(x => x.AuthozireId.Equals(id) && x.AppId.Equals(appId)).ToListAsync();
             if (listdelete.Any())
-                _context.ListRoleByUsers.RemoveRange(listdelete);
+                _context.ListAuthozireByListRoles.RemoveRange(listdelete);
             if (ids.Any())
                 foreach (var item in ids)
                 {
-                    await _context.ListRoleByUsers.AddAsync(new ListRoleByUser()
+                    await _context.ListAuthozireByListRoles.AddAsync(new ListAuthozireByListRole()
                     {
                         Id = Guid.NewGuid().ToString(),
-                        UserId = id,
+                        AuthozireId = id,
                         ListRoleId = item,
                         AppId = appId
                     });
@@ -168,8 +163,6 @@ namespace Master.Controllers
 
 
 
-
-        [CheckRole(LevelCheck.DELETE)]
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -177,10 +170,10 @@ namespace Master.Controllers
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
             bool res = false;
-            var get = _context.ListRoleByUsers.Where(x => listIds.Contains(x.Id));
+            var get = _context.ListAuthozireByListRoles.Where(x => listIds.Contains(x.Id));
             if (get != null)
             {
-                _context.ListRoleByUsers.RemoveRange(get);
+                _context.ListAuthozireByListRoles.RemoveRange(get);
                 res = await _context.SaveChangesAsync() > 0;
             }
 

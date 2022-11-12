@@ -14,7 +14,7 @@ import { ResultMessageResponse } from 'src/app/model/ResultMessageResponse';
 import { RoleSearchModel } from 'src/app/model/RoleSearchModel';
 import { ListRoleCreateComponent } from 'src/app/method/create/ListRoleCreate/ListRoleCreate.component';
 import { ListRoleEditComponent } from 'src/app/method/edit/ListRoleEdit/ListRoleEdit.component';
-import { ListRole } from 'src/app/model/ListApp';
+import { ListAuthozire, ListRole } from 'src/app/model/ListApp';
 import { ListApp } from 'src/app/model/ListApp';
 import { TreeView } from 'src/app/model/TreeView';
 import { ListAppService } from 'src/app/service/ListApp.service';
@@ -25,33 +25,22 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ListRoleByUserService } from './../../../service/ListRoleByUser.service';
 import { ListAuthozireRoleByUserService } from 'src/app/service/ListAuthozireRoleByUser.service';
 import { ListAuthozireByListRoleService } from 'src/app/service/ListAuthozireByListRole.service';
-
-
-interface ExampleFlatNode {
-  expandable: boolean;
-  level: number;
-  name: string
-  key: string;
-  inActive: boolean;
-  description: string;
-  isAPI: boolean;
-  id: string;
-}
-
+import { ListAuthozireService } from 'src/app/service/ListAuthozire.service';
 
 @Component({
-  selector: 'app-ListRoleShowToAuthozire',
-  templateUrl: './ListRoleShowToAuthozire.component.html',
-  styleUrls: ['./ListRoleShowToAuthozire.component.scss']
+  selector: 'app-ListAuthozireShowToUser',
+  templateUrl: './ListAuthozireShowToUser.component.html',
+  styleUrls: ['./ListAuthozireShowToUser.component.scss']
 })
-export class ListRoleShowToAuthozireComponent implements OnInit {
+export class ListAuthozireShowToUserComponent implements OnInit {
 
+  
 
 
   @Input() item: ModelDialog | undefined;
   //
-  files5: TreeNode<ListRole>[] = [];
-  selectedNodes3: TreeNode<ListRole>[] = [];
+  files5: ListAuthozire[] = [];
+  selectedNodes3: ListAuthozire[] = [];
 
   cols: any[] = [];
 
@@ -62,7 +51,7 @@ export class ListRoleShowToAuthozireComponent implements OnInit {
   foods: ListApp[] = [];
 
   //
-  listDelete: ListRole[] = [];
+  listDelete: ListAuthozire[] = [];
   //select
   //noti
   private readonly notifier!: NotifierService;
@@ -83,7 +72,7 @@ export class ListRoleShowToAuthozireComponent implements OnInit {
     num: 15,
     pages: 0
   };
-  list: ResultMessageResponse<ListRole> = {
+  list: ResultMessageResponse<ListAuthozire> = {
     success: false,
     code: '',
     httpStatusCode: 0,
@@ -99,14 +88,13 @@ export class ListRoleShowToAuthozireComponent implements OnInit {
   first = 0;
 
   rows = 10;
-  constructor(private authbyuser: ListAuthozireByListRoleService, private listrolebyusser: ListRoleByUserService, public ref: DynamicDialogRef, public config: DynamicDialogConfig, private messageService: MessageService, private serviceapp: ListAppService, private service: ListRoleService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService) {
+  constructor(private authbyuser: ListAuthozireByListRoleService, private listrolebyusser: ListRoleByUserService, public ref: DynamicDialogRef, public config: DynamicDialogConfig, private messageService: MessageService, private serviceapp: ListAppService, private service: ListAuthozireService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService) {
 
     this.notifier = notifierService;
     this.isRowSelectable = this.isRowSelectable.bind(this);
 
   }
   setMyPagination(event: any) {
-
     let startRow = event.first + 1;
     let endRow = startRow + event.rows;
     this.totalRows = 1000;
@@ -132,17 +120,6 @@ export class ListRoleShowToAuthozireComponent implements OnInit {
   isFirstPage(): boolean {
     return this.files5 ? this.first === 0 : true;
   }
-  selectProduct(product: any) {
-    //this.messageService.add({severity:'info', summary:'Product Selected', detail: product.name});
-  }
-
-  onRowSelect(event: any) {
-    // this.messageService.add({severity:'info', summary:'Product Selected', detail: event.data.name});
-  }
-
-  onRowUnselect(event: any) {
-    //this.messageService.add({severity:'info', summary:'Product Unselected',  detail: event.data.name});
-  }
 
   isRowSelectable(event: any): boolean {
     return !this.isOutOfStock(event.data);
@@ -158,7 +135,6 @@ export class ListRoleShowToAuthozireComponent implements OnInit {
     // 'id', 'name', 'key', 'description', 'isAPI', 'inActive'
     this.cols = [
       { field: 'name', header: 'Name' },
-      { field: 'key', header: 'Key' },
       { field: 'description', header: 'Mô tả' },
       { field: 'isAPI', header: 'API' },
       { field: 'inActive', header: 'Hoạt động' }
@@ -193,7 +169,7 @@ export class ListRoleShowToAuthozireComponent implements OnInit {
       else if (this.config.data.type == 2)
         this.authbyuser.getListByUserId(this.config.data.id, this.selectedValue.id).subscribe(x => this.listRoleByUser = x.data);
 
-      this.service.getListTreeTable(this.selectedValue.id).subscribe(list => {
+      this.service.getList().subscribe(list => {
         this.files5 = list.data;
         this.getElement(list.data);
       });
@@ -201,22 +177,13 @@ export class ListRoleShowToAuthozireComponent implements OnInit {
 
   }
 
-  getElement(e: TreeNode<ListRole>[]) {
+  getElement(e: ListAuthozire[]) {
     let model = this.listRoleByUser;
     console.log(model);
     e.forEach(element => {
-      if (element.data != undefined && element.data.id != undefined && model.find(x => element.data?.id.includes(x)))
+      if (element != undefined && element.id != undefined && model.find(x => element?.id.includes(x)))
         this.selectedNodes3.push(element);
-      if (element.children != undefined && element.children.length > 0)
-        this.getElement(element.children);
     });
-    // if (e.isAPI)
-    //   this.selectedNodes3.push(e);
-    // if (e.children != undefined && e.children.length > 0)
-    //   e.children.forEach(element => {
-    //     this.getElement(element);
-
-    //   });
   }
 
 
@@ -258,8 +225,8 @@ export class ListRoleShowToAuthozireComponent implements OnInit {
     var idselect = Array<string>();
     for (let index = 0; index < this.selectedNodes3.length; index++) {
       const element = this.selectedNodes3[index];
-      if (element.data?.id)
-        idselect.push(element.data?.id);
+      if (element?.id)
+        idselect.push(element?.id);
     }
     this.ref.close({
       idselect: idselect,

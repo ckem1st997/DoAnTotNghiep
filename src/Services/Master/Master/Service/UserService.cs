@@ -234,5 +234,20 @@ namespace Master.Service
             // res.Password = "";
             return res;
         }
+
+        public async Task<bool> CheckAuthozireByUserIdAndRoleKey(string userId, string roleKey)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(roleKey))
+            {
+                throw new ArgumentException($"'{nameof(userId)}' or {nameof(roleKey)}' cannot be null or empty.", nameof(roleKey));
+            }
+
+            var roleId = await _context.ListRoles.FirstOrDefaultAsync(x => x.Key.Equals(roleKey));
+            if (roleId is null)
+                return false;
+            var checkListAuthozire = await _context.ListAuthozireRoleByUsers.FirstOrDefaultAsync(x => x.UserId.Equals(userId) && x.ListAuthozireId.Equals(roleId.Id));
+            var checkListRole = await _context.ListRoleByUsers.FirstOrDefaultAsync(x => x.UserId.Equals(userId) && x.ListRoleId.Equals(roleId.Id));
+            return true;
+        }
     }
 }

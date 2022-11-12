@@ -33,6 +33,11 @@ import { ListAppEditComponent } from 'src/app/method/edit/ListAppEdit/ListAppEdi
 import { ListAuthozireService } from 'src/app/service/ListAuthozire.service';
 import { ListAuthozireCreateComponentComponent } from 'src/app/method/create/ListAuthozireCreateComponent/ListAuthozireCreateComponent.component';
 import { ListAuthozireEditComponent } from 'src/app/method/edit/ListAuthozireEdit/ListAuthozireEdit.component';
+import { MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
+import { ListRoleShowToAuthozireComponent } from 'src/app/method/details/ListRoleShowToAuthozire/ListRoleShowToAuthozire.component';
+import { ListAuthozireRoleByUserService } from 'src/app/service/ListAuthozireRoleByUser.service';
+import { ListAuthozireByListRoleService } from 'src/app/service/ListAuthozireByListRole.service';
 @Component({
   selector: 'app-ListAuthozire',
   templateUrl: './ListAuthozire.component.html',
@@ -84,7 +89,7 @@ export class ListAuthozireComponent implements OnInit {
   @ViewChild(MatSort)
   sort!: MatSort;
 
-  constructor(private service: ListAuthozireService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService) {
+  constructor(private listrolebyuser: ListAuthozireByListRoleService,public dialogService: DialogService,private messageService: MessageService,private service: ListAuthozireService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService) {
 
     this.notifier = notifierService;
 
@@ -169,6 +174,32 @@ export class ListAuthozireComponent implements OnInit {
       }
     });
   }
+
+  openDialogByAuthozire(model: ListAuthozire): void {
+    this.service.EditIndex(model.id).subscribe(x => {
+      if (x.success) {
+        const dialogRef = this.dialogService.open(ListRoleShowToAuthozireComponent, {
+          width: '90%',
+          data: {
+            id: model.id,
+            type: 2
+          },
+        });
+        dialogRef.onClose.subscribe((result) => {
+          console.log(result);
+          this.listrolebyuser.EditOrCreate(result.idselect, model.id,result.appid).subscribe(x => {
+            if (x.success)
+              this.messageService.add({ severity: 'success', summary: 'Thông báo', detail: 'Phân quyền thành công !' });
+            else
+              this.messageService.add({ severity: 'error', summary: 'Thông báo', detail: 'Phân quyền thất bại !' });
+
+          })
+        });
+      }
+    });
+
+  }
+
 
   openDialogDeleteAll(): void {
     var model = this.selection.selected;

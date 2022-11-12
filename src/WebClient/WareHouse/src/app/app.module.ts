@@ -142,6 +142,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { Table, TableModule, TableService } from 'primeng/table';
 import { DialogService } from 'primeng/dynamicdialog';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { ListAuthozireShowToUserComponent } from './method/details/ListAuthozireShowToUser/ListAuthozireShowToUser.component';
 const customNotifierOptions: NotifierOptions = {
   position: {
     horizontal: {
@@ -184,6 +185,7 @@ const customNotifierOptions: NotifierOptions = {
 };
 @NgModule({
   declarations: [
+    ListAuthozireShowToUserComponent,
     AppComponent,
     HeaderComponent,
     WareHouseBenginingComponent,

@@ -26,6 +26,7 @@ namespace Infrastructure
         public virtual DbSet<ListRole> ListRoles { get; set; }
         public virtual DbSet<ListRoleByUser> ListRoleByUsers { get; set; }
         public virtual DbSet<UserMaster> UserMasters { get; set; }
+        public virtual DbSet<ListAuthozireByListRole> ListAuthozireByListRoles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -51,6 +52,7 @@ namespace Infrastructure
             modelBuilder.ApplyConfiguration(new Configurations.ListRoleConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.ListRoleByUserConfiguration());
             modelBuilder.ApplyConfiguration(new Configurations.UserMasterConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.ListAuthozireByListRoleConfiguration());
             OnModelCreatingPartial(modelBuilder);
         }
 
