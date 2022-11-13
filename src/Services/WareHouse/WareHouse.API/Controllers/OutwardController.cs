@@ -53,7 +53,7 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.READ)]
+        //[CheckRole(LevelCheck.READ)]
         [Route("details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -72,16 +72,16 @@ namespace WareHouse.API.Controllers
             var data = await _mediat.Send(new OutwardGetFirstCommand() { Id = id });
             if (data != null)
             {
-                if (!string.IsNullOrEmpty(data.WareHouseId))
-                {
-                    var check = await _userSevice.CheckWareHouseIdByUser(data.WareHouseId);
-                    if (!check)
-                        return Unauthorized(new ResultMessageResponse()
-                        {
-                            success = false,
-                            message = "Bạn không có quyền truy cập vào kho này !"
-                        });
-                }
+                //if (!string.IsNullOrEmpty(data.WareHouseId))
+                //{
+                //    var check = await _userSevice.CheckWareHouseIdByUser(data.WareHouseId);
+                //    if (!check)
+                //        return Unauthorized(new ResultMessageResponse()
+                //        {
+                //            success = false,
+                //            message = "Bạn không có quyền truy cập vào kho này !"
+                //        });
+                //}
                 await GetDataToDrop(data, true);
             }
 
@@ -94,7 +94,6 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.UPDATE)]
         [Route("edit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -113,16 +112,16 @@ namespace WareHouse.API.Controllers
             var data = await _mediat.Send(new OutwardGetFirstCommand() { Id = id });
             if (data != null)
             {
-                if (!string.IsNullOrEmpty(data.WareHouseId))
-                {
-                    var check = await _userSevice.CheckWareHouseIdByUser(data.WareHouseId);
-                    if (!check)
-                        return Unauthorized(new ResultMessageResponse()
-                        {
-                            success = false,
-                            message = "Bạn không có quyền truy cập vào kho này !"
-                        });
-                }
+                //if (!string.IsNullOrEmpty(data.WareHouseId))
+                //{
+                //    var check = await _userSevice.CheckWareHouseIdByUser(data.WareHouseId);
+                //    if (!check)
+                //        return Unauthorized(new ResultMessageResponse()
+                //        {
+                //            success = false,
+                //            message = "Bạn không có quyền truy cập vào kho này !"
+                //        });
+                //}
                 await GetDataToDrop(data);
             }
 
@@ -136,23 +135,23 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.UPDATE)]
+        //[CheckRole(LevelCheck.UPDATE)]
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Edit(OutwardCommands OutwardCommands)
         {
-            if (!string.IsNullOrEmpty(OutwardCommands.WareHouseId))
-            {
-                var check = await _userSevice.CheckWareHouseIdByUser(OutwardCommands.WareHouseId);
-                if (!check)
-                    return Unauthorized(new ResultMessageResponse()
-                    {
-                        success = false,
-                        message = "Bạn không có quyền truy cập vào kho này !"
-                    });
-            }
+            //if (!string.IsNullOrEmpty(OutwardCommands.WareHouseId))
+            //{
+            //    var check = await _userSevice.CheckWareHouseIdByUser(OutwardCommands.WareHouseId);
+            //    if (!check)
+            //        return Unauthorized(new ResultMessageResponse()
+            //        {
+            //            success = false,
+            //            message = "Bạn không có quyền truy cập vào kho này !"
+            //        });
+            //}
 
             OutwardCommands.ModifiedDate = DateTime.Now;
             foreach (var item in OutwardCommands.OutwardDetails)
@@ -219,23 +218,23 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.CREATE)]
+        //[CheckRole(LevelCheck.CREATE)]
         [Route("create")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(string idWareHouse)
         {
-            if (!string.IsNullOrEmpty(idWareHouse))
-            {
-                var check = await _userSevice.CheckWareHouseIdByUser(idWareHouse);
-                if (!check)
-                    return Unauthorized(new ResultMessageResponse()
-                    {
-                        success = false,
-                        message = "Bạn không có quyền truy cập vào kho này !"
-                    });
-            }
+            //if (!string.IsNullOrEmpty(idWareHouse))
+            //{
+            //    var check = await _userSevice.CheckWareHouseIdByUser(idWareHouse);
+            //    if (!check)
+            //        return Unauthorized(new ResultMessageResponse()
+            //        {
+            //            success = false,
+            //            message = "Bạn không có quyền truy cập vào kho này !"
+            //        });
+            //}
             var modelCreate = new OutwardDTO();
             modelCreate.Id = Guid.NewGuid().ToString();
             modelCreate.WareHouseId = idWareHouse;
@@ -275,23 +274,23 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.CREATE)]
+        //[CheckRole(LevelCheck.CREATE)]
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(OutwardCommands OutwardCommands)
         {
-            if (!string.IsNullOrEmpty(OutwardCommands.WareHouseId))
-            {
-                var check = await _userSevice.CheckWareHouseIdByUser(OutwardCommands.WareHouseId);
-                if (!check)
-                    return Unauthorized(new ResultMessageResponse()
-                    {
-                        success = false,
-                        message = "Bạn không có quyền truy cập vào kho này !"
-                    });
-            }
+            //if (!string.IsNullOrEmpty(OutwardCommands.WareHouseId))
+            //{
+            //    var check = await _userSevice.CheckWareHouseIdByUser(OutwardCommands.WareHouseId);
+            //    if (!check)
+            //        return Unauthorized(new ResultMessageResponse()
+            //        {
+            //            success = false,
+            //            message = "Bạn không có quyền truy cập vào kho này !"
+            //        });
+            //}
             OutwardCommands.CreatedDate = DateTime.Now;
             OutwardCommands.ModifiedDate = DateTime.Now;
             foreach (var item in OutwardCommands.OutwardDetails)
@@ -356,7 +355,7 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.DELETE)]
+        //[CheckRole(LevelCheck.DELETE)]
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

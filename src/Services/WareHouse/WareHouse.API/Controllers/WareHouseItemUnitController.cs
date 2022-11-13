@@ -37,7 +37,7 @@ namespace WareHouse.API.Controllers
         }
         #region R
 
-        [CheckRole(LevelCheck.CREATE)]
+        //[CheckRole(LevelCheck.CREATE)]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -70,7 +70,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.READ)]
+        //[CheckRole(LevelCheck.READ)]
         [Route("check-item-unit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -105,7 +105,7 @@ namespace WareHouse.API.Controllers
         #endregion
         #region CD
 
-        [CheckRole(LevelCheck.CREATE)]
+        //[CheckRole(LevelCheck.CREATE)]
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -120,7 +120,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-        [CheckRole(LevelCheck.DELETE)]
+        //[CheckRole(LevelCheck.DELETE)]
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

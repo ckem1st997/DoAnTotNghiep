@@ -416,7 +416,7 @@ namespace WareHouse.API.Controllers
 
         #region CUD
 
-        // [CheckRole(LevelCheck.READ)]
+        // //[CheckRole(LevelCheck.READ)]
         [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
         [Route("details")]
         [HttpGet]

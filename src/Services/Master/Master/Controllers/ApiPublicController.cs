@@ -4,8 +4,7 @@
 
 namespace Master.Controllers
 {
-    [Authorize(Roles = "User,Admin,Manager")]
-    [CheckRole(LevelCheck.READ)]
+
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     public class ApiPublicController : Controller

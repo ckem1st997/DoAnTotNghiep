@@ -34,7 +34,6 @@ using Share.BaseCore.EventBus.Abstractions;
 
 namespace WareHouse.API.Controllers
 {
-    [CheckRole(LevelCheck.WAREHOUSE)]
     public class WareHouseBookController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
@@ -59,23 +58,22 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.READ)]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> IndexAsync([FromQuery] PaginatedWareHouseBookCommand paginatedList)
         {
-            if (!string.IsNullOrEmpty(paginatedList.WareHouseId))
-            {
-                var check = await _userSevice.CheckWareHouseIdByUser(paginatedList.WareHouseId);
-                if (!check)
-                    return Ok(new ResultMessageResponse()
-                    {
-                        success = false,
-                        message = "Bạn không có quyền truy cập vào kho này !"
-                    }); ;
-            }
+            //if (!string.IsNullOrEmpty(paginatedList.WareHouseId))
+            //{
+            //    var check = await _userSevice.CheckWareHouseIdByUser(paginatedList.WareHouseId);
+            //    if (!check)
+            //        return Ok(new ResultMessageResponse()
+            //        {
+            //            success = false,
+            //            message = "Bạn không có quyền truy cập vào kho này !"
+            //        }); ;
+            //}
 
             var data = await _mediat.Send(paginatedList);
             var result = new ResultMessageResponse()
@@ -88,7 +86,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.READ)]
+        //[CheckRole(LevelCheck.READ)]
 
         [Route("get-drop-tree")]
         [HttpGet]
@@ -108,7 +106,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-        [CheckRole(LevelCheck.READ)]
+        //[CheckRole(LevelCheck.READ)]
 
         [Route("get-unit-by-id")]
         [HttpGet]
@@ -135,7 +133,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-        [CheckRole(LevelCheck.READ)]
+        //[CheckRole(LevelCheck.READ)]
 
         [Route("check-ui-quantity")]
         [HttpGet]
@@ -161,7 +159,7 @@ namespace WareHouse.API.Controllers
 
         #region inward-details
 
-        [CheckRole(LevelCheck.READ)]
+        //[CheckRole(LevelCheck.READ)]
         [Route("get-data-to-warehouse-book")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -180,7 +178,7 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.CREATE)]
+        //[CheckRole(LevelCheck.CREATE)]
         [Route("create-inward-details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -198,7 +196,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.UPDATE)]
+        //[CheckRole(LevelCheck.UPDATE)]
         [Route("edit-inward-details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -221,7 +219,7 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.READ)]
+        //[CheckRole(LevelCheck.READ)]
         [Route("details-inward-details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -247,7 +245,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.UPDATE)]
+        //[CheckRole(LevelCheck.UPDATE)]
         [Route("edit-inward-details")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -431,7 +429,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.CREATE)]
+        //[CheckRole(LevelCheck.CREATE)]
         [Route("create-inward-details")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -478,7 +476,7 @@ namespace WareHouse.API.Controllers
 
 
         #region  outward-details
-        [CheckRole(LevelCheck.CREATE)]
+        //[CheckRole(LevelCheck.CREATE)]
         [Route("create-outward-details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -533,7 +531,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.UPDATE)]
+        //[CheckRole(LevelCheck.UPDATE)]
         [Route("edit-outward-details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -555,7 +553,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.READ)]
+        //[CheckRole(LevelCheck.READ)]
         [Route("details-outward-details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -582,7 +580,7 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.UPDATE)]
+        //[CheckRole(LevelCheck.UPDATE)]
         [Route("edit-outward-details")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -693,7 +691,7 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.CREATE)]
+        //[CheckRole(LevelCheck.CREATE)]
         [Route("create-outward-details")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -745,7 +743,7 @@ namespace WareHouse.API.Controllers
 
         #region delete
 
-        [CheckRole(LevelCheck.DELETE)]
+        //[CheckRole(LevelCheck.DELETE)]
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -848,7 +846,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.DELETE)]
+        //[CheckRole(LevelCheck.DELETE)]
         [Route("delete-inward")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -896,7 +894,7 @@ namespace WareHouse.API.Controllers
 
         }
 
-        [CheckRole(LevelCheck.DELETE)]
+        //[CheckRole(LevelCheck.DELETE)]
         [Route("delete-outward")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -944,7 +942,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.DELETE)]
+        //[CheckRole(LevelCheck.DELETE)]
         [Route("delete-details-inward")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -988,7 +986,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-        [CheckRole(LevelCheck.DELETE)]
+        //[CheckRole(LevelCheck.DELETE)]
         [Route("delete-details-outward")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

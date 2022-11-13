@@ -39,7 +39,6 @@ namespace Share.BaseCore.Authozire.ConfigureServices
             });
             //
             services.AddHttpContextAccessor();
-            services.AddScoped<IGetClaims, GetClaims>();
             services.AddScoped<IAuthozireExtensionForMaster, AuthozireExtensionForMaster>();
 
             // Adding Authentication  

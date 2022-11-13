@@ -1,6 +1,5 @@
 ﻿using Share.BaseCore.Extensions;
 using Infrastructure;
-using Master.Application.Authentication;
 using Master.Controllers.BaseController;
 using Master.Service;
 using Microsoft.AspNetCore.Authorization;
@@ -21,9 +20,6 @@ namespace Master.Controllers
             _userService = userService;
         }
 
-
-        [Authorize(Roles = "User,Admin,Manager")]
-        [CheckRole(LevelCheck.READ)]
         [Route("get-list-by-user")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]

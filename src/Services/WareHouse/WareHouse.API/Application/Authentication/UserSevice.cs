@@ -8,6 +8,7 @@ using WareHouse.API.Application.Model;
 
 namespace WareHouse.API.Application.Authentication
 {
+    // service này phục vụ cho nhu cầu riêng, nên không cần viết tại share
     // thử xoá connect service grpc, rồi import sharegrpcfull và chạy thử
     // nếu được thì sẽ có một nơi chứa cả file server và client
     // các service muốn dùng dạng nào thì có thể import vô mà cấu hình

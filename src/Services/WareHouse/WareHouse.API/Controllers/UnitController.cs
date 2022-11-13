@@ -33,7 +33,7 @@ namespace WareHouse.API.Controllers
         }
         #region R
 
-        [CheckRole(LevelCheck.READ)]
+        //[CheckRole(LevelCheck.READ)]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -52,7 +52,7 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.READ)]
+        //[CheckRole(LevelCheck.READ)]
         [Route("get-drop-tree")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -76,7 +76,7 @@ namespace WareHouse.API.Controllers
         #region CUD
 
 
-        [CheckRole(LevelCheck.READ)]
+        //[CheckRole(LevelCheck.READ)]
         [Route("details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -113,7 +113,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.CREATE)]
+        //[CheckRole(LevelCheck.CREATE)]
         [Route("create")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -133,7 +133,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.UPDATE)]
+        //[CheckRole(LevelCheck.UPDATE)]
         [Route("edit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -169,7 +169,7 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.UPDATE)]
+        //[CheckRole(LevelCheck.UPDATE)]
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -187,7 +187,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.CREATE)]
+        //[CheckRole(LevelCheck.CREATE)]
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -204,7 +204,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-        [CheckRole(LevelCheck.DELETE)]
+        //[CheckRole(LevelCheck.DELETE)]
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

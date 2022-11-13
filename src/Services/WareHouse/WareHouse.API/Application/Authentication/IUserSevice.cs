@@ -9,12 +9,12 @@ namespace WareHouse.API.Application.Authentication
         public Task<UserGrpc> GetUser();
 
 
-        /// <summary>
-        /// true nếu có quyền
-        /// </summary>
-        /// <param name="idWareHouse">mã kho cần kiểm tra</param>
-        /// <returns></returns>
-        public Task<bool> CheckWareHouseIdByUser(string idWareHouse);
+        ///// <summary>
+        ///// true nếu có quyền
+        ///// </summary>
+        ///// <param name="idWareHouse">mã kho cần kiểm tra</param>
+        ///// <returns></returns>
+        //public Task<bool> CheckWareHouseIdByUser(string idWareHouse);
 
         /// <summary>
         /// Thêm mới lịch sử

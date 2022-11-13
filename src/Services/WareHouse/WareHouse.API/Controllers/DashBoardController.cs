@@ -24,7 +24,7 @@ using WareHouse.API.Controllers.BaseController;
 namespace WareHouse.API.Controllers
 {
 
-    [CheckRole(LevelCheck.READ)]
+    //[CheckRole(LevelCheck.READ)]
     public class DashBoardController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;

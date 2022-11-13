@@ -20,9 +20,7 @@ namespace Share.BaseCore.Authozire
         /// <param name="idUser"></param>
         /// <param name="Key"></param>
         /// <returns></returns>
-        public Task<bool> GetAuthozireByUserIdToKey(string iduser, string Key);
-        public Task<bool> GetAuthozireByUserNameToKey(string username, string Key);
-        public Task<bool> GetAuthozireByUserIdToAuthorizeRole(string idUser, string authRole);
+        public Task<bool> GetAuthozireByUserId(string idUser, string authRole);
 
         public void GetInfoUserByClaims();
 

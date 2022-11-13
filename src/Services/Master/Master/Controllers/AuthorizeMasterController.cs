@@ -2,6 +2,10 @@
 
 
 
+using Share.BaseCore;
+using Share.BaseCore.Authozire;
+using System.Security.Claims;
+
 namespace Master.Controllers
 {
     public class AuthorizeMasterController : BaseControllerMaster
@@ -18,7 +22,7 @@ namespace Master.Controllers
         #region R
 
 
-        [CheckRole(LevelCheck.READ)]
+        //[CheckRole(LevelCheck.READ)]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -36,7 +40,7 @@ namespace Master.Controllers
 
         #endregion
 
-        [CheckRole(LevelCheck.UPDATE)]
+        //[CheckRole(LevelCheck.UPDATE)]
         [Route("role-edit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -88,7 +92,7 @@ namespace Master.Controllers
             });
         }
 
-        [CheckRole(LevelCheck.UPDATE)]
+        //[CheckRole(LevelCheck.UPDATE)]
         [Route("role-edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -140,7 +144,7 @@ namespace Master.Controllers
         }
 
 
-        [CheckRole(LevelCheck.UPDATE)]
+        //[CheckRole(LevelCheck.UPDATE)]
         [Route("update")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -179,7 +183,7 @@ namespace Master.Controllers
             });
         }
 
-        [CheckRole(LevelCheck.READ)]
+        //[CheckRole(LevelCheck.READ)]
         [Route("get-user-login")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -262,7 +266,13 @@ namespace Master.Controllers
                     success = false,
                     message = "Tài khoản chưa được kích hoạt !"
                 });
-            var res = _userService.GenerateJWT(map);
+            IAuthozireExtensionForMaster iAuthenForMaster = EngineContext.Current.Resolve<IAuthozireExtensionForMaster>();
+            List<Claim> authClaims = new List<Claim>
+                            {
+                                new Claim(ClaimTypes.Name, model.Username),
+                                new Claim("id", _userService.GetUserByUserName(model.Username).Id),
+                            };
+            var res = iAuthenForMaster.GenerateJWT(authClaims, 7);
             var response = new ResponseLogin()
             {
                 Jwt = res,

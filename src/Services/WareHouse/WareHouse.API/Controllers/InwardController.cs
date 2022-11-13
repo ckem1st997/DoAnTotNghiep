@@ -30,6 +30,7 @@ using Share.BaseCore.EventBus.Abstractions;
 
 namespace WareHouse.API.Controllers
 {
+
     public class InwardController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
@@ -63,7 +64,7 @@ namespace WareHouse.API.Controllers
         /// <returns></returns>
         /// 
 
-        [CheckRole(LevelCheck.READ)]
+        //[CheckRole(LevelCheck.READ)]
         [Route("check-item-exist")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -78,16 +79,16 @@ namespace WareHouse.API.Controllers
                     message = "Bạn chưa chọn vật tư hoặc kho !"
                 });
             }
-            if (!string.IsNullOrEmpty(warehouseId))
-            {
-                var check = await _userSevice.CheckWareHouseIdByUser(warehouseId);
-                if (!check)
-                    return Unauthorized(new ResultMessageResponse()
-                    {
-                        success = false,
-                        message = "Bạn không có quyền truy cập vào kho này !"
-                    });
-            }
+            //if (!string.IsNullOrEmpty(warehouseId))
+            //{
+            //    var check = await _userSevice.CheckWareHouseIdByUser(warehouseId);
+            //    if (!check)
+            //        return Unauthorized(new ResultMessageResponse()
+            //        {
+            //            success = false,
+            //            message = "Bạn không có quyền truy cập vào kho này !"
+            //        });
+            //}
             var data = await _mediat.Send(new CheckItemAndWareHouseItemByOutWardCommand() { ItemId = itemId, WareHouseId = warehouseId });
 
             return Ok(new ResultMessageResponse
@@ -104,7 +105,7 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.READ)]
+        //[CheckRole(LevelCheck.READ)]
         [Route("details")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -123,16 +124,16 @@ namespace WareHouse.API.Controllers
             var data = await _mediat.Send(new InwardGetFirstCommand() { Id = id });
             if (data != null)
             {
-                if (!string.IsNullOrEmpty(data.WareHouseId))
-                {
-                    var check = await _userSevice.CheckWareHouseIdByUser(data.WareHouseId);
-                    if (!check)
-                        return Ok(new ResultMessageResponse()
-                        {
-                            success = false,
-                            message = "Bạnn không có quyền truy cập vào kho này !"
-                        }); ;
-                }
+                //if (!string.IsNullOrEmpty(data.WareHouseId))
+                //{
+                //    var check = await _userSevice.CheckWareHouseIdByUser(data.WareHouseId);
+                //    if (!check)
+                //        return Ok(new ResultMessageResponse()
+                //        {
+                //            success = false,
+                //            message = "Bạnn không có quyền truy cập vào kho này !"
+                //        }); ;
+                //}
                 await GetDataToDrop(data, true);
             }
 
@@ -145,7 +146,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.UPDATE)]
+        //[CheckRole(LevelCheck.UPDATE)]
         [Route("edit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -164,16 +165,16 @@ namespace WareHouse.API.Controllers
             var data = await _mediat.Send(new InwardGetFirstCommand() { Id = id });
             if (data != null)
             {
-                if (!string.IsNullOrEmpty(data.WareHouseId))
-                {
-                    var check = await _userSevice.CheckWareHouseIdByUser(data.WareHouseId);
-                    if (!check)
-                        return Ok(new ResultMessageResponse()
-                        {
-                            success = false,
-                            message = "Bạnn không có quyền truy cập vào kho này !"
-                        }); ;
-                }
+                //if (!string.IsNullOrEmpty(data.WareHouseId))
+                //{
+                //    var check = await _userSevice.CheckWareHouseIdByUser(data.WareHouseId);
+                //    if (!check)
+                //        return Ok(new ResultMessageResponse()
+                //        {
+                //            success = false,
+                //            message = "Bạnn không có quyền truy cập vào kho này !"
+                //        }); ;
+                //}
                 await GetDataToDrop(data);
             }
             var result = new ResultMessageResponse()
@@ -186,7 +187,7 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.UPDATE)]
+        //[CheckRole(LevelCheck.UPDATE)]
         [Route("edit")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -194,16 +195,16 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> Edit(InwardCommands inwardCommands)
         {
 
-            if (!string.IsNullOrEmpty(inwardCommands.WareHouseId))
-            {
-                var check = await _userSevice.CheckWareHouseIdByUser(inwardCommands.WareHouseId);
-                if (!check)
-                    return Ok(new ResultMessageResponse()
-                    {
-                        success = false,
-                        message = "Bạn không có quyền truy cập vào kho này !"
-                    }); ;
-            }
+            //if (!string.IsNullOrEmpty(inwardCommands.WareHouseId))
+            //{
+            //    var check = await _userSevice.CheckWareHouseIdByUser(inwardCommands.WareHouseId);
+            //    if (!check)
+            //        return Ok(new ResultMessageResponse()
+            //        {
+            //            success = false,
+            //            message = "Bạn không có quyền truy cập vào kho này !"
+            //        }); ;
+            //}
             inwardCommands.ModifiedDate = DateTime.Now;
             foreach (var item in inwardCommands.InwardDetails)
             {
@@ -279,23 +280,23 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.CREATE)]
+        //[CheckRole(LevelCheck.CREATE)]
         [Route("create")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(string idWareHouse)
         {
-            if (!string.IsNullOrEmpty(idWareHouse))
-            {
-                var check = await _userSevice.CheckWareHouseIdByUser(idWareHouse);
-                if (!check)
-                    return Ok(new ResultMessageResponse()
-                    {
-                        success = false,
-                        message = "Bạn không có quyền truy cập vào kho này !"
-                    }); ;
-            }
+            //if (!string.IsNullOrEmpty(idWareHouse))
+            //{
+            //    var check = await _userSevice.CheckWareHouseIdByUser(idWareHouse);
+            //    if (!check)
+            //        return Ok(new ResultMessageResponse()
+            //        {
+            //            success = false,
+            //            message = "Bạn không có quyền truy cập vào kho này !"
+            //        }); ;
+            //}
             var modelCreate = new InwardDTO();
             modelCreate.Id = Guid.NewGuid().ToString();
             modelCreate.WareHouseId = idWareHouse;
@@ -345,23 +346,23 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.CREATE)]
+        //[CheckRole(LevelCheck.CREATE)]
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(InwardCommands inwardCommands)
         {
-            if (!string.IsNullOrEmpty(inwardCommands.WareHouseId))
-            {
-                var check = await _userSevice.CheckWareHouseIdByUser(inwardCommands.WareHouseId);
-                if (!check)
-                    return Ok(new ResultMessageResponse()
-                    {
-                        success = false,
-                        message = "Bạn không có quyền truy cập vào kho này !"
-                    }); ;
-            }
+            //if (!string.IsNullOrEmpty(inwardCommands.WareHouseId))
+            //{
+            //    var check = await _userSevice.CheckWareHouseIdByUser(inwardCommands.WareHouseId);
+            //    if (!check)
+            //        return Ok(new ResultMessageResponse()
+            //        {
+            //            success = false,
+            //            message = "Bạn không có quyền truy cập vào kho này !"
+            //        }); ;
+            //}
             inwardCommands.CreatedDate = DateTime.Now;
             inwardCommands.ModifiedDate = DateTime.Now;
             foreach (var item in inwardCommands.InwardDetails)
@@ -429,7 +430,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.DELETE)]
+        //[CheckRole(LevelCheck.DELETE)]
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

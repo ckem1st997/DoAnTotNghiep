@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -13,44 +14,42 @@ namespace Share.BaseCore.Authozire
 {
     public class AuthozireExtensionForMaster : IAuthozireExtensionForMaster
     {
-        private readonly IAuthenForMaster _authenForMaster;
         private readonly IHttpContextAccessor _contextAccessor;
-        public AuthozireExtensionForMaster(IAuthenForMaster authenForMaster, IHttpContextAccessor contextAccessor)
+        public AuthozireExtensionForMaster(IHttpContextAccessor contextAccessor)
         {
-            _authenForMaster = authenForMaster;
             _contextAccessor = contextAccessor;
         }
 
-        public async Task<string> GenerateJWT(string username, string password, bool remember = true)
+        public string GenerateJWT(IList<Claim> claims, int time)
         {
-            if (username == null || password == null)
-                throw new BaseException("username or password is null !");
-            if (await _authenForMaster.Login(username, password))
+            if (claims is null)
             {
-                List<Claim> authClaims = new List<Claim>
-                            {
-                                new Claim(ClaimTypes.Name, username),
-                                new Claim("IpAddress", _contextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString())
-                            };
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthozireStringHelper.JWT.Secret));
-
-                var token = new JwtSecurityToken(
-                    issuer: AuthozireStringHelper.JWT.ValidIssuer,
-                    audience: AuthozireStringHelper.JWT.ValidAudience,
-                    expires: remember ? DateTime.Now.AddYears(1) : DateTime.Now.AddHours(3),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                    );
-
-                return new JwtSecurityTokenHandler().WriteToken(token);
+                throw new ArgumentNullException(nameof(claims));
             }
-            else
-                return string.Empty;
+            claims.Add(new Claim("IpAddress", _contextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString()));
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthozireStringHelper.JWT.Secret));
+
+            var token = new JwtSecurityToken(
+                issuer: AuthozireStringHelper.JWT.ValidIssuer,
+                audience: AuthozireStringHelper.JWT.ValidAudience,
+                expires: DateTime.Now.AddYears(time),
+                claims: claims,
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public Task<bool> Register(string username, string password, string repassword)
+
+        public string GetClaimType(string type)
         {
-            throw new NotImplementedException();
+            if (_contextAccessor.HttpContext.User.Identity is ClaimsIdentity identity)
+            {
+                IEnumerable<Claim> claims = identity.Claims;
+                return identity.Claims.FirstOrDefault(c => c.Type.Equals(type)).Value;
+            }
+            return string.Empty;
         }
     }
 }
+

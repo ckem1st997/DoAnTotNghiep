@@ -31,10 +31,11 @@ namespace Share.BaseCore.Authozire
             }
             // create instance of IUserInfomationService not contractor
             IUserInfomationService _userService = EngineContext.Current.Resolve<IUserInfomationService>();
-            IGetClaims iAuthenForMaster = EngineContext.Current.Resolve<IGetClaims>();
+            IAuthozireExtensionForMaster iAuthenForMaster = EngineContext.Current.Resolve<IAuthozireExtensionForMaster>();
             bool checkRole = false;
-            if (_userService != null)
-                checkRole = await _userService.GetAuthozireByUserIdToAuthorizeRole(iAuthenForMaster.GetIdUserByClaims(), _keyRole);
+            string userId = iAuthenForMaster.GetClaimType("id");
+            if (_userService != null && !string.IsNullOrEmpty(userId))
+                checkRole = await _userService.GetAuthozireByUserId(userId, _keyRole);
 
 
             if (!checkRole && _userService == null)
@@ -53,7 +54,7 @@ namespace Share.BaseCore.Authozire
                 var res = new ResultMessageResponse()
                 {
                     data = null,
-                    message = "Bạn chưa có quyền thực hiện thao tác hoặc truy cập kho !",
+                    message = "Bạn chưa có quyền thực hiện thao tác này !",
                     httpStatusCode = (int)HttpStatusCode.Forbidden,
                 };
                 context.Result = new ObjectResult(res);

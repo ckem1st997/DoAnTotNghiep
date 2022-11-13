@@ -24,7 +24,7 @@ using Share.BaseCore.Cache.CacheName;
 
 namespace WareHouse.API.Controllers
 {
-    [CheckRole(LevelCheck.WAREHOUSE)]
+    //[CheckRole(LevelCheck.WAREHOUSE)]
     public class BeginningWareHouseController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
@@ -36,7 +36,7 @@ namespace WareHouse.API.Controllers
 
         #region R
 
-        [CheckRole(LevelCheck.READ)]
+        //[CheckRole(LevelCheck.READ)]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -57,7 +57,7 @@ namespace WareHouse.API.Controllers
 
         #region CUD
 
-        [CheckRole(LevelCheck.CREATE)]
+        //[CheckRole(LevelCheck.CREATE)]
         [Route("create")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -78,7 +78,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.UPDATE)]
+        //[CheckRole(LevelCheck.UPDATE)]
         [Route("edit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -140,7 +140,7 @@ namespace WareHouse.API.Controllers
             return res;
         }
 
-        [CheckRole(LevelCheck.UPDATE)]
+        //[CheckRole(LevelCheck.UPDATE)]
 
         [Route("edit")]
         [HttpPost]
@@ -177,7 +177,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [CheckRole(LevelCheck.CREATE)]
+        //[CheckRole(LevelCheck.CREATE)]
         [Route("create")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -208,7 +208,7 @@ namespace WareHouse.API.Controllers
 
 
 
-        [CheckRole(LevelCheck.DELETE)]
+        //[CheckRole(LevelCheck.DELETE)]
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

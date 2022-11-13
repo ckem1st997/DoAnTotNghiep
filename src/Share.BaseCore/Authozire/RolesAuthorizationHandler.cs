@@ -3,16 +3,14 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WareHouse.API.Application.Authentication
+namespace Share.BaseCore.Authozire
 {
     public class RolesAuthorizationHandler : AuthorizationHandler<RolesAuthorizationRequirement>
     {
-        public readonly IUserSevice _context;
-        public RolesAuthorizationHandler(IUserSevice context)
+        public RolesAuthorizationHandler()
         {
-            _context = context;
         }
-        protected override async Task<Task> HandleRequirementAsync(AuthorizationHandlerContext context,
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
                                                        RolesAuthorizationRequirement requirement)
         {
 
@@ -27,12 +25,12 @@ namespace WareHouse.API.Application.Authentication
             else
             {
                 var claims = context.User.Claims;
-               // var id = claims.FirstOrDefault(c => c.Type == "id").Value;
+                var id = claims.FirstOrDefault(c => c.Type == "id").Value;
                 // quyền nhập vào
                 var roles = requirement.AllowedRoles;
                 //  Console.WriteLine(_context);
-                var user =await _context.GetUser();
-                validRole = roles.Contains(user.Role);
+                // var user = _context.GetUserById(id);
+                //   validRole = roles.Contains(user.Role);
 
             }
 
@@ -43,6 +41,5 @@ namespace WareHouse.API.Application.Authentication
                 context.Fail();
             return Task.CompletedTask;
         }
-
     }
 }

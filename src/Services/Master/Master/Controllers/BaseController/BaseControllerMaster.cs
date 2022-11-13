@@ -1,5 +1,4 @@
-﻿using Master.Application.Authentication;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Master.Controllers.BaseController

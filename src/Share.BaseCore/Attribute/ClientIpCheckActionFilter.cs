@@ -42,13 +42,13 @@ namespace Share.BaseCore.Attribute
             _logger.LogDebug("Remote IpAddress: {RemoteIp}", remoteIp);
             var ip = _safelist.Split(';');
             var badIp = true;
-            IGetClaims iAuthenForMaster = EngineContext.Current.Resolve<IGetClaims>();
+            IAuthozireExtensionForMaster iAuthenForMaster = EngineContext.Current.Resolve<IAuthozireExtensionForMaster>();
 
             if (remoteIp.IsIPv4MappedToIPv6)
             {
                 remoteIp = remoteIp.MapToIPv4();
             }
-            var testIp = IPAddress.Parse(iAuthenForMaster.GetIpAddressClaims());
+            var testIp = IPAddress.Parse(iAuthenForMaster.GetClaimType("IpAddress"));
 
             if (testIp.Equals(remoteIp))
             {

@@ -28,7 +28,6 @@ namespace Master.Controllers
 
 
 
-        [CheckRole(LevelCheck.CREATE)]
         [HttpGet]
         [Route("create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -43,7 +42,6 @@ namespace Master.Controllers
         }
 
 
-        [CheckRole(LevelCheck.CREATE)]
         [HttpPost]
         [Route("create")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -116,7 +114,6 @@ namespace Master.Controllers
 
 
 
-        [CheckRole(LevelCheck.DELETE)]
         [Route("delete")]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]

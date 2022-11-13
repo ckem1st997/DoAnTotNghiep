@@ -1,6 +1,5 @@
 ﻿global using Share.BaseCore.Extensions;
 global using Infrastructure;
-global using Master.Application.Authentication;
 global using Master.Controllers.BaseController;
 global using Master.Models;
 global using Microsoft.AspNetCore.Mvc;

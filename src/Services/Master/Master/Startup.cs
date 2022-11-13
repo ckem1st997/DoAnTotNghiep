@@ -1,8 +1,9 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Grpc.Net.Client.Web;
 using Grpc.Net.ClientFactory;
 using GrpcGetDataToMaster;
 using GrpcGetDataToWareHouse;
-using Master.Application.Authentication;
 using Master.ConfigureServices.CustomConfiguration;
 using Master.Extension;
 using Master.IntegrationEvents;
@@ -24,6 +25,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Share.BaseCore.Authozire;
 using Share.BaseCore.Authozire.ConfigureServices;
 using Share.BaseCore.Grpc;
 using Share.BaseCore.Kafka;
@@ -44,6 +46,8 @@ namespace Master
         }
 
         public IConfiguration Configuration { get; }
+        public ILifetimeScope AutofacContainer { get; private set; }
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -60,8 +64,7 @@ namespace Master
             {
                 option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;
                 option.IterationCount = 12000;
-            });     
-            services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
+            });
             services.AddApiAuthentication();
             services.AddApiCors();
             services.AddSignalR(options =>
@@ -69,7 +72,7 @@ namespace Master
                 // Global filters will run first
                 options.AddFilter<CustomFilter>();
             });
-           
+
         }
 
 
@@ -78,14 +81,14 @@ namespace Master
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-          //  if (env.IsDevelopment())
-          //  {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BasicAuth v1"));
-          //  }
+            //  if (env.IsDevelopment())
+            //  {
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BasicAuth v1"));
+            //  }
             //  app.UseHttpsRedirection();
-
+            this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
             app.UseRouting();
             app.UseGrpcWeb();
             app.UseCors("AllowAll");
@@ -98,6 +101,7 @@ namespace Master
                 endpoints.MapHub<ConnectRealTimeHub>("/signalr");
             });
             app.ConfigureEventBusKafka();
+            app.ConfigureRequestPipeline();
         }
 
 

@@ -18,6 +18,7 @@ using WareHouse.Infrastructure;
 
 namespace WareHouse.API.Controllers
 {
+
     public class MasterGetController : BaseControllerWareHouse
     {
         private readonly IElasticClient _elasticClient;

@@ -50,9 +50,6 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             services.AddScoped<ISignalRService, SignalRService>();
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
-            //  services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
-            //   services.AddScoped(typeof(GetServiceByInterface<>));
 
             services.AddCustomConfigurationCore<WareHousesController, WarehouseManagementContext, Startup>(configuration, "WarehouseManagementContext");
 

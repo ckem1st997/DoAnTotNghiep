@@ -18,7 +18,7 @@ namespace ShareImplemention
             _cache = cache;
         }
 
-        public async Task<bool> GetAuthozireByUserIdToAuthorizeRole(string idUser, string authRole)
+        public async Task<bool> GetAuthozireByUserId(string idUser, string authRole)
         {
             // get user from cache by cache - key, set cache in login
             // if cachet == null then call grpc to service master
@@ -34,16 +34,6 @@ namespace ShareImplemention
                 UserId = idUser
             });
             return res is not null && res.Check;
-        }
-
-        public Task<bool> GetAuthozireByUserIdToKey(string iduser, string Key)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> GetAuthozireByUserNameToKey(string username, string Key)
-        {
-            throw new NotImplementedException();
         }
 
         public void GetInfoUserByClaims()
