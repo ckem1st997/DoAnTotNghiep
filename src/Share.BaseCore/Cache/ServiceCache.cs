@@ -43,40 +43,39 @@ namespace Share.BaseCore.Cache
 
         public static void AddEasyCachingAPI(this IServiceCollection services, IConfiguration configuration)
         {
+            var stringConnect = configuration.GetSection("Redis")["ConnectionString"];
+
             services.AddEasyCaching(option =>
             {
-                option.WithJson("myjson");
-
-                // local
-                option.UseInMemory("m1");
-                // distributed
                 option.UseRedis(config =>
                 {
-                    config.DBConfig.Endpoints.Add(new EasyCaching.Core.Configurations.ServerEndPoint("127.0.0.1", 6379));
-                    config.DBConfig.Database = 5;
-                    config.SerializerName = "myjson";
-                }, "myredis");
-
-                // combine local and distributed
-                option.UseHybrid(config =>
-                {
-                    config.TopicName = "test-topic";
-                    config.EnableLogging = false;
-
-                    // specify the local cache provider name after v0.5.4
-                    config.LocalCacheProviderName = "m1";
-                    // specify the distributed cache provider name after v0.5.4
-                    config.DistributedCacheProviderName = "myredis";
-                })
-                // use redis bus
-                .WithRedisBus(busConf =>
-                {
-                    busConf.Endpoints.Add(new ServerEndPoint("127.0.0.1", 6380));
-
-                // do not forget to set the SerializerName for the bus here !!
-                busConf.SerializerName = "myjson";
-                });
+                    config.DBConfig.Endpoints.Add(new ServerEndPoint(configuration.GetSection("Redis")["Server"], int.Parse(configuration.GetSection("Redis")["Port"])));
+                    config.EnableLogging = true;
+                }, "redis");
             });
+
+
+            //services.AddEasyCaching(delegate (EasyCachingOptions options)
+            //{
+            //    options.UseInMemory(configuration, CachingHelper.Configs.ProviderNames.InMemory, CachingHelper.Configs.ConfigSectionNames.InMemory);
+            //    options.UseRedis(configuration, CachingHelper.Configs.ProviderNames.Redis, CachingHelper.Configs.ConfigSectionNames.Redis);
+            //    options.UseHybrid(delegate (HybridCachingOptions config)
+            //    {
+            //        config.TopicName = CachingHelper.Configs.HybridTopicName;
+            //        config.EnableLogging = true;
+            //        config.LocalCacheProviderName = CachingHelper.Configs.ProviderNames.InMemory;
+            //        config.DistributedCacheProviderName = CachingHelper.Configs.ProviderNames.Redis;
+            //    }, CachingHelper.Configs.ProviderNames.Hybrid).WithRedisBus(configuration, CachingHelper.Configs.ConfigSectionNames.RedisBus);
+            //    Action<JsonSerializerSettings> jsonSerializerSettingsConfigure = delegate (JsonSerializerSettings x)
+            //    {
+            //        x.MissingMemberHandling = MissingMemberHandling.Ignore;
+            //        x.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            //        x.DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind;
+            //        x.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+            //        x.MaxDepth = 32;
+            //    };
+            //    options.WithJson(jsonSerializerSettingsConfigure, CachingHelper.SerializerNames.Json);
+            //});
 
         }
     }
