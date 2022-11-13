@@ -63,7 +63,7 @@ namespace WareHouse.API
         public void ConfigureServices(IServiceCollection services)
         {
             SetLicense();
-            services.AddEasyCachingAPI(Configuration);
+          //  services.AddEasyCachingAPI(Configuration);
             services.AddCustomConfiguration(Configuration);
             services.AddMapper();
             services.AddValidator();

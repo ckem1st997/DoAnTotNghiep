@@ -2,6 +2,7 @@
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using EasyCaching.Core;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +22,7 @@ namespace Share.BaseCore.Behaviors
         private readonly CacheSettings _settings;
         private readonly IConfiguration _configuration;
         private readonly ICacheExtension _cacheExtension;
+        //   private readonly IEasyCachingProvider _easyCachingProvider;
 
         public CachingBehavior(ICacheExtension cacheExtension, IConfiguration configuration, IDistributedCache cache, IOptions<CacheSettings> settings)
         {
