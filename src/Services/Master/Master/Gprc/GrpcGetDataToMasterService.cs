@@ -195,11 +195,9 @@ namespace GrpcGetDataToMaster
         {
             if (request is null || string.IsNullOrEmpty(request.UserId) || string.IsNullOrEmpty(request.RoleKey))
                 return new SaveChange() { Check = false };
-            //var roleId = await _masterdataContext.ListRoles.FirstOrDefaultAsync(x => x.Key.Equals(request.RoleKey));
-            //if (roleId is null)
-            //    return new SaveChange() { Check = false };
-            //var check = await _masterdataContext.ListRoleByUsers.FirstOrDefaultAsync(x => x.UserId.Equals(request.UserId) && x.ListRoleId.Equals(roleId.Id));
             bool res = await _userService.CheckAuthozireByUserIdAndRoleKey(request.UserId, request.RoleKey);
+            await _userService.RemoveCacheListRole(request.UserId);
+            await _userService.CacheListRole(request.UserId);
             return new SaveChange() { Check = res };
         }
     }

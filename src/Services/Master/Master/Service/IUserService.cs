@@ -7,7 +7,6 @@ namespace Master.Service
     public interface IUserService
     {
         public UserMaster User { get; }
-        public string GenerateJWT(LoginModel model);
         public Task<bool> Register(RegisterModel model);
         /// <summary>
         /// true nếu không tồn tại
@@ -21,6 +20,8 @@ namespace Master.Service
         public UserMaster GetUserById(string id);
         public UserMaster GetUserByUserName(string userName);
         public Task<bool> CheckAuthozireByUserIdAndRoleKey(string userId, string roleKey);
+        public Task CacheListRole(string userId);
+        public Task RemoveCacheListRole(string userId);
         public Task<IPaginatedList<UserMaster>> GetListUserAsync(int pages, int number, string wareHouseId, string keyWords);
     }
 }

@@ -1,9 +1,15 @@
-﻿using GrpcGetDataToMaster;
+﻿using Elastic.Apm.Api;
+using GrpcGetDataToMaster;
+using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
+using Nest;
 using Newtonsoft.Json;
+using Serilog;
 using Share.BaseCore.Authozire;
+using Share.BaseCore.Cache.CacheName;
 using ShareModels.Models;
 using System.Text;
+using System.Threading;
 
 namespace ShareImplemention
 {
@@ -28,6 +34,17 @@ namespace ShareImplemention
             //var cachedResponse = JsonConvert.DeserializeObject<UserListRoleModel>(Encoding.UTF8.GetString(await _cache.GetAsync(idUser)));
             //if (cachedResponse is not null)
             //    return cachedResponse.ListKey.Contains(authRole);
+            if (string.IsNullOrEmpty(idUser))
+                return false;
+            var cachedResponse = await _cache.GetAsync(string.Format(UserListRoleCacheName.UserListRoleCache, idUser));
+
+            if (cachedResponse is not null)
+            {
+                var resList = JsonConvert.DeserializeObject<List<string>>(Encoding.UTF8.GetString(cachedResponse));
+                if (resList is not null && resList.Contains(authRole))
+                    return true;
+            }
+
             SaveChange res = await _client.CheckAuthozireByUserIdAndRoleKeyAsync(new CheckAuthozireByUserIdAndRoleKeyModel()
             {
                 RoleKey = authRole,

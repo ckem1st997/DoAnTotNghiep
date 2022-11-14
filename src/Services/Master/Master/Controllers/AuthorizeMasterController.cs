@@ -267,12 +267,18 @@ namespace Master.Controllers
                     message = "Tài khoản chưa được kích hoạt !"
                 });
             IAuthozireExtensionForMaster iAuthenForMaster = EngineContext.Current.Resolve<IAuthozireExtensionForMaster>();
+            string userId = _userService.GetUserByUserName(model.Username).Id;
             List<Claim> authClaims = new List<Claim>
                             {
                                 new Claim(ClaimTypes.Name, model.Username),
-                                new Claim("id", _userService.GetUserByUserName(model.Username).Id),
+                                new Claim("id", userId),
                             };
             var res = iAuthenForMaster.GenerateJWT(authClaims, 7);
+            if (!string.IsNullOrEmpty(res))
+            {
+                await _userService.RemoveCacheListRole(userId);
+                await _userService.CacheListRole(userId);
+            }
             var response = new ResponseLogin()
             {
                 Jwt = res,

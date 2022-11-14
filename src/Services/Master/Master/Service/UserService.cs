@@ -5,15 +5,20 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Share.BaseCore.Authozire;
+using Share.BaseCore.Cache.CacheName;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using BaseId = GrpcGetDataToWareHouse.BaseId;
 
@@ -27,57 +32,23 @@ namespace Master.Service
         private readonly IHttpContextAccessor _httpContext;
         private readonly IPaginatedList<UserMaster> _list;
         private readonly GrpcGetDataWareHouse.GrpcGetDataWareHouseClient _client;
+        private readonly IDistributedCache _cache;
+        private readonly ICacheExtension _cacheExtension;
 
 
         public UserMaster User => GetUser();
 
-        public UserService(GrpcGetDataWareHouse.GrpcGetDataWareHouseClient client, IPaginatedList<UserMaster> list, MasterdataContext context, IConfiguration configuration, IHttpContextAccessor httpContext)
+        public UserService(GrpcGetDataWareHouse.GrpcGetDataWareHouseClient client, IPaginatedList<UserMaster> list, MasterdataContext context, IConfiguration configuration, IHttpContextAccessor httpContext, IDistributedCache cache, ICacheExtension cacheExtension)
         {
             _context = context;
             _configuration = configuration;
             _httpContext = httpContext;
             _list = list;
             _client = client;
+            _cache = cache;
+            _cacheExtension = cacheExtension;
         }
 
-
-        public string GenerateJWT(LoginModel model)
-        {
-            if (model is null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-            if (ValidateAdmin(model.Username, model.Password))
-            {
-                var user = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.UserName.Equals(model.Username) && x.InActive == true && !x.OnDelete);
-                var authClaims = new List<Claim>
-                            {
-                                new Claim(ClaimTypes.Name, user.UserName),
-                                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                                //new Claim(ClaimTypes.Role, user.Role),
-                                //new Claim("Create", user.Create),
-                                //new Claim("Edit", user.Edit),
-                                //new Claim("Delete", user.Delete),
-                                //new Claim("Read", user.Read),
-                              
-                                new Claim("id",user.Id)
-                            };
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
-                var token = new JwtSecurityToken(
-                    issuer: AuthozireStringHelper.JWT.ValidIssuer,
-                    audience: AuthozireStringHelper.JWT.ValidAudience,
-                    expires: model.Remember ? DateTime.Now.AddYears(1) : DateTime.Now.AddHours(3),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                    );
-
-                return new JwtSecurityTokenHandler().WriteToken(token);
-            }
-            else
-                return string.Empty;
-
-        }
         private bool ValidateAdmin(string username, string password)
         {
             var admin = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.UserName.Equals(username) && x.InActive == true && !x.OnDelete);
@@ -246,7 +217,7 @@ namespace Master.Service
             if (roleId is null)
                 return false;
             // get listid authorize
-            var authozireId = _context.ListAuthozireByListRoles.Where(x => x.ListRoleId.Equals(roleId.Id)).Select(x=>x.AuthozireId);
+            var authozireId = _context.ListAuthozireByListRoles.Where(x => x.ListRoleId.Equals(roleId.Id)).Select(x => x.AuthozireId);
             if (authozireId is not null && await authozireId.AnyAsync())
             {
                 // get user with userid and authzireid
@@ -257,6 +228,48 @@ namespace Master.Service
             //check with role key
             var checkListRole = await _context.ListRoleByUsers.FirstOrDefaultAsync(x => x.UserId.Equals(userId) && x.ListRoleId.Equals(roleId.Id));
             return checkListRole is not null;
+        }
+
+        public async Task CacheListRole(string userId)
+        {
+            if (_cacheExtension.IsConnected)
+            {
+                var slidingExpiration = TimeSpan.FromDays(10);
+                var options = new DistributedCacheEntryOptions
+                {
+                    SlidingExpiration = slidingExpiration
+                };
+                List<string> listRole = new List<string>();
+                // get list roleid by userid
+                List<string> listRoleOne = await _context.ListRoleByUsers.Where(x => x.UserId.Equals(userId)).Select(x => x.ListRoleId).ToListAsync();
+
+                if (listRoleOne.Any())
+                    listRole.AddRange(listRoleOne);
+
+
+                // get list authozrireid by userid
+
+                List<string> checkListAuthozire = await _context.ListAuthozireRoleByUsers.Where(x => x.UserId.Equals(userId)).Select(x => x.ListAuthozireId).ToListAsync();
+                // get list roleid by authozreid
+                if (checkListAuthozire.Any())
+                {
+                    List<string> listRoleTwo = await _context.ListAuthozireByListRoles.Where(x => checkListAuthozire.Contains(x.AuthozireId)).Select(x => x.ListRoleId).ToListAsync();
+                    if (listRoleTwo.Any())
+                        listRole.AddRange(listRoleTwo);
+                }
+                List<string> res = new List<string>();
+                if (listRole.Any())
+                    res.AddRange(await _context.ListRoles.Where(x => listRole.Contains(x.Id)).Select(x => x.Key).ToListAsync());
+
+                byte[] serializedData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(res));
+                await _cache.SetAsync(string.Format(UserListRoleCacheName.UserListRoleCache, userId), serializedData, options);
+            }
+
+        }
+
+        public async Task RemoveCacheListRole(string userId)
+        {
+            await _cacheExtension.RemoveAllKeysBy(string.Format(UserListRoleCacheName.UserListRoleCache, userId));
         }
     }
 }

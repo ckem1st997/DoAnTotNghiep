@@ -33,6 +33,12 @@
         public const string VendorCacheNameTreeView = "Vendor-5-TreeView-{0}";
         public const string VendorCacheNameDropDown = "Vendor-5-DropDown-{0}";
         public const string Prefix = "Vendor-5-";
+    }   
+    
+    public static class UserListRoleCacheName
+    {
+        public const string UserListRoleCache = "UserListRole-{0}";
+        public const string Prefix = "UserListRole-";
     }
 
 
