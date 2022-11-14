@@ -18,19 +18,19 @@ namespace Share.BaseCore.Behaviors
     public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : ICacheableMediatrQuery
     {
-        // private readonly IDistributedCache _cache;
+        private readonly IDistributedCache _cache;
         private readonly CacheSettings _settings;
         // private readonly IConfiguration _configuration;
         private readonly ICacheExtension _cacheExtension;
-        private readonly IEasyCachingProvider _easyCachingProvider;
+        //  private readonly IEasyCachingProvider _easyCachingProvider;
 
-        public CachingBehavior(ICacheExtension cacheExtension, IOptions<CacheSettings> settings, IEasyCachingProvider easyCachingProvider)
+        public CachingBehavior(ICacheExtension cacheExtension, IOptions<CacheSettings> settings, IDistributedCache cache)
         {
-            //  _cache = cache;
             _settings = settings.Value;
             //    _configuration = configuration;
             _cacheExtension = cacheExtension;
-            _easyCachingProvider = easyCachingProvider;
+            // _easyCachingProvider = easyCachingProvider;
+            _cache = cache;
         }
 
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
@@ -48,12 +48,13 @@ namespace Share.BaseCore.Behaviors
                 return await next();
             }
             // nếu data null thì chạy đến request tiếp theo để lấy data và gán vào cache
-            // var cachedResponse = await _cache.GetAsync(request.CacheKey, cancellationToken);
-            var cachedResponse = await _easyCachingProvider.GetAsync<TResponse>(request.CacheKey, cancellationToken: cancellationToken);
-            if (cachedResponse.HasValue)
+            var cachedResponse = await _cache.GetAsync(request.CacheKey, cancellationToken);
+            //   var cachedResponse = await _easyCachingProvider.GetAsync<TResponse>(request.CacheKey, cancellationToken: cancellationToken);
+            //  if (cachedResponse.HasValue)
+            if (cachedResponse is not null)
             {
-                //  response = JsonConvert.DeserializeObject<TResponse>(Encoding.UTF8.GetString(cachedResponse));
-                response = cachedResponse.Value;
+                response = JsonConvert.DeserializeObject<TResponse>(Encoding.UTF8.GetString(cachedResponse));
+                // response = cachedResponse.Value;
                 Log.Information($"Fetched from Cache -> '{request.CacheKey}'.");
             }
             else
@@ -69,9 +70,9 @@ namespace Share.BaseCore.Behaviors
                 {
                     SlidingExpiration = slidingExpiration
                 };
-                // var serializedData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(response));
-                // await _cache.SetAsync(request.CacheKey, serializedData, options, cancellationToken);
-                await _easyCachingProvider.SetAsync<TResponse>(request.CacheKey, response, slidingExpiration, cancellationToken);
+                var serializedData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(response));
+                await _cache.SetAsync(request.CacheKey, serializedData, options, cancellationToken);
+                //  await _easyCachingProvider.SetAsync<TResponse>(request.CacheKey, response, slidingExpiration, cancellationToken);
                 return response;
             }
             // cuối cùng trả về kết quả cho controller

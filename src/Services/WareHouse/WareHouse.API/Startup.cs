@@ -63,13 +63,13 @@ namespace WareHouse.API
         public void ConfigureServices(IServiceCollection services)
         {
             SetLicense();
-          //  services.AddEasyCachingAPI(Configuration);
+            //  services.AddEasyCachingAPI(Configuration);
             services.AddCustomConfiguration(Configuration);
             services.AddMapper();
             services.AddValidator();
-           // services.AddBehavior();
+            // services.AddBehavior();
             services.AddCache(Configuration);
-            services.AddEasyCachingAPI(Configuration);
+            // services.AddEasyCachingAPI(Configuration);
             services.AddSingleton<IKafKaConnection, KafKaConnection>();
             services.AddEventBus(Configuration);
             services.AddApiElastic(Configuration);
