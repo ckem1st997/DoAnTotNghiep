@@ -92,6 +92,7 @@ namespace Share.BaseCore.Cache.CacheName
                 foreach (var item in list)
                 {
                     await _cache.RemoveAsync(item);
+                    //  await _db.KeyDeleteAsync(item);
                 }
 
         }
