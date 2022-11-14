@@ -8,7 +8,7 @@ namespace Share.BaseCore.Cache.CacheName
     /// <summary>
     /// Extension Cache Redis
     /// </summary>
-    public interface ICacheExtension : IDisposable
+    public interface ICacheExtension 
     {
         /// <summary>
         /// Get All Name Keys

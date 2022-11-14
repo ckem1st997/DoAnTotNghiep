@@ -12,15 +12,11 @@ namespace Share.BaseCore.Cache.CacheName
 {
     public class CacheExtension : ICacheExtension
     {
-        IConfiguration _configuration { get; set; }
-        private readonly ILogger<CacheExtension> _logger;
         private readonly IDistributedCache _cache;
         private readonly IDatabase _db;
-        public CacheExtension(IConfiguration configuration, IDistributedCache cache, ILogger<CacheExtension> logger, IDatabase db)
+        public CacheExtension(IDistributedCache cache, IDatabase db)
         {
-            _configuration = configuration;
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _db = db;
         }
 
@@ -104,10 +100,6 @@ namespace Share.BaseCore.Cache.CacheName
         {
             var res = await _db.ExecuteAsync("flushall");
             return res;
-        }
-
-        public void Dispose()
-        {
         }
     }
 }
