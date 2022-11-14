@@ -20,16 +20,14 @@ namespace GrpcGetDataToMaster
     {
 
         private readonly MasterdataContext _masterdataContext;
-        private readonly ILogger<GrpcGetDataToMasterService> _logger;
         private readonly IUserService _userService;
         private readonly IHubContext<ConnectRealTimeHub> _hubContext;
 
 
 
-        public GrpcGetDataToMasterService(IHubContext<ConnectRealTimeHub> hubContext, IUserService userService, MasterdataContext masterdataContext, ILogger<GrpcGetDataToMasterService> logger)
+        public GrpcGetDataToMasterService(IHubContext<ConnectRealTimeHub> hubContext, IUserService userService, MasterdataContext masterdataContext)
         {
             _userService = userService;
-            _logger = logger;
             _masterdataContext = masterdataContext;
             _hubContext = hubContext;
         }
