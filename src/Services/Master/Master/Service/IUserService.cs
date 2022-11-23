@@ -8,6 +8,7 @@ namespace Master.Service
     {
         public UserMaster User { get; }
         public Task<bool> Register(RegisterModel model);
+        public Task<bool> Login(LoginModel model);
         /// <summary>
         /// true nếu không tồn tại
         /// </summary>

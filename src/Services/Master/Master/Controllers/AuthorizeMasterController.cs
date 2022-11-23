@@ -266,6 +266,12 @@ namespace Master.Controllers
                     success = false,
                     message = "Tài khoản chưa được kích hoạt !"
                 });
+            if (!(await _userService.Login(map)))
+                return Ok(new ResultMessageResponse()
+                {
+                    success = false,
+                    message = "Tài khoản hoặc mật khẩu chưa chính xác !"
+                });
             IAuthozireExtensionForMaster iAuthenForMaster = EngineContext.Current.Resolve<IAuthozireExtensionForMaster>();
             string userId = _userService.GetUserByUserName(model.Username).Id;
             List<Claim> authClaims = new List<Claim>

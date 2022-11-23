@@ -49,9 +49,9 @@ namespace Master.Service
             _cacheExtension = cacheExtension;
         }
 
-        private bool ValidateAdmin(string username, string password)
+        private async Task<bool> ValidateAdmin(string username, string password)
         {
-            var admin = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.UserName.Equals(username) && x.InActive == true && !x.OnDelete);
+            var admin = await _context.UserMasters.AsNoTracking().FirstOrDefaultAsync(x => x.UserName.Equals(username) && x.InActive == true && !x.OnDelete);
             return admin != null && new PasswordHasher<UserMaster>().VerifyHashedPassword(new UserMaster(), admin.Password, password) == PasswordVerificationResult.Success;
         }
         public async Task<bool> Register(RegisterModel model)
@@ -270,6 +270,15 @@ namespace Master.Service
         public async Task RemoveCacheListRole(string userId)
         {
             await _cacheExtension.RemoveAllKeysBy(string.Format(UserListRoleCacheName.UserListRoleCache, userId));
+        }
+
+        public async Task<bool> Login(LoginModel model)
+        {
+            if (model is null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+            return await ValidateAdmin(model.Username, model.Password);
         }
     }
 }
