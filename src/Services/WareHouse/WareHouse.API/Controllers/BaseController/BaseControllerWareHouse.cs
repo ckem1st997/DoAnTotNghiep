@@ -7,7 +7,7 @@ using WareHouse.API.Application.Extensions;
 namespace WareHouse.API.Controllers.BaseController
 {
    // [Authorize(Roles = "Admin,Manager,User")]
-    [Authorize]
+   // [Authorize]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     public class BaseControllerWareHouse : ControllerBase

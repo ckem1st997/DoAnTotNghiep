@@ -33,7 +33,7 @@ namespace WareHouse.API.Controllers
         }
         #region R
 
-        //[CheckRole(LevelCheck.READ)]
+        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -52,7 +52,6 @@ namespace WareHouse.API.Controllers
 
 
 
-        //[CheckRole(LevelCheck.READ)]
         [Route("get-drop-tree")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]

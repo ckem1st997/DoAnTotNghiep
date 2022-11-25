@@ -20,6 +20,11 @@ namespace Share.BaseCore.Authozire
             _contextAccessor = contextAccessor;
         }
 
+        public bool CheckUserIsAuthenticated()
+        {
+            return _contextAccessor.HttpContext.User.Identity.IsAuthenticated;
+        }
+
         public string GenerateJWT(IList<Claim> claims, int time)
         {
             if (claims is null)
@@ -43,10 +48,10 @@ namespace Share.BaseCore.Authozire
 
         public string GetClaimType(string type)
         {
-            if (_contextAccessor.HttpContext.User.Identity is ClaimsIdentity identity)
+            if (_contextAccessor.HttpContext.User.Identity is ClaimsIdentity identity && this.CheckUserIsAuthenticated())
             {
                 IEnumerable<Claim> claims = identity.Claims;
-                return identity.Claims.FirstOrDefault(c => c.Type.Equals(type)).Value;
+                return identity.Claims.FirstOrDefault(c => c.Type.Equals(type))?.Value;
             }
             return string.Empty;
         }

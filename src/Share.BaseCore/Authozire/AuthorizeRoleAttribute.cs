@@ -29,16 +29,25 @@ namespace Share.BaseCore.Authozire
             {
                 throw new ArgumentNullException(nameof(context));
             }
+            bool checkRole = false, check401 = false;
             // create instance of IUserInfomationService not contractor
             IUserInfomationService _userService = EngineContext.Current.Resolve<IUserInfomationService>();
-            IAuthozireExtensionForMaster iAuthenForMaster = EngineContext.Current.Resolve<IAuthozireExtensionForMaster>();
-            bool checkRole = false;
-            string userId = iAuthenForMaster.GetClaimType("id");
-            if (_userService != null && !string.IsNullOrEmpty(userId))
-                checkRole = await _userService.GetAuthozireByUserId(userId, _keyRole);
+            // chưa xác thực
+            if (!context.HttpContext.User.Identity.IsAuthenticated)
+            {
+                checkRole = await _userService.GetAuthozireByUserId("IsAuthenticatedFalse", _keyRole);
+                check401 = true;
+            }
+            else
+            {
+                IAuthozireExtensionForMaster iAuthenForMaster = EngineContext.Current.Resolve<IAuthozireExtensionForMaster>();
+                string userId = iAuthenForMaster.GetClaimType("id");
+                // xác thực rồi
+                if (_userService != null && !string.IsNullOrEmpty(userId))
+                    checkRole = await _userService.GetAuthozireByUserId(userId, _keyRole);
+            }             
 
-
-            if (!checkRole && _userService == null)
+            if (!checkRole && _userService is null || !checkRole && check401)
             {
                 var res = new ResultMessageResponse()
                 {

@@ -18,6 +18,6 @@ namespace Share.BaseCore.Authozire
         public string GenerateJWT(IList<Claim> claims, int time);
         // public Task<string> GenerateRefreshToken();
         public string GetClaimType(string type);
-
+        public bool CheckUserIsAuthenticated();
     }
 }

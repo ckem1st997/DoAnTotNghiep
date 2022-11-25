@@ -25,9 +25,7 @@ using Nest;
 using WareHouse.API.Application.Queries.Paginated.WareHouseBook;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Infrastructure.ElasticSearch;
-using Share.BaseCore;
-using Share.BaseCore.Cache.CacheName;
-using Share.BaseCore.Authozire;
+
 
 namespace WareHouse.API.Controllers
 {

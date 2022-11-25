@@ -55,9 +55,9 @@ namespace Master
             services.AddControllers();
             services.AddCustomConfiguration(Configuration);
             services.AddSingleton<IKafKaConnection, KafKaConnection>();
-            services.AddEventBus(Configuration);
-            services.AddEventBusKafka();
-            services.AddHostedService<RequestTimeConsumer>();
+            // services.AddEventBus(Configuration);
+            // services.AddEventBusKafka();
+            //   services.AddHostedService<RequestTimeConsumer>();
             // call http to grpc
             services.AddApiGrpc<GrpcGetDataWareHouse.GrpcGetDataWareHouseClient>(Configuration);
             services.Configure<PasswordHasherOptions>(option =>
@@ -100,7 +100,7 @@ namespace Master
                 endpoints.MapControllers();
                 endpoints.MapHub<ConnectRealTimeHub>("/signalr");
             });
-            app.ConfigureEventBusKafka();
+            //    app.ConfigureEventBusKafka();
             app.ConfigureRequestPipeline();
         }
 
