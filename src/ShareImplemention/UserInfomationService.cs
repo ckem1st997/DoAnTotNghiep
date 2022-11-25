@@ -1,9 +1,15 @@
-﻿using GrpcGetDataToMaster;
+﻿using Elastic.Apm.Api;
+using GrpcGetDataToMaster;
+using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
+using Nest;
 using Newtonsoft.Json;
+using Serilog;
 using Share.BaseCore.Authozire;
+using Share.BaseCore.Cache.CacheName;
 using ShareModels.Models;
 using System.Text;
+using System.Threading;
 
 namespace ShareImplemention
 {
@@ -28,23 +34,16 @@ namespace ShareImplemention
             //var cachedResponse = JsonConvert.DeserializeObject<UserListRoleModel>(Encoding.UTF8.GetString(await _cache.GetAsync(idUser)));
             //if (cachedResponse is not null)
             //    return cachedResponse.ListKey.Contains(authRole);
-            // viết thêm phần check key role
-            // cache list role
-            // mỗi lần vô đây thì bước đầu là lấy list role từ cache, nếu không lấy list từ grpc hoặc check bằng grpc
-            // xem active có true không, nếu true thì tiếp tục check, nếu false thì tức là key này không hoạt động
-            // action dùng key này sẽ không cần xác thực mà cho phép truy cập luôn, hàm này trả về true luôn
-            // nếu là true tức là cần xác thực, check xem request có xác thực chưa, nếu chưa thì return 401
-
-            var listRoleCache = new List<string>();
-            // listRoleCache là null thì get by grpc
-            var getRole = listRoleCache.FirstOrDefault(x => x.Equals(authRole));
-            // không có trong list
-            if (getRole is null)
+            if (string.IsNullOrEmpty(idUser))
                 return false;
-            // key không hoạt động và không có ai xác thực
-            if (getRole.Equals("active false") && idUser.Trim().Equals("IsAuthenticatedFalse"))
-                return true;
+            var cachedResponse = await _cache.GetAsync(string.Format(UserListRoleCacheName.UserListRoleCache, idUser));
 
+            if (cachedResponse is not null)
+            {
+                var resList = JsonConvert.DeserializeObject<List<string>>(Encoding.UTF8.GetString(cachedResponse));
+                if (resList is not null && resList.Contains(authRole))
+                    return true;
+            }
 
             SaveChange res = await _client.CheckAuthozireByUserIdAndRoleKeyAsync(new CheckAuthozireByUserIdAndRoleKeyModel()
             {

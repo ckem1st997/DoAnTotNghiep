@@ -1,6 +1,9 @@
 ﻿using EasyCaching.Core.Configurations;
+using EasyCaching.Serialization.SystemTextJson.Configurations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Share.BaseCore.Cache.CacheName;
 using StackExchange.Redis;
 
@@ -51,7 +54,18 @@ namespace Share.BaseCore.Cache
                 {
                     config.DBConfig.Endpoints.Add(new ServerEndPoint(configuration.GetSection("Redis")["Server"], int.Parse(configuration.GetSection("Redis")["Port"])));
                     config.EnableLogging = true;
-                }, "redis");
+                    config.SerializerName = "redis";
+                }, "redis")
+                .WithMessagePack("redis");
+                Action<JsonSerializerSettings> serializerSettings = x =>
+                {
+                    x.MissingMemberHandling = MissingMemberHandling.Ignore;
+                    x.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    x.DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind;
+                    x.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+                    x.MaxDepth = 32;
+                };
+                option.WithJson(serializerSettings, "json");
             });
 
 

@@ -51,7 +51,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.networkStatus = await isOnline();
         this.checkNetworkStatus();
       })();
-    }, 5000);
+    }, 25000);
   }
 
   checkNetworkStatus() {

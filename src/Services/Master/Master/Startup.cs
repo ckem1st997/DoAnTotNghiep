@@ -27,6 +27,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Share.BaseCore.Authozire;
 using Share.BaseCore.Authozire.ConfigureServices;
+using Share.BaseCore.Cache;
 using Share.BaseCore.Grpc;
 using Share.BaseCore.Kafka;
 using System;
@@ -52,6 +53,7 @@ namespace Master
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCache(Configuration);
             services.AddControllers();
             services.AddCustomConfiguration(Configuration);
             services.AddSingleton<IKafKaConnection, KafKaConnection>();
