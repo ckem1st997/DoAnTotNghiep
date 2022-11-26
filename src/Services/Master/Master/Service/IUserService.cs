@@ -22,7 +22,12 @@ namespace Master.Service
         public UserMaster GetUserByUserName(string userName);
         public Task<bool> CheckAuthozireByUserIdAndRoleKey(string userId, string roleKey);
         public Task CacheListRole(string userId);
+        public Task CacheListRoleInactiveFalse();
+        public Task<IEnumerable<string>> GetListRoleInactiveFalse();
+        public Task RemoveCacheListRoleInactiveFalse();
         public Task RemoveCacheListRole(string userId);
+        public Task RemoveAllCacheListRoleByUser();
+
         public Task<IPaginatedList<UserMaster>> GetListUserAsync(int pages, int number, string wareHouseId, string keyWords);
     }
 }

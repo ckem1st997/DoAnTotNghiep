@@ -37,16 +37,30 @@ namespace ShareImplemention
 
             // list active false
             // var listRoleCache = await _cache.GetAsync(string.Format(ListRoleCacheName.UserListRoleCache, false));
+            var listRoleFalse = new List<string>();
+            var listRoleCache = await _cache.GetAsync(string.Format(ListRoleCacheName.UserListRoleCache, false));
+            if (listRoleCache is null)
+            {
+                var listRoleGrpc = await _client.GetListRoleInactiveFalseAsync(new Params());
+                listRoleFalse = listRoleGrpc.ListRoleInactiveFalse_.ToList();
+            }
+            else
+            {
+                listRoleFalse = JsonConvert.DeserializeObject<List<string>>(Encoding.UTF8.GetString(listRoleCache));
 
-            var listRoleCache = new List<string>();
-            // listRoleCache là null thì get by grpc
-            var getRole = listRoleCache.FirstOrDefault(x => x.Equals(authRole));
-            // key không hoạt động => trả về luôn
-            if (getRole != null && getRole.Equals("active false"))
-                return true;
-            // tới đây tức là key active mà userid truyền vào là chưa xác thực => return false
-            if (idUser.Equals("IsAuthenticatedFalse"))
-                return false;
+            }
+            if (listRoleFalse is not null && listRoleFalse.Any())
+            {
+                // listRoleCache là null thì get by grpc
+                var getRole = listRoleFalse.FirstOrDefault(x => x.Equals(authRole));
+                // key không hoạt động => trả về luôn
+                if (getRole != null)
+                    return true;
+                // tới đây tức là key active mà userid truyền vào là chưa xác thực => return false
+                if (idUser.Equals("IsAuthenticatedFalse"))
+                    return false;
+            }
+
 
             // get user from cache by cache - key, set cache in login
             // if cachet == null then call grpc to service master

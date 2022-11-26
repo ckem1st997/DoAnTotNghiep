@@ -22,6 +22,7 @@ service GrpcGetData {
     rpc CreateHistory(HistotyModel) returns (SaveChange) {}
     rpc ActiveHistory(BaseId) returns (SaveChange) {}
     rpc CheckAuthozireByUserIdAndRoleKey(CheckAuthozireByUserIdAndRoleKeyModel) returns (SaveChange) {}
+    rpc GetListRoleInactiveFalse(Params) returns (ListRoleInactiveFalse) {}
 
 }
 
@@ -86,6 +87,12 @@ message ListGetDepartment{
 
 message ListGetEmployee{
     repeated BaseSelectDTO listGetEmployee=1;
+
+}
+
+
+message ListRoleInactiveFalse{
+    repeated string listRoleInactiveFalse=1;
 
 }
 

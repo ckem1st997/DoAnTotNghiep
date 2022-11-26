@@ -10,10 +10,12 @@ namespace Master.Controllers
     public class ListRoleController : BaseControllerMaster
     {
         private readonly MasterdataContext _context;
+        private readonly IUserService _userService;
 
-        public ListRoleController(MasterdataContext context)
+        public ListRoleController(MasterdataContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
 
@@ -325,9 +327,15 @@ namespace Master.Controllers
             }
             list.Id = Guid.NewGuid().ToString();
             await _context.ListRoles.AddAsync(list);
+            var res = await _context.SaveChangesAsync() > 0;
+            if (res)
+            {
+                await _userService.RemoveCacheListRoleInactiveFalse();
+                await _userService.CacheListRoleInactiveFalse();
+            }
             return Ok(new ResultMessageResponse()
             {
-                success = await _context.SaveChangesAsync() > 0
+                success = res
             });
         }
 
@@ -372,10 +380,15 @@ namespace Master.Controllers
                 });
             }
             _context.ListRoles.Update(list);
-            var res = await _context.SaveChangesAsync();
+            var res = await _context.SaveChangesAsync()>0;
+            if (res)
+            {
+                await _userService.RemoveCacheListRoleInactiveFalse();
+                await _userService.CacheListRoleInactiveFalse();
+            }
             return Ok(new ResultMessageResponse()
             {
-                success = res > 0
+                success = res
             });
         }
 
@@ -394,7 +407,11 @@ namespace Master.Controllers
                 _context.ListRoles.RemoveRange(get);
                 res = await _context.SaveChangesAsync() > 0;
             }
-
+            if (res)
+            {
+                await _userService.RemoveCacheListRoleInactiveFalse();
+                await _userService.CacheListRoleInactiveFalse();
+            }
             var result = new ResultMessageResponse()
             {
                 success = res

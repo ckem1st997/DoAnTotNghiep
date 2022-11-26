@@ -5,10 +5,12 @@ namespace Master.Controllers
     public class ListAuthozireRoleByUserController : BaseControllerMaster
     {
         private readonly MasterdataContext _context;
+        private readonly IUserService _userService;
 
-        public ListAuthozireRoleByUserController(MasterdataContext context)
+        public ListAuthozireRoleByUserController(MasterdataContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
 
@@ -57,9 +59,12 @@ namespace Master.Controllers
             }
             list.Id = Guid.NewGuid().ToString();
             await _context.ListAuthozireRoleByUsers.AddAsync(list);
+            var res = await _context.SaveChangesAsync() > 0;
+            if (res)
+                await _userService.RemoveAllCacheListRoleByUser();
             return Ok(new ResultMessageResponse()
             {
-                success = await _context.SaveChangesAsync() > 0
+                success = res
             });
         }
 
@@ -93,10 +98,12 @@ namespace Master.Controllers
                         ListAuthozireId = item
                     });
                 }
-            var res = await _context.SaveChangesAsync();
+            var res = await _context.SaveChangesAsync() > 0;
+            if (res)
+                await _userService.RemoveAllCacheListRoleByUser();
             return Ok(new ResultMessageResponse()
             {
-                success = res > 0
+                success = res
             });
         }
 
@@ -140,10 +147,12 @@ namespace Master.Controllers
                 });
             }
             _context.ListAuthozireRoleByUsers.Update(list);
-            var res = await _context.SaveChangesAsync();
+            var res = await _context.SaveChangesAsync() > 0;
+            if (res)
+                await _userService.RemoveCacheListRoleInactiveFalse(list.UserId);
             return Ok(new ResultMessageResponse()
             {
-                success = res > 0
+                success = res
             });
         }
 

@@ -24,7 +24,7 @@ using BaseId = GrpcGetDataToWareHouse.BaseId;
 
 namespace Master.Service
 {
-    [Authorize]
+  //  [Authorize]
     public class UserService : IUserService
     {
         private readonly MasterdataContext _context;
@@ -272,6 +272,13 @@ namespace Master.Service
             await _cacheExtension.RemoveAllKeysBy(string.Format(UserListRoleCacheName.UserListRoleCache, userId));
         }
 
+
+        public async Task RemoveAllCacheListRoleByUser()
+        {
+            await _cacheExtension.RemoveAllKeysBy(UserListRoleCacheName.Prefix);
+        }
+
+
         public async Task<bool> Login(LoginModel model)
         {
             if (model is null)
@@ -279,6 +286,47 @@ namespace Master.Service
                 throw new ArgumentNullException(nameof(model));
             }
             return await ValidateAdmin(model.Username, model.Password);
+        }
+
+
+        [AllowAnonymous]
+        public async Task CacheListRoleInactiveFalse()
+        {
+            if (_cacheExtension.IsConnected)
+            {
+                var slidingExpiration = TimeSpan.FromDays(10);
+                var options = new DistributedCacheEntryOptions
+                {
+                    SlidingExpiration = slidingExpiration
+                };
+
+                // get list roleid by userid
+                var listRoleFalse = await GetListRoleInactiveFalse();
+                if (listRoleFalse.Any())
+                {
+                    byte[] serializedData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(listRoleFalse));
+                    await _cache.SetAsync(string.Format(ListRoleCacheName.UserListRoleCache, false), serializedData, options);
+                }
+
+            }
+        }
+
+
+        [AllowAnonymous]
+        public async Task<IEnumerable<string>> GetListRoleInactiveFalse()
+        {
+            List<string> listRoleFalse = new List<string>();
+            // get list roleid by userid
+            listRoleFalse = await _context.ListRoles.Where(x => !x.InActive).Select(x => x.Key).ToListAsync();
+
+            return listRoleFalse;
+        }
+
+
+        [AllowAnonymous]
+        public async Task RemoveCacheListRoleInactiveFalse()
+        {
+            await _cacheExtension.RemoveAllKeysBy(string.Format(ListRoleCacheName.UserListRoleCache, false));
         }
     }
 }

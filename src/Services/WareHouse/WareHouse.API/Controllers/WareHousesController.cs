@@ -465,7 +465,8 @@ namespace WareHouse.API.Controllers
                 Code = ExtensionFull.GetVoucherCode("WH")
 
             };
-            await GetDataToDrop(mode);
+            if (mode != null)
+                await GetDataToDrop(mode);
             var result = new ResultMessageResponse()
             {
                 data = mode,
@@ -495,8 +496,8 @@ namespace WareHouse.API.Controllers
                 Id = Id
             };
             var data = await _mediat.Send(commandCheck);
-
-            await GetDataToDrop(data);
+            if (data != null)
+                await GetDataToDrop(data);
             var result = new ResultMessageResponse()
             {
                 data = data,

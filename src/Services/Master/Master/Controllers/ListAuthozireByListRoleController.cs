@@ -5,10 +5,13 @@ namespace Master.Controllers
     public class ListAuthozireByListRoleController : BaseControllerMaster
     {
         private readonly MasterdataContext _context;
+        private readonly IUserService _userService;
 
-        public ListAuthozireByListRoleController(MasterdataContext context)
+
+        public ListAuthozireByListRoleController(MasterdataContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
 
@@ -30,7 +33,7 @@ namespace Master.Controllers
         [Route("get-list-id")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult GetListId(string id,string appId)
+        public IActionResult GetListId(string id, string appId)
         {
             var list = _context.ListAuthozireByListRoles.Where(x => x.Id != null && x.AuthozireId.Equals(id) && x.AppId.Equals(appId)).Select(x => x.ListRoleId);
             return Ok(new ResultMessageResponse()
@@ -70,9 +73,12 @@ namespace Master.Controllers
             }
             list.Id = Guid.NewGuid().ToString();
             await _context.ListAuthozireByListRoles.AddAsync(list);
+            var res = await _context.SaveChangesAsync() > 0;
+            if (res)
+                await _userService.RemoveAllCacheListRoleByUser();
             return Ok(new ResultMessageResponse()
             {
-                success = await _context.SaveChangesAsync() > 0
+                success = res
             });
         }
 
@@ -117,10 +123,12 @@ namespace Master.Controllers
                 });
             }
             _context.ListAuthozireByListRoles.Update(list);
-            var res = await _context.SaveChangesAsync();
+            var res = await _context.SaveChangesAsync() > 0;
+            if (res)
+                await _userService.RemoveAllCacheListRoleByUser();
             return Ok(new ResultMessageResponse()
             {
-                success = res > 0
+                success = res
             });
         }
 
@@ -154,10 +162,12 @@ namespace Master.Controllers
                         AppId = appId
                     });
                 }
-            var res = await _context.SaveChangesAsync();
+            var res = await _context.SaveChangesAsync() > 0;
+            if (res)
+                await _userService.RemoveAllCacheListRoleByUser();
             return Ok(new ResultMessageResponse()
             {
-                success = res > 0
+                success = res
             });
         }
 

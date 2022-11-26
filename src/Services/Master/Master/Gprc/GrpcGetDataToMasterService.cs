@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace GrpcGetDataToMaster
 {
-    [Authorize]
+  //  [Authorize]
     public class GrpcGetDataToMasterService : GrpcGetData.GrpcGetDataBase
     {
 
@@ -197,6 +197,21 @@ namespace GrpcGetDataToMaster
             await _userService.RemoveCacheListRole(request.UserId);
             await _userService.CacheListRole(request.UserId);
             return new SaveChange() { Check = res };
+        }
+
+
+        [AllowAnonymous]
+        public override async Task<ListRoleInactiveFalse> GetListRoleInactiveFalse(Params request, ServerCallContext context)
+        {
+            var res = await _userService.GetListRoleInactiveFalse();
+            await _userService.RemoveCacheListRoleInactiveFalse();
+            await _userService.CacheListRoleInactiveFalse();
+            var result = new ListRoleInactiveFalse();
+            foreach (var item in res)
+            {
+                result.ListRoleInactiveFalse_.Add(item);
+            }
+            return result;
         }
     }
 }
