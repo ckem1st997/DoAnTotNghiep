@@ -61,7 +61,7 @@ namespace Master.Controllers
             await _context.ListAuthozireRoleByUsers.AddAsync(list);
             var res = await _context.SaveChangesAsync() > 0;
             if (res)
-                await _userService.RemoveAllCacheListRoleByUser();
+                await _userService.RemoveCacheListRole(list.UserId);
             return Ok(new ResultMessageResponse()
             {
                 success = res
@@ -100,7 +100,7 @@ namespace Master.Controllers
                 }
             var res = await _context.SaveChangesAsync() > 0;
             if (res)
-                await _userService.RemoveAllCacheListRoleByUser();
+                await _userService.RemoveCacheListRole(id);
             return Ok(new ResultMessageResponse()
             {
                 success = res
@@ -149,7 +149,7 @@ namespace Master.Controllers
             _context.ListAuthozireRoleByUsers.Update(list);
             var res = await _context.SaveChangesAsync() > 0;
             if (res)
-                await _userService.RemoveCacheListRoleInactiveFalse(list.UserId);
+                await _userService.RemoveCacheListRole(list.UserId);
             return Ok(new ResultMessageResponse()
             {
                 success = res

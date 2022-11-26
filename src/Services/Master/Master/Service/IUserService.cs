@@ -4,6 +4,14 @@ using System.Threading.Tasks;
 
 namespace Master.Service
 {
+    // done phân quyền với xác thực hoặc không xác thực.
+    //hiện đang xoá hết cache
+    //Note: 
+    //- Khi phân quyền người dùng theo key, xoá cache theo userId==> xong.
+    //- Khi phân quyền người người theo định danh quyền, xoá cache theo userId==> xong.
+    //- Khi phân quyền định danh quyền theo key, đang xoá tất cả key,
+    //nghĩ cách xoá các cache có userId được phân quyền theo định danh quyền,
+    //có thể sẽ lấy danh sách userId ứng viên định danh quyền đó rồi xoá theo list userId đó==> chưa xong.
     public interface IUserService
     {
         public UserMaster User { get; }
