@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace ShareImplemention
 {
+
     public static class ServiceConfigImplementAPI
     {
         public static void AddServiceConfigImplementAPI(this IServiceCollection services)

@@ -41,6 +41,11 @@
         public const string Prefix = "UserListRole-";
     }
 
+    public static class ListRoleCacheName
+    {
+        public const string UserListRoleCache = "ListRole-{0}";
+        public const string Prefix = "ListRole-";
+    }
 
 
 }
