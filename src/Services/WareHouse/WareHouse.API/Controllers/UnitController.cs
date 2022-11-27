@@ -51,7 +51,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-
+        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
         [Route("get-drop-tree")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]

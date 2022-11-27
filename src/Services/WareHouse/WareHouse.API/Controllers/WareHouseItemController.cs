@@ -28,7 +28,7 @@ using Share.BaseCore.Cache.CacheName;
 
 namespace WareHouse.API.Controllers
 {
-
+    [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
     public class WareHouseItemController : BaseControllerWareHouse
     {
         private readonly IMediator _mediat;
