@@ -188,15 +188,28 @@ export class ListRoleShowToAuthozireComponent implements OnInit {
   GetData() {
     if (this.selectedValue != undefined) {
       if (this.config.data.type == 1) {
-        this.listrolebyusser.getListByUserId(this.config.data.id, this.selectedValue.id).subscribe(x => this.listRoleByUser = x.data);
+        this.listrolebyusser.getListByUserId(this.config.data.id, this.selectedValue.id).subscribe(x => {
+          this.listRoleByUser = x.data;
+          if (this.selectedValue != undefined)
+            this.service.getListTreeTable(this.selectedValue.id).subscribe(list => {
+              this.files5 = list.data;
+              this.getElement(list.data);
+            });
+        }
+        );
       }
       else if (this.config.data.type == 2)
-        this.authbyuser.getListByUserId(this.config.data.id, this.selectedValue.id).subscribe(x => this.listRoleByUser = x.data);
+        this.authbyuser.getListByUserId(this.config.data.id, this.selectedValue.id).subscribe(x => {
+          this.listRoleByUser = x.data;
+          if (this.selectedValue != undefined)
+            this.service.getListTreeTable(this.selectedValue.id).subscribe(list => {
+              this.files5 = list.data;
+              this.getElement(list.data);
+            });
+        }
+        );
 
-      this.service.getListTreeTable(this.selectedValue.id).subscribe(list => {
-        this.files5 = list.data;
-        this.getElement(list.data);
-      });
+
     }
 
   }
