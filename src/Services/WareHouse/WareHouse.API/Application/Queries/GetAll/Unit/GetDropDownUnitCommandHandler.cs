@@ -23,7 +23,7 @@ namespace WareHouse.API.Application.Queries.GetAll.Unit
             CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            const string sql = "select Id,UnitName from Unit where Inactive =@active and OnDelete=0 ";
+            const string sql = "select Id,UnitName from Unit where Inactive =@active and OnDelete=0 order by UnitName  ";
             var parameter = new DynamicParameters();
             parameter.Add("@active", request.Active ? 1 : 0);
             var getAll = await _repository.GetAllAync<UnitDTO>(sql, parameter, CommandType.Text);

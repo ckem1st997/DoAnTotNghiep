@@ -29,6 +29,12 @@ namespace Share.BaseCore.Authozire
             {
                 throw new ArgumentNullException(nameof(context));
             }
+
+            // get content param action
+            //    public async Task<ActionResult<MemberDisplay?>> PostSave([ModelBinder(typeof(MemberBinder))] MemberSave contentItem)
+            //var model = (MemberSave?)context.ActionArguments["contentItem"];
+
+
             bool checkRole = false, check401 = false;
             // create instance of IUserInfomationService not contractor
             IUserInfomationService _userService = EngineContext.Current.Resolve<IUserInfomationService>();
@@ -45,7 +51,7 @@ namespace Share.BaseCore.Authozire
                 // xác thực rồi
                 if (_userService != null && !string.IsNullOrEmpty(userId))
                     checkRole = await _userService.GetAuthozireByUserId(userId, _keyRole);
-            }             
+            }
 
             if (!checkRole && _userService is null || !checkRole && check401)
             {
