@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using Share.BaseCore.Extensions;
 using Share.BaseCore.IRepositories;
 using System;
@@ -34,6 +35,7 @@ namespace Share.BaseCore.Authozire
             //    public async Task<ActionResult<MemberDisplay?>> PostSave([ModelBinder(typeof(MemberBinder))] MemberSave contentItem)
             //var model = (MemberSave?)context.ActionArguments["contentItem"];
 
+            //  IAuthozireExtensionForMaster iAuthenForMaster = context.HttpContext.RequestServices.GetService<IAuthozireExtensionForMaster>();
 
             bool checkRole = false, check401 = false;
             // create instance of IUserInfomationService not contractor
