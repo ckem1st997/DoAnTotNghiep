@@ -45,6 +45,7 @@ using Share.BaseCore.Authozire.ConfigureServices;
 using Share.BaseCore.Kafka;
 using Share.BaseCore.Grpc;
 using ShareImplemention;
+using ShareImplemention.Background;
 
 namespace WareHouse.API
 {
@@ -79,6 +80,8 @@ namespace WareHouse.API
             services.AddServiceConfigImplementAPI();
 
             // services.AddSingleton<IHostedService, RequestTimeConsumer>();
+
+            services.AddBackGrouService();
         }
         public void ConfigureContainer(ContainerBuilder builder)
         {
