@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using EFCore.BulkExtensions;
 using Share.BaseCore;
 using Share.BaseCore.IRepositories;
+using Nest;
+using System.Data.Common;
 
 namespace Share.BaseCore.Repositories
 {
@@ -208,5 +210,31 @@ namespace Share.BaseCore.Repositories
                 query = query.Where(filter);
             return query;
         }
+
+
     }
+    //    try {
+    //    context.Add(myNewEntity);
+    //   var result = context.SaveChanges();
+    //    if(result==0){
+    //       dbTransaction.Rollback();
+    //        ... return  error
+    //}
+    //otherEntity.RefId = myNewEntity.Id;
+    //context.Update(otherEntity);
+    //// some other inserts and updates
+    //result = context.SaveChanges();
+    //if (result == 0)
+    //{
+    //    dbTransaction.Rollback();
+    //    ... return error
+    //     }
+    //dbTransaction.Commit();
+    //}
+    //catch
+    //{
+    //    dbTransaction.Rollback();
+    //    throw;
+    //}
+
 }
