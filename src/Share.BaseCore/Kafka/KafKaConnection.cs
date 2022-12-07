@@ -46,7 +46,7 @@ namespace Share.BaseCore.Kafka
             connectionName = _configuration["KafKaconnectionName"];
             //kafkaConsumer = ConsumerConfigMethod();
             //kafkaProducer = ProducerConfigMethod();
-            Log.Information(BootstrapServers);
+            //  Log.Information(BootstrapServers);
         }
 
         private IProducer<string, byte[]> ProducerConfigMethod()

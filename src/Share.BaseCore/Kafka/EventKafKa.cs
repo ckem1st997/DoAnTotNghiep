@@ -20,19 +20,14 @@ using System.Threading.Tasks;
 namespace Share.BaseCore.Kafka
 {
     public class EventKafKa : IEventBus, IDisposable
-    {
-        const string BROKER_NAME = "event_bus";
-        const string AUTOFAC_SCOPE_NAME = "event_bus";
-
+    {     
         private readonly IKafKaConnection _persistentConnection;
-        private readonly ILogger<EventKafKa> _logger;
         private readonly IEventBusSubscriptionsManager _subsManager;
         private readonly string _topicName;
 
-        public EventKafKa(IConfiguration configuration, IKafKaConnection persistentConnection, ILogger<EventKafKa> logger, IEventBusSubscriptionsManager subsManager, string queueName = null)
+        public EventKafKa(IConfiguration configuration, IKafKaConnection persistentConnection, IEventBusSubscriptionsManager subsManager, string queueName = null)
         {
             _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _subsManager = subsManager ?? new InMemoryEventBusSubscriptionsManager();
             // _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
             _topicName = configuration["KafKaTopic"];
