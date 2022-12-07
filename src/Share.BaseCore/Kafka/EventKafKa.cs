@@ -141,10 +141,10 @@ namespace Share.BaseCore.Kafka
 
         public void Dispose()
         {
-            if (_persistentConnection != null)
-            {
-                _persistentConnection.Dispose();
-            }
+            //if (_persistentConnection != null)
+            //{
+            //    _persistentConnection.Dispose();
+            //}
 
             _subsManager.Clear();
         }

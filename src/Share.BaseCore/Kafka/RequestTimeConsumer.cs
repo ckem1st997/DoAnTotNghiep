@@ -168,11 +168,11 @@ namespace Share.BaseCore.Kafka
 
             await base.StopAsync(stoppingToken);
         }
-        public override void Dispose()
-        {
-            kafkaConsumer.Close(); // Commit offsets and leave the group cleanly.
-            kafkaConsumer.Dispose();
-            base.Dispose();
-        }
+        //public override void Dispose()
+        //{
+        //    kafkaConsumer.Close(); // Commit offsets and leave the group cleanly.
+        //    kafkaConsumer.Dispose();
+        //    base.Dispose();
+        //}
     }
 }

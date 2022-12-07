@@ -180,22 +180,22 @@ namespace Share.BaseCore.Kafka
             }
             //  }
         }
-        public void Dispose()
-        {
-            if (_disposed) return;
+        //public void Dispose()
+        //{
+        //    if (_disposed) return;
 
-            _disposed = true;
+        //    _disposed = true;
 
-            try
-            {
-                kafkaConsumer.Close();
-                kafkaProducer.Flush();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message.ToString());
-            }
-        }
+        //    try
+        //    {
+        //        kafkaConsumer.Close();
+        //        kafkaProducer.Flush();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.Error(ex.Message.ToString());
+        //    }
+        //}
 
     }
 }
