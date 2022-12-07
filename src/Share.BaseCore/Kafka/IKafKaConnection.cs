@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Share.BaseCore.Kafka
 {
+    /// <summary>
+    /// get Producer and  Consumer
+    /// </summary>
     public interface IKafKaConnection : IDisposable
     {
         bool IsConnectedConsumer { get; }
@@ -15,7 +18,13 @@ namespace Share.BaseCore.Kafka
         bool TryConnectConsumer();
         bool TryConnectProducer();
 
+        /// <summary>
+        /// get Producer
+        /// </summary>
         IProducer<string, byte[]> ProducerConfig { get; }
+        /// <summary>
+        /// get Consumer
+        /// </summary>
         IConsumer<string, byte[]> ConsumerConfig { get; }
     }
 }
