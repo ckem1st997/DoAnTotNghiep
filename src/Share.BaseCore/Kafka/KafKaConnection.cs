@@ -44,8 +44,8 @@ namespace Share.BaseCore.Kafka
             GroupId = _configuration["KafKaGroupId"];
             BootstrapServers = _configuration["KafKaBootstrapServers"];
             connectionName = _configuration["KafKaconnectionName"];
-            kafkaConsumer = ConsumerConfigMethod();
-            kafkaProducer = ProducerConfigMethod();
+            //kafkaConsumer = ConsumerConfigMethod();
+            //kafkaProducer = ProducerConfigMethod();
             Log.Information(BootstrapServers);
         }
 
@@ -97,13 +97,14 @@ namespace Share.BaseCore.Kafka
 
         public IProducer<string, byte[]> ProducerConfig
         {
-            get { return kafkaProducer; }
+            get { return kafkaProducer = ProducerConfigMethod(); }
         }
 
 
         public IConsumer<string, byte[]> ConsumerConfig
         {
-            get { return kafkaConsumer; }
+            //  get { return kafkaConsumer; }
+            get { return kafkaConsumer = ConsumerConfigMethod(); }
         }
 
         public bool TryConnectConsumer()
