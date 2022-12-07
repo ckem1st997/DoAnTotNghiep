@@ -34,7 +34,7 @@ namespace Share.BaseCore.Kafka
             _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _subsManager = subsManager ?? new InMemoryEventBusSubscriptionsManager();
-            _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
+            // _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
             _topicName = configuration["KafKaTopic"];
         }
 
@@ -75,7 +75,7 @@ namespace Share.BaseCore.Kafka
                     WriteIndented = true
                 });
                 producer.Produce(_topicName, new Message<string, byte[]> { Key = eventName, Value = body });
-                producer.Flush(timeout: TimeSpan.FromSeconds(5));
+                producer.Flush(timeout: TimeSpan.FromSeconds(3));
             }
 
         }
@@ -98,8 +98,8 @@ namespace Share.BaseCore.Kafka
                 {
                     WriteIndented = true
                 });
-                await producer.ProduceAsync(_topicName, new Message<string, byte[]> { Key = eventName, Value = body });
-                producer.Flush(timeout: TimeSpan.FromSeconds(5));
+                var res = await producer.ProduceAsync(_topicName, new Message<string, byte[]> { Key = eventName, Value = body });
+                producer.Flush();
             }
 
         }

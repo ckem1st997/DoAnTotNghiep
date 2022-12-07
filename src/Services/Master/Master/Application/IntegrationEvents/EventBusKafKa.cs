@@ -22,6 +22,7 @@ namespace Master.IntegrationEvents
         {
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
             // thêm xử lí event trong app
+            // đăng ký hàm xử lý mesage model
             services.AddTransient<CreateHistoryIntegrationEventHandler>();
         }
 
@@ -30,6 +31,7 @@ namespace Master.IntegrationEvents
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             // đăng ký xử lý
+            // hàm xử lý tương ứng model mesage nhận được
             eventBus.Subscribe<CreateHistoryIntegrationEvent, CreateHistoryIntegrationEventHandler>();
         }
     }

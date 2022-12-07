@@ -232,7 +232,7 @@ namespace WareHouse.API.Controllers
                     Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel})");
                     if (_eventBus.IsConnectedProducer())
                     {
-                        for (int i = 0; i < 10000; i++)
+                        for (int i = 0; i < 1; i++)
                         {
                             kafkaModel.Id = Guid.NewGuid().ToString();
                             await _eventBus.PublishAsync(kafkaModel);

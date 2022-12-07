@@ -23,7 +23,7 @@ namespace Share.BaseCore.Kafka
     ///     A simple example demonstrating how to set up a Kafka consumer as an
     ///     IHostedService.
     /// </summary>
-    public class RequestTimeConsumer : BackgroundService
+    public sealed class RequestTimeConsumer : BackgroundService
     {
         private readonly IKafKaConnection _kafKaConnection;
         private readonly string topic;
@@ -46,60 +46,79 @@ namespace Share.BaseCore.Kafka
             _logger = logger;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var policy = Policy.Handle<SocketException>()
-                .Or<KafkaRetriableException>()
-                .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                    (ex, time) =>
-                    {
-                        Log.Warning(ex, "Kafka Client could not connect after {TimeOut}s ({ExceptionMessage})",
-                            $"{time.TotalSeconds:n1}", ex.Message);
-                    }
-                );
+            //var policy = Policy.Handle<SocketException>()
+            //    .Or<KafkaRetriableException>()
+            //    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+            //        (ex, time) =>
+            //        {
+            //            Log.Warning(ex, "Kafka Client could not connect after {TimeOut}s ({ExceptionMessage})",
+            //                $"{time.TotalSeconds:n1}", ex.Message);
+            //        }
+            //    );
 
-            await policy.ExecuteAsync(() => { new Thread(() => StartConsumerLoop(stoppingToken)).Start(); return Task.CompletedTask; });
+            //await policy.ExecuteAsync(() =>
+            //{
+            //    return StartConsumerLoop(stoppingToken);
+            //}
+            //);
+            return StartConsumerLoop(stoppingToken);
+
             // return Task.CompletedTask;
         }
 
-        [Obsolete]
+        // [Obsolete]
         private async Task StartConsumerLoop(CancellationToken cancellationToken)
         {
-            Log.Information("Listen to Kafka");
-            if (!_kafKaConnection.IsConnectedConsumer)
+            int delay = 1;
+            while (!cancellationToken.IsCancellationRequested)
             {
-                Log.Error("Kafka Client is not connected");
-                _kafKaConnection.TryConnectConsumer();
-            }
-            else
-            {
+                Log.Information("Listen to Kafka");
+                //if (!_kafKaConnection.IsConnectedConsumer)
+                //{
+                //    Log.Error("Kafka Client is not connected");
+                //    _kafKaConnection.TryConnectConsumer();
+                //}
+                //else
+                //{
                 kafkaConsumer.Subscribe(topic);
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    try
-                    {
-                        var cr = kafkaConsumer.Consume(cancellationToken);
-                        if (cr.Message != null)
-                        {
-                            var message = Encoding.UTF8.GetString(cr.Value);
-                            await ProcessEvent(cr.Key, message);
-                        }
 
-                        kafkaConsumer.StoreOffset(cr);
-                    }
-                    catch (ConsumeException e)
+                try
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(delay), cancellationToken);
+                    //await Task.CompletedTask;
+                    if (delay > 0)
                     {
-                        Log.Error($"Consume error: {e.Error.Reason}");
-                        kafkaConsumer.Close();
-                        if (e.Error.IsFatal)
-                        {
-                            break;
-                        }
+                        Console.WriteLine(delay);
+                        delay /= 2;
+
+                    }
+
+                    var cr = kafkaConsumer.Consume(cancellationToken);
+                    if (cr.Message != null)
+                    {
+                        var message = Encoding.UTF8.GetString(cr.Value);
+                        await ProcessEvent(cr.Key, message);
+                    }
+
+                    kafkaConsumer.StoreOffset(cr);
+                }
+                catch (ConsumeException e)
+                {
+                    Log.Error($"Consume error: {e.Error.Reason}");
+                    kafkaConsumer.Close();
+                    if (e.Error.IsFatal)
+                    {
+                        break;
                     }
                 }
+                //    }
 
-                kafkaConsumer.Close();
+
             }
+            kafkaConsumer.Close();
+
         }
 
         private async Task ProcessEvent(string eventName, string message)
@@ -143,7 +162,12 @@ namespace Share.BaseCore.Kafka
                 Log.Warning("No subscription for KafKa event: {EventName}", eventName);
             }
         }
+        public override async Task StopAsync(CancellationToken stoppingToken)
+        {
+            Log.Information($"{nameof(RequestTimeConsumer)} is stopping.");
 
+            await base.StopAsync(stoppingToken);
+        }
         public override void Dispose()
         {
             kafkaConsumer.Close(); // Commit offsets and leave the group cleanly.

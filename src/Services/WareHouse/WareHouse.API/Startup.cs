@@ -79,7 +79,7 @@ namespace WareHouse.API
             services.AddApiCors();
             services.AddServiceConfigImplementAPI();
 
-            // services.AddSingleton<IHostedService, RequestTimeConsumer>();
+          //  services.AddHostedService<RequestTimeConsumer>();
 
             services.AddBackGrouService();
         }
