@@ -55,6 +55,10 @@ namespace Share.BaseCore.Kafka
             {
                 BootstrapServers = BootstrapServers,
                 ClientId = Dns.GetHostName(),
+                // RequestTimeoutMs=3000,
+                MessageTimeoutMs = 1500,
+                //  TransactionTimeoutMs=3000,
+
             };
 
             return new ProducerBuilder<string, byte[]>(pConfig).SetErrorHandler((p, e) =>
@@ -72,7 +76,7 @@ namespace Share.BaseCore.Kafka
                 AllowAutoCreateTopics = true,
                 EnableAutoCommit = true,
                 EnableAutoOffsetStore = false,
-                HeartbeatIntervalMs = 1000
+                HeartbeatIntervalMs = 3000
             };
             return new ConsumerBuilder<string, byte[]>(consumerConfig).SetErrorHandler((p, e) =>
             {
@@ -184,7 +188,7 @@ namespace Share.BaseCore.Kafka
         }
         public void Dispose()
         {
-            if (_disposed) 
+            if (_disposed)
                 return;
 
             _disposed = true;

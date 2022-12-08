@@ -81,21 +81,32 @@ namespace Share.BaseCore.Kafka
         /// Xuất bản một tin nhắn.
         /// </summary>
         /// <param name="event"></param>
-        public async Task PublishAsync(IntegrationEvent @event)
+        public async Task<bool> PublishAsync(IntegrationEvent @event)
         {
-            if (_persistentConnection.IsConnectedProducer)
+            try
             {
-                var eventName = @event.GetType().Name;
-
-                Log.Information($"Creating KafKa Topic by EventBus to publish event: {@event.Id} ({eventName})");
-                var producer = _persistentConnection.ProducerConfig;
-                var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
+                if (_persistentConnection.IsConnectedProducer)
                 {
-                    WriteIndented = true
-                });
-                var res = await producer.ProduceAsync(_topicName, new Message<string, byte[]> { Key = eventName, Value = body });
-                producer.Flush();
+                    var eventName = @event.GetType().Name;
+
+                    Log.Information($"Creating KafKa Topic by EventBus to publish event: {@event.Id} ({eventName})");
+                    var producer = _persistentConnection.ProducerConfig;
+                    var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+                    var res = await producer.ProduceAsync(_topicName, new Message<string, byte[]> { Key = eventName, Value = body });
+                    producer.Flush();
+                    return true;
+                }
+                return false;
             }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+                return false;
+            }
+
 
         }
 

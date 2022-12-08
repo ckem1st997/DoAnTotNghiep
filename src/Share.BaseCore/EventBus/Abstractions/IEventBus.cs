@@ -10,7 +10,7 @@ namespace Share.BaseCore.EventBus.Abstractions
         /// </summary>
         /// <param name="event"></param>
         void Publish(IntegrationEvent @event);
-        Task PublishAsync(IntegrationEvent @event);
+        Task<bool> PublishAsync(IntegrationEvent @event);
 
         bool IsConnectedConsumer();
         bool IsConnectedProducer();

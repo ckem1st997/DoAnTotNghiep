@@ -235,8 +235,9 @@ namespace WareHouse.API.Controllers
                         for (int i = 0; i < 1; i++)
                         {
                             kafkaModel.Id = Guid.NewGuid().ToString();
-                            await _eventBus.PublishAsync(kafkaModel);
-
+                            bool checkKafka = await _eventBus.PublishAsync(kafkaModel);
+                            if (!checkKafka)
+                                await _userSevice.CreateHistory(kafkaModel);
                         }
                     }
                     else
