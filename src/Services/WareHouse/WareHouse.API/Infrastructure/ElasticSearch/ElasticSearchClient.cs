@@ -87,5 +87,11 @@ namespace WareHouse.API.Infrastructure.ElasticSearch
             Log.Information($"InsertOrUpdateMany {nameof(T)} width result {res.IsValid}");
             return res.IsValid;
         }
+
+        public async Task<bool> Ping()
+        {
+            PingResponse res= await _elasticClient.PingAsync();
+            return res.IsValid;
+        }
     }
 }

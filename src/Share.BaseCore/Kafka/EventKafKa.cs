@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace Share.BaseCore.Kafka
 {
     public class EventKafKa : IEventBus, IDisposable
-    {     
+    {
         private readonly IKafKaConnection _persistentConnection;
         private readonly IEventBusSubscriptionsManager _subsManager;
         private readonly string _topicName;
@@ -29,7 +29,7 @@ namespace Share.BaseCore.Kafka
         {
             _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
             _subsManager = subsManager ?? new InMemoryEventBusSubscriptionsManager();
-            // _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
+            _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
             _topicName = configuration["KafKaTopic"];
         }
 
@@ -136,10 +136,10 @@ namespace Share.BaseCore.Kafka
 
         public void Dispose()
         {
-            //if (_persistentConnection != null)
-            //{
-            //    _persistentConnection.Dispose();
-            //}
+            if (_persistentConnection != null)
+            {
+                _persistentConnection.Dispose();
+            }
 
             _subsManager.Clear();
         }

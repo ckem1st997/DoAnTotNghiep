@@ -22,10 +22,10 @@ namespace Share.BaseCore.Kafka
             {
                 var subscriptionClientName = configuration["SubscriptionClientName"];
                 var kafkaPersistentConnection = sp.GetRequiredService<IKafKaConnection>();
-                var logger = sp.GetRequiredService<ILogger<EventKafKa>>();
+                // var logger = sp.GetRequiredService<ILogger<EventKafKa>>();
                 var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
-                return new EventKafKa(configuration, kafkaPersistentConnection, logger, eventBusSubcriptionsManager, subscriptionClientName);
+                return new EventKafKa(configuration, kafkaPersistentConnection, eventBusSubcriptionsManager, subscriptionClientName);
             }
             );
 

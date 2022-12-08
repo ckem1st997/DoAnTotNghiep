@@ -247,28 +247,29 @@ namespace WareHouse.API.Controllers
 
 
             }
-            if (data)
-            {
-                var resElastic = await _elasticSearchClient.InsertOrUpdateAsync(new WareHouseBookDTO()
-                {
-                    Id = inwardCommands.Id,
-                    CreatedBy = inwardCommands.CreatedBy,
-                    CreatedDate = inwardCommands.CreatedDate,
-                    Deliver = inwardCommands.Deliver,
-                    Description = inwardCommands.Description,
-                    ModifiedBy = inwardCommands.ModifiedBy,
-                    ModifiedDate = inwardCommands.ModifiedDate,
-                    Reason = inwardCommands.Reason,
-                    ReasonDescription = inwardCommands.ReasonDescription,
-                    Receiver = inwardCommands.Receiver,
-                    Type = "Phiếu nhập",
-                    VendorId = inwardCommands.VendorId,
-                    VoucherCode = inwardCommands.VoucherCode,
-                    VoucherDate = inwardCommands.VoucherDate,
-                    WareHouseId = inwardCommands.WareHouseId,
-                    WareHouseName = await _elasticSearchClient.GetNameWareHouse(inwardCommands.WareHouseId)
-                });
-            }
+            // pushs to queue vì check connected tốn 2s
+            //if (data && await _elasticSearchClient.CountAllAsync() > 0)
+            //{
+            //    var resElastic = await _elasticSearchClient.InsertOrUpdateAsync(new WareHouseBookDTO()
+            //    {
+            //        Id = inwardCommands.Id,
+            //        CreatedBy = inwardCommands.CreatedBy,
+            //        CreatedDate = inwardCommands.CreatedDate,
+            //        Deliver = inwardCommands.Deliver,
+            //        Description = inwardCommands.Description,
+            //        ModifiedBy = inwardCommands.ModifiedBy,
+            //        ModifiedDate = inwardCommands.ModifiedDate,
+            //        Reason = inwardCommands.Reason,
+            //        ReasonDescription = inwardCommands.ReasonDescription,
+            //        Receiver = inwardCommands.Receiver,
+            //        Type = "Phiếu nhập",
+            //        VendorId = inwardCommands.VendorId,
+            //        VoucherCode = inwardCommands.VoucherCode,
+            //        VoucherDate = inwardCommands.VoucherDate,
+            //        WareHouseId = inwardCommands.WareHouseId,
+            //        WareHouseName = await _elasticSearchClient.GetNameWareHouse(inwardCommands.WareHouseId)
+            //    });
+            //}
 
             var result = new ResultMessageResponse()
             {

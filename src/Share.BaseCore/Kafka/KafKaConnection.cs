@@ -44,8 +44,8 @@ namespace Share.BaseCore.Kafka
             GroupId = _configuration["KafKaGroupId"];
             BootstrapServers = _configuration["KafKaBootstrapServers"];
             connectionName = _configuration["KafKaconnectionName"];
-            //kafkaConsumer = ConsumerConfigMethod();
-            //kafkaProducer = ProducerConfigMethod();
+            kafkaConsumer = ConsumerConfigMethod();
+            kafkaProducer = ProducerConfigMethod();
             //  Log.Information(BootstrapServers);
         }
 
@@ -97,14 +97,15 @@ namespace Share.BaseCore.Kafka
 
         public IProducer<string, byte[]> ProducerConfig
         {
-            get { return kafkaProducer = ProducerConfigMethod(); }
+            get { return kafkaProducer; }
+            //  get { return kafkaProducer = ProducerConfigMethod(); }
         }
 
 
         public IConsumer<string, byte[]> ConsumerConfig
         {
-            //  get { return kafkaConsumer; }
-            get { return kafkaConsumer = ConsumerConfigMethod(); }
+            get { return kafkaConsumer; }
+            //  get { return kafkaConsumer = ConsumerConfigMethod(); }
         }
 
         public bool TryConnectConsumer()
@@ -181,22 +182,23 @@ namespace Share.BaseCore.Kafka
             }
             //  }
         }
-        //public void Dispose()
-        //{
-        //    if (_disposed) return;
+        public void Dispose()
+        {
+            if (_disposed) 
+                return;
 
-        //    _disposed = true;
+            _disposed = true;
 
-        //    try
-        //    {
-        //        kafkaConsumer.Close();
-        //        kafkaProducer.Flush();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Log.Error(ex.Message.ToString());
-        //    }
-        //}
+            try
+            {
+                kafkaConsumer.Close();
+                kafkaProducer.Flush();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message.ToString());
+            }
+        }
 
     }
 }

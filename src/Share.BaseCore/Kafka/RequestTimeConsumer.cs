@@ -75,11 +75,11 @@ namespace Share.BaseCore.Kafka
             while (!cancellationToken.IsCancellationRequested)
             {
                 Log.Information("Listen to Kafka");
-                //if (!_kafKaConnection.IsConnectedConsumer)
-                //{
-                //    Log.Error("Kafka Client is not connected");
-                //    _kafKaConnection.TryConnectConsumer();
-                //}
+                if (!_kafKaConnection.IsConnectedConsumer)
+                {
+                    Log.Error("Kafka Client is not connected");
+                    _kafKaConnection.TryConnectConsumer();
+                }
                 //else
                 //{
                 kafkaConsumer.Subscribe(topic);
@@ -170,8 +170,8 @@ namespace Share.BaseCore.Kafka
         }
         //public override void Dispose()
         //{
-        //    kafkaConsumer.Close(); // Commit offsets and leave the group cleanly.
-        //    kafkaConsumer.Dispose();
+        //    kafkaConsumer?.Close(); // Commit offsets and leave the group cleanly.
+        //    kafkaConsumer?.Dispose();
         //    base.Dispose();
         //}
     }

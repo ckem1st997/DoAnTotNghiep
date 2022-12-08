@@ -11,7 +11,7 @@ namespace Share.BaseCore.Kafka
     /// get Producer and  Consumer
     /// IKafKaConnection : IDisposable
     /// </summary>
-    public interface IKafKaConnection
+    public interface IKafKaConnection : IDisposable
     {
         bool IsConnectedConsumer { get; }
         bool IsConnectedProducer { get; }
