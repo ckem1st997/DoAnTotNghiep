@@ -80,40 +80,40 @@ namespace Share.BaseCore.Kafka
                     Log.Error("Kafka Client is not connected");
                     _kafKaConnection.TryConnectConsumer();
                 }
-                //else
-                //{
-                kafkaConsumer.Subscribe(topic);
-
-                try
+                else
                 {
-                    await Task.Delay(TimeSpan.FromMilliseconds(delay), cancellationToken);
-                    //await Task.CompletedTask;
-                    if (delay > 0)
+                    kafkaConsumer.Subscribe(topic);
+
+                    try
                     {
-                        Console.WriteLine(delay);
-                        delay /= 2;
+                        await Task.Delay(TimeSpan.FromMilliseconds(delay), cancellationToken);
+                        //await Task.CompletedTask;
+                        if (delay > 0)
+                        {
+                            Console.WriteLine(delay);
+                            delay /= 2;
 
+                        }
+
+                        var cr = kafkaConsumer.Consume(cancellationToken);
+                        if (cr.Message != null)
+                        {
+                            var message = Encoding.UTF8.GetString(cr.Value);
+                            await ProcessEvent(cr.Key, message);
+                        }
+
+                        kafkaConsumer.StoreOffset(cr);
                     }
-
-                    var cr = kafkaConsumer.Consume(cancellationToken);
-                    if (cr.Message != null)
+                    catch (ConsumeException e)
                     {
-                        var message = Encoding.UTF8.GetString(cr.Value);
-                        await ProcessEvent(cr.Key, message);
+                        Log.Error($"Consume error: {e.Error.Reason}");
+                        kafkaConsumer.Close();
+                        if (e.Error.IsFatal)
+                        {
+                            break;
+                        }
                     }
-
-                    kafkaConsumer.StoreOffset(cr);
                 }
-                catch (ConsumeException e)
-                {
-                    Log.Error($"Consume error: {e.Error.Reason}");
-                    kafkaConsumer.Close();
-                    if (e.Error.IsFatal)
-                    {
-                        break;
-                    }
-                }
-                //    }
 
 
             }
