@@ -106,7 +106,7 @@ namespace Share.BaseCore.Kafka
                     }
                     catch (ConsumeException e)
                     {
-                        Log.Error($"Consume error: {e.Error.Reason}");
+                        Log.Error($"Consume error: {e.Error.Code}");
                         kafkaConsumer.Close();
                         if (e.Error.IsFatal)
                         {
