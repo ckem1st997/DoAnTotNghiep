@@ -29,7 +29,7 @@ namespace Share.BaseCore.Kafka
         {
             _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
             _subsManager = subsManager ?? new InMemoryEventBusSubscriptionsManager();
-            _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
+          //  _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
             _topicName = configuration["KafKaTopic"];
         }
 
@@ -57,21 +57,33 @@ namespace Share.BaseCore.Kafka
         /// Xuất bản một tin nhắn.
         /// </summary>
         /// <param name="event"></param>
-        public void Publish(IntegrationEvent @event)
+        public bool Publish(IntegrationEvent @event)
         {
-            if (_persistentConnection.IsConnectedProducer)
+            try
             {
-                var eventName = @event.GetType().Name;
-
-                Log.Information($"Creating KafKa Topic by EventBus to publish event: {@event.Id} ({eventName})");
-                var producer = _persistentConnection.ProducerConfig;
-                var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
+                if (_persistentConnection.IsConnectedProducer)
                 {
-                    WriteIndented = true
-                });
-                producer.Produce(_topicName, new Message<string, byte[]> { Key = eventName, Value = body });
-                producer.Flush(timeout: TimeSpan.FromSeconds(3));
+                    var eventName = @event.GetType().Name;
+
+                    Log.Information($"Creating KafKa Topic by EventBus to publish event: {@event.Id} ({eventName})");
+                    var producer = _persistentConnection.ProducerConfig;
+                    var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+                    producer.Produce(_topicName, new Message<string, byte[]> { Key = eventName, Value = body });
+                    producer.Flush(timeout: TimeSpan.FromSeconds(3));
+                    return true;
+                }
+                return false;
             }
+            catch (Exception e)
+            {
+
+                Log.Error(e.Message);
+                return false;
+            }
+
 
         }
 
@@ -157,14 +169,14 @@ namespace Share.BaseCore.Kafka
 
         public bool IsConnectedProducer()
         {
-            if (_persistentConnection.IsConnectedProducer)
-                _persistentConnection.TryConnectProducer();
+            //if (_persistentConnection.IsConnectedProducer)
+            //    _persistentConnection.TryConnectProducer();
             return _persistentConnection.IsConnectedProducer;
         }
         public bool IsConnectedConsumer()
         {
-            if (_persistentConnection.IsConnectedConsumer)
-                _persistentConnection.TryConnectConsumer();
+            //if (_persistentConnection.IsConnectedConsumer)
+            //    _persistentConnection.TryConnectConsumer();
             return _persistentConnection.IsConnectedConsumer;
         }
 
