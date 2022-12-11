@@ -11,6 +11,13 @@ using System.Threading.Tasks;
 
 namespace ShareImplemention.Background
 {
+    /// <summary>
+    /// tạo riêng một QueueHosted để xử lý notication
+    /// thay vì phải đợi xem có gửi được thông báo đi hay không
+    /// thì phần thông báo sẽ xử lý nền
+    /// vì giúp trả về response cho client nhanh hơn, tránh đợi
+    /// và giúp ngắn gọn code xử lý ở một nơi thay vì nhiều nơi
+    /// </summary>
     public sealed class QueueHostedService : BackgroundService
     {
         private readonly IBackgroundTaskQueue<QueueModel> _taskQueue;
