@@ -41,6 +41,8 @@ namespace ShareImplemention.Background
         private async Task ProcessTaskQueueAsync(CancellationToken stoppingToken)
         {
             Console.WriteLine("////////// Queue ////////////");
+            stoppingToken.Register(() => Log.Debug("#1 GracePeriodManagerService background task is stopping."));
+
             while (!stoppingToken.IsCancellationRequested)
             {
                 try
