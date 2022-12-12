@@ -56,7 +56,7 @@ namespace Share.BaseCore.Kafka
                 BootstrapServers = BootstrapServers,
                 ClientId = Dns.GetHostName(),
                 // RequestTimeoutMs=3000,
-                MessageTimeoutMs = 1500,
+                MessageTimeoutMs = 5000,
                 //  TransactionTimeoutMs=3000,
 
             };

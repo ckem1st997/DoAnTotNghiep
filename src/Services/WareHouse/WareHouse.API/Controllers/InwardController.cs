@@ -27,6 +27,8 @@ using WareHouse.API.Infrastructure.ElasticSearch;
 using Serilog;
 using Share.BaseCore.Cache.CacheName;
 using Share.BaseCore.EventBus.Abstractions;
+using System.Threading;
+using Microsoft.Extensions.Hosting;
 
 namespace WareHouse.API.Controllers
 {
@@ -41,9 +43,11 @@ namespace WareHouse.API.Controllers
         private readonly IEventBus _eventBus;
         private readonly ILogger<InwardController> _logger;
         private readonly IElasticSearchClient<WareHouseBookDTO> _elasticSearchClient;
+        private readonly IBackgroundTaskQueue<Func<CancellationToken, ValueTask>> _taskQueue;
+        private CancellationToken _cancellationToken;
+        private CreateHistoryIntegrationEvent _kafkaModel;
 
-
-        public InwardController(ILogger<InwardController> logger, IEventBus bus, ISignalRService signalRService, IUserSevice userSevice, IFakeData ifakeData, IMediator mediat, ICacheExtension cacheExtension, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient)
+        public InwardController(IHostApplicationLifetime applicationLifetime, ILogger<InwardController> logger, IEventBus bus, ISignalRService signalRService, IUserSevice userSevice, IFakeData ifakeData, IMediator mediat, ICacheExtension cacheExtension, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient, IBackgroundTaskQueue<Func<CancellationToken, ValueTask>> taskQueue)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
@@ -53,6 +57,9 @@ namespace WareHouse.API.Controllers
             _eventBus = bus;
             _logger = logger;
             _elasticSearchClient = elasticSearchClient;
+            _taskQueue = taskQueue;
+            _cancellationToken = applicationLifetime.ApplicationStopping;
+            _kafkaModel = new CreateHistoryIntegrationEvent();
         }
         #region R    
 
@@ -219,7 +226,7 @@ namespace WareHouse.API.Controllers
                 var user = await _userSevice.GetUser();
                 // save history by Grpc
                 //  mes = await _userSevice.CreateHistory(user.UserName, "Tạo", "vừa tạo mới phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!", false, inwardCommands.Id);
-                var kafkaModel = new CreateHistoryIntegrationEvent()
+                this._kafkaModel = new CreateHistoryIntegrationEvent()
                 {
                     UserName = user.UserName,
                     Method = "Chỉnh sửa",
@@ -227,25 +234,13 @@ namespace WareHouse.API.Controllers
                     Read = false,
                     Link = inwardCommands.Id,
                 };
-                using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
-                {
-                    Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel})");
-                    if (_eventBus.IsConnectedProducer())
-                    {
-                        for (int i = 0; i < 1; i++)
-                        {
-                            kafkaModel.Id = Guid.NewGuid().ToString();
-                            bool checkKafka = await _eventBus.PublishAsync(kafkaModel);
-                            if (!checkKafka)
-                                await _userSevice.CreateHistory(kafkaModel);
-                        }
-                    }
-                    else
-                        await _userSevice.CreateHistory(kafkaModel);
-                    Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel}) done...");
+                //   await NoticationInward(kafkaModel);
 
-                }
-
+                // gửi task vào queue, giúp cho việc return message tới client nhanh hơn thay vì phải đợi timeout 5s của kafka
+                // notication sẽ tiến hành xử lý dưới nền, có thể để timeout lâu mà không lo người dùng phải đợi message trả về
+                // phần thông báo có thể để time out lâu hơn chút và có thể dùng retry connect, tránh việc call qua GRPC nhiều lần
+                if (!_cancellationToken.IsCancellationRequested)
+                    await _taskQueue.QueueBackgroundWorkItemAsync(NoticationInward);
 
             }
             // pushs to queue vì check connected tốn 2s
@@ -278,6 +273,31 @@ namespace WareHouse.API.Controllers
                 data = data
             };
             return Ok(result);
+        }
+
+
+        private async ValueTask NoticationInward(CancellationToken token)
+        {
+            if (!token.IsCancellationRequested)
+                using (LogContext.PushProperty("IntegrationEvent", $"{this._kafkaModel.Id}"))
+                {
+                    Log.Information($"----- Sending integration event: {this._kafkaModel.Id} at CreateHistoryIntegrationEvent - ({this._kafkaModel})");
+                    if (_eventBus.IsConnectedProducer())
+                    //  if (true)
+                    {
+                        for (int i = 0; i < 1; i++)
+                        {
+                            this._kafkaModel.Id = Guid.NewGuid().ToString();
+                            bool checkKafka = await _eventBus.PublishAsync(this._kafkaModel);
+                            if (!checkKafka)
+                                await _userSevice.CreateHistory(this._kafkaModel);
+                        }
+                    }
+                    else
+                        await _userSevice.CreateHistory(this._kafkaModel);
+                    Log.Information($"----- Sending integration event: {this._kafkaModel.Id} at CreateHistoryIntegrationEvent - ({this._kafkaModel}) done...");
+
+                }
         }
 
 

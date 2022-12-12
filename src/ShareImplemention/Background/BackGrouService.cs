@@ -16,8 +16,9 @@ namespace ShareImplemention.Background
         {
             services.AddSingleton(typeof(IBackgroundTaskQueue<>), typeof(DefaultBackgroundTaskQueue<>));
             services.AddSingleton(typeof(IBackgroundTaskStack<>), typeof(DefaultBackgroundTaskStack<>));
-            services.AddHostedService<QueueHostedService>();
-            services.AddHostedService<StackHostedService>();
+            //   services.AddHostedService<QueueHostedService>();
+            //  services.AddHostedService<StackHostedService>();
+            services.AddHostedService<QueueHostedTaskService>();
         }
 
 
