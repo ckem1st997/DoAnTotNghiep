@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using Share.BaseCore.StackAndQueue;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace ShareImplemention.Background
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation(
+            Log.Information(
                 $"{nameof(QueueHostedTaskService)} is running.{Environment.NewLine}" +
                 $"{Environment.NewLine}Tap W to add a work item to the " +
                 $"background queue.{Environment.NewLine}");
@@ -35,10 +36,10 @@ namespace ShareImplemention.Background
             {
                 try
                 {
-                    Func<CancellationToken, ValueTask>? workItem =
-                        await _taskQueue.DequeueAsync(stoppingToken);
+                    Func<CancellationToken, ValueTask>? workItem =await _taskQueue.DequeueAsync(stoppingToken);
 
                     await workItem(stoppingToken);
+                    Log.Information("QueueHostedTaskService");
                 }
                 catch (OperationCanceledException)
                 {
@@ -46,15 +47,14 @@ namespace ShareImplemention.Background
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error occurred executing task work item.");
+                    Log.Error(ex, "Error occurred executing task work item.");
                 }
             }
         }
 
         public override async Task StopAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation(
-                $"{nameof(QueueHostedTaskService)} is stopping.");
+            Log.Information($"{nameof(QueueHostedTaskService)} is stopping.");
 
             await base.StopAsync(stoppingToken);
         }
