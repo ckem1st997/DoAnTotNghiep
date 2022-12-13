@@ -45,6 +45,7 @@ namespace Master.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetlistbyUser()
         {
+            ///AsEnumerable:nhanh hơn giảm từ 1.8, 1.7-1.5 s
             var user = _userService.User;
             var list = _context.HistoryNotications.Where(x => x.OnDelete == false);
             if (user.RoleNumber < 3)
@@ -52,7 +53,7 @@ namespace Master.Controllers
             list = list.OrderByDescending(x => x.CreateDate);
             return Ok(new ResultMessageResponse()
             {
-                data = list,
+                data = list.AsEnumerable(),
                 success = list != null
             });
         }

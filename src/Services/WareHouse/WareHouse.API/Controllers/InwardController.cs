@@ -238,7 +238,11 @@ namespace WareHouse.API.Controllers
                 // notication sẽ tiến hành xử lý dưới nền, có thể để timeout lâu mà không lo người dùng phải đợi message trả về
                 // phần thông báo có thể để time out lâu hơn chút và có thể dùng retry connect, tránh việc call qua GRPC nhiều lần
                 if (!_cancellationToken.IsCancellationRequested)
-                    await _taskQueue.QueueBackgroundWorkItemAsync(x=> NoticationInward(model,x));
+                    for (int i = 0; i < 100000; i++)
+                    {
+                        model.Id = Guid.NewGuid().ToString();
+                        await _taskQueue.QueueBackgroundWorkItemAsync(x => NoticationInward(model, x));
+                    }
 
             }
             // pushs to queue vì check connected tốn 2s
@@ -283,13 +287,10 @@ namespace WareHouse.API.Controllers
                     if (_eventBus.IsConnectedProducer())
                     //  if (true)
                     {
-                        for (int i = 0; i < 1; i++)
-                        {
-                            model.Id = Guid.NewGuid().ToString();
-                            bool checkKafka = await _eventBus.PublishAsync(model);
-                            if (!checkKafka)
-                                await _userSevice.CreateHistory(model);
-                        }
+
+                        bool checkKafka = await _eventBus.PublishAsync(model);
+                        if (!checkKafka)
+                            await _userSevice.CreateHistory(model);
                     }
                     else
                         await _userSevice.CreateHistory(model);
