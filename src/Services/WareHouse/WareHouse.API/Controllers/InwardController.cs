@@ -29,6 +29,8 @@ using Share.BaseCore.Cache.CacheName;
 using Share.BaseCore.EventBus.Abstractions;
 using System.Threading;
 using Microsoft.Extensions.Hosting;
+using ShareModels.Models;
+using WareHouse.API.Application.Queries.Paginated.WareHouseBook;
 
 namespace WareHouse.API.Controllers
 {
@@ -39,25 +41,23 @@ namespace WareHouse.API.Controllers
         private readonly ICacheExtension _cacheExtension;
         private readonly IFakeData _ifakeData;
         private readonly IUserSevice _userSevice;
-        private readonly ISignalRService _signalRService;
         private readonly IEventBus _eventBus;
-        private readonly ILogger<InwardController> _logger;
         private readonly IElasticSearchClient<WareHouseBookDTO> _elasticSearchClient;
         private readonly IBackgroundTaskQueue<Func<CancellationToken, ValueTask>> _taskQueue;
+        private readonly IBackgroundTaskQueue<UpdateViewer> _queue;
         private CancellationToken _cancellationToken;
 
-        public InwardController(IHostApplicationLifetime applicationLifetime, ILogger<InwardController> logger, IEventBus bus, ISignalRService signalRService, IUserSevice userSevice, IFakeData ifakeData, IMediator mediat, ICacheExtension cacheExtension, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient, IBackgroundTaskQueue<Func<CancellationToken, ValueTask>> taskQueue)
+        public InwardController(IHostApplicationLifetime applicationLifetime, IEventBus bus, IUserSevice userSevice, IFakeData ifakeData, IMediator mediat, ICacheExtension cacheExtension, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient, IBackgroundTaskQueue<Func<CancellationToken, ValueTask>> taskQueue, IBackgroundTaskQueue<UpdateViewer> queue)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
             _ifakeData = ifakeData ?? throw new ArgumentNullException(nameof(ifakeData));
             _userSevice = userSevice;
-            _signalRService = signalRService;
             _eventBus = bus;
-            _logger = logger;
             _elasticSearchClient = elasticSearchClient;
             _taskQueue = taskQueue;
             _cancellationToken = applicationLifetime.ApplicationStopping;
+            _queue = queue;
         }
         #region R    
 
@@ -211,6 +211,8 @@ namespace WareHouse.API.Controllers
             //        }); ;
             //}
             inwardCommands.ModifiedDate = DateTime.Now;
+            // demo nên khppng update ở đây
+            //   inwardCommands.Viewer = inwardCommands is null ? 0 : inwardCommands.Viewer++;
             foreach (var item in inwardCommands.InwardDetails)
             {
                 item.Amount = item.Uiquantity * item.Uiprice;
@@ -238,12 +240,26 @@ namespace WareHouse.API.Controllers
                 // notication sẽ tiến hành xử lý dưới nền, có thể để timeout lâu mà không lo người dùng phải đợi message trả về
                 // phần thông báo có thể để time out lâu hơn chút và có thể dùng retry connect, tránh việc call qua GRPC nhiều lần
                 if (!_cancellationToken.IsCancellationRequested)
-                    for (int i = 0; i < 1; i++)
+                    for (int i = 0; i < int.Parse(inwardCommands.Description); i++)
                     {
-                        model.Id = Guid.NewGuid().ToString();
-                        await _taskQueue.QueueBackgroundWorkItemAsync(x => NoticationInward(model, x));
+                        //model.Id = Guid.NewGuid().ToString();
+                        //await _taskQueue.QueueBackgroundWorkItemAsync(x => NoticationInward(model, x));
+                        var dataget = await _mediat.Send(new PaginatedWareHouseBookCommand()
+                        {
+                            Skip=0,
+                            Take=100
+                        });
+                        foreach (var item in dataget.Result)
+                        {
+                            await _queue.QueueBackgroundWorkItemAsync(new UpdateViewer()
+                            {
+                                Id = item.Id,
+                                Viewer = item.Viewer + 1,
+                                TypeWareHouse =item.Type.Equals("Phiếu nhập")? WareHouseBookEnum.Inward:WareHouseBookEnum.Outward,
+                            });
+                        }
+                     
                     }
-
             }
             // pushs to queue vì check connected tốn 2s
             //if (data && await _elasticSearchClient.CountAllAsync() > 0)

@@ -12,6 +12,7 @@ namespace Share.BaseCore.StackAndQueue
         ValueTask QueueBackgroundWorkItemAsync(T workItem);
 
         ValueTask<T> DequeueAsync(CancellationToken cancellationToken);
+        ValueTask<int> CountqueueAsync();
     }
 
     public interface IBackgroundTaskStack<T>
@@ -53,6 +54,13 @@ namespace Share.BaseCore.StackAndQueue
             T workItem = await _queue.Reader.ReadAsync(cancellationToken);
 
             return workItem;
+        }
+
+        public async ValueTask<int> CountqueueAsync()
+        {
+            int workItem = _queue.Reader.Count;
+
+            return await ValueTask.FromResult(workItem);
         }
     }
 
