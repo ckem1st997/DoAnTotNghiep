@@ -26,17 +26,34 @@ namespace ShareImplemention.Background
                 $"{nameof(QueueHostedTaskService)} is running.{Environment.NewLine}" +
                 $"{Environment.NewLine}Tap W to add a work item to the " +
                 $"background queue.{Environment.NewLine}");
-
-            return ProcessTaskQueueAsync(stoppingToken);
+            return Task.WhenAll( ProcessTaskQueueAsync(stoppingToken),test(stoppingToken));
         }
-
+        private async Task test(CancellationToken stoppingToken)
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                try
+                {
+                    await Task.Delay(10000, stoppingToken);
+                    Log.Information("QueueHostedTaskService test");
+                }
+                catch (OperationCanceledException)
+                {
+                    // Prevent throwing if stoppingToken was signaled
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Error occurred executing task work item.");
+                }
+            }
+        }
         private async Task ProcessTaskQueueAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
                 try
                 {
-                    Func<CancellationToken, ValueTask>? workItem =await _taskQueue.DequeueAsync(stoppingToken);
+                    Func<CancellationToken, ValueTask>? workItem = await _taskQueue.DequeueAsync(stoppingToken);
 
                     await workItem(stoppingToken);
                     Log.Information("QueueHostedTaskService");

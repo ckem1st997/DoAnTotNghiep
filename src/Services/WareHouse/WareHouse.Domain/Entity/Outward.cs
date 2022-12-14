@@ -37,6 +37,7 @@ namespace WareHouse.Domain.Entity
         public string ReceiverPhone { get; set; }
 
         public string ReceiverAddress { get; set; }
+        public int Viewer { get; set; }
 
         public string ReceiverDepartment { get; set; }
         public virtual WareHouse ToWareHouse { get; set; }

@@ -39,6 +39,9 @@ namespace WareHouse.Domain.Entity
         public string ReceiverAddress { get; set; }
 
         public string ReceiverDepartment { get; set; }
+        public int? Viewer { get; set; }
+
+
 
         public virtual Vendor Vendor { get; set; }
         public virtual WareHouse WareHouse { get; set; }

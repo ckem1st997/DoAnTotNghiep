@@ -83,7 +83,10 @@
               <th style="width:110px;text-align: center;" mat-header-cell *matHeaderCellDef>Số chứng từ </th>
               <td style="text-align: center;" mat-cell *matCellDef="let element"> {{element.voucherCode}} </td>
             </ng-container>
-
+            <ng-container matColumnDef="viewer">
+              <th style="width:110px;text-align: center;" mat-header-cell *matHeaderCellDef>Lượt xem</th>
+              <td style="text-align: center;" mat-cell *matCellDef="let element"> {{element.viewer}} </td>
+            </ng-container>
             <ng-container matColumnDef="voucherDate">
               <th style="width:110px;text-align: center;" mat-header-cell *matHeaderCellDef> Ngày tạo</th>
               <td style="text-align: center;" mat-cell *matCellDef="let element">

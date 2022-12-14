@@ -18,6 +18,7 @@ namespace WareHouse.API.Application.Model
         public string CreatedBy { get; set; }
         public DateTime ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
+        public int Viewer { get; set; }
         public  string Type { get; set; }
         public  string WareHouseName { get; set; }
     }

@@ -238,7 +238,7 @@ namespace WareHouse.API.Controllers
                 // notication sẽ tiến hành xử lý dưới nền, có thể để timeout lâu mà không lo người dùng phải đợi message trả về
                 // phần thông báo có thể để time out lâu hơn chút và có thể dùng retry connect, tránh việc call qua GRPC nhiều lần
                 if (!_cancellationToken.IsCancellationRequested)
-                    for (int i = 0; i < 100000; i++)
+                    for (int i = 0; i < 1; i++)
                     {
                         model.Id = Guid.NewGuid().ToString();
                         await _taskQueue.QueueBackgroundWorkItemAsync(x => NoticationInward(model, x));

@@ -25,6 +25,7 @@ namespace WareHouse.API.Application.Commands.Models
         public string DeliverAddress { get; set; }
 
         public string DeliverDepartment { get; set; }
+        public int? Viewer { get; set; }
 
         public string ReceiverPhone { get; set; }
 

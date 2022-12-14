@@ -45,6 +45,8 @@ namespace WareHouse.Infrastructure.EntityConfigurations
                 .HasMaxLength(255)
                 .IsUnicode(true);
 
+            entity.Property(e => e.Viewer).HasDefaultValue(0);
+
             entity.Property(e => e.Receiver)
                 .HasMaxLength(255)
                 .IsUnicode(true);

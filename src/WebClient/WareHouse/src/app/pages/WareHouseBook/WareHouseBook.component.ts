@@ -66,7 +66,7 @@ export class WareHouseBookComponent implements OnInit, OnDestroy {
   pageSize = 15;
   currentPage = 0;
   pageSizeOptions: number[] = [15, 50, 100];
-  displayedColumns: string[] = ['select', 'id', 'type', 'voucherCode', 'voucherDate', 'wareHouseName', 'deliver', 'receiver', 'reason', 'createdBy', 'modifiedBy', 'method'];
+  displayedColumns: string[] = ['select', 'id','viewer', 'type', 'voucherCode', 'voucherDate', 'wareHouseName', 'deliver', 'receiver', 'reason', 'createdBy', 'modifiedBy', 'method'];
   dataSource = new MatTableDataSource<WareHouseBookDTO>();
   model: WareHouseBookSearchModel = {
     active: null,
