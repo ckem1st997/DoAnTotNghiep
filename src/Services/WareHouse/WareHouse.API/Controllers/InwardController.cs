@@ -31,6 +31,7 @@ using System.Threading;
 using Microsoft.Extensions.Hosting;
 using ShareModels.Models;
 using WareHouse.API.Application.Queries.Paginated.WareHouseBook;
+using Nest;
 
 namespace WareHouse.API.Controllers
 {
@@ -240,26 +241,34 @@ namespace WareHouse.API.Controllers
                 // notication sẽ tiến hành xử lý dưới nền, có thể để timeout lâu mà không lo người dùng phải đợi message trả về
                 // phần thông báo có thể để time out lâu hơn chút và có thể dùng retry connect, tránh việc call qua GRPC nhiều lần
                 if (!_cancellationToken.IsCancellationRequested)
-                    for (int i = 0; i < int.Parse(inwardCommands.Description); i++)
+                    await _queue.QueueBackgroundWorkItemAsync(new UpdateViewer()
                     {
-                        //model.Id = Guid.NewGuid().ToString();
-                        //await _taskQueue.QueueBackgroundWorkItemAsync(x => NoticationInward(model, x));
-                        var dataget = await _mediat.Send(new PaginatedWareHouseBookCommand()
-                        {
-                            Skip=0,
-                            Take=100
-                        });
-                        foreach (var item in dataget.Result)
-                        {
-                            await _queue.QueueBackgroundWorkItemAsync(new UpdateViewer()
-                            {
-                                Id = item.Id,
-                                Viewer = item.Viewer + 1,
-                                TypeWareHouse =item.Type.Equals("Phiếu nhập")? WareHouseBookEnum.Inward:WareHouseBookEnum.Outward,
-                            });
-                        }
-                     
-                    }
+                        Id = inwardCommands.Id,
+                        Viewer = 1,
+                        TypeWareHouse = WareHouseBookEnum.Inward,
+                    });
+                model.Id = Guid.NewGuid().ToString();
+                await _taskQueue.QueueBackgroundWorkItemAsync(x => NoticationInward(model, x));
+                //for (int i = 0; i < int.Parse(inwardCommands.Description); i++)
+                //    {
+                //        //model.Id = Guid.NewGuid().ToString();
+                //        //await _taskQueue.QueueBackgroundWorkItemAsync(x => NoticationInward(model, x));
+                //        var dataget = await _mediat.Send(new PaginatedWareHouseBookCommand()
+                //        {
+                //            Skip = 0,
+                //            Take = 100
+                //        });
+                //        foreach (var item in dataget.Result)
+                //        {
+                //            await _queue.QueueBackgroundWorkItemAsync(new UpdateViewer()
+                //            {
+                //                Id = item.Id,
+                //                Viewer = item.Viewer + 1,
+                //                TypeWareHouse = item.Type.Equals("Phiếu nhập") ? WareHouseBookEnum.Inward : WareHouseBookEnum.Outward,
+                //            });
+                //        }
+
+                //    }
             }
             // pushs to queue vì check connected tốn 2s
             //if (data && await _elasticSearchClient.CountAllAsync() > 0)
@@ -293,15 +302,19 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-
+        /// <summary>
+        /// viết các phần muốn đẩy vô queue thành 1 serice
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         private async ValueTask NoticationInward(CreateHistoryIntegrationEvent model, CancellationToken token)
         {
             if (!token.IsCancellationRequested)
                 using (LogContext.PushProperty("IntegrationEvent", $"{model.Id}"))
                 {
-                    Log.Information($"----- Sending integration event: {model.Id} at CreateHistoryIntegrationEvent - ({model})");
+                    Log.Information($"-----Begin Sending integration event: {model.Id} at CreateHistoryIntegrationEvent - ({model})");
                     if (_eventBus.IsConnectedProducer())
-                    //  if (true)
                     {
 
                         bool checkKafka = await _eventBus.PublishAsync(model);
@@ -310,7 +323,7 @@ namespace WareHouse.API.Controllers
                     }
                     else
                         await _userSevice.CreateHistory(model);
-                    Log.Information($"----- Sending integration event: {model.Id} at CreateHistoryIntegrationEvent - ({model}) done...");
+                    Log.Information($"----- End Sending integration event: {model.Id} at CreateHistoryIntegrationEvent - ({model}) done...");
 
                 }
         }
