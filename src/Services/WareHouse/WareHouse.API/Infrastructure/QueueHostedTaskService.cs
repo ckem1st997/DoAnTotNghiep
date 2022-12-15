@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿#nullable enable
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Share.BaseCore.StackAndQueue;
@@ -61,10 +62,10 @@ namespace WareHouse.API.Infrastructure
                     UpdateViewer? workItem = await _queue.DequeueAsync(stoppingToken);
                     if (workItem != null)
                     {
-                        if (numberNames.ContainsKey(workItem.Id + workItem.TypeWareHouse))
+                        if (numberNames != null && numberNames.ContainsKey(workItem.Id + workItem.TypeWareHouse))
                             numberNames[workItem.Id + workItem.TypeWareHouse]++;
                         else
-                            numberNames.Add(workItem.Id + workItem.TypeWareHouse, 1);
+                            numberNames?.Add(workItem.Id + workItem.TypeWareHouse, 1);
 
                     }
                     ViewerBefore++;
@@ -81,7 +82,7 @@ namespace WareHouse.API.Infrastructure
                                     var model = await _repository.GetFirstAsync(item.Key.Replace(WareHouseBookEnum.Inward.ToString(),string.Empty));
                                     if (model is not null)
                                     {
-                                        int view = (int)(model.Viewer is null ? 0 : model.Viewer);
+                                        int view = (int)(model.Viewer ?? 0);
                                         model.Viewer = view + item.Value;
                                     }
                                 }
@@ -90,13 +91,13 @@ namespace WareHouse.API.Infrastructure
                                     var model = await _repositoryOut.GetFirstAsync(item.Key.Replace(WareHouseBookEnum.Outward.ToString(), string.Empty));
                                     if (model is not null)
                                     {
-                                        int view = (int)(model.Viewer is null ? 0 : model.Viewer);
+                                        int view = (int)(model.Viewer ?? 0);
                                         model.Viewer = view + item.Value;
                                     }
                                 }
                                 
                             }
-                            var res = await _repository.UnitOfWork.SaveChangesAsync();
+                            var res = await _repository.UnitOfWork.SaveChangesAsync(stoppingToken);
                             numberNames.Clear();
                             ViewerBefore = 0;
                         }
@@ -114,7 +115,7 @@ namespace WareHouse.API.Infrastructure
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Error occurred executing task work item.");
+                    Log.Error(ex, "Error occurred executing task work item");
                 }
             }
         }
