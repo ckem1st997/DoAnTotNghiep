@@ -76,7 +76,10 @@ namespace Share.BaseCore.Kafka
                 AllowAutoCreateTopics = true,
                 EnableAutoCommit = true,
                 EnableAutoOffsetStore = false,
-                HeartbeatIntervalMs = 3000
+                HeartbeatIntervalMs = 3000,
+                // RequestTimeoutMs=3000,
+                //  MessageTimeoutMs = 5000,
+                //  TransactionTimeoutMs=3000,
             };
             return new ConsumerBuilder<string, byte[]>(consumerConfig).SetErrorHandler((p, e) =>
             {
