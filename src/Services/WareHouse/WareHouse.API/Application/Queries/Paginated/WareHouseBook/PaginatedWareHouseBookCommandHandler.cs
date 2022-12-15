@@ -94,7 +94,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
             }
 
             // sẽ search lâu vì sẽ dính exception
-          //  var check = await _elasticClient.PingAsync();
+            //  var check = await _elasticClient.PingAsync();
             bool check = false;
             if (check)
             {
@@ -290,6 +290,8 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
                 parameter.Add("@take", request.Take);
                 _list.Result = await _repository.GetList<WareHouseBookDTO>(sb.ToString(), parameter, CommandType.Text);
                 _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text) - 1;
+                //     var results = await Task.WhenAll(_list);
+
                 #endregion
             }
 

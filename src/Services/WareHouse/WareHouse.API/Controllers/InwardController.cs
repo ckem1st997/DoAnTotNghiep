@@ -234,20 +234,21 @@ namespace WareHouse.API.Controllers
                     Body = "vừa chỉnh sửa phiếu nhập kho có mã " + inwardCommands.VoucherCode + "!",
                     Read = false,
                     Link = inwardCommands.Id,
+                    Id = inwardCommands.Id,
                 };
                 //   await NoticationInward(kafkaModel);
 
                 // gửi task vào queue, giúp cho việc return message tới client nhanh hơn thay vì phải đợi timeout 5s của kafka
                 // notication sẽ tiến hành xử lý dưới nền, có thể để timeout lâu mà không lo người dùng phải đợi message trả về
                 // phần thông báo có thể để time out lâu hơn chút và có thể dùng retry connect, tránh việc call qua GRPC nhiều lần
-                if (!_cancellationToken.IsCancellationRequested)
-                    await _queue.QueueBackgroundWorkItemAsync(new UpdateViewer()
-                    {
-                        Id = inwardCommands.Id,
-                        Viewer = 1,
-                        TypeWareHouse = WareHouseBookEnum.Inward,
-                    });
-                model.Id = Guid.NewGuid().ToString();
+                //  if (!_cancellationToken.IsCancellationRequested)
+                await _queue.QueueBackgroundWorkItemAsync(new UpdateViewer()
+                {
+                    Id = inwardCommands.Id,
+                    Viewer = 1,
+                    TypeWareHouse = WareHouseBookEnum.Inward,
+                });
+                // model.Id = Guid.NewGuid().ToString();
                 await _taskQueue.QueueBackgroundWorkItemAsync(x => NoticationInward(model, x));
                 //for (int i = 0; i < int.Parse(inwardCommands.Description); i++)
                 //    {
