@@ -25,6 +25,11 @@ namespace Share.BaseCore.StackAndQueue
 
     }
 
+
+    /// <summary>
+    ///  valuetask dùng để trả về một giá trị đồng bộ nhưng muốn sử dụng cơ chết bất đồng bộ 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public sealed class DefaultBackgroundTaskQueue<T> : IBackgroundTaskQueue<T>
     {
         private readonly Channel<T> _queue;
