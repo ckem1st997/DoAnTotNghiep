@@ -2,7 +2,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { WareHouseLimitComponent } from './pages/WareHouseLimit/WareHouseLimit.component';
 import { WareHouseBookComponent } from './pages/WareHouseBook/WareHouseBook.component';
 import { WareHouseBenginingComponent } from './pages/WareHouseBengining/WareHouseBengining.component';
-import { NgModule } from '@angular/core';
+import { inject, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 import { AppRoutingModule } from './app-routing.module';
@@ -16,7 +16,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { AngularSplitModule } from 'angular-split';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -129,8 +129,8 @@ import { ListAuthozireComponent } from './pages/ListAuthozire/ListAuthozire.comp
 import { ListAuthozireEditComponent } from './method/edit/ListAuthozireEdit/ListAuthozireEdit.component';
 import { ListRoleShowToAuthozireComponent } from './method/details/ListRoleShowToAuthozire/ListRoleShowToAuthozire.component';
 import { TreeNode, MessageService } from 'primeng/api';
-import {CascadeSelectModule} from 'primeng/cascadeselect';
-import {PaginatorModule} from 'primeng/paginator';
+import { CascadeSelectModule } from 'primeng/cascadeselect';
+import { PaginatorModule } from 'primeng/paginator';
 import { TreeTableModule } from 'primeng/treetable';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -141,8 +141,13 @@ import { ContextMenuModule } from 'primeng/contextmenu';
 import { CheckboxModule } from 'primeng/checkbox';
 import { Table, TableModule, TableService } from 'primeng/table';
 import { DialogService } from 'primeng/dynamicdialog';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ListAuthozireShowToUserComponent } from './method/details/ListAuthozireShowToUser/ListAuthozireShowToUser.component';
+import { QUERY_CLIENT_OPTIONS } from './extension/ng-query/src';
+import { firstValueFrom } from 'rxjs';
+import { QueryClient, QueryClientConfig, QueryFunction } from '@tanstack/query-core';
+
+
 const customNotifierOptions: NotifierOptions = {
   position: {
     horizontal: {
@@ -335,7 +340,28 @@ const customNotifierOptions: NotifierOptions = {
     provide: HTTP_INTERCEPTORS,
     useClass: ErrorIntercept,
     multi: true
-  }, HeaderComponent, SignalRService, HttpCancelService, Table, TableService, MessageService, DialogService],
+  }, HeaderComponent, SignalRService, HttpCancelService, Table, TableService, MessageService, DialogService,
+    // {
+    //   provide: QUERY_CLIENT_OPTIONS,
+    //   useFactory: () => {
+    //     const httpClient = inject(HttpClient);
+    //     // const queryFn: QueryFunction = async ({ queryKey }) =>
+    //     //   firstValueFrom(
+    //     //     httpClient.get<unknown[]>(
+    //     //       `https://jsonplaceholder.typicode.com${queryKey[0]}`
+    //     //     )
+    //     //   );
+    //     return <QueryClientConfig>{
+    //       defaultOptions: {
+    //         queries: {
+    //        //   queryFn,
+    //         },
+    //       },
+    //     };
+    //   },
+    // }
+
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

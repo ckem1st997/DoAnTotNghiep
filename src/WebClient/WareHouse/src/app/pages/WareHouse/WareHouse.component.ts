@@ -52,7 +52,7 @@ export class WareHouseComponent implements OnInit {
   panelOpenState = false;
   checkedl = false;
   totalRows = 0;
-  pageSize = 15;
+  pageSize = 5;
   currentPage = 0;
   pageSizeOptions: number[] = [15, 50, 100];
   displayedColumns: string[] = ['select', 'id', 'name', 'code', 'address', 'description', 'parentId', 'inactive', 'method'];
@@ -105,6 +105,8 @@ export class WareHouseComponent implements OnInit {
       this.checkSizeWindows = true;
   }
   GetData() {
+   const data= this.service.getListN(this.model);
+   console.log(data)
     this.service.getList(this.model).subscribe(list => {
       this.dataSource.data = list.data; setTimeout(() => {
         this.paginator.pageIndex = this.currentPage;

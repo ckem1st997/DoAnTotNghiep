@@ -1,7 +1,7 @@
 import { LiveAnnouncer } from "@angular/cdk/a11y";
 import { SelectionModel } from "@angular/cdk/collections";
 import { FlatTreeControl } from "@angular/cdk/tree";
-import { Component, OnInit, ViewChild, HostListener, OnDestroy } from "@angular/core";
+import { Component, OnInit, ViewChild, HostListener, OnDestroy, inject, Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSort, Sort } from "@angular/material/sort";
@@ -31,6 +31,7 @@ import { WareHouseBookDeleteAllComponent } from "src/app/method/delete/WareHouse
 import { InwardService } from "src/app/service/Inward.service";
 import { OutwardService } from "src/app/service/Outward.service";
 import { SignalRService } from "src/app/service/SignalR.service";
+import { UseQuery } from "src/app/extension/ng-query/src";
 
 interface ExampleFlatNode {
   expandable: boolean;
@@ -43,6 +44,7 @@ interface ExampleFlatNode {
   templateUrl: './WareHouseBook.component.html',
   styleUrls: ['./WareHouseBook.component.scss']
 })
+
 export class WareHouseBookComponent implements OnInit, OnDestroy {
   listACccount: BaseSelectDTO[] = [];
   //
@@ -66,7 +68,7 @@ export class WareHouseBookComponent implements OnInit, OnDestroy {
   pageSize = 15;
   currentPage = 0;
   pageSizeOptions: number[] = [15, 50, 100];
-  displayedColumns: string[] = ['select', 'id','viewer', 'type', 'voucherCode', 'voucherDate', 'wareHouseName', 'deliver', 'receiver', 'reason', 'createdBy', 'modifiedBy', 'method'];
+  displayedColumns: string[] = ['select', 'id', 'viewer', 'type', 'voucherCode', 'voucherDate', 'wareHouseName', 'deliver', 'receiver', 'reason', 'createdBy', 'modifiedBy', 'method'];
   dataSource = new MatTableDataSource<WareHouseBookDTO>();
   model: WareHouseBookSearchModel = {
     active: null,
@@ -118,7 +120,7 @@ export class WareHouseBookComponent implements OnInit, OnDestroy {
   );
 
   dataSourceTreee = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
+  //  private useQuery = inject(UseQuery);
   constructor(public signalRService: SignalRService, private serviceInward: InwardService, private serviceOutward: OutwardService, private getDataToGprc: GetDataToGprcService, private route: Router, private service: WareHouseBookService, private serviceW: WarehouseService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, notifierService: NotifierService) {
     this.notifier = notifierService;
   }
@@ -178,9 +180,10 @@ export class WareHouseBookComponent implements OnInit, OnDestroy {
       this.checkSizeWindows = true;
   }
   GetData(): void {
+
+
     this.service.getList(this.model).subscribe(list => {
-      console.log(list);
-      this.dataSource.data = list.data==null?[]:list.data; 
+      this.dataSource.data = list.data == null ? [] : list.data;
       setTimeout(() => {
         this.paginator.pageIndex = this.currentPage;
         this.paginator.length = list.totalCount;
@@ -347,8 +350,8 @@ export class WareHouseBookComponent implements OnInit, OnDestroy {
         var res = result;
         this.model.keySearch = res.key == undefined ? "" : res.key;
         this.model.active = res.inactive;
-        this.model.fromDate = res.start ;
-        this.model.toDate = res.end ;
+        this.model.fromDate = res.start;
+        this.model.toDate = res.end;
         this.model.typeWareHouseBook = res.type == undefined ? "" : res.type;
         this.GetData();
       }

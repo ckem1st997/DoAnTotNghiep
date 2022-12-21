@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Observable, throwError, map } from 'rxjs';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, retry, tap } from 'rxjs/operators';
 import { VendorDTO } from './../model/VendorDTO';
@@ -11,6 +11,8 @@ import { TreeView } from '../model/TreeView';
 import { WareHouseSearchModel } from '../model/WareHouseSearchModel';
 import { WareHouse } from '../entity/WareHouse';
 import { WareHouseDTO } from '../model/WareHouseDTO';
+import { UseQuery } from './../extension/ng-query/src/lib/query';
+import { QueryClientService } from './../extension/ng-query/src/lib/query-client';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +22,11 @@ export class WarehouseService {
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
-  constructor(private http: HttpClient) { }
+  private http = inject(HttpClient);
+  private useQuery = inject(UseQuery);
+
+  constructor() { }
+  //constructor(private useQuery: UseQuery, private http: HttpClient) { }
 
   private GetParams(model: BaseSearchModel): HttpParams {
 
@@ -33,11 +39,39 @@ export class WarehouseService {
     return param;
   }
 
-  getById(id:string): Observable<ResultMessageResponse<WareHouseDTO>> {
+  getById(id: string): Observable<ResultMessageResponse<WareHouseDTO>> {
     var url = this.baseUrl + `WareHouses/get-list?`;
     return this.http.get<ResultMessageResponse<WareHouseDTO>>(url, this.httpOptions).pipe(
       retry(1), // retry a failed request up to 3 times
-     
+
+    );
+  }
+
+
+  getListN(search: WareHouseSearchModel) {
+    var check = search.active == null ? '' : search.active;
+    var url = this.baseUrl + `WareHouses/get-list?KeySearch=` + search.keySearch + `&Active=` + check + `&Skip=` + search.skip + `&Take=` + search.take + ``;
+    return this.useQuery<ResultMessageResponse<WareHouseDTO>, Error>(
+      ['getList', search.skip],
+      () => {
+        debugger
+
+        return this.http.get<ResultMessageResponse<WareHouseDTO>>(url, this.httpOptions).pipe(
+          retry(1), // retry a failed request up to 3 times
+
+        );;
+      },
+      // {
+      //     keepPreviousData: true,
+      //      refetchOnMount: false,
+      //      refetchOnWindowFocus: false,
+      //   staleTime: 1,
+      //   // time cache, sau 10s call api
+      //   cacheTime: 1,
+      //   //   initialData: props.queries
+      //   // onError: (error:any) =>
+      //   // MessageService.Success("Lỗi xảy ra")
+      // },
     );
   }
 
@@ -46,32 +80,41 @@ export class WarehouseService {
     var url = this.baseUrl + `WareHouses/get-list?KeySearch=` + search.keySearch + `&Active=` + check + `&Skip=` + search.skip + `&Take=` + search.take + ``;
     return this.http.get<ResultMessageResponse<WareHouseDTO>>(url, this.httpOptions).pipe(
       retry(1), // retry a failed request up to 3 times
-     
+
+    );
+  }
+
+  getListNg(search: WareHouseSearchModel) {
+    var check = search.active == null ? '' : search.active;
+    var url = this.baseUrl + `WareHouses/get-list?KeySearch=` + search.keySearch + `&Active=` + check + `&Skip=` + search.skip + `&Take=` + search.take + ``;
+    return this.http.get<ResultMessageResponse<WareHouseDTO>>(url, this.httpOptions).pipe(
+      retry(1), // retry a failed request up to 3 times
+
     );
   }
   getListDropDown(): Observable<ResultMessageResponse<WareHouseDTO>> {
     var url = this.baseUrl + `WareHouses/get-drop-tree?Active=true`;
     return this.http.get<ResultMessageResponse<WareHouseDTO>>(url, this.httpOptions).pipe(
       retry(1), // retry a failed request up to 3 times
-     
+
     );
   }
 
 
-  
-  Details(id:string): Observable<ResultMessageResponse<WareHouseDTO>> {
+
+  Details(id: string): Observable<ResultMessageResponse<WareHouseDTO>> {
     var url = this.baseUrl + `WareHouses/details?id=` + id;
     return this.http.get<ResultMessageResponse<WareHouseDTO>>(url, this.httpOptions).pipe(
       tap(_ => console.log(`details WareHouses id=${id}`)),
-     
+
     );
   }
 
-  EditIndex(id:string): Observable<ResultMessageResponse<WareHouseDTO>> {
+  EditIndex(id: string): Observable<ResultMessageResponse<WareHouseDTO>> {
     var url = this.baseUrl + `WareHouses/edit?id=` + id;
     return this.http.get<ResultMessageResponse<WareHouseDTO>>(url, this.httpOptions).pipe(
       tap(_ => console.log(`edit WareHouses id=${id}`)),
-     
+
     );
   }
 
@@ -79,7 +122,7 @@ export class WarehouseService {
     var url = this.baseUrl + `WareHouses/create`;
     return this.http.get<ResultMessageResponse<WareHouseDTO>>(url, this.httpOptions).pipe(
       tap(_ => console.log(`add WareHouses`)),
-     
+
     );
   }
 
@@ -89,7 +132,7 @@ export class WarehouseService {
     var url = this.baseUrl + `WareHouses/edit`;
     return this.http.post<ResultMessageResponse<WareHouse>>(url, model, this.httpOptions).pipe(
       tap(_ => console.log(`edit WareHouses id=${model.id}`)),
-     
+
     );
   }
 
@@ -97,15 +140,15 @@ export class WarehouseService {
     var url = this.baseUrl + `WareHouses/create`;
     return this.http.post<ResultMessageResponse<WareHouse>>(url, model, this.httpOptions).pipe(
       tap(_ => console.log(`create vendor id=${model.id}`)),
-     
+
     );
   }
 
- Delete(ids:string[]): Observable<ResultMessageResponse<WareHouse>> {
+  Delete(ids: string[]): Observable<ResultMessageResponse<WareHouse>> {
     var url = this.baseUrl + `WareHouses/delete`;
     return this.http.post<ResultMessageResponse<WareHouse>>(url, ids, this.httpOptions).pipe(
       tap(_ => console.log(`delete vendor id=${ids}`)),
-     
+
     );
   }
 
@@ -116,7 +159,7 @@ export class WarehouseService {
       retry(1), // retry a failed request up to 3 times
     );
   }
- 
+
   getTreeAllView(): Observable<ResultMessageResponse<TreeView>> {
 
     var url = this.baseUrl + `WareHouses/get-tree-view?Active=true&GetAll=true`;
