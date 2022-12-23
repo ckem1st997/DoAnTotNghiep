@@ -26,10 +26,8 @@ namespace Share.BaseCore.Grpc
             AsyncUnaryCallContinuation<TRequest, TResponse> continuation)
         {
             var metadata = new Metadata();
-            string accessToken = "";
-            if (_httpContextAccessor.HttpContext != null)
-                accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
-            if (!string.IsNullOrEmpty(accessToken) && accessToken.StartsWith("Bearer"))
+            string accessToken = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"] ?? "";
+            if (!string.IsNullOrWhiteSpace(accessToken) && accessToken.StartsWith("Bearer"))
             {
                 metadata.Add("Authorization", accessToken);
             }
@@ -42,6 +40,8 @@ namespace Share.BaseCore.Grpc
         {
             try
             {
+                string accessToken = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"] ?? "";
+
                 var response = await t;
                 return response;
             }
