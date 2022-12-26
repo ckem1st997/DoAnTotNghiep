@@ -9,7 +9,6 @@ namespace Share.BaseCore
 {
     public class BaseEntity : BaseEntityGeneric<string>
     {
-        int? _requestedHashCode;
 
         public bool OnDelete { get; set; }
 

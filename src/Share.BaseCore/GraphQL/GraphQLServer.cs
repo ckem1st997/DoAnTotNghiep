@@ -14,7 +14,12 @@ namespace Share.BaseCore.GraphQL
     {
         public static void AddGraphQLServer<T,TContext>(this IServiceCollection services) where T: class where TContext: DbContext
         {
-            services.AddGraphQLServer().AddQueryType<T>().AddHttpRequestInterceptor<HttpRequestInterceptor>();
+            services.AddGraphQLServer().AddQueryType<T>().AddHttpRequestInterceptor<HttpRequestInterceptor>().AddFiltering()
+        .AddSorting()
+        .AddProjections()
+         .InitializeOnStartup()
+         .RegisterDbContext<TContext>()
+        ;
         }
         public static void AppGraphQLServer(this IApplicationBuilder app)
         {

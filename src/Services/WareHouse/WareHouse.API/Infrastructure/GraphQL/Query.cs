@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using HotChocolate;
+using HotChocolate.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +28,13 @@ namespace WareHouse.API.Infrastructure.GraphQL
             var list =await _repositoryEF.ListAllAsync();
             return list;
         }
+
+        //[UseProjection]
+        //[UseFiltering]
+        //[UseSorting]
+        [UseFiltering]
+        public IQueryable<Unit> GetUnits( WarehouseManagementContext context)
+             => context.Units;
 
         public IEnumerable<Unit> GetUnit()
         {
