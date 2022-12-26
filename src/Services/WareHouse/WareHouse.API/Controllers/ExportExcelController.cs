@@ -134,8 +134,8 @@ namespace WareHouse.API.Controllers
 
             var bcStream = new MemoryStream();
             // 
-            string path = Path.Combine(_hostingEnvironment.WebRootPath, "Word", "xuatphieukhosaigon.doc");
-            var doc = new Document(Path.GetFullPath(path).Replace("~\\", ""));
+            string path = System.IO.Path.Combine(_hostingEnvironment.WebRootPath, "Word", "xuatphieukhosaigon.doc");
+            var doc = new Document(System.IO.Path.GetFullPath(path).Replace("~\\", ""));
 
             doc.MailMerge.Execute(new[]
             {
@@ -277,8 +277,8 @@ namespace WareHouse.API.Controllers
             #region Export word
 
             var bcStream = new MemoryStream();
-            string path = Path.Combine(_hostingEnvironment.WebRootPath, "Word", "inphieukhosaigon.doc");
-            var doc = new Aspose.Words.Document(Path.GetFullPath(path).Replace("~\\", ""));
+            string path = System.IO.Path.Combine(_hostingEnvironment.WebRootPath, "Word", "inphieukhosaigon.doc");
+            var doc = new Aspose.Words.Document(System.IO.Path.GetFullPath(path).Replace("~\\", ""));
 
             doc.MailMerge.Execute(new[]
             {
@@ -396,7 +396,7 @@ namespace WareHouse.API.Controllers
                 var dtData = models.ToDataTable();
                 dtData.TableName = dtDataName;
                 ds.Tables.Add(dtData);
-                var tmpPath = Path.Combine(_hostingEnvironment.WebRootPath, "Templates", "Reports", "ReportTotal_vi.xlsx");
+                var tmpPath = System.IO.Path.Combine(_hostingEnvironment.WebRootPath, "Templates", "Reports", "ReportTotal_vi.xlsx");
                 var wb = new Workbook(tmpPath);
                 var wd = new WorkbookDesigner(wb);
                 wd.SetDataSource(dataSet: ds);
@@ -495,7 +495,7 @@ namespace WareHouse.API.Controllers
                 var dtData = models.ToDataTable();
                 dtData.TableName = dtDataName;
                 ds.Tables.Add(dtData);
-                var tmpPath = Path.Combine(_hostingEnvironment.WebRootPath, "Templates", "Reports", "ReportDetail_vi.xlsx");
+                var tmpPath = System.IO.Path.Combine(_hostingEnvironment.WebRootPath, "Templates", "Reports", "ReportDetail_vi.xlsx");
                 var wb = new Workbook(tmpPath);
                 var wd = new WorkbookDesigner(wb);
                 wd.SetDataSource(dataSet: ds);

@@ -25,7 +25,7 @@ namespace Share.BaseCore.Kafka
         private IConsumer<string, byte[]> kafkaConsumer;
         private IProducer<string, byte[]> kafkaProducer;
         private readonly IConfiguration _configuration;
-        private Error Error;
+        private Confluent.Kafka.Error Error;
         bool _disposed;
 
         object sync_root = new object();

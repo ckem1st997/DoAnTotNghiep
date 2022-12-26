@@ -46,6 +46,10 @@ using Share.BaseCore.Kafka;
 using Share.BaseCore.Grpc;
 using ShareImplemention;
 using ShareImplemention.Background;
+using Share.BaseCore.GraphQL;
+using WareHouse.API.Infrastructure.GraphQL;
+using WareHouse.Domain.Entity;
+using WareHouse.Infrastructure;
 
 namespace WareHouse.API
 {
@@ -83,6 +87,7 @@ namespace WareHouse.API
             //  services.AddHostedService<RequestTimeConsumer>();
 
             services.AddBackGrouService();
+            services.AddGraphQLServer<Query, WarehouseManagementContext>();
         }
         public void ConfigureContainer(ContainerBuilder builder)
         {
@@ -120,7 +125,7 @@ namespace WareHouse.API
             });
             app.ConfigureEventBusKafka();
             app.ConfigureRequestPipeline();
-
+            app.AppGraphQLServer();
         }
 
 
