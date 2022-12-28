@@ -50,6 +50,8 @@ using Share.BaseCore.GraphQL;
 using WareHouse.API.Infrastructure.GraphQL;
 using WareHouse.Domain.Entity;
 using WareHouse.Infrastructure;
+using Share.BaseCore.Middleware;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace WareHouse.API
 {
@@ -111,7 +113,11 @@ namespace WareHouse.API
             //  }
 
             //   app.UseHttpsRedirection();
-
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor |ForwardedHeaders.XForwardedProto
+            });
+            app.UseMiddleware<RemoteIpAddressMiddleware>();
             app.UseRouting();
             app.UseGrpcWeb();
             app.UseCors("AllowAll");

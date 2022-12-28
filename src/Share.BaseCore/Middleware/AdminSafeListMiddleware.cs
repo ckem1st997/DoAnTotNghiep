@@ -62,4 +62,24 @@ namespace Share.BaseCore.Middleware
             await _next.Invoke(context);
         }
     }
+
+    public class RemoteIpAddressMiddleware
+    {
+        private readonly RequestDelegate _next;
+
+        public RemoteIpAddressMiddleware(
+            RequestDelegate next)
+        {
+            _next = next;
+        }
+
+        public async Task Invoke(HttpContext context)
+        {
+            var remoteIp = context.Connection.RemoteIpAddress;
+            Log.Information("Request from Remote IP address: {RemoteIp}", remoteIp);
+
+            await _next.Invoke(context);
+        }
+    }
+
 }
