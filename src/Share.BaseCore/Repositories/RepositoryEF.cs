@@ -100,10 +100,13 @@ namespace Share.BaseCore.Repositories
             return await query.AsNoTracking().ToListAsync();
         }
 
-        public virtual async Task<T> AddAsync(T entity)
+        public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken))
         {
+
+            cancellationToken.ThrowIfCancellationRequested();
+            // ThrowIfDisposed();
             if (entity is null)
-                throw new NotImplementedException(nameof(entity));
+                throw new BaseException(nameof(entity));
             if (string.IsNullOrEmpty(entity.Id) || entity.Id.Length < 10)
                 entity.Id = Guid.NewGuid().ToString();
             return (await _dbSet.AddAsync(entity)).Entity;
@@ -112,7 +115,7 @@ namespace Share.BaseCore.Repositories
         public virtual void Delete(T entity)
         {
             if (entity is null)
-                throw new NotImplementedException(nameof(entity));
+                throw new BaseException(nameof(entity));
             //if (_context.Entry(entity).State == EntityState.Detached)
             //{
             //    _dbSet.Attach(entity);
@@ -122,13 +125,16 @@ namespace Share.BaseCore.Repositories
         }
 
 
-        public virtual async Task<T> GetFirstAsync(string id)
+        public virtual async Task<T> GetFirstAsync(string id, CancellationToken cancellationToken = default(CancellationToken))
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return await _dbSet.FirstOrDefaultAsync(x => x.Id.Equals(id) && !x.OnDelete);
         }
 
-        public virtual async Task<T> GetFirstAsyncAsNoTracking(string id)
+        public virtual async Task<T> GetFirstAsyncAsNoTracking(string id, CancellationToken cancellationToken = default(CancellationToken))
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             return await _dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id.Equals(id) && !x.OnDelete);
         }
 
@@ -147,23 +153,61 @@ namespace Share.BaseCore.Repositories
         public virtual void Update(T entity)
         {
             if (entity is null)
-                throw new NotImplementedException(nameof(entity));
+                throw new BaseException(nameof(entity));
+            _dbSet.Attach(entity);
+
+            //  entity.ConcurrencyStamp = Guid.NewGuid().ToString();
+
             _dbSet.Update(entity);
-            //_dbSet.Attach(entity);
-            //_context.Entry(entity).State = EntityState.Modified;
+
+
         }
 
+        public virtual async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            // ThrowIfDisposed();
+            if (entity == null)
+            {
+                throw new BaseException(nameof(entity));
+            }
+            _dbSet.Attach(entity);
+            //   entity.ConcurrencyStamp = Guid.NewGuid().ToString();
+            _dbSet.Update(entity);
+            try
+            {
+                return await SaveChanges(cancellationToken);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return await Task.FromResult(false);
+            }
+        }
+
+
+
+        public bool AutoSaveChanges { get; set; } = true;
+        protected virtual async Task<bool> SaveChanges(CancellationToken cancellationToken)
+        {
+            if (AutoSaveChanges)
+            {
+                return await _context.SaveChangesAsync(cancellationToken) > 0;
+            }
+            return AutoSaveChanges;
+        }
         public void BulkInsert(IList<T> listEntity)
         {
             if (listEntity is null)
-                throw new NotImplementedException(nameof(listEntity));
+                throw new BaseException(nameof(listEntity));
             _context.BulkInsert(listEntity);
         }
 
-        public async Task BulkInsertAsync(IList<T> listEntity)
+        public async Task BulkInsertAsync(IList<T> listEntity, CancellationToken cancellationToken = default(CancellationToken))
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (listEntity is null)
-                throw new NotImplementedException(nameof(listEntity));
+                throw new BaseException(nameof(listEntity));
             var sb = new StringBuilder();
             await _context.BulkInsertAsync(listEntity);
         }
@@ -171,35 +215,41 @@ namespace Share.BaseCore.Repositories
         public void BulkUpdate(IList<T> listEntity)
         {
             if (listEntity is null)
-                throw new NotImplementedException(nameof(listEntity));
+                throw new BaseException(nameof(listEntity));
             _context.BulkUpdate(listEntity);
         }
 
-        public async Task BulkUpdateAsync(IList<T> listEntity)
+        public async Task BulkUpdateAsync(IList<T> listEntity, CancellationToken cancellationToken = default(CancellationToken))
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (listEntity is null)
-                throw new NotImplementedException(nameof(listEntity));
+                throw new BaseException(nameof(listEntity));
             await _context.BulkUpdateAsync(listEntity);
         }
 
         public void BulkDelete(IList<T> listEntity)
         {
             if (listEntity is null)
-                throw new NotImplementedException(nameof(listEntity));
+                throw new BaseException(nameof(listEntity));
             _context.BulkDelete(listEntity);
         }
 
-        public async Task<int> BulkDeleteEditOnDeleteAsync(IEnumerable<string> listIds)
+        public async Task<int> BulkDeleteEditOnDeleteAsync(IEnumerable<string> listIds, CancellationToken cancellationToken = default(CancellationToken))
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (listIds is null)
-                throw new NotImplementedException(nameof(listIds));
+                throw new BaseException(nameof(listIds));
             return await _dbSet.Where(x => listIds.Contains(x.Id)).BatchUpdateAsync(x => new T { OnDelete = true });
         }
 
-        public async Task BulkInsertOrUpdateAsync(IList<T> listEntity)
+        public async Task BulkInsertOrUpdateAsync(IList<T> listEntity, CancellationToken cancellationToken = default(CancellationToken))
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (listEntity is null)
-                throw new NotImplementedException(nameof(listEntity));
+                throw new BaseException(nameof(listEntity));
             await _context.BulkInsertOrUpdateAsync(listEntity);
         }
 
