@@ -29,13 +29,14 @@ namespace WareHouse.API.Infrastructure.GraphQL
             return list;
         }
 
-        //[UseProjection]
-        //[UseFiltering]
-        //[UseSorting]
+        [UseProjection]
         [UseFiltering]
+        [UseSorting]
         public IQueryable<Unit> GetUnits( WarehouseManagementContext context)
              => context.Units;
-
+        [UseProjection]
+        [UseFiltering]
+        [UseSorting]
         public IEnumerable<Unit> GetUnit()
         {
             var lisst=new List<Unit>();
