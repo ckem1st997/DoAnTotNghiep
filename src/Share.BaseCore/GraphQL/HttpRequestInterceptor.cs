@@ -15,6 +15,7 @@ namespace Share.BaseCore.GraphQL
             IRequestExecutor requestExecutor, IQueryRequestBuilder requestBuilder,
             CancellationToken cancellationToken)
         {
+
             return base.OnCreateAsync(context, requestExecutor, requestBuilder,
                 cancellationToken);
         }
