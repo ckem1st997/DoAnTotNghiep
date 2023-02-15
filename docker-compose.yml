@@ -7,83 +7,83 @@ version: '3.4'
 
 services:
 
-  elasticsearch:
-    container_name: elasticsearch
-    build: ./deploy/elk/elasticsearch/
-    image: tunnm/docker-es-cococ-tokenizer:7.12.1
-    volumes:
-      - ./deploy/elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+  #elasticsearch:
+  #  container_name: elasticsearch
+  #  build: ./deploy/elk/elasticsearch/
+  #  image: tunnm/docker-es-cococ-tokenizer:7.12.1
+  #  volumes:
+  #    - ./deploy/elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+  #  ports:
+  #    - "9200:9200"
+  #    - "9300:9300"
+  #  environment:
+  #    ES_JAVA_OPTS: "-Xmx256m -Xms256m"
 
-  logstash:
-    container_name: logstash
-    restart: always
-    build:
-      context: deploy/elk/logstash/
-    volumes:
-      - ./deploy/elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
-      - ./deploy/elk/logstash/pipeline:/usr/share/logstash/pipeline:ro
-    ports:
-      - "8080:8080"
-    environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-    depends_on:
-      - elasticsearch
+  #logstash:
+  #  container_name: logstash
+  #  restart: always
+  #  build:
+  #    context: deploy/elk/logstash/
+  #  volumes:
+  #    - ./deploy/elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+  #    - ./deploy/elk/logstash/pipeline:/usr/share/logstash/pipeline:ro
+  #  ports:
+  #    - "8080:8080"
+  #  environment:
+  #    LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+  #  depends_on:
+  #    - elasticsearch
 
-  kibana:
-    container_name: kibana
-    build: ./deploy/elk/kibana/
-    volumes:
-      - ./deploy/elk/kibana/config/:/usr/share/kibana/config:ro
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch
+  #kibana:
+  #  container_name: kibana
+  #  build: ./deploy/elk/kibana/
+  #  volumes:
+  #    - ./deploy/elk/kibana/config/:/usr/share/kibana/config:ro
+  #  ports:
+  #    - "5601:5601"
+  #  depends_on:
+  #    - elasticsearch
 
 
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.1.1
-    hostname: zookeeper
-    container_name: zookeeper
-    ports:
-      - "2181:2181"
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+  #zookeeper:
+  #  image: confluentinc/cp-zookeeper:7.1.1
+  #  hostname: zookeeper
+  #  container_name: zookeeper
+  #  ports:
+  #    - "2181:2181"
+  #  environment:
+  #    ZOOKEEPER_CLIENT_PORT: 2181
+  #    ZOOKEEPER_TICK_TIME: 2000
 
-  broker:
-    image: confluentinc/cp-server:7.1.1
-    hostname: broker
-    container_name: broker
-    depends_on:
-      - zookeeper
-    ports:
-      - "9092:9092"
-      - "9101:9101"
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_JMX_PORT: 9101
-      KAFKA_JMX_HOSTNAME: localhost
-      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: broker:29092
-      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
-      CONFLUENT_METRICS_ENABLE: 'true'
-      CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+  #broker:
+  #  image: confluentinc/cp-server:7.1.1
+  #  hostname: broker
+  #  container_name: broker
+  #  depends_on:
+  #    - zookeeper
+  #  ports:
+  #    - "9092:9092"
+  #    - "9101:9101"
+  #  environment:
+  #    KAFKA_BROKER_ID: 1
+  #    KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+  #    KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+  #    KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
+  #    KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+  #    KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  #    KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+  #    KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
+  #    KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 1
+  #    KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+  #    KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+  #    KAFKA_JMX_PORT: 9101
+  #    KAFKA_JMX_HOSTNAME: localhost
+  #    KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+  #    CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: broker:29092
+  #    CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
+  #    CONFLUENT_METRICS_ENABLE: 'true'
+  #    CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
 
   # manager:
   #   image: sheepkiller/kafka-manager
@@ -105,15 +105,15 @@ services:
   #     - ./storage/seq:/seq
 
   #ALTER SERVICE MASTER KEY FORCE REGENERATE;
-  sqlserver:
-    build: ./deploy/sqlreplication/master
-    container_name: sqlServer
-    environment:
-            SA_PASSWORD: "Aa!012345679"
-            ACCEPT_EULA: "Y"
-            MSSQL_AGENT_ENABLED: "true"
-    ports:
-      - "5433:1433"
+  #sqlserver:
+  #  build: ./deploy/sqlreplication/master
+  #  container_name: sqlServer
+  #  environment:
+  #          SA_PASSWORD: "Aa!012345679"
+  #          ACCEPT_EULA: "Y"
+  #          MSSQL_AGENT_ENABLED: "true"
+  #  ports:
+  #    - "5433:1433"
   # volumes:
   #   - ./storage/sqlserver:/var/opt/mssql/data
 
@@ -329,43 +329,43 @@ services:
 
 # keyclosk sso
 
-  keycloak_db_sso:
-    image: postgres:11.2-alpine
-    environment:
-        - POSTGRES_DB=keycloak_sso
-        - POSTGRES_USER=keycloak_sso
-        - POSTGRES_PASSWORD=password
-        - POSTGRES_ROOT_PASSWORD=password
-    networks:
-      service_sso_net:
-    ports:
-      - "5432:5432"
-    volumes:
-      - keycloak_sso_vol:/var/lib/postgresql/data
+  #keycloak_db_sso:
+  #  image: postgres:11.2-alpine
+  #  environment:
+  #      - POSTGRES_DB=keycloak_sso
+  #      - POSTGRES_USER=keycloak_sso
+  #      - POSTGRES_PASSWORD=password
+  #      - POSTGRES_ROOT_PASSWORD=password
+  #  networks:
+  #    service_sso_net:
+  #  ports:
+  #    - "5432:5432"
+  #  volumes:
+  #    - keycloak_sso_vol:/var/lib/postgresql/data
 
-  keycloak:
-    image: jboss/keycloak:15.0.2
-    hostname: keycloak
-    environment:
-      - DB_VENDOR=POSTGRES
-      - DB_ADDR=keycloak_db_sso
-      - DB_DATABASE=keycloak_sso
-      - DB_PORT=5432
-      - DB_USER=keycloak_sso
-      - DB_SCHEMA=public
-      - DB_PASSWORD=password
-      - PROXY_ADDRESS_FORWARDING=true
-      - KEYCLOAK_LOGLEVEL=INFO
-      - KEYCLOAK_USER=admin
-      - KEYCLOAK_PASSWORD=admin
-    networks:
-      service_sso_net:
-    ports:
-      - "2080:8080"
-    volumes:
-      - ./themes/demo:/opt/jboss/keycloak/themes/demo
-    depends_on: 
-      - keycloak_db_sso
+  #keycloak:
+  #  image: jboss/keycloak:15.0.2
+  #  hostname: keycloak
+  #  environment:
+  #    - DB_VENDOR=POSTGRES
+  #    - DB_ADDR=keycloak_db_sso
+  #    - DB_DATABASE=keycloak_sso
+  #    - DB_PORT=5432
+  #    - DB_USER=keycloak_sso
+  #    - DB_SCHEMA=public
+  #    - DB_PASSWORD=password
+  #    - PROXY_ADDRESS_FORWARDING=true
+  #    - KEYCLOAK_LOGLEVEL=INFO
+  #    - KEYCLOAK_USER=admin
+  #    - KEYCLOAK_PASSWORD=admin
+  #  networks:
+  #    service_sso_net:
+  #  ports:
+  #    - "2080:8080"
+  #  volumes:
+  #    - ./themes/demo:/opt/jboss/keycloak/themes/demo
+  #  depends_on: 
+  #    - keycloak_db_sso
 
 
 volumes: 
