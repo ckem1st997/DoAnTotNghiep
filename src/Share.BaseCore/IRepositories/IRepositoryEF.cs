@@ -24,20 +24,22 @@ namespace Share.BaseCore.IRepositories
         Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, int records = 0,
         string includeProperties = "");
         IEnumerable<T> GetList(Func<T, bool> filter = null);
-        Task<T> GetFirstAsync(string id);
-        Task<T> GetFirstAsyncAsNoTracking(string id);
-        Task<T> AddAsync(T entity);
+        Task<T> GetFirstAsync(string id, CancellationToken cancellationToken = default(CancellationToken));
+        Task<T> GetFirstAsyncAsNoTracking(string id, CancellationToken cancellationToken = default(CancellationToken));
+        Task<T> AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
         Task<IEnumerable<T>> ListAllAsync();
         Task<IEnumerable<T>> ListByListId(IEnumerable<string> ids);
         void Update(T entity);
+        public Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
+
         void Delete(T entity);
         void BulkInsert(IList<T> listEntity);
-        Task BulkInsertAsync(IList<T> listEntity);
+        Task BulkInsertAsync(IList<T> listEntity, CancellationToken cancellationToken = default(CancellationToken));
         void BulkUpdate(IList<T> listEntity);
-        Task BulkUpdateAsync(IList<T> listEntity);
+        Task BulkUpdateAsync(IList<T> listEntity, CancellationToken cancellationToken = default(CancellationToken));
         void BulkDelete(IList<T> listEntity);
-        Task<int> BulkDeleteEditOnDeleteAsync(IEnumerable<string> listEntity);
+        Task<int> BulkDeleteEditOnDeleteAsync(IEnumerable<string> listEntity, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task BulkInsertOrUpdateAsync(IList<T> listEntity);
+        Task BulkInsertOrUpdateAsync(IList<T> listEntity, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
