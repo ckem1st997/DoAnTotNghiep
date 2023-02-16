@@ -15,5 +15,5 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: isbang/compose-action@v1.4.1
-    with:
-      compose-file: "./docker-compose.yml"
+      with: 
+       compose-file: "./docker-compose.yml"
