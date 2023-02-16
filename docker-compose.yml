@@ -172,8 +172,8 @@ services:
       dockerfile: src/Services/WareHouse/WareHouse.API/Dockerfile
     depends_on:
       - redis
-      - sqlserver
-      - broker
+      
+      
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:5005
@@ -189,8 +189,8 @@ services:
       dockerfile: src/Services/Master/Master/Dockerfile
     depends_on:
       - redis
-      - sqlserver
-      - broker
+      
+    
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://0.0.0.0:50001
