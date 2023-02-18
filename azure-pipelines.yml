@@ -1,0 +1,182 @@
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '40a0dd68-3a0d-4845-b1de-ee03927870b1'
+  imageRepository: 'doan'
+  containerRegistry: 'doantotnghiep.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/docker-compose'
+  tag: '$(Build.BuildId)'
+  azureContainerRegistry: 'doantotnghiep.azurecr.io'
+  azureSubscriptionEndpoint: Azure subscription Doan
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Build_and_Push
+  displayName: Build and Push stage
+  jobs:
+  - job: Build_and_Push
+    displayName: Build and Push Job
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - script: |
+        curl -L https://github.com/kubernetes/kompose/releases/download/v1.26.0/kompose-linux-amd64 -o kompose
+        chmod +x kompose
+        sudo mv ./kompose /usr/local/bin/kompose
+        mkdir exportk8s
+        kompose -v convert -f docker-compose.yml -o exportk8s
+      displayName: Kompose is a conversion tool for Docker Compose to container orchestrators such as Kubernetes
+      #  helm repo add stable https://charts.helm.sh/stable
+      #  helm repo update
+
+    - task: DockerCompose@0
+      displayName: Build an image to container registry
+      inputs:
+        containerregistrytype: Azure Container Registry
+        action: Build services
+        azureSubscription: AzureBuidAndPush
+        azureContainerRegistry: '{"loginServer":"doantotnghiep.azurecr.io", "id" : "/subscriptions/9a5e5181-2d35-471c-aeac-a3d6f6ebf20d/resourceGroups/VisualStudioOnline-640AFD7AA5C84096BC50DF4299758EEE/providers/Microsoft.ContainerRegistry/registries/doantotnghiep"}'
+
+        dockerComposeFile: docker-compose.yml
+        projectName: $(Build.Repository.Name)
+        qualifyImageNames: true
+        additionalImageTags: $(Build.BuildId)
+        dockerComposeFileArgs: |
+          firstArg=$(firstArg)
+          secondArg=$(secondArg)
+
+
+    - task: DockerCompose@0
+      displayName: Push an image to container registry
+      inputs:
+        containerregistrytype: Azure Container Registry
+        action: Push services
+
+        azureSubscription: AzureBuidAndPush
+        azureContainerRegistry: '{"loginServer":"doantotnghiep.azurecr.io", "id" : "/subscriptions/9a5e5181-2d35-471c-aeac-a3d6f6ebf20d/resourceGroups/VisualStudioOnline-640AFD7AA5C84096BC50DF4299758EEE/providers/Microsoft.ContainerRegistry/registries/doantotnghiep"}'
+
+
+        dockerComposeFile: docker-compose.yml
+        projectName: $(Build.Repository.Name)
+        qualifyImageNames: true
+        additionalImageTags: $(Build.BuildId)
+
+
+
+    - task: HelmInstaller@0
+      displayName: 'Install Helm 2.9.1'
+      inputs:
+        helmVersion: 2.9.1
+        kubectlVersion: 1.10.3
+        checkLatestKubectl: false
+        checkLatestHelmVersion: false
+
+    - task: HelmDeploy@0
+      displayName: 'helm init --client-only'
+      inputs:
+        azureSubscription: AzureBuidAndPush
+        azureResourceGroup: 'VisualStudioOnline-640AFD7AA5C84096BC50DF4299758EEE'
+        kubernetesCluster: 'K8s-Doan'
+        namespace: 'k8s-doan-pipe'
+        command: init
+        upgradeTiller: false
+        arguments: '--client-only'
+
+
+    - task: HelmDeploy@0
+      displayName: 'helm package'
+      inputs:
+        command: package
+        chartPath: helm
+        save: false
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifacts: drop'
+
+# - stage: Deploy
+#   displayName: Deploy stage
+#   dependsOn: Build_and_Push
+#   jobs:
+#   - deployment: Deploy
+#     displayName: Deploy job
+#     pool:
+#       vmImage: $(vmImageName)
+#     environment: 'prod' #customize with your environment
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - task: DownloadPipelineArtifact@2
+#             inputs:
+#               artifactName: 'manifests'
+#               downloadPath: '$(System.ArtifactsDirectory)/manifests'
+
+#           - task: KubernetesManifest@0
+#             displayName: Create imagePullSecret
+#             inputs:
+#               action: createSecret
+#               secretName: $(imagePullSecret)
+#               namespace: $(k8sNamespace)
+#               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+
+#           - task: KubernetesManifest@0
+#             displayName: Deploy to Kubernetes cluster
+#             inputs:
+#               action: deploy
+#               namespace: $(k8sNamespace)
+#               manifests: |
+#                 $(System.ArtifactsDirectory)/manifests/deployment.yml
+#                 $(System.ArtifactsDirectory)/manifests/service.yml
+#               imagePullSecrets: |
+#                 $(imagePullSecret)
+#               containers: |
+#                 $(containerRegistry)/$(imageRepository):$(tag)
+
+
+
+
+
+
+
+
+
+
+
+
+    # - task: DockerCompose@0
+    #   displayName: Build an image to container registry
+    #   inputs:
+    #     action: Build services
+    #     # repository: $(imageRepository)
+    #     dockerComposeFile: docker-compose.yml
+    #     projectName: $(Build.Repository.Name)
+    #     containerRegistry: $(dockerRegistryServiceConnection)
+    #     additionalImageTags: $(Build.BuildId)
+    #     qualifyImageNames: true
+    #     dockerComposeFileArgs: |
+    #       firstArg=$(firstArg)
+    #       secondArg=$(secondArg)
+
+    # - task: DockerCompose@0
+    #   displayName: Push an image to container registry
+    #   inputs:
+    #     action: Push services
+    #     containerRegistry: $(dockerRegistryServiceConnection)
+    #     azureContainerRegistry: $(containerRegistry)
+    #     dockerComposeFile: docker-compose.yml
+    #     projectName: $(Build.Repository.Name)
+    #     qualifyImageNames: true
+    #     additionalImageTags: $(Build.BuildId)
+
