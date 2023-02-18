@@ -32,3 +32,10 @@ jobs:
     - uses: isbang/compose-action@v1.4.1
       with: 
        compose-file: "./docker-compose.yml"
+    -
+        name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          
+          push: true
+          tags: user/app:latest
