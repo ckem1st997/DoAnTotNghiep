@@ -181,14 +181,14 @@ services:
   #    - "5005:5005"
   #    - "5006:5006"
 
-  # master-api:
-  #   image: ${REGISTRY:-doantotnghiep}/master:${PLATFORM:-linux}-${TAG:-latest}
-  #   container_name: mt-api
-  #   build:
-  #     context: .
-  #     dockerfile: src/Services/Master/Master/Dockerfile
-  #   depends_on:
-  #     - redis
+  master-api:
+    image: ${REGISTRY:-doantotnghiep}/master:${PLATFORM:-linux}-${TAG:-latest}
+    container_name: mt-api
+    build:
+      context: .
+      dockerfile: src/Services/Master/Master/Dockerfile
+    depends_on:
+      - redis
       
     
   #   environment:
