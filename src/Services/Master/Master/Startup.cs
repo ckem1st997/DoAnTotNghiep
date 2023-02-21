@@ -53,7 +53,7 @@ namespace Master
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-          //  services.AddCache(Configuration);
+            services.AddCache(Configuration);
             services.AddControllers();
             services.AddCustomConfiguration(Configuration);
             services.AddSingleton<IKafKaConnection, KafKaConnection>();
