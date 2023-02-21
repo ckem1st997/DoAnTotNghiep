@@ -17,6 +17,7 @@ namespace Share.BaseCore.Cache
             // Register the RedisCache service
             //  services.AddMemoryCache();
             var stringConnect = configuration.GetSection("Redis")["ConnectionString"];
+            Console.WriteLine(stringConnect);
             var connect = new ConfigurationOptions
             {
                 Password = configuration.GetSection("Redis")["Password"],
