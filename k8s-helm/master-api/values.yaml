@@ -37,8 +37,9 @@ securityContext: {}
 # runAsUser: 1000
 
 service:
-  type: ClusterIP
-  port: 80
+  type: NodePort #NodePort #ClusterIP
+  port: 50001
+  grpcPort: 50000
 
 ingress:
   enabled: false
@@ -85,3 +86,10 @@ affinity: {}
 
 env:
   Environments: Production
+  values:
+  - name: ASPNETCORE_ENVIRONMENT
+    value: Production
+  - name: PORT
+    value: "50001"
+  - name: GRPC_PORT
+    value: "50000"

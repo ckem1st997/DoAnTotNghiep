@@ -7,3 +7,6 @@ kompose -v convert -f docker-compose.yml -o k8s.yaml
 @REM đường dẫn tới file đường dẫn tới chart chưa file
 @REM helm install -f k8s-helm/master-api/values.yaml master-api k8s-helm/master-api
 @REM helm upgrade master-api k8s-helm/master-api
+@REM kubectl get events
+@REM kubectl get pods
+@REM kubectl describe pod  master-api-7b69f6dfd7-t294j

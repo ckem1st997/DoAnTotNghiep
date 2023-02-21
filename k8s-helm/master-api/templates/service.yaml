@@ -4,6 +4,10 @@ metadata:
   name: {{ include "master-api.fullname" . }}
   labels:
     {{- include "master-api.labels" . | nindent 4 }}
+  # app: {{ template  "master-api.name" . }}
+  # chart: {{ template  "master-api.chart" . }}
+  # release: {{ .Release.Name }}
+  # heritage: {{ .Release.Service }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -11,5 +15,9 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    - port: {{ .Values.service.grpcPort }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
   selector:
     {{- include "master-api.selectorLabels" . | nindent 4 }}
