@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: meoh0ang97/doantotnghiep
-  pullPolicy: IfNotPresent
+  pullPolicy: Always #IfNotPresent: cái này là pull một lần
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
