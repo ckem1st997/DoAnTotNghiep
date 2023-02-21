@@ -182,7 +182,7 @@ services:
   #    - "5006:5006"
 
   master-api:
-    image: ${REGISTRY:-doantotnghiep}/master:${PLATFORM:-linux}-${TAG:-latest}
+    image: meoh0ang97/doantotnghiep:${PLATFORM:-linux}-${TAG:-latest}
     container_name: mt-api
     build:
       context: .
@@ -313,18 +313,18 @@ services:
   #     volumes:
   #         - ./storage/konga:/konga
           
-  angular:
-    image: warehouse
-    container_name: angular
-    build:
-      context: src/WebClient/WareHouse/
-      dockerfile: ./Dockerfile
-    environment:
-        NODE_ENV: production
-    # depends_on:
-    #   - master-api
-    ports:
-        - 4200:80
+  # angular:
+  #   image: warehouse
+  #   container_name: angular
+  #   build:
+  #     context: src/WebClient/WareHouse/
+  #     dockerfile: ./Dockerfile
+  #   environment:
+  #       NODE_ENV: production
+  #   # depends_on:
+  #   #   - master-api
+  #   ports:
+  #       - 4200:80
 
 
 # keyclosk sso
