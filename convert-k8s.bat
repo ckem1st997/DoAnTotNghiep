@@ -10,3 +10,5 @@ kompose -v convert -f docker-compose.yml -o k8s.yaml
 @REM kubectl get events
 @REM kubectl get pods
 @REM kubectl describe pod  master-api-7b69f6dfd7-t294j
+@REM kubectl get svc,po,deploy
+@REM helm uninstall master-api
