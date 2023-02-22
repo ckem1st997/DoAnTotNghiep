@@ -13,3 +13,7 @@ kompose -v convert -f docker-compose.yml -o k8s.yaml
 @REM kubectl get svc,po,deploy
 @REM helm uninstall master-api
 @REM helm upgrade wh-api k8s-helm/wh-api
+@REM helm install -f k8s-helm/wh-api/values.yaml wh-api k8s-helm/wh-api 
+
+@REM co the trien khai nhieu container trong cung mot pod, co ma khong nen vi kho trien khai
+@REM vi microservie la tach biet

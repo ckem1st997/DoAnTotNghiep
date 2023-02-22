@@ -15,6 +15,7 @@ using Share.BaseCore.IRepositories;
 using Share.BaseCore.Repositories;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -47,6 +48,7 @@ namespace Share.BaseCore.CustomConfiguration
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = nameof(TControler), Version = "v1" });
             });
             var sqlConnect = configuration.GetConnectionString(nameConnect);
+            Console.WriteLine(sqlConnect);
             services.AddDbContextPool<TDbContext>(options =>
             {
                 options.UseSqlServer(sqlConnect,
