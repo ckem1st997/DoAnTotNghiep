@@ -75,7 +75,7 @@ namespace WareHouse.API
             services.AddMapper();
             services.AddValidator();
             // services.AddBehavior();
-          //  services.AddCache(Configuration);
+            services.AddCache(Configuration);
             // services.AddEasyCachingAPI(Configuration);
             services.AddSingleton<IKafKaConnection, KafKaConnection>();
             services.AddEventBus(Configuration);
@@ -115,7 +115,7 @@ namespace WareHouse.API
             //   app.UseHttpsRedirection();
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor |ForwardedHeaders.XForwardedProto
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
             app.UseMiddleware<RemoteIpAddressMiddleware>();
             app.UseRouting();
