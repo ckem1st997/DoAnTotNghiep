@@ -43,6 +43,7 @@ spec:
           env:          
             - name: "ASPNETCORE_ENVIRONMENT"
               value: {{ .Values.env.Environments }}
+        
           # livenessProbe:
           #   httpGet:
           #     path: /

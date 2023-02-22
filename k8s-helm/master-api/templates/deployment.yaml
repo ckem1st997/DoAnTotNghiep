@@ -43,6 +43,17 @@ spec:
           env:          
             - name: "ASPNETCORE_ENVIRONMENT"
               value: {{ .Values.env.Environments }}
+        
+          
+          # resources:
+          #   limits:
+          #     memory: 4Gi
+          #     cpu: 4
+          #   requests:
+          #     memory: 4Gi
+          #     cpu: 4
+          # ports:
+          #   - containerPort: 6379
           # livenessProbe:
           #   httpGet:
           #     path: /
