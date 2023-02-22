@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: nginx
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
@@ -38,7 +38,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 4200
 
 ingress:
   enabled: false
@@ -80,3 +80,14 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+
+env:
+  NODE_ENV: production
+  # values:
+  # - name: ASPNETCORE_ENVIRONMENT
+  #   value: Production
+  # - name: PORT
+  #   value: "50001"
+  # - name: GRPC_PORT
+  #   value: "50000"

@@ -8,7 +8,7 @@ image:
   repository: meoh0ang97/doantotnghiep
   pullPolicy: Always #IfNotPresent: cái này là pull một lần
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: "latest1"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -38,8 +38,8 @@ securityContext: {}
 
 service:
   type: LoadBalancer #NodePort #ClusterIP #LoadBalancer: truy cap qua localhost
-  port: 50001
-  grpcPort: 50000
+  port: 5005
+  grpcPort: 5006
 
 ingress:
   enabled: false
@@ -48,7 +48,7 @@ ingress:
   # kubernetes.io/ingress.class: nginx
   # kubernetes.io/tls-acme: "true"
   hosts:
-  - host: master-api.local
+  - host: wh-api.local
     paths:
     - path: /
       pathType: ImplementationSpecific
@@ -90,6 +90,6 @@ env:
   - name: ASPNETCORE_ENVIRONMENT
     value: Production
   - name: PORT
-    value: "50001"
+    value: "5005"
   - name: GRPC_PORT
-    value: "50000"
+    value: "5006"
