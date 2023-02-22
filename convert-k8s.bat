@@ -17,3 +17,4 @@ kompose -v convert -f docker-compose.yml -o k8s.yaml
 
 @REM co the trien khai nhieu container trong cung mot pod, co ma khong nen vi kho trien khai
 @REM vi microservie la tach biet
+@REM giao tiep giua cac service dung tenservice:port cua no nhu docker compose, quan trong la cai ten va port
