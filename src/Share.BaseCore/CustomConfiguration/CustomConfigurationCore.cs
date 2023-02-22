@@ -48,6 +48,7 @@ namespace Share.BaseCore.CustomConfiguration
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = nameof(TControler), Version = "v1" });
             });
             var sqlConnect = configuration.GetConnectionString(nameConnect);
+            Console.WriteLine("Set up Sql connect");
             Console.WriteLine(sqlConnect);
             services.AddDbContextPool<TDbContext>(options =>
             {
