@@ -182,7 +182,7 @@ services:
   #    - "5006:5006"
 
   master-api:
-    image: meoh0ang97/doantotnghiep:${PLATFORM:-linux}-${TAG:-latest}
+    image: doantotnghiep.azurecr.io/wh-api:${PLATFORM:-linux}-${TAG:-latest}
     container_name: mt-api
     build:
       context: .
