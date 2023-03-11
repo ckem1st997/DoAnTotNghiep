@@ -190,7 +190,6 @@ services:
     depends_on:
       - redis
       
-    
   #   environment:
   #     - ASPNETCORE_ENVIRONMENT=Production
   #     - ASPNETCORE_URLS=http://0.0.0.0:50001
