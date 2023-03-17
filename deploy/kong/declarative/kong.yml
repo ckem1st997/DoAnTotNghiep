@@ -7,7 +7,7 @@ _format_version: "1.1"
 
 services:
 - name: api-mt
-  url : http://host.docker.internal:50001/
+  url : https://www.facebook.com/ #http://host.docker.internal:50001/
   routes:
     - name: api-mt
       methods: 
