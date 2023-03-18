@@ -257,16 +257,17 @@ services:
        KONG_ADMIN_ERROR_LOG: /dev/stderr
        KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
        KONG_LOG_LEVEL: warn
+       # da tu dong copy vo trong thu muc nho luc build
        KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
    # add
    # buid va push len docker.io sau do them image vo cloud va set up bien moi truong
-   # cac thao tac da duoc ly ben docker
+   # cac thao tac da duoc xu ly ben docker
    healthcheck:
      test: ["CMD", "kong", "health"]
      interval: 120s
      timeout: 10s
      retries: 3
-     # set up port o day ra soa thi torng k8s se chay vay
+     # set up port o day ra sao thi trong k8s se chay vay
    ports:
        - "8000:8000"
        - "8443:8443"
