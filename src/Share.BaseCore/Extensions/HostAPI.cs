@@ -22,8 +22,7 @@ namespace Share.BaseCore.Extensions
 
             var seqServerUrl = configuration["Serilog:SeqServerUrl"];
             var logstashUrl = configuration["Serilog:LogstashgUrl"];
-            Console.WriteLine(seqServerUrl + " " + logstashUrl);
-            return new LoggerConfiguration()
+        return new LoggerConfiguration()
                 .MinimumLevel.Verbose()
                 .Enrich.WithProperty("ApplicationContext", nameApp)
                 .Enrich.FromLogContext()
@@ -35,11 +34,12 @@ namespace Share.BaseCore.Extensions
 
         public static IConfiguration GetConfiguration()
         {
-            var appjon = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals(Environments.Production) ? "appsettings.Production.json" : "appsettings.Development.json";
+            var getEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var appjon = !string.IsNullOrEmpty(getEnv) && getEnv.Equals(Environments.Production) ? "appsettings.Production.json" : "appsettings.Development.json";
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+            .AddJsonFile($"appsettings.{getEnv ?? "Production"}.json", optional: true)
                 .AddEnvironmentVariables();
 
             var config = builder.Build();
@@ -50,14 +50,14 @@ namespace Share.BaseCore.Extensions
         {
             Log.Information("Starting up");
             Log.Information(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
-            CreateHostBuilder<T>(args, portHttp1AndHttp2,portHttp2).Build().Run();
+            CreateHostBuilder<T>(args, portHttp1AndHttp2, portHttp2).Build().Run();
             WebApplication.CreateBuilder(new WebApplicationOptions
             {
                 EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
             });
         }
 
-        public static IHostBuilder CreateHostBuilder<T>(string[] args,int portHttp1AndHttp2,int portHttp2) where T : class =>
+        public static IHostBuilder CreateHostBuilder<T>(string[] args, int portHttp1AndHttp2, int portHttp2) where T : class =>
                 Host.CreateDefaultBuilder(args)
                         .ConfigureLogging(logging =>
                         {
