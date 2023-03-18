@@ -11,13 +11,11 @@ namespace Master.Controllers
     {
         private readonly MasterdataContext _context;
         private readonly IUserService _userService;
-
         public ListRoleController(MasterdataContext context, IUserService userService)
         {
             _context = context;
             _userService = userService;
         }
-
 
         [HttpGet]
         [Route("get-list-key")]
