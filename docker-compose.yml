@@ -190,14 +190,14 @@ services:
     depends_on:
       - redis
       
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Production
-  #     - ASPNETCORE_URLS=http://0.0.0.0:50001
-  #     - GRPC_PORT=81
-  #     - PORT=80
-  #   ports:
-  #     - "50001:50001"
-  #     - "50000:50000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://0.0.0.0:50001
+      - GRPC_PORT=50000
+      - PORT=50001
+    ports:
+      - "50001:50001"
+      - "50000:50000"
    
   # kong-database:
   #   image: postgres:9.6
