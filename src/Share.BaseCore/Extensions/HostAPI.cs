@@ -17,24 +17,25 @@ namespace Share.BaseCore.Extensions
 {
     public static class HostAPI
     {
+        private static string getEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")??Environments.Development;
+
         public static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration, string nameApp)
         {
 
             var seqServerUrl = configuration["Serilog:SeqServerUrl"];
             var logstashUrl = configuration["Serilog:LogstashgUrl"];
-        return new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .Enrich.WithProperty("ApplicationContext", nameApp)
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-               .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl)
-               .ReadFrom.Configuration(configuration)
-                .CreateLogger();
+            return new LoggerConfiguration()
+                    .MinimumLevel.Verbose()
+                    .Enrich.WithProperty("ApplicationContext-"+getEnv, nameApp)
+                    .Enrich.FromLogContext()
+                    .WriteTo.Console()
+                   .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl)
+                   .ReadFrom.Configuration(configuration)
+                    .CreateLogger();
         }
 
         public static IConfiguration GetConfiguration()
         {
-            var getEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             var appjon = !string.IsNullOrEmpty(getEnv) && getEnv.Equals(Environments.Production) ? "appsettings.Production.json" : "appsettings.Development.json";
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -49,11 +50,11 @@ namespace Share.BaseCore.Extensions
         public static void LogStartUp<T>(string[] args, int portHttp1AndHttp2, int portHttp2) where T : class
         {
             Log.Information("Starting up");
-            Log.Information(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+            Log.Information(getEnv);
             CreateHostBuilder<T>(args, portHttp1AndHttp2, portHttp2).Build().Run();
             WebApplication.CreateBuilder(new WebApplicationOptions
             {
-                EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+                EnvironmentName = getEnv
             });
         }
 

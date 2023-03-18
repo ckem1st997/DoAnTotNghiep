@@ -23,7 +23,7 @@ namespace Master
             var configuration = HostAPI.GetConfiguration();
 
             Log.Logger = HostAPI.CreateSerilogLogger(configuration, "Master");
-            HostAPI.LogStartUp<Startup>(args, configuration.GetValue("PORT", 80), configuration.GetValue("GRPC_PORT", 50000));
+            HostAPI.LogStartUp<Startup>(args, configuration.GetValue("PORT", 80), configuration.GetValue("GRPC_PORT", 81));
 
             //Log.Information("Starting up");
             //CreateHostBuilder(args).Build().Run();
