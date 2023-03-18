@@ -259,14 +259,16 @@ services:
        KONG_LOG_LEVEL: warn
        KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
    # add
+   # buid va push len docker.io sau do them image vo cloud va set up bien moi truong
+   # cac thao tac da duoc ly ben docker
    healthcheck:
      test: ["CMD", "kong", "health"]
      interval: 120s
      timeout: 10s
      retries: 3
    ports:
-       - "8000:8000"
-       - "8443:8443"
+       - "80:8000"
+       - "443:8443"
        - "8001:8001"
        - "8444:8444"
 
