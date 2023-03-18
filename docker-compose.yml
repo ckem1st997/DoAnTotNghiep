@@ -268,8 +268,8 @@ services:
      retries: 3
      # set up port o day ra soa thi torng k8s se chay vay
    ports:
-       - "80:8000"
-       - "443:8443"
+       - "8000:8000"
+       - "8443:8443"
        - "8001:8001"
        - "8444:8444"
 
