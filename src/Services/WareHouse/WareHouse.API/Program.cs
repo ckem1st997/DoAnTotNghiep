@@ -27,7 +27,7 @@ namespace WareHouse.API
             var configuration = HostAPI.GetConfiguration();
 
             Log.Logger = HostAPI.CreateSerilogLogger(configuration, "WareHouse");
-            HostAPI.LogStartUp<Startup>(args, 5005, 5006);
+            HostAPI.LogStartUp<Startup>(args,configuration.GetValue("PORT", 80), configuration.GetValue("GRPC_PORT", 5006));
         }
 
 
