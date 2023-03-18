@@ -198,8 +198,8 @@ services:
       - GRPC_PORT=50000
       - PORT=50001
     ports:
-      - "50001:50001"
-      - "50000:50000"
+      - "80:50001"
+      - "81:50000"
    
   # kong-database:
   #   image: postgres:9.6
@@ -266,6 +266,7 @@ services:
      interval: 120s
      timeout: 10s
      retries: 3
+     # set up port o day ra soa thi torng k8s se chay vay
    ports:
        - "80:8000"
        - "443:8443"
