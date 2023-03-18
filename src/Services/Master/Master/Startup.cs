@@ -89,7 +89,7 @@ namespace Master
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BasicAuth v1"));
             //  }
-           // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
             app.UseRouting();
             app.UseGrpcWeb();
