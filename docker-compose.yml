@@ -194,11 +194,11 @@ services:
       
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://0.0.0.0:50001
+      - ASPNETCORE_URLS=http://0.0.0.0:80
       - GRPC_PORT=50000
-      - PORT=50001
+      - PORT=80
     ports:
-      - "50001:50001"
+      - "50001:80"
       - "50000:50000"
    
   # kong-database:
