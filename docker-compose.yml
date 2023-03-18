@@ -183,6 +183,14 @@ services:
   #    - "5005:5005"
   #    - "5006:5006"
 
+# chú ý nếu deploy bằng sunteco
+# phải để cái này app.UseHttpsRedirection(); để tự đổng chuyển từ https sang http
+# vì nếu không, thì cổng 80 hoặc cổng khác sẽ chỉ nhận http
+# mà mặc định tên miền của sunteco là https
+# không tự đổng chuyển sang http nên sẽ dễ dàng sai
+
+
+
   master-api:
     image: meoh0ang97/master.api:${PLATFORM:-linux}-${TAG:-latest} #doantotnghiep.azurecr.io/master-api:latest
     container_name: mt-api
