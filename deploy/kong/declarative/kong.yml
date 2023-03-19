@@ -7,7 +7,7 @@ _format_version: "1.1"
 
 services:
 - name: api-mt
-  url: http://api-mt:80/
+  url: http://apimt-4681-service.k8sqrt.svc:80/
   routes:
   - name: api-mt
     methods:
@@ -31,7 +31,7 @@ services:
     path_handling: v1
 
 - name: api-wh
-  url: http://apimt-4681-service.k8sqrt.svc:80/
+  url: http://apimt-4681-service.k8sqrt.svc/
   tags:
   - api-wh
   retries: 5
@@ -54,27 +54,3 @@ services:
     regex_priority: 0
     strip_path: true
     preserve_host: false
-
-- name: api-mt1
-  url: http://api-mt/
-  routes:
-  - name: api-mt1
-    methods:
-    - OPTIONS
-    - GET
-    - POST
-    - PUT
-    - HEAD
-    - DELETE
-    paths:
-    - /api-mt1
-    tags:
-    - api-mt1
-    protocols:
-    - http
-    - https
-    https_redirect_status_code: 301
-    regex_priority: 0
-    strip_path: true
-    preserve_host: false
-    path_handling: v1
