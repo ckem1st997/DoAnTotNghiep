@@ -191,23 +191,23 @@ services:
 
 
 
-  # master-api:
-  #   image: meoh0ang97/master.api:${PLATFORM:-linux}-${TAG:-latest} #doantotnghiep.azurecr.io/master-api:latest
-  #   container_name: mt-api
-  #   build:
-  #     context: .
-  #     dockerfile: src/Services/Master/Master/Dockerfile
-  #   # depends_on:
-  #   #   - redis
+  master-api:
+    image: meoh0ang97/master.api:${PLATFORM:-linux}-${TAG:-latest} #doantotnghiep.azurecr.io/master-api:latest
+    container_name: mt-api
+    build:
+      context: .
+      dockerfile: src/Services/Master/Master/Dockerfile
+    # depends_on:
+    #   - redis
       
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Production
-  #     - ASPNETCORE_URLS=http://0.0.0.0:80
-  #     - GRPC_PORT=81
-  #     - PORT=80
-  #   ports:
-  #     - "50001:80"
-  #     - "50000:81"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - GRPC_PORT=81
+      - PORT=80
+    ports:
+      - "50001:80"
+      - "50000:81"
    
   # kong-database:
   #   image: postgres:9.6

@@ -87,7 +87,7 @@ namespace Master
             //  {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BasicAuth v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Swagger v1: "+"Master"));
             //  }
             app.UseHttpsRedirection();
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
