@@ -240,7 +240,13 @@ services:
   #   entrypoint: sh -c "sleep 100 && kong migrations bootstrap --vv"
   #   networks:
   #       - kong-net
-            
+
+# đã ngon, build và push lên container registry
+# sau đó triển khai image lên sunteco
+# thêm cái biến môi trường như dưới
+# chạy cổng 8000 và cổng 8000 là http đã tự chuyển sang https
+
+
   # kong:
   #  image: meoh0ang97/kong.api:${PLATFORM:-linux}-${TAG:-latest} #kong:latest
   #  build: ./deploy/kong/
