@@ -7,6 +7,7 @@ _format_version: "1.1"
 
 services:
 - name: api-mt
+  #gọi theo bên sunteco
   url: http://apimt-4681-service.k8sqrt.svc:80/
   routes:
   - name: api-mt
