@@ -348,10 +348,10 @@ services:
 
 #volumes: 
 #  keycloak_sso_vol:
-# networks:
-#  kong-net:
-#    name: kong-net
-#    driver: bridge
+networks:
+ kong-net:
+   name: kong-net
+   driver: bridge
         
     
 
