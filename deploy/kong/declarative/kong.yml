@@ -8,6 +8,11 @@ _format_version: "1.1"
 services:
 - name: api-mt
   #gọi theo bên sunteco
+  # để cổng hoặc không để cổng cũng được
+  # http://apimt-4681-service.k8sqrt.svc cũng được
+  # tuỳ vào môi trường triển khai, hiện đang triển khai trên sunteco
+  # còn đối với vps hay các dịch vụ tương đương thì sẽ tìm hiểu thêm
+  # có thể là chỉ cần gọi tên serivce trong cùng một namespace
   url: http://apimt-4681-service.k8sqrt.svc:80/
   routes:
   - name: api-mt
