@@ -109,7 +109,7 @@ namespace WareHouse.API
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WareHouse.API v1"));
+            app.UseSwaggerUI();
             //  }
 
             //   app.UseHttpsRedirection();
