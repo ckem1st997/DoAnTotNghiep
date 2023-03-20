@@ -1,3 +1,5 @@
 {
-    "DockerRun.DisableAutoGenerateConfig": true
+    "DockerRun.DisableAutoGenerateConfig": true,
+    "docify.translateService.targetLanguage": "Vietnamese",
+    "docify.commentService.autoTranslationService": "Vietnamese"
 }
