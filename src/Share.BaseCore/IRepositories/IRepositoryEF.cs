@@ -19,14 +19,9 @@ namespace Share.BaseCore.IRepositories
         /// </summary>
         public IQueryable<T> Queryable { get; }
 
-        public IEnumerable<T> Get(
-            Expression<Func<T, bool>> filter = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, int records = 0,
-            string includeProperties = "");
-        public Task<IEnumerable<T>> GetAync(
-        Expression<Func<T, bool>> filter = null,
-        Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, int records = 0,
-        string includeProperties = "");
+
+        public IQueryable<T> GetBy(Expression<Func<T, bool>> predicate);
+        public Task<IQueryable<T>> GetByAsync(Expression<Func<T, bool>> predicate);
         IEnumerable<T> GetList(Func<T, bool> filter = null);
         Task<T> GetFirstAsync(string id, CancellationToken cancellationToken = default(CancellationToken));
         Task<T> GetFirstAsyncAsNoTracking(string id, CancellationToken cancellationToken = default(CancellationToken));
