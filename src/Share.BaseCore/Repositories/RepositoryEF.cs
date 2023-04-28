@@ -19,16 +19,22 @@ namespace Share.BaseCore.Repositories
     {
         private readonly DbContext _context;
         private readonly DbSet<T> _dbSet;
-
+        private readonly IQueryable<T> _query;
         public DbContext UnitOfWork
         {
             get { return _context; }
+        }
+
+        public IQueryable<T> Queryable
+        {
+            get { return _query; }
         }
 
         public RepositoryEF(DbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _dbSet = _context.Set<T>();
+            _query = _dbSet.AsQueryable();
         }
 
 

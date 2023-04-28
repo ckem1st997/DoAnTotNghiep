@@ -14,6 +14,10 @@ namespace Share.BaseCore.IRepositories
     public partial interface IRepositoryEF<T> where T : BaseEntity
     {
         public DbContext UnitOfWork { get; }
+        /// <summary>
+        /// không tạo truy vấn lưu mà chỉ tạo khi cần thiết
+        /// </summary>
+        public IQueryable<T> Queryable { get; }
 
         public IEnumerable<T> Get(
             Expression<Func<T, bool>> filter = null,
