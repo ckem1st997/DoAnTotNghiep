@@ -33,7 +33,7 @@ namespace WareHouse.API.Application.Queries.GetFisrt
                 return null;
             var res = await _repositoryDetail.GetFirstAsyncAsNoTracking(request.Id);
             if (res != null)
-                res.SerialWareHouses = (ICollection<SerialWareHouse>)await _repositorySeri.GetAync(x => x.OutwardDetailId.Equals(res.Id) && x.OnDelete==false);
+                res.SerialWareHouses = (ICollection<SerialWareHouse>)await _repositorySeri.GetByAsync(x => x.OutwardDetailId.Equals(res.Id) && x.OnDelete==false);
             return _mapper.Map<OutwardDetailDTO>(res);
 
         }

@@ -39,7 +39,7 @@ namespace WareHouse.API.Application.Querie.CheckCode
                 throw new ArgumentNullException(request.ItemId);
             }
 
-            var beginning =await _repository.GetAync(x => x.WareHouseId.Equals(request.WareHouseId)&& x.ItemId.Equals(request.ItemId),records:1);
+            var beginning =await _repository.GetByAsync(x => x.WareHouseId.Equals(request.WareHouseId)&& x.ItemId.Equals(request.ItemId));
 
             if (beginning != null & beginning.AsList().Count>0)
             {
@@ -47,10 +47,10 @@ namespace WareHouse.API.Application.Querie.CheckCode
             }
             else
             {
-                var inward = await _repositoryInward.GetAync(x => x.WareHouseId.Equals(request.WareHouseId), records: 1);
+                var inward = await _repositoryInward.GetByAsync(x => x.WareHouseId.Equals(request.WareHouseId));
                 if (inward != null & inward.AsList().Count > 0)
                 {
-                    var inwardDetail =await _repositoryInwardDetails.GetAync(x => x.ItemId.Equals(request.ItemId), records: 1);
+                    var inwardDetail =await _repositoryInwardDetails.GetByAsync(x => x.ItemId.Equals(request.ItemId));
                     if (inwardDetail != null & inwardDetail.AsList().Count > 0)
                     {
                         return true;
