@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace Share.BaseCore.IRepositories
 {
+
+
     public interface IDapper : IDisposable
     {
         DbConnection GetDbconnection();
