@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace Share.BaseCore.IRepositories
 {
+    /// <summary>
+    /// thao tác với entity để đọc dữ liệu 
+    /// </summary>
     public interface IQueryRepository
     {
         /// <summary>

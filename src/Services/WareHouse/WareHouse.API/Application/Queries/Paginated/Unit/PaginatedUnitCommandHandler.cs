@@ -8,7 +8,7 @@ using Dapper;
 using MediatR;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
-
+using WareHouse.Domain.Entity;
 
 namespace WareHouse.API.Application.Queries.Paginated.Unit
 {
@@ -16,11 +16,13 @@ namespace WareHouse.API.Application.Queries.Paginated.Unit
     {
         private readonly IDapper _repository;
         private readonly IPaginatedList<UnitDTO> _list;
+        private readonly IQueryRepository _queryRepository;
 
-        public PaginatedUnitCommandHandler(IDapper repository, IPaginatedList<UnitDTO> list)
+        public PaginatedUnitCommandHandler(IDapper repository, IPaginatedList<UnitDTO> list, IQueryRepository queryRepository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _list = list ?? throw new ArgumentNullException(nameof(list));
+            _queryRepository = queryRepository;
         }
 
         public async Task<IPaginatedList<UnitDTO>> Handle(PaginatedUnitCommand request,
@@ -52,12 +54,16 @@ namespace WareHouse.API.Application.Queries.Paginated.Unit
             parameter.Add("@key", '%' + request.KeySearch + '%');
             parameter.Add("@skip", request.Skip);
             parameter.Add("@take", request.Take);
-            parameter.Add("@active", request.Active==true ? 1 : 0);
+            parameter.Add("@active", request.Active == true ? 1 : 0);
             //Console.WriteLine(sbCount.ToString());
             //string jj = ValidatorString.GetSqlCount(sb.ToString());
             //Console.WriteLine(jj);
             _list.Result = await _repository.GetList<UnitDTO>(sb.ToString(), parameter, CommandType.Text);
-            _list.totalCount = await _repository.GetAyncFirst<int>(ValidatorString.GetSqlCount(sb.ToString(),SqlEnd: "order"), parameter, CommandType.Text);
+            _list.totalCount = await _repository.GetAyncFirst<int>(ValidatorString.GetSqlCount(sb.ToString(), SqlEnd: "order"), parameter, CommandType.Text);
+
+            var res = await _queryRepository.GetListAsync<WareHouse.Domain.Entity.Unit>();
+
+
             return _list;
         }
     }

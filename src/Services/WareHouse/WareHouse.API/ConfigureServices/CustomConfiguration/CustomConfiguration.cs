@@ -52,6 +52,8 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
 
             services.AddCustomConfigurationCore<WareHousesController, WarehouseManagementContext, Startup>(configuration, "WarehouseManagementContext");
+            services.AddGenericRepository<WarehouseManagementContext>();
+            services.AddQueryRepository<WarehouseManagementContext>();
 
         }
 

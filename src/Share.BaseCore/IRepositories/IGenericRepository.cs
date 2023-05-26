@@ -20,6 +20,7 @@ namespace Share.BaseCore.IRepositories
 
     /// <summary>
     /// Contains all the repository methods. If you register the multiple DbContexts, it will use the last one.
+    /// dùng để ghi hoặc đọc dữ liệu
     /// To use specific <see cref="DbContext"/> please use <see cref="IRepository{TDbContext}"/>.
     /// </summary>
     public interface IGenericRepository : IQueryRepository
