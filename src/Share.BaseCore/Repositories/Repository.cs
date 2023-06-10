@@ -22,6 +22,9 @@ using System.Reflection;
 using System.Linq.Dynamic.Core;
 using Share.BaseCore.IRepositories;
 using Share.BaseCore.Specification;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json.Linq;
+using System.Runtime.InteropServices;
 
 namespace Share.BaseCore.Repositories
 {
@@ -50,17 +53,22 @@ namespace Share.BaseCore.Repositories
             {
                 throw new ArgumentNullException(nameof(entity));
             }
-
+            // ConfigureAwait(false) được sử dụng để chỉ định rằng không cần thiết phải tiếp tục trên luồng gốc khi hoàn tất thao tác này.
             EntityEntry<TEntity> entityEntry = await _dbContext.Set<TEntity>().AddAsync(entity, cancellationToken).ConfigureAwait(false);
             await _dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
+
+            //Sử dụng entityEntry.Metadata.FindPrimaryKey() để tìm ra khóa chính (Primary Key) của thực thể đã được thêm vào.
+            // entityEntry.Property(p.Name).CurrentValue được sử dụng để lấy giá trị hiện tại của từng thuộc tính(Property) trong khóa chính.
+            //Select và ToArray được sử dụng để biến đổi các giá trị thuộc tính thành một mảng các đối tượng.
+            //Cuối cùng, phương thức trả về giá trị mảng primaryKeyValue chứa các giá trị khóa chính của thực thể vừa được thêm vào cơ sở dữ liệu.
             object[] primaryKeyValue = entityEntry.Metadata.FindPrimaryKey().Properties.
                 Select(p => entityEntry.Property(p.Name).CurrentValue).ToArray();
 
             return primaryKeyValue;
         }
 
-        public async Task InsertAsync<TEntity>(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        public async Task<int> InsertAsync<TEntity>(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
            where TEntity : class
         {
             if (entities == null)
@@ -69,7 +77,8 @@ namespace Share.BaseCore.Repositories
             }
 
             await _dbContext.Set<TEntity>().AddRangeAsync(entities, cancellationToken).ConfigureAwait(false);
-            await _dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            int affectedRecords = await _dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            return affectedRecords;
         }
 
         public async Task<int> UpdateAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default)

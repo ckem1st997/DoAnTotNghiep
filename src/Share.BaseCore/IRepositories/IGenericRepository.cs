@@ -54,7 +54,7 @@ namespace Share.BaseCore.IRepositories
         /// <param name="cancellationToken"> A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
         /// <returns>Returns <see cref="Task"/>.</returns>
         [Obsolete("The method will be removed in the next version. Please use Add()/AddAsync and SaveChangesAsync() methods together.")]
-        Task InsertAsync<TEntity>(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        Task<int> InsertAsync<TEntity>(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
             where TEntity : class;
 
         /// <summary>
