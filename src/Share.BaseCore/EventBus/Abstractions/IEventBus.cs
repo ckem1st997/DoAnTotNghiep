@@ -9,8 +9,8 @@ namespace Share.BaseCore.EventBus.Abstractions
         /// Xuất bản một tin nhắn.
         /// </summary>
         /// <param name="event"></param>
-        bool Publish(IntegrationEvent @event);
-        Task<bool> PublishAsync(IntegrationEvent @event);
+        bool Publish(IntegrationEvent @event, string Topic="");
+        Task<bool> PublishAsync(IntegrationEvent @event, string Topic = "");
 
         bool IsConnectedConsumer();
         bool IsConnectedProducer();

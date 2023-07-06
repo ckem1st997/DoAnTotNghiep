@@ -29,7 +29,7 @@ namespace Share.BaseCore.Kafka
         {
             _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
             _subsManager = subsManager ?? new InMemoryEventBusSubscriptionsManager();
-          //  _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
+            //  _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
             _topicName = configuration["KafKaTopic"];
         }
 
@@ -57,7 +57,7 @@ namespace Share.BaseCore.Kafka
         /// Xuất bản một tin nhắn.
         /// </summary>
         /// <param name="event"></param>
-        public bool Publish(IntegrationEvent @event)
+        public bool Publish(IntegrationEvent @event, string Topic = "")
         {
             try
             {
@@ -71,7 +71,7 @@ namespace Share.BaseCore.Kafka
                     {
                         WriteIndented = true
                     });
-                    producer.Produce(_topicName, new Message<string, byte[]> { Key = eventName, Value = body });
+                    producer.Produce(Topic ?? _topicName, new Message<string, byte[]> { Key = eventName, Value = body });
                     producer.Flush(timeout: TimeSpan.FromSeconds(3));
                     return true;
                 }
@@ -93,7 +93,7 @@ namespace Share.BaseCore.Kafka
         /// Xuất bản một tin nhắn.
         /// </summary>
         /// <param name="event"></param>
-        public async Task<bool> PublishAsync(IntegrationEvent @event)
+        public async Task<bool> PublishAsync(IntegrationEvent @event, string Topic = "")
         {
             try
             {
@@ -107,7 +107,7 @@ namespace Share.BaseCore.Kafka
                     {
                         WriteIndented = true
                     });
-                    var res = await producer.ProduceAsync(_topicName, new Message<string, byte[]> { Key = eventName, Value = body });
+                    var res = await producer.ProduceAsync(Topic ?? _topicName, new Message<string, byte[]> { Key = eventName, Value = body });
                     producer.Flush();
                     return true;
                 }
