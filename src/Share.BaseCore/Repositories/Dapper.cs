@@ -19,9 +19,9 @@ namespace Share.BaseCore.Repositories
         private readonly IConfiguration _config;
         private readonly string Connectionstring;
 
-        public Dapperr(IConfiguration config, string connectionstring)
+        public Dapperr(string connectionstring)
         {
-            _config = config;
+            _config = CommonHelper.Configuration ;
             Connectionstring = connectionstring;
         }
 

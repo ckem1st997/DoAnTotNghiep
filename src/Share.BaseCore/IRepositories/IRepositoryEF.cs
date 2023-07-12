@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Share.BaseCore;
@@ -17,21 +18,22 @@ namespace Share.BaseCore.IRepositories
         /// <summary>
         /// không tạo truy vấn lưu mà chỉ tạo khi cần thiết
         /// </summary>
-        public IQueryable<T> Queryable { get; }
-
-
+        IQueryable<T> GetQueryable(bool tracking=false);
         public IQueryable<T> GetBy(Expression<Func<T, bool>> predicate);
         public Task<IQueryable<T>> GetByAsync(Expression<Func<T, bool>> predicate);
         IEnumerable<T> GetList(Func<T, bool> filter = null);
         Task<T> GetFirstAsync(string id, CancellationToken cancellationToken = default(CancellationToken));
         Task<T> GetFirstAsyncAsNoTracking(string id, CancellationToken cancellationToken = default(CancellationToken));
         Task<T> AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
+        Task AddAsync(IEnumerable<T> entity, CancellationToken cancellationToken = default(CancellationToken));
         Task<IEnumerable<T>> ListAllAsync();
         Task<IEnumerable<T>> ListByListId(IEnumerable<string> ids);
         void Update(T entity);
+        void Update(IEnumerable<T> entity);
         public Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
 
         void Delete(T entity);
+        void Delete(IEnumerable<T> entity);
         void BulkInsert(IList<T> listEntity);
         Task BulkInsertAsync(IList<T> listEntity, CancellationToken cancellationToken = default(CancellationToken));
         void BulkUpdate(IList<T> listEntity);
@@ -40,5 +42,8 @@ namespace Share.BaseCore.IRepositories
         Task<int> BulkDeleteEditOnDeleteAsync(IEnumerable<string> listEntity, CancellationToken cancellationToken = default(CancellationToken));
 
         Task BulkInsertOrUpdateAsync(IList<T> listEntity, CancellationToken cancellationToken = default(CancellationToken));
+
+
+        Task<int> SaveChangesConfigureAwaitAsync(bool configure = false, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

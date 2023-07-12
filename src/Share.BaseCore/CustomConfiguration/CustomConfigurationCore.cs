@@ -72,11 +72,10 @@ namespace Share.BaseCore.CustomConfiguration
 
             services.AddScoped<IDapper, Dapperr>(sp =>
             {
-                var config = sp.GetRequiredService<IConfiguration>();
-                return new Dapperr(config, nameConnect);
+                return new Dapperr(nameConnect);
 
             });
-            services.AddScoped(typeof(GetServiceByInterface<>));
+         //   services.AddScoped(typeof(GetServiceByInterface<>));
 
 
         }
@@ -92,36 +91,36 @@ namespace Share.BaseCore.CustomConfiguration
         /// <param name="lifetime">The life time of the service.</param>
         /// <returns>Retruns <see cref="IServiceCollection"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="services"/> is <see langword="null"/>.</exception>
-        public static IServiceCollection AddGenericRepository<TDbContext>(
-            this IServiceCollection services,
-            ServiceLifetime lifetime = ServiceLifetime.Scoped)
-            where TDbContext : DbContext
-        {
-            if (services == null)
-            {
-                throw new ArgumentNullException(nameof(services));
-            }
+        //public static IServiceCollection AddGenericRepository<TDbContext>(
+        //    this IServiceCollection services,
+        //    ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        //    where TDbContext : DbContext
+        //{
+        //    if (services == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(services));
+        //    }
 
-            services.Add(new ServiceDescriptor(
-                typeof(IGenericRepository),
-                serviceProvider =>
-                {
-                    TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
-                    return new Repository<TDbContext>(dbContext);
-                },
-                lifetime));
+        //    services.Add(new ServiceDescriptor(
+        //        typeof(IGenericRepository),
+        //        serviceProvider =>
+        //        {
+        //            TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
+        //            return new Repository<TDbContext>(dbContext);
+        //        },
+        //        lifetime));
 
-            services.Add(new ServiceDescriptor(
-               typeof(IGenericRepository<TDbContext>),
-               serviceProvider =>
-               {
-                   TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
-                   return new Repository<TDbContext>(dbContext);
-               },
-               lifetime));
+        //    services.Add(new ServiceDescriptor(
+        //       typeof(IGenericRepository<TDbContext>),
+        //       serviceProvider =>
+        //       {
+        //           TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
+        //           return new Repository<TDbContext>(dbContext);
+        //       },
+        //       lifetime));
 
-            return services;
-        }
+        //    return services;
+        //}
 
 
 
@@ -134,38 +133,38 @@ namespace Share.BaseCore.CustomConfiguration
         /// <param name="lifetime">The life time of the service.</param>
         /// <returns>Retruns <see cref="IServiceCollection"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="services"/> is <see langword="null"/>.</exception>
-        public static IServiceCollection AddQueryRepository<TDbContext>(
-            this IServiceCollection services,
-            ServiceLifetime lifetime = ServiceLifetime.Scoped)
-            where TDbContext : DbContext
-        {
-            if (services == null)
-            {
-                throw new ArgumentNullException(nameof(services));
-            }
+        //public static IServiceCollection AddQueryRepository<TDbContext>(
+        //    this IServiceCollection services,
+        //    ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        //    where TDbContext : DbContext
+        //{
+        //    if (services == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(services));
+        //    }
 
-            services.Add(new ServiceDescriptor(
-                typeof(IQueryRepository),
-                serviceProvider =>
-                {
-                    TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
-                    dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-                    return new QueryRepository<TDbContext>(dbContext);
-                },
-                lifetime));
+        //    services.Add(new ServiceDescriptor(
+        //        typeof(IQueryRepository),
+        //        serviceProvider =>
+        //        {
+        //            TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
+        //            dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+        //            return new QueryRepository<TDbContext>(dbContext);
+        //        },
+        //        lifetime));
 
-            services.Add(new ServiceDescriptor(
-                typeof(IQueryRepository<TDbContext>),
-                serviceProvider =>
-                {
-                    TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
-                    dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-                    return new QueryRepository<TDbContext>(dbContext);
-                },
-                lifetime));
+        //    services.Add(new ServiceDescriptor(
+        //        typeof(IQueryRepository<TDbContext>),
+        //        serviceProvider =>
+        //        {
+        //            TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
+        //            dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+        //            return new QueryRepository<TDbContext>(dbContext);
+        //        },
+        //        lifetime));
 
-            return services;
-        }
+        //    return services;
+        //}
 
 
     }

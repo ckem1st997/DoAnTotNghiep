@@ -16,13 +16,11 @@ namespace WareHouse.API.Application.Queries.Paginated.Unit
     {
         private readonly IDapper _repository;
         private readonly IPaginatedList<UnitDTO> _list;
-        private readonly IQueryRepository _queryRepository;
 
-        public PaginatedUnitCommandHandler(IDapper repository, IPaginatedList<UnitDTO> list, IQueryRepository queryRepository)
+        public PaginatedUnitCommandHandler(IDapper repository, IPaginatedList<UnitDTO> list)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _list = list ?? throw new ArgumentNullException(nameof(list));
-            _queryRepository = queryRepository;
         }
 
         public async Task<IPaginatedList<UnitDTO>> Handle(PaginatedUnitCommand request,
@@ -60,10 +58,6 @@ namespace WareHouse.API.Application.Queries.Paginated.Unit
             //Console.WriteLine(jj);
             _list.Result = await _repository.GetList<UnitDTO>(sb.ToString(), parameter, CommandType.Text);
             _list.totalCount = await _repository.GetAyncFirst<int>(ValidatorString.GetSqlCount(sb.ToString(), SqlEnd: "order"), parameter, CommandType.Text);
-
-            var res = await _queryRepository.GetListAsync<WareHouse.Domain.Entity.Unit>();
-
-
             return _list;
         }
     }

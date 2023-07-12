@@ -17,6 +17,9 @@ namespace Share.BaseCore.Repositories
     public class RepositoryEF<T> : IRepositoryEF<T>
         where T : BaseEntity, new()
     {
+
+        //  _rep = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
+
         private readonly DbContext _context;
         private readonly DbSet<T> _dbSet;
         private readonly IQueryable<T> _query;
@@ -25,9 +28,9 @@ namespace Share.BaseCore.Repositories
             get { return _context; }
         }
 
-        public IQueryable<T> Queryable
+        public IQueryable<T> GetQueryable(bool tracking = false)
         {
-            get { return _query; }
+            return tracking ? _query : _query.AsNoTracking();
         }
 
         public RepositoryEF(DbContext context)
@@ -46,8 +49,6 @@ namespace Share.BaseCore.Repositories
             // ThrowIfDisposed();
             if (entity is null)
                 throw new BaseException(nameof(entity));
-            if (string.IsNullOrEmpty(entity.Id) || entity.Id.Length < 10)
-                entity.Id = Guid.NewGuid().ToString();
             return (await _dbSet.AddAsync(entity)).Entity;
         }
 
@@ -55,11 +56,6 @@ namespace Share.BaseCore.Repositories
         {
             if (entity is null)
                 throw new BaseException(nameof(entity));
-            //if (_context.Entry(entity).State == EntityState.Detached)
-            //{
-            //    _dbSet.Attach(entity);
-            //}
-
             _dbSet.Remove(entity);
         }
 
@@ -93,10 +89,6 @@ namespace Share.BaseCore.Repositories
         {
             if (entity is null)
                 throw new BaseException(nameof(entity));
-            _dbSet.Attach(entity);
-
-            //  entity.ConcurrencyStamp = Guid.NewGuid().ToString();
-
             _dbSet.Update(entity);
 
 
@@ -208,6 +200,34 @@ namespace Share.BaseCore.Repositories
         public async Task<IQueryable<T>> GetByAsync(Expression<Func<T, bool>> predicate)
         {
             return await Task.FromResult(_query.AsNoTracking().Where(predicate));
+        }
+
+
+        public async Task<int> SaveChangesConfigureAwaitAsync(bool configure = false, CancellationToken cancellationToken = default)
+        {
+            return await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(configure);
+
+        }
+
+        public async Task AddAsync(IEnumerable<T> entity, CancellationToken cancellationToken = default)
+        {
+            if (entity is null)
+                throw new BaseException(nameof(entity));
+            await _dbSet.AddRangeAsync(entity);
+        }
+
+        public void Update(IEnumerable<T> entity)
+        {
+            if (entity is null)
+                throw new BaseException(nameof(entity));
+            _dbSet.UpdateRange(entity);
+        }
+
+        public void Delete(IEnumerable<T> entity)
+        {
+            if (entity is null)
+                throw new BaseException(nameof(entity));
+            _dbSet.RemoveRange(entity);
         }
     }
     //    try {
