@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Autofac;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -70,16 +71,17 @@ namespace Share.BaseCore.CustomConfiguration
             services.AddScoped<DbContext, TDbContext>();
             //  services.AddScoped<DbContext, MasterdataContext>();
 
-            services.AddScoped<IDapper, Dapperr>(sp =>
-            {
-                return new Dapperr(nameConnect);
-
-            });
+           
          //   services.AddScoped(typeof(GetServiceByInterface<>));
 
 
         }
 
+        public static void AddDapper(this ContainerBuilder builder, string nameConnect)
+        {
+            builder.Register((c, p) =>
+                   new Dapperr(p.Named<string>(nameConnect))).As<IDapper>();
+        }
 
 
 
@@ -91,80 +93,80 @@ namespace Share.BaseCore.CustomConfiguration
         /// <param name="lifetime">The life time of the service.</param>
         /// <returns>Retruns <see cref="IServiceCollection"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="services"/> is <see langword="null"/>.</exception>
-        //public static IServiceCollection AddGenericRepository<TDbContext>(
-        //    this IServiceCollection services,
-        //    ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        //    where TDbContext : DbContext
-        //{
-        //    if (services == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(services));
-        //    }
+            //public static IServiceCollection AddGenericRepository<TDbContext>(
+            //    this IServiceCollection services,
+            //    ServiceLifetime lifetime = ServiceLifetime.Scoped)
+            //    where TDbContext : DbContext
+            //{
+            //    if (services == null)
+            //    {
+            //        throw new ArgumentNullException(nameof(services));
+            //    }
 
-        //    services.Add(new ServiceDescriptor(
-        //        typeof(IGenericRepository),
-        //        serviceProvider =>
-        //        {
-        //            TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
-        //            return new Repository<TDbContext>(dbContext);
-        //        },
-        //        lifetime));
+            //    services.Add(new ServiceDescriptor(
+            //        typeof(IGenericRepository),
+            //        serviceProvider =>
+            //        {
+            //            TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
+            //            return new Repository<TDbContext>(dbContext);
+            //        },
+            //        lifetime));
 
-        //    services.Add(new ServiceDescriptor(
-        //       typeof(IGenericRepository<TDbContext>),
-        //       serviceProvider =>
-        //       {
-        //           TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
-        //           return new Repository<TDbContext>(dbContext);
-        //       },
-        //       lifetime));
+            //    services.Add(new ServiceDescriptor(
+            //       typeof(IGenericRepository<TDbContext>),
+            //       serviceProvider =>
+            //       {
+            //           TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
+            //           return new Repository<TDbContext>(dbContext);
+            //       },
+            //       lifetime));
 
-        //    return services;
-        //}
-
-
+            //    return services;
+            //}
 
 
-        /// <summary>
-        /// Add generic query repository services to the .NET Dependency Injection container.
-        /// </summary>
-        /// <typeparam name="TDbContext">Your EF Core <see cref="DbContext"/>.</typeparam>
-        /// <param name="services">The type to be extended.</param>
-        /// <param name="lifetime">The life time of the service.</param>
-        /// <returns>Retruns <see cref="IServiceCollection"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="services"/> is <see langword="null"/>.</exception>
-        //public static IServiceCollection AddQueryRepository<TDbContext>(
-        //    this IServiceCollection services,
-        //    ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        //    where TDbContext : DbContext
-        //{
-        //    if (services == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(services));
-        //    }
 
-        //    services.Add(new ServiceDescriptor(
-        //        typeof(IQueryRepository),
-        //        serviceProvider =>
-        //        {
-        //            TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
-        //            dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-        //            return new QueryRepository<TDbContext>(dbContext);
-        //        },
-        //        lifetime));
 
-        //    services.Add(new ServiceDescriptor(
-        //        typeof(IQueryRepository<TDbContext>),
-        //        serviceProvider =>
-        //        {
-        //            TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
-        //            dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-        //            return new QueryRepository<TDbContext>(dbContext);
-        //        },
-        //        lifetime));
+            /// <summary>
+            /// Add generic query repository services to the .NET Dependency Injection container.
+            /// </summary>
+            /// <typeparam name="TDbContext">Your EF Core <see cref="DbContext"/>.</typeparam>
+            /// <param name="services">The type to be extended.</param>
+            /// <param name="lifetime">The life time of the service.</param>
+            /// <returns>Retruns <see cref="IServiceCollection"/>.</returns>
+            /// <exception cref="ArgumentNullException">Thrown if <paramref name="services"/> is <see langword="null"/>.</exception>
+            //public static IServiceCollection AddQueryRepository<TDbContext>(
+            //    this IServiceCollection services,
+            //    ServiceLifetime lifetime = ServiceLifetime.Scoped)
+            //    where TDbContext : DbContext
+            //{
+            //    if (services == null)
+            //    {
+            //        throw new ArgumentNullException(nameof(services));
+            //    }
 
-        //    return services;
-        //}
+            //    services.Add(new ServiceDescriptor(
+            //        typeof(IQueryRepository),
+            //        serviceProvider =>
+            //        {
+            //            TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
+            //            dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            //            return new QueryRepository<TDbContext>(dbContext);
+            //        },
+            //        lifetime));
+
+            //    services.Add(new ServiceDescriptor(
+            //        typeof(IQueryRepository<TDbContext>),
+            //        serviceProvider =>
+            //        {
+            //            TDbContext dbContext = ActivatorUtilities.CreateInstance<TDbContext>(serviceProvider);
+            //            dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            //            return new QueryRepository<TDbContext>(dbContext);
+            //        },
+            //        lifetime));
+
+            //    return services;
+            //}
 
 
     }
