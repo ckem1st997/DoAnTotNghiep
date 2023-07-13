@@ -13,6 +13,12 @@ namespace Share.BaseCore.Grpc
 {
     public static class ServiceAPIGrpc
     {
+        /// <summary>
+        /// GrpcGetData.GrpcGetDataClient
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
         public static void AddApiGrpc<T>(this IServiceCollection services, IConfiguration configuration) where T : class
         {
             services.AddGrpc(options =>
