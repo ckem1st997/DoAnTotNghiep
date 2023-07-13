@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 namespace Share.BaseCore.IRepositories
 {
 
-
+    /// <summary>
+    /// để tạm không bị lỗi
+    /// </summary>
     public interface IDapper : IDisposable
     {
         DbConnection GetDbconnection();

@@ -77,11 +77,7 @@ namespace Share.BaseCore.CustomConfiguration
 
         }
 
-        public static void AddDapper(this ContainerBuilder builder, string nameConnect)
-        {
-            builder.Register((c, p) =>
-                   new Dapperr(p.Named<string>(nameConnect))).As<IDapper>();
-        }
+      
 
 
 

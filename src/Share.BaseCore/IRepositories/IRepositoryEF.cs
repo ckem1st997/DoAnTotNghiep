@@ -2,17 +2,34 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Share.BaseCore;
+using static Dapper.SqlMapper;
 
 namespace Share.BaseCore.IRepositories
 {
-    public partial interface IRepositoryEF<T> where T : BaseEntity
+
+    public interface IDapperEF : IDisposable
+    {
+        DbConnection GetDbconnection();
+        Task<T1> QueryFirstOrDefaultAsync<T1>(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure);
+        T1 QueryFirst<T1>(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure);
+        Task<IEnumerable<T1>> QueryAsync<T1>(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure);
+        IEnumerable<T1> Query<T1>(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure);
+        Task<GridReader> QueryMultipleAsync(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure);
+        GridReader QueryMultiple(string sp, DynamicParameters parms, CommandType commandType = CommandType.StoredProcedure);
+
+    }
+
+    public partial interface IRepositoryEF<T>: IDapperEF where T : BaseEntity
     {
         public DbContext UnitOfWork { get; }
         /// <summary>
@@ -45,5 +62,6 @@ namespace Share.BaseCore.IRepositories
 
 
         Task<int> SaveChangesConfigureAwaitAsync(bool configure = false, CancellationToken cancellationToken = default(CancellationToken));
+       
     }
 }

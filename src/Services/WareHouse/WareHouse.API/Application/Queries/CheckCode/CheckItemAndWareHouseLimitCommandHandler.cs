@@ -17,11 +17,10 @@ namespace WareHouse.API.Application.Querie.CheckCode
     public class
         CheckItemAndWareHouseLimitCommandHandler : IRequestHandler<CheckItemAndWareHouseLimitCommand, bool>
     {
-        private readonly IDapper _repository;
+        private readonly IRepositoryEF<Domain.Entity.Audit> _repository;
 
-        public CheckItemAndWareHouseLimitCommandHandler(IDapper repository)
+        public CheckItemAndWareHouseLimitCommandHandler()
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         public async Task<bool> Handle(CheckItemAndWareHouseLimitCommand request,
@@ -33,7 +32,7 @@ namespace WareHouse.API.Application.Querie.CheckCode
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@key1", request.ItemId);
             parameter.Add("@key2", request.WareHouseId);
-            var res = await _repository.GetAyncFirst<BaseModel>(sql, parameter, CommandType.Text);
+            var res = await _repository.QueryFirstOrDefaultAsync<BaseModel>(sql, parameter, CommandType.Text);
             return res != null;
         }
     }

@@ -17,11 +17,11 @@ namespace WareHouse.API.Application.Querie.CheckCode
     }
     public class GetConvertRateByIdItemCommandHandler : IRequestHandler<GetConvertRateByIdItemCommand, int>
     {
-        private readonly IDapper _repository;
+        private readonly IRepositoryEF<Domain.Entity.Audit> _repository;
 
-        public GetConvertRateByIdItemCommandHandler(IDapper repository)
+
+        public GetConvertRateByIdItemCommandHandler(IDapperEF repository)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         public async Task<int> Handle(GetConvertRateByIdItemCommand request,
@@ -33,7 +33,7 @@ namespace WareHouse.API.Application.Querie.CheckCode
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@key1", request.IdItem);
             parameter.Add("@key2", request.IdUnit);
-            var res = await _repository.GetAyncFirst<int>(sql, parameter, CommandType.Text);
+            var res = await _repository.QueryFirstOrDefaultAsync<int>(sql, parameter, CommandType.Text);
             return res;
         }
     }
