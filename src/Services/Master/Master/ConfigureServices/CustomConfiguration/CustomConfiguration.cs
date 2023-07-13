@@ -30,10 +30,13 @@ namespace Master.ConfigureServices.CustomConfiguration
     {
         public static void AddCustomConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddCustomConfigurationCore<AuthorizeMasterController, MasterdataContext, Startup>(configuration, "MasterdataContext");
             services.AddScoped<IUserService, UserService>();
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
             services.AddMediatR(Assembly.GetExecutingAssembly());
+
+            services.AddCustomConfigurationCore<MasterdataContext, Startup>(configuration, "MasterdataContext");
+            services.AddConfigurationCoreFilter<Startup>();
+            services.AddSwaggerCore();
         }
 
     }

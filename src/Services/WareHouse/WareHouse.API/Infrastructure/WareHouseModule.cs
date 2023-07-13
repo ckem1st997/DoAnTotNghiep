@@ -10,6 +10,8 @@ using System;
 using WareHouse.Infrastructure;
 using Nest;
 using Share.BaseCore.IRepositories;
+using Share.BaseCore.CustomConfiguration;
+using Infrastructure;
 
 namespace WareHouse.API.Infrastructure
 {
@@ -24,34 +26,46 @@ namespace WareHouse.API.Infrastructure
             builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().InstancePerLifetimeScope();
             builder.RegisterType<BaseEngine>().As<IEngine>().SingleInstance();
             //
-            builder.RegisterType<WarehouseManagementContext>()
-                 .Named<DbContext>(DataConnectionHelper.ConnectionStringNames.Warehouse)
-                 .InstancePerDependency();
+            //builder.RegisterType<WarehouseManagementContext>()
+            //     .Named<DbContext>(DataConnectionHelper.ConnectionStringNames.Warehouse)
+            //     .InstancePerDependency();
+
+            builder.AddDbContext<WarehouseManagementContext>(DataConnectionHelper.ConnectionStringNames.Warehouse);
+            //   builder.AddDbContext<MasterdataContext>(DataConnectionHelper.ConnectionStringNames.Master);
 
             // mulplite connect to dbcontext
             //builder.RegisterType<MasterdataContext>()
             //    .Named<DbContext>(DataConnectionHelper.ConnectionStringNames.Master)
             //    .InstancePerDependency();
+
+
             // Register resolving delegate 
-            builder.Register<Func<string, DbContext>>(c =>
-            {
-                var cc = c.Resolve<IComponentContext>();
-                return connectionStringName => cc.ResolveNamed<DbContext>(connectionStringName);
-            });
-            builder.Register<Func<string, Lazy<DbContext>>>(c =>
-            {
-                var cc = c.Resolve<IComponentContext>();
-                return connectionStringName => cc.ResolveNamed<Lazy<DbContext>>(connectionStringName);
-            });
+            //builder.Register<Func<string, DbContext>>(c =>
+            //{
+            //    var cc = c.Resolve<IComponentContext>();
+            //    return connectionStringName => cc.ResolveNamed<DbContext>(connectionStringName);
+            //});
+            //builder.Register<Func<string, Lazy<DbContext>>>(c =>
+            //{
+            //    var cc = c.Resolve<IComponentContext>();
+            //    return connectionStringName => cc.ResolveNamed<Lazy<DbContext>>(connectionStringName);
+            //});
+
+            builder.AddRegisterDbContext(true);
             //
             // ef core
-            builder.RegisterGeneric(typeof(RepositoryEF<>))
-                  .Named(DataConnectionHelper.ConnectionStringNames.Warehouse, typeof(IRepositoryEF<>))
-                  .WithParameter(new ResolvedParameter(
-                      // kiểu truyền vào và tên biến truyền vào qua hàm khởi tạo
-                      (pi, ctx) => pi.ParameterType == typeof(DbContext) && pi.Name == DataConnectionHelper.ParameterName,
-                      (pi, ctx) => EngineContext.Current.Resolve<DbContext>(DataConnectionHelper.ConnectionStringNames.Warehouse)))
-            .InstancePerLifetimeScope();
+
+            builder.AddGeneric(DataConnectionHelper.ConnectionStringNames.Warehouse, DataConnectionHelper.ParameterName);
+            //   builder.AddGeneric(DataConnectionHelper.ConnectionStringNames.Master, DataConnectionHelper.ParameterName);
+
+            //builder.RegisterGeneric(typeof(RepositoryEF<>))
+            //      .Named(DataConnectionHelper.ConnectionStringNames.Warehouse, typeof(IRepositoryEF<>))
+            //      .WithParameter(new ResolvedParameter(
+            //          // kiểu truyền vào và tên biến truyền vào qua hàm khởi tạo
+            //          (pi, ctx) => pi.ParameterType == typeof(DbContext) && pi.Name == DataConnectionHelper.ParameterName,
+            //          (pi, ctx) => EngineContext.Current.Resolve<DbContext>(DataConnectionHelper.ConnectionStringNames.Warehouse)))
+            //.InstancePerLifetimeScope();
+
 
             // mulplite connect to dbcontext
             //builder.RegisterGeneric(typeof(RepositoryEF<>))
@@ -77,5 +91,5 @@ namespace WareHouse.API.Infrastructure
     }
 
 
-  
+
 }

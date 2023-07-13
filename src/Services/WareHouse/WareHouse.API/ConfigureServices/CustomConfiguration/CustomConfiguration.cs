@@ -51,13 +51,10 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
 
-            services.AddCustomConfigurationCore<WareHousesController, WarehouseManagementContext, Startup>(configuration, "WarehouseManagementContext");
-
+            services.AddCustomConfigurationCore<WarehouseManagementContext, Startup>(configuration, "WarehouseManagementContext");
+            services.AddConfigurationCoreFilter<Startup>();
+            services.AddSwaggerCore();
         }
 
-        public static void ConfigureDBContext(this ContainerBuilder builder)
-        {
-
-        }
     }
 }
