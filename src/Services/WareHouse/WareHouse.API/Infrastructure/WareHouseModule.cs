@@ -31,7 +31,7 @@ namespace WareHouse.API.Infrastructure
             //     .InstancePerDependency();
 
             builder.AddDbContext<WarehouseManagementContext>(DataConnectionHelper.ConnectionStringNames.Warehouse);
-            //   builder.AddDbContext<MasterdataContext>(DataConnectionHelper.ConnectionStringNames.Master);
+            builder.AddDbContext<MasterdataContext>(DataConnectionHelper.ConnectionStringNames.Master);
 
             // mulplite connect to dbcontext
             //builder.RegisterType<MasterdataContext>()
@@ -56,7 +56,7 @@ namespace WareHouse.API.Infrastructure
             // ef core
 
             builder.AddGeneric(DataConnectionHelper.ConnectionStringNames.Warehouse, DataConnectionHelper.ParameterName);
-            //   builder.AddGeneric(DataConnectionHelper.ConnectionStringNames.Master, DataConnectionHelper.ParameterName);
+            builder.AddGeneric(DataConnectionHelper.ConnectionStringNames.Master, DataConnectionHelper.ParameterName);
 
             //builder.RegisterGeneric(typeof(RepositoryEF<>))
             //      .Named(DataConnectionHelper.ConnectionStringNames.Warehouse, typeof(IRepositoryEF<>))

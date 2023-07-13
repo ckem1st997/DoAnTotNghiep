@@ -51,7 +51,10 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
 
-            services.AddCustomConfigurationCore<WarehouseManagementContext, Startup>(configuration, "WarehouseManagementContext");
+            services.AddCustomConfigurationCore<WarehouseManagementContext, Startup>(configuration, DataConnectionHelper.ConnectionString.Warehouse);
+            services.AddCustomConfigurationCore<MasterdataContext, Startup>(configuration, DataConnectionHelper.ConnectionString.Master);
+
+
             services.AddConfigurationCoreFilter<Startup>();
             services.AddSwaggerCore();
         }

@@ -17,6 +17,17 @@ namespace Share.BaseCore.Extensions
             public const string Dashboard = "Dashboard";
             public const string File = "File";
             public const string Notify = "Notify";
+        }       
+        
+        public static class ConnectionString
+        {
+            public const string Master = "MasterDataContext";
+            public const string Warehouse = "WarehouseManagementContext";
+            public const string Asset = "Asset";
+            public const string Ticket = "Ticket";
+            public const string Dashboard = "Dashboard";
+            public const string File = "File";
+            public const string Notify = "Notify";
         }
         // name biến truyền qua hàm khơir tạo
         public const string ParameterName = "context";

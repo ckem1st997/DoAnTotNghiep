@@ -1,3 +1,4 @@
+using Share.BaseCore.IRepositories;
 using System;
 
 namespace Share.BaseCore.Extensions
@@ -17,6 +18,12 @@ namespace Share.BaseCore.Extensions
         {
             var date = DateTime.Now;
             return name + date.Year.ToString() + date.Month.ToString() + date.Day.ToString() + date.Hour.ToString() + date.Minute.ToString() + date.Second.ToString() + date.Millisecond.ToString();
+        }
+
+
+        public static IRepositoryEF<T> ResolveRepository<T>(string ConnectionStringNames) where T : BaseEntity
+        {
+            return EngineContext.Current.Resolve<IRepositoryEF<T>>(ConnectionStringNames);
         }
     }
 }

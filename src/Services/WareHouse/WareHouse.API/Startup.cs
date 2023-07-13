@@ -84,7 +84,7 @@ namespace WareHouse.API
             services.AddApiAuthentication();
             services.AddApiCors();
             services.AddServiceConfigImplementAPI();
-            services.AddHostedService<QueueHostedTaskService>();
+          //  services.AddHostedService<QueueHostedTaskService>();
 
             //  services.AddHostedService<RequestTimeConsumer>();
 
