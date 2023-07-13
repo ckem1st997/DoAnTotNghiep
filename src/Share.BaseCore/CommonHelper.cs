@@ -327,22 +327,12 @@ namespace Share.BaseCore
 
         #region Properties
 
-        /// <summary>
-        /// Gets or sets the default file provider
-        /// </summary>
-        public static IBaseFileProvider DefaultFileProvider { get; set; }
-
         public static IConfiguration Configuration { get; set; }
 
         //public static IWebHostEnvironment WebHostEnvironment { get; set; }
 
         public static List<string> ApplicationParts { get; set; } = new List<string>();
 
-        //   public static HostingConfig HostingConfig { get; set; }
-
-        public static BaseSsoConfig BaseConfig { get; set; }
-
-        //public static SsoConfig SsoConfig { get; set; }
 
         //public static ElasticConfig ElasticConfig { get; set; }
 

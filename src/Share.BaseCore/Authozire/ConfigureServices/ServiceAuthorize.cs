@@ -25,10 +25,6 @@ namespace Share.BaseCore.Authozire.ConfigureServices
 {
     public static class ServiceAuthorize
     {
-        public static void InitAppSettings(this IServiceCollection services, IConfiguration configuration)
-        {
-            CommonHelper.BaseConfig = configuration.GetSection("JWT").Get<BaseSsoConfig>();
-        }
         public static void AddApiAuthentication(this IServiceCollection services)
         {
             services.AddApiVersioning(x =>
