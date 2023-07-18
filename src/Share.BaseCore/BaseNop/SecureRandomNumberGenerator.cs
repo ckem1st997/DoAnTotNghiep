@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore
+namespace Share.BaseCore.BaseNop
 {
     public class SecureRandomNumberGenerator : RandomNumberGenerator
     {

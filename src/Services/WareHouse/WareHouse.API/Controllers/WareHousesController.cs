@@ -25,7 +25,7 @@ using Nest;
 using WareHouse.API.Application.Queries.Paginated.WareHouseBook;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Infrastructure.ElasticSearch;
-
+using Share.BaseCore.BaseNop;
 
 namespace WareHouse.API.Controllers
 {

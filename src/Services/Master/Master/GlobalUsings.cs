@@ -15,3 +15,4 @@ global using GrpcGetDataToMaster;
 global using Microsoft.AspNetCore.Authorization;
 global using KafKa.Net;
 global using Microsoft.Extensions.Logging;
+global using Share.BaseCore.BaseNop;

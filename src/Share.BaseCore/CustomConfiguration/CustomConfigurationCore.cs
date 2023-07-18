@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using Nest;
 using Serilog;
 using Share.BaseCore.Authozire;
+using Share.BaseCore.BaseNop;
 using Share.BaseCore.Extensions;
 using Share.BaseCore.Filters;
 using Share.BaseCore.IRepositories;

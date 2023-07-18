@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Share.BaseCore.Behaviors;
 using Share.BaseCore.Repositories;
-using Share.BaseCore;
 using System;
 using WareHouse.Infrastructure;
 using Nest;
 using Share.BaseCore.IRepositories;
 using Share.BaseCore.CustomConfiguration;
 using Infrastructure;
+using Share.BaseCore.BaseNop;
 
 namespace WareHouse.API.Infrastructure
 {

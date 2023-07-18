@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore
+namespace Share.BaseCore.BaseNop
 {
     /// <summary>
     /// // dùng IAggregateRoot là vì: giả sở mình có entity Order, trong Order có Address, List<Product>

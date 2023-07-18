@@ -9,11 +9,11 @@ using Dapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Share.BaseCore.Extensions;
-using Share.BaseCore;
 using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;
 using WareHouse.Domain.Entity;
+using Share.BaseCore.BaseNop;
 
 namespace WareHouse.API.Application.Queries.GetAll.WareHouses
 {

@@ -1,4 +1,4 @@
-﻿using Share.BaseCore;
+﻿using Share.BaseCore.BaseNop;
 using System;
 using System.Collections.Generic;
 using System.Linq;

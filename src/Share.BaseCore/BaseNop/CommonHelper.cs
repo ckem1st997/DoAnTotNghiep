@@ -11,7 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore
+namespace Share.BaseCore.BaseNop
 {
     /// <summary>
     /// Represents a common helper

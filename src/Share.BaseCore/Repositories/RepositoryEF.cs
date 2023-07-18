@@ -7,7 +7,6 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using EFCore.BulkExtensions;
-using Share.BaseCore;
 using Share.BaseCore.IRepositories;
 using Nest;
 using System.Data.Common;
@@ -16,6 +15,7 @@ using Confluent.Kafka;
 using Microsoft.Data.SqlClient;
 using StackExchange.Redis;
 using static Dapper.SqlMapper;
+using Share.BaseCore.BaseNop;
 
 namespace Share.BaseCore.Repositories
 {

@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Share.BaseCore.BaseNop;
 using System;
 using System.Collections.Generic;
 using System.Linq;

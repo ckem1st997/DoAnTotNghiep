@@ -5,3 +5,4 @@ global using Share.BaseCore.Authozire;
 global using Share.BaseCore.StackAndQueue;
 global using HotChocolate;
 global using HotChocolate.AspNetCore;
+global using Share.BaseCore.BaseNop;

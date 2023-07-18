@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore
+namespace Share.BaseCore.BaseNop
 {
     public class FancytreeItem
     {
@@ -97,6 +97,6 @@ namespace Share.BaseCore
 
         public int level { get; set; }
 
-        public FancytreeItem() => this.children = (IList<FancytreeItem>)new List<FancytreeItem>();
+        public FancytreeItem() => children = new List<FancytreeItem>();
     }
 }

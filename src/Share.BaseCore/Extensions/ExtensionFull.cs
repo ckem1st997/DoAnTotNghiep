@@ -1,3 +1,4 @@
+using Share.BaseCore.BaseNop;
 using Share.BaseCore.IRepositories;
 using System;
 

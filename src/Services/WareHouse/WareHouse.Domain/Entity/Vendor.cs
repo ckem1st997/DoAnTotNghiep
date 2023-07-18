@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Share.BaseCore;
+using Share.BaseCore.BaseNop;
 
 #nullable disable
 

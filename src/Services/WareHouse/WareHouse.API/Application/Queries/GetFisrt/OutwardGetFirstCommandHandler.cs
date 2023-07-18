@@ -2,13 +2,13 @@
 using Infrastructure;
 using MediatR;
 using Share.BaseCore.Extensions;
-using Share.BaseCore;
 using Share.BaseCore.IRepositories;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Model;
 using WareHouse.Domain.Entity;
+using Share.BaseCore.BaseNop;
 
 namespace WareHouse.API.Application.Queries.GetFisrt
 {

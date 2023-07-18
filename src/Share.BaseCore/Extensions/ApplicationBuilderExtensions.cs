@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Share.BaseCore;
+using Share.BaseCore.BaseNop;
 using System;
 using System.Globalization;
 using System.Linq;

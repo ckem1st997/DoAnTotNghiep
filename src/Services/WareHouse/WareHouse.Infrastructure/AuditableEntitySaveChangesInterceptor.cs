@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WareHouse.Domain.Entity;
 using Share.BaseCore.Extensions;
-using Share.BaseCore;
+using Share.BaseCore.BaseNop;
 
 namespace WareHouse.Infrastructure
 {

@@ -11,8 +11,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
-using Share.BaseCore;
 using static Dapper.SqlMapper;
+using Share.BaseCore.BaseNop;
 
 namespace Share.BaseCore.IRepositories
 {
@@ -29,11 +29,17 @@ namespace Share.BaseCore.IRepositories
 
     }
 
+
+    /// <summary>
+    /// nếu chạy đồng bộ thì GetQueryable và Table nhanh hơn Dapper 8 lần. 
+    /// Nếu chạy bất đồng bộ thì Dapper nhanh hơn GetQueryable và Table nhanh hơn 8 lần
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial interface IRepositoryEF<T>: IDapperEF where T : BaseEntity
     {
         public DbContext UnitOfWork { get; }
         /// <summary>
-        /// không tạo truy vấn lưu mà chỉ tạo khi cần thiết
+        /// không tạo truy vấn lưu mà chỉ tạo khi cần thiết nhanh hơn Table
         /// </summary>
         IQueryable<T> GetQueryable(bool tracking=false);
         IQueryable<T> Table { get; }
