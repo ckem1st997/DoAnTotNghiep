@@ -20,12 +20,12 @@ namespace Share.BaseCore.IRepositories
     public interface IDapperEF : IDisposable
     {
         DbConnection GetDbconnection();
-        Task<T1> QueryFirstOrDefaultAsync<T1>(string sp, DynamicParameters parms = null, CommandType commandType = CommandType.StoredProcedure);
-        T1 QueryFirst<T1>(string sp, DynamicParameters parm = null, CommandType commandType = CommandType.StoredProcedure);
-        Task<IEnumerable<T1>> QueryAsync<T1>(string sp, DynamicParameters parms=null, CommandType commandType = CommandType.StoredProcedure);
-        IEnumerable<T1> Query<T1>(string sp, DynamicParameters parms = null, CommandType commandType = CommandType.StoredProcedure);
-        Task<GridReader> QueryMultipleAsync(string sp, DynamicParameters parms = null, CommandType commandType = CommandType.StoredProcedure);
-        GridReader QueryMultiple(string sp, DynamicParameters parms = null, CommandType commandType = CommandType.StoredProcedure);
+        Task<T1> QueryFirstOrDefaultAsync<T1>(string sp, DynamicParameters parms = null, CommandType commandType = CommandType.Text);
+        T1 QueryFirst<T1>(string sp, DynamicParameters parm = null, CommandType commandType = CommandType.Text);
+        Task<IEnumerable<T1>> QueryAsync<T1>(string sp, DynamicParameters parms=null, CommandType commandType = CommandType.Text);
+        IEnumerable<T1> Query<T1>(string sp, DynamicParameters parms = null, CommandType commandType = CommandType.Text);
+        Task<GridReader> QueryMultipleAsync(string sp, DynamicParameters parms = null, CommandType commandType = CommandType.Text);
+        GridReader QueryMultiple(string sp, DynamicParameters parms = null, CommandType commandType = CommandType.Text);
 
     }
 
@@ -36,6 +36,7 @@ namespace Share.BaseCore.IRepositories
         /// không tạo truy vấn lưu mà chỉ tạo khi cần thiết
         /// </summary>
         IQueryable<T> GetQueryable(bool tracking=false);
+        IQueryable<T> Table { get; }
         public IQueryable<T> GetBy(Expression<Func<T, bool>> predicate);
         public Task<IQueryable<T>> GetByAsync(Expression<Func<T, bool>> predicate);
         IEnumerable<T> GetList(Func<T, bool> filter = null);

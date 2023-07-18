@@ -40,6 +40,7 @@ namespace Share.BaseCore.Repositories
         {
             return tracking ? _query : _query.AsNoTracking();
         }
+        public IQueryable<T> Table => _query.AsNoTracking();
 
         public RepositoryEF(DbContext context)
         {
@@ -127,6 +128,8 @@ namespace Share.BaseCore.Repositories
 
 
         public bool AutoSaveChanges { get; set; } = true;
+
+
         protected virtual async Task<bool> SaveChanges(CancellationToken cancellationToken)
         {
             if (AutoSaveChanges)
@@ -244,38 +247,38 @@ namespace Share.BaseCore.Repositories
             return new SqlConnection(_connectionstring);
         }
 
-        public async Task<T1> QueryFirstOrDefaultAsync<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.StoredProcedure)
+        public async Task<T1> QueryFirstOrDefaultAsync<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
             using var connection = new SqlConnection(_connectionstring);
             return await connection.QueryFirstOrDefaultAsync<T1>(sp, parms, commandType: commandType);
         }
 
-        public T1 QueryFirst<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.StoredProcedure)
+        public T1 QueryFirst<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
             using var connection = new SqlConnection(_connectionstring);
             return connection.QueryFirst<T1>(sp, parms, commandType: commandType);
         }
 
-        public async Task<IEnumerable<T1>> QueryAsync<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.StoredProcedure)
+        public async Task<IEnumerable<T1>> QueryAsync<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
             using var connection = new SqlConnection(_connectionstring);
             return await connection.QueryAsync<T1>(sp, parms, commandType: commandType);
         }     
         
-        public IEnumerable<T1> Query<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.StoredProcedure)
+        public IEnumerable<T1> Query<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
             using var connection = new SqlConnection(_connectionstring);
             return  connection.Query<T1>(sp, parms, commandType: commandType);
         }
 
-        public async Task<GridReader> QueryMultipleAsync(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.StoredProcedure)
+        public async Task<GridReader> QueryMultipleAsync(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
             using var connection = new SqlConnection(_connectionstring);
             return await connection.QueryMultipleAsync(sp, param: parms, commandType: commandType);
         }
 
 
-        public GridReader QueryMultiple(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.StoredProcedure)
+        public GridReader QueryMultiple(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
             using var connection = new SqlConnection(_connectionstring);
             return connection.QueryMultiple(sp, param: parms, commandType: commandType);
