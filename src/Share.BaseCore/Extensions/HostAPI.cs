@@ -49,8 +49,7 @@ namespace Share.BaseCore.Extensions
 
         public static void LogStartUp<T>(string[] args, int portHttp1AndHttp2, int portHttp2) where T : class
         {
-            Log.Information("Starting up");
-            Log.Information(getEnv);
+            Log.Information("Starting up: "+ getEnv);
             CreateHostBuilder<T>(args, portHttp1AndHttp2, portHttp2).Build().Run();
             WebApplication.CreateBuilder(new WebApplicationOptions
             {

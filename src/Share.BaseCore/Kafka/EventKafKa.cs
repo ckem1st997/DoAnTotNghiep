@@ -108,6 +108,7 @@ namespace Share.BaseCore.Kafka
                         WriteIndented = true
                     });
                     var res = await producer.ProduceAsync(Topic ?? _topicName, new Message<string, byte[]> { Key = eventName, Value = body });
+                    Log.Information($"Message sent (value: {res.Value}), topic: {res.Topic}, partition: {res.Partition}, offset: {res.Offset}");
                     producer.Flush();
                     return true;
                 }
