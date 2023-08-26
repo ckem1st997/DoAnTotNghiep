@@ -34,7 +34,7 @@ namespace Master.ConfigureServices.CustomConfiguration
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
-            services.AddCustomConfigurationCore<MasterdataContext, Startup>(configuration, "MasterdataContext");
+            services.AddDataBaseContext<MasterdataContext>(configuration, "MasterdataContext");
             services.AddConfigurationCoreFilter<Startup>();
             services.AddSwaggerCore();
         }

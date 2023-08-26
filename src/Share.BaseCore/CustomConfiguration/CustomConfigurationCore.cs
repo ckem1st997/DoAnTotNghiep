@@ -30,7 +30,7 @@ namespace Share.BaseCore.CustomConfiguration
 {
     public static class CustomConfigurationCore
     {
-        public static void AddCustomConfigurationCore<TDbContext>(this IServiceCollection services, IConfiguration configuration, string nameConnect, DatabaseType dbType = DatabaseType.MSSQL) where TDbContext : DbContext
+        public static void AddDataBaseContext<TDbContext>(this IServiceCollection services, IConfiguration configuration, string nameConnect, DatabaseType dbType = DatabaseType.MSSQL) where TDbContext : DbContext
         {
             var sqlConnect = configuration.GetConnectionString(nameConnect);
             services.AddDbContextPool<TDbContext>(options =>
