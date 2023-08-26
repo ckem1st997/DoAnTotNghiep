@@ -5,21 +5,21 @@ namespace WareHouse.API.Application.Queries.BaseModel
 {
     public class BaseSearchModel
     {
-        
-         [DataMember]
+
+        [DataMember]
         public string KeySearch { get; set; }
 
-        [DataMember] 
+        [DataMember]
         public bool? Active { get; set; }
-        
-        
-        [DataMember]
-       // [Range(typeof(int), "1", "1000")]
-        public int Skip { get; set; }=0;
 
 
         [DataMember]
-     //   [Range(typeof(int), "1", "1000")]
-        public int Take { get; set; }=1000;
+        // [Range(typeof(int), "1", "1000")]
+        public int Skip { get; set; } = 0;
+
+
+        [DataMember]
+        //   [Range(typeof(int), "1", "1000")]
+        public int Take { get; set; } = 1000;
     }
 }

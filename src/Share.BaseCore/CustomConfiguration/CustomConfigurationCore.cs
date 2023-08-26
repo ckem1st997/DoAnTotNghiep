@@ -13,6 +13,7 @@ using Nest;
 using Serilog;
 using Share.BaseCore.Authozire;
 using Share.BaseCore.BaseNop;
+using Share.BaseCore.Enum;
 using Share.BaseCore.Extensions;
 using Share.BaseCore.Filters;
 using Share.BaseCore.IRepositories;
@@ -20,6 +21,7 @@ using Share.BaseCore.Repositories;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -29,7 +31,7 @@ namespace Share.BaseCore.CustomConfiguration
 {
     public static class CustomConfigurationCore
     {
-        public static void AddCustomConfigurationCore<TDbContext, TStartUp>(this IServiceCollection services, IConfiguration configuration, string nameConnect) where TDbContext : DbContext
+        public static void AddCustomConfigurationCore<TDbContext>(this IServiceCollection services, IConfiguration configuration, string nameConnect, DatabaseType dbType = DatabaseType.MSSQL) where TDbContext : DbContext
         {
             var sqlConnect = configuration.GetConnectionString(nameConnect);
             services.AddDbContextPool<TDbContext>(options =>
@@ -37,7 +39,7 @@ namespace Share.BaseCore.CustomConfiguration
                 options.UseSqlServer(sqlConnect,
                     sqlServerOptionsAction: sqlOptions =>
                     {
-                        sqlOptions.MigrationsAssembly(typeof(TStartUp).GetTypeInfo().Assembly.GetName().Name);
+                        sqlOptions.MigrationsAssembly(typeof(TDbContext).GetTypeInfo().Assembly.GetName().Name);
                         // sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                     });
                 options.LogTo(Log.Information, Microsoft.Extensions.Logging.LogLevel.Information, Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging();
@@ -46,13 +48,8 @@ namespace Share.BaseCore.CustomConfiguration
             );
 
             // Register dynamic dbContext
-            services.AddScoped<DbContext, TDbContext>();
+            //  services.AddScoped<DbContext, TDbContext>();
 
-        }
-
-        public static void AddGeneric(this IServiceCollection services)
-        {
-            services.AddScoped(typeof(IRepositoryEF<>), typeof(RepositoryEF<>));
         }
 
         public static void AddGeneric(this ContainerBuilder builder, string ConnectionStringNames, string ParameterName)
