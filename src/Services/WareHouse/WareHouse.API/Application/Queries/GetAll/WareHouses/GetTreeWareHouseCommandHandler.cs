@@ -28,13 +28,11 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
     public class
         GetTreeWareHouseCommandHandler : IRequestHandler<GetTreeWareHouseCommand, IEnumerable<WareHousesTreeModel>>
     {
-        private readonly IDapper _repository;
         private readonly IRepositoryEF<Domain.Entity.WareHouse> _rep;
         public readonly IUserSevice _context;
 
-        public GetTreeWareHouseCommandHandler(IUserSevice context, IDapper repository)
+        public GetTreeWareHouseCommandHandler(IUserSevice context)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _rep = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
             _context = context;
         }
@@ -173,8 +171,7 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
                     DynamicParameters parameterwh = new DynamicParameters();
                     Console.WriteLine(GetListChidren.ToString());
                     departmentIds =
-                        (List<string>)await _repository.GetList<string>(GetListChidren.ToString(), null,
-                            CommandType.Text);
+                        (List<string>)await _rep.QueryAsync<string>(GetListChidren.ToString(), null,CommandType.Text);
                     wareHouses = WareHouseDTOs.Where(x => departmentIds.Contains(x.Id)).ToList();
 
                 }

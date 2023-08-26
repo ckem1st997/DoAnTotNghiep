@@ -13,7 +13,6 @@ using Nest;
 using Serilog;
 using Share.BaseCore.Authozire;
 using Share.BaseCore.BaseNop;
-using Share.BaseCore.Enum;
 using Share.BaseCore.Extensions;
 using Share.BaseCore.Filters;
 using Share.BaseCore.IRepositories;

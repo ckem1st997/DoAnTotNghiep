@@ -40,6 +40,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareImplemention", "src\Sh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareModels", "src\ShareModels\ShareModels.csproj", "{74E61B00-7C6B-44DE-9474-08A65FDF8B59}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Share.Base.Core", "Share.Base.Core\Share.Base.Core.csproj", "{B703F001-0BFF-4A89-9C76-2B96E47B0D89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Share.Base.Data", "Share.Base.Data\Share.Base.Data.csproj", "{A212A5B4-4089-4EF5-A8AB-70B501466548}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +94,14 @@ Global
 		{74E61B00-7C6B-44DE-9474-08A65FDF8B59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74E61B00-7C6B-44DE-9474-08A65FDF8B59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74E61B00-7C6B-44DE-9474-08A65FDF8B59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B703F001-0BFF-4A89-9C76-2B96E47B0D89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B703F001-0BFF-4A89-9C76-2B96E47B0D89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B703F001-0BFF-4A89-9C76-2B96E47B0D89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B703F001-0BFF-4A89-9C76-2B96E47B0D89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A212A5B4-4089-4EF5-A8AB-70B501466548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A212A5B4-4089-4EF5-A8AB-70B501466548}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A212A5B4-4089-4EF5-A8AB-70B501466548}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A212A5B4-4089-4EF5-A8AB-70B501466548}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
