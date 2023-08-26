@@ -35,8 +35,8 @@ namespace Master.ConfigureServices.CustomConfiguration
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddDataBaseContext<MasterdataContext>(configuration, "MasterdataContext");
-            services.AddConfigurationCoreFilter<Startup>();
-            services.AddSwaggerCore();
+            services.AddFilter();
+            services.AddSwagger();
         }
 
     }

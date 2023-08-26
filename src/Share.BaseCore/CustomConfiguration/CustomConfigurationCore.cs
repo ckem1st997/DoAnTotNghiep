@@ -30,7 +30,7 @@ namespace Share.BaseCore.CustomConfiguration
 {
     public static class CustomConfigurationCore
     {
-        public static void AddDataBaseContext<TDbContext>(this IServiceCollection services, IConfiguration configuration, string nameConnect, DatabaseType dbType = DatabaseType.MSSQL) where TDbContext : DbContext
+        public static void AddDataBaseContext<TDbContext>(this IServiceCollection services, IConfiguration configuration, string nameConnect, DatabaseType dbType = DatabaseType.MSSQL, QueryTrackingBehavior trackingBehavior=QueryTrackingBehavior.TrackAll) where TDbContext : DbContext
         {
             var sqlConnect = configuration.GetConnectionString(nameConnect);
             services.AddDbContextPool<TDbContext>(options =>
@@ -39,10 +39,17 @@ namespace Share.BaseCore.CustomConfiguration
                     sqlServerOptionsAction: sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(typeof(TDbContext).GetTypeInfo().Assembly.GetName().Name);
-                        // sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                        sqlOptions.EnableRetryOnFailure(
+                        // Số lần tái thử tối đa
+                        maxRetryCount: 15,
+                        // Thời gian chờ tối đa giữa các lần tái thử
+                        maxRetryDelay: TimeSpan.FromSeconds(10),
+                        // Danh sách mã lỗi cụ thể để tái thử, null nếu muốn tái thử cho tất cả các lỗi 
+                        errorNumbersToAdd: null
+                        );
                     });
                 options.LogTo(Log.Information, Microsoft.Extensions.Logging.LogLevel.Information, Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging();
-                //  options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                options.UseQueryTrackingBehavior(trackingBehavior);
             }
             );
 
@@ -93,7 +100,7 @@ namespace Share.BaseCore.CustomConfiguration
         }
 
 
-        public static void AddConfigurationCoreFilter<TStartup>(this IServiceCollection services)
+        public static void AddFilter(this IServiceCollection services)
         {
             services.Configure<ApiBehaviorOptions>(options =>
             {
@@ -105,7 +112,7 @@ namespace Share.BaseCore.CustomConfiguration
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
                 options.Filters.Add(typeof(CustomValidationAttribute));
             })
-                .AddApplicationPart(typeof(TStartup).Assembly)
+                // .AddApplicationPart(typeof(TStartup).Assembly)
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.WriteIndented = true;
@@ -114,7 +121,7 @@ namespace Share.BaseCore.CustomConfiguration
         }
 
 
-        public static void AddSwaggerCore(this IServiceCollection services)
+        public static void AddSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
             {
