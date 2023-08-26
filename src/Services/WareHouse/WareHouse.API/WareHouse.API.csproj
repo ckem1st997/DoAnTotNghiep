@@ -34,6 +34,9 @@
 
 	</ItemGroup>
 	<ItemGroup>
+		<Folder Include="Application\Commands\Create\" />
+		<Folder Include="Application\Commands\Update\" />
+		<Folder Include="Application\Extensions\" />
 		<Folder Include="Application\HealthChecks\" />
 	</ItemGroup>
 	<ItemGroup>

@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web;
+using Share.BaseCore.Repositories;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
@@ -15,9 +16,9 @@ namespace GrpcGetDataToWareHouse
     public class GrpcGetDataWareHouseService : GrpcGetDataWareHouse.GrpcGetDataWareHouseBase
     {
 
-        private readonly IDapper _dapper;
+        private readonly IRepositoryEF<WareHouse.Domain.Entity.WareHouse> _dapper;
         private readonly ILogger<GrpcGetDataWareHouseService> _logger;
-        public GrpcGetDataWareHouseService(IDapper dapper, ILogger<GrpcGetDataWareHouseService> logger)
+        public GrpcGetDataWareHouseService(RepositoryEF<WareHouse.Domain.Entity.WareHouse> dapper , ILogger<GrpcGetDataWareHouseService> logger)
         {
             _logger = logger;
             _dapper = dapper;
@@ -69,7 +70,7 @@ namespace GrpcGetDataToWareHouse
                 DynamicParameters parameterwh = new DynamicParameters();
                 parameterwh.Add("@WareHouseId", request.IdWareHouse);
                 departmentIds =
-                    (List<string>)await _dapper.GetList<string>(GetListChidren.ToString(), parameterwh,
+                    (List<string>)await _dapper.QueryAsync<string>(GetListChidren.ToString(), parameterwh,
                         CommandType.Text);
                 //    departmentIds.Add(request.IdWareHouse);
 
