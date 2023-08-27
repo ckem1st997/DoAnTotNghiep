@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WareHouse.API.Controllers.BaseController
+namespace Share.Base.Service.BaseImplement
 {
     [AllowAnonymous]
     [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
-    public class BasePublicControllerWareHouse : ControllerBase
+    public abstract class BasePublicControllerWareHouse : ControllerBase
     {
         //or stogare => create PARTITION
 

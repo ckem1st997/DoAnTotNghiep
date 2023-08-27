@@ -143,7 +143,6 @@
 
 	<ItemGroup>
 		<Folder Include="EventBus\Extensions\" />
-		<Folder Include="Implement\" />
 	</ItemGroup>
 
 </Project>

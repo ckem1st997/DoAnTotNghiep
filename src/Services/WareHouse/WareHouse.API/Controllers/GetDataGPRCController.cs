@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Model;
-using WareHouse.API.Controllers.BaseController;
 using WareHouse.Domain.Entity;
 
 namespace WareHouse.API.Controllers
@@ -21,7 +20,7 @@ namespace WareHouse.API.Controllers
 
     //[CheckRole(LevelCheck.READ)]
 
-    public class GetDataGPRCController : BaseControllerWareHouse
+    public class GetDataGPRCController : BaseController
     {
         private readonly IFakeData _ifakeData;
         private readonly GrpcGetData.GrpcGetDataClient _client;

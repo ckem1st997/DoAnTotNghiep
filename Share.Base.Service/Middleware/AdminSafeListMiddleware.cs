@@ -37,9 +37,13 @@ namespace Share.Base.Service.Middleware
             if (context.Request.Method != HttpMethod.Get.Method)
             {
                 var remoteIp = context.Connection.RemoteIpAddress;
-                Log.Debug("Request from Remote IP address: {RemoteIp}", remoteIp);
+                var clientIp = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
 
-                var bytes = remoteIp.GetAddressBytes();
+                Log.Debug("Request from Remote IP address: {RemoteIp}", remoteIp);
+                Log.Debug("Request from X-Forwarded-For address: {RemoteIp}", clientIp);
+                // Lấy địa chỉ IP thực của client từ header X-Forwarded-For (nếu có)
+
+                var bytes = remoteIp?.GetAddressBytes();
                 var badIp = true;
                 foreach (var address in _safelist)
                 {
@@ -76,7 +80,10 @@ namespace Share.Base.Service.Middleware
         public async Task Invoke(HttpContext context)
         {
             var remoteIp = context.Connection.RemoteIpAddress;
+            var clientIp = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+
             Log.Information("Request from Remote IP address: {RemoteIp}", remoteIp);
+            Log.Debug("Request from X-Forwarded-For address: {RemoteIp}", clientIp);
 
             await _next.Invoke(context);
         }

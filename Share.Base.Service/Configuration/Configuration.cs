@@ -18,6 +18,7 @@ using Share.Base.Core.Enum;
 using Share.Base.Service.Repository;
 using Share.Base.Core.Infrastructure;
 using System.Reflection;
+using Microsoft.AspNetCore.Builder;
 
 namespace Share.Base.Service.Configuration
 {
@@ -117,6 +118,7 @@ namespace Share.Base.Service.Configuration
 
         public static void AddSwagger(this IServiceCollection services)
         {
+            services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
@@ -149,7 +151,18 @@ namespace Share.Base.Service.Configuration
             //   services.AddTransient<TestIntegrationEventHandler>();
         }
 
-
+        public static void ConfigureSwagger(this IApplicationBuilder app)
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                options.RoutePrefix = string.Empty;
+            });
+            //  var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+            // đăng ký xử lý
+            //  eventBus.Subscribe<InwardIntegrationEvent, InwardIntegrationEventHandler>();
+        }
         //public static void ConfigureEventBus(this IApplicationBuilder app)
         //{
         //    var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();

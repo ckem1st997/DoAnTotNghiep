@@ -14,14 +14,13 @@ using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.Paginated.WareHouseBook;
-using WareHouse.API.Controllers.BaseController;
 using WareHouse.API.Infrastructure.ElasticSearch;
 using WareHouse.Infrastructure;
 
 namespace WareHouse.API.Controllers
 {
 
-    public class MasterGetController : BaseControllerWareHouse
+    public class MasterGetController : BaseController
     {
         private readonly IElasticClient _elasticClient;
         private readonly IMediator _mediat;

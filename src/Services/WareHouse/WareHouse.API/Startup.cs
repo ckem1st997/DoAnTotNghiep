@@ -86,12 +86,12 @@ namespace WareHouse.API
             services.AddApiAuthentication();
             services.AddApiCors();
             services.AddServiceConfigImplementAPI();
-          //  services.AddHostedService<QueueHostedTaskService>();
+            //  services.AddHostedService<QueueHostedTaskService>();
 
             //  services.AddHostedService<RequestTimeConsumer>();
 
             services.AddBackGrouService();
-           // services.AddGraphQLServer<Query, WarehouseManagementContext>();
+            // services.AddGraphQLServer<Query, WarehouseManagementContext>();
         }
         public void ConfigureContainer(ContainerBuilder builder)
         {
@@ -110,8 +110,7 @@ namespace WareHouse.API
             // {
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
             app.UseDeveloperExceptionPage();
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            app.ConfigureSwagger();
             //  }
 
             //   app.UseHttpsRedirection();
@@ -133,7 +132,11 @@ namespace WareHouse.API
             });
             app.ConfigureEventBusKafka();
             app.ConfigureRequestPipeline();
-           // app.AppGraphQLServer();
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+            // app.AppGraphQLServer();
         }
 
 
