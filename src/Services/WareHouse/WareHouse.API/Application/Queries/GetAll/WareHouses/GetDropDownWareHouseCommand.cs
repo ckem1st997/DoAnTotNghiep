@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Share.Base.Core.Cache;
+using Share.Base.Service.Caching;
 using WareHouse.API.Application.Model;
 
 namespace WareHouse.API.Application.Queries.GetAll.WareHouses

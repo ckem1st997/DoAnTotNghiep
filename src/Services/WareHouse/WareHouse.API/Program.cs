@@ -13,10 +13,10 @@ using System.Runtime.InteropServices;
 using Autofac.Extensions.DependencyInjection;
 using System.Net;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Serilog.Sinks.Elasticsearch;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Serilog.Events;
+using Share.Base.Core.Extensions;
 
 namespace WareHouse.API
 {

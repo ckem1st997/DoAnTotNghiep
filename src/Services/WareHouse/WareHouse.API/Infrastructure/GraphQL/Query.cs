@@ -24,7 +24,7 @@ namespace WareHouse.API.Infrastructure.GraphQL
 
         public async Task<IEnumerable<Unit>> GetSuperheroes()
         {
-            var list =await _repositoryEF.ListAllAsync();
+            var list = await _repositoryEF.WhereAsync(x => x.Id != null);
             return list;
         }
 

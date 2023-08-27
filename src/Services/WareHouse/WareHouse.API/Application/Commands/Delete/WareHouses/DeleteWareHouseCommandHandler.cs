@@ -24,7 +24,8 @@ namespace WareHouse.API.Application.Commands.Delete
 
             if (request is null)
                 return false;
-            var res = await _repository.BulkDeleteEditOnDeleteAsync(request.Id);
+           await _repository.DeteleSoftDelete(request.Id, cancellationToken);
+            var res = await _repository.SaveChangesConfigureAwaitAsync(cancellationToken: cancellationToken);
             return res > 0;
         }
     }

@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Share.Base.Core.IRepositories;
 using MediatR;
 using WareHouse.API.Application.Model;
 
@@ -27,7 +26,7 @@ namespace WareHouse.API.Application.Queries.GetFisrt.WareHouses
         {
             if (request?.Id is null)
                 return null;
-            var res = await _repository.GetFirstAsyncAsNoTracking(request.Id);
+            var res = await _repository.GetByIdsync(request.Id);
             return _mapper.Map<WareHouseDTO>(res);
         }
     }

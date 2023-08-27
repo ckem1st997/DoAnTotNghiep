@@ -13,14 +13,14 @@ namespace Share.Base.Core.GraphQL
 {
     public static class GraphQLServer
     {
-        //public static void AddGraphQLServer<T, TContext>(this IServiceCollection services) where T : class where TContext : DbContext
-        //{
-        //    services.AddGraphQLServer().AddQueryType<T>().AddHttpRequestInterceptor<HttpRequestInterceptor>().AddFiltering()
-        //.AddSorting()
-        //.AddProjections()
-        // .InitializeOnStartup()
-        // .RegisterDbContext<TContext>();
-        //}
+        public static void AddGraphQLServer<T, TContext>(this IServiceCollection services) where T : class where TContext : DbContext
+        {
+            services.AddGraphQLServer().AddQueryType<T>().AddHttpRequestInterceptor<HttpRequestInterceptor>().AddFiltering()
+        .AddSorting()
+        .AddProjections()
+         .InitializeOnStartup()
+         .RegisterDbContext<TContext>();
+        }
         public static void AppGraphQLServer(this IApplicationBuilder app)
         {
             //app.UseGraphQL("/graphql");            // url to host GraphQL endpoint

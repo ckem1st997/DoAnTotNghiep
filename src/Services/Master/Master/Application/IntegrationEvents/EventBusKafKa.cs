@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Base.Events;
 using Master.IntegrationEvents;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;

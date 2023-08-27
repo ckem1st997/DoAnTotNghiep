@@ -13,6 +13,7 @@ using Dapper;
 using Microsoft.EntityFrameworkCore;
 using static Dapper.SqlMapper;
 using Share.Base.Core.Infrastructure;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Share.Base.Service.Repository
 {
@@ -37,29 +38,31 @@ namespace Share.Base.Service.Repository
     /// <typeparam name="T"></typeparam>
     public partial interface IRepositoryEF<T> : IDapperEF where T : BaseEntity
     {
-        public DbContext UnitOfWork { get; }
         /// <summary>
         /// không tạo truy vấn lưu mà chỉ tạo khi cần thiết nhanh hơn Table
         /// </summary>
-        IQueryable<T> GetQueryable(bool tracking = false);
+        IQueryable<T> GetQueryable(bool tracking = true);
         IQueryable<T> Table { get; }
-        public IQueryable<T> GetBy(Expression<Func<T, bool>> predicate);
-        public Task<IQueryable<T>> GetByAsync(Expression<Func<T, bool>> predicate);
-        IEnumerable<T> GetList(Func<T, bool> filter = null);
-        Task<T> GetFirstAsync(string id, CancellationToken cancellationToken = default);
-        Task<T> GetFirstAsyncAsNoTracking(string id, CancellationToken cancellationToken = default);
-        Task<T> AddAsync(T entity, CancellationToken cancellationToken = default);
-        Task AddAsync(IEnumerable<T> entity, CancellationToken cancellationToken = default);
-        Task<IEnumerable<T>> ListAllAsync();
-        Task<IEnumerable<T>> ListByListId(IEnumerable<string> ids);
+        DatabaseFacade Database { get; }
+        public IQueryable<T> Where(Expression<Func<T, bool>> predicate);
+        public Task<IQueryable<T>> WhereAsync(Expression<Func<T, bool>> predicate);
+
+        public IQueryable<T> WhereTracking(Expression<Func<T, bool>> predicate);
+        public Task<IQueryable<T>> WhereTrackingAsync(Expression<Func<T, bool>> predicate);
+        Task<T?> GetByIdsync(string id, CancellationToken cancellationToken = default(CancellationToken), bool Tracking = false);
+        IEnumerable<T> GetList(Func<T, bool> filter);
+        Task<T> AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// hàm này sẽ update tất cả các trường, nếu muốn tận dụng tracking thì hãy bỏ update và dùng savechange
+        /// </summary>
+        /// <param name="entity"></param>
         void Update(T entity);
         void Update(IEnumerable<T> entity);
-        public Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default);
-
+        public Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
         void Delete(T entity);
         void Delete(IEnumerable<T> entity);
-
-        Task<int> SaveChangesConfigureAwaitAsync(bool configure = false, CancellationToken cancellationToken = default);
-
+        Task<int> SaveChangesConfigureAwaitAsync(CancellationToken cancellationToken = default(CancellationToken),bool configure = false);
+        Task<IEnumerable<T>> DeteleSoftDelete(IEnumerable<string> ids, CancellationToken cancellationToken = default(CancellationToken));
+        Task<T> DeteleSoftDelete(string id, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

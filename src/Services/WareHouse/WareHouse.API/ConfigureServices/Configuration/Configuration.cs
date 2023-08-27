@@ -18,7 +18,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Authentication;
-using Microsoft.Identity.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -39,15 +38,15 @@ using Share.Base.Service;
 
 namespace WareHouse.API.ConfigureServices.CustomConfiguration
 {
-    public static class CustomConfiguration
+    public static class Configuration
     {
-        public static void AddCustomConfiguration(this IServiceCollection services, IConfiguration configuration)
+        public static void AddConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped(typeof(IElasticSearchClient<>), typeof(ElasticSearchClient<>));        
             services.AddScoped<IFakeData, FakeData>();
             services.AddScoped<IUserSevice, UserSevice>();
             services.AddScoped<ISignalRService, SignalRService>();
-            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddMediatRCore();
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
 
             services.AddDataBaseContext<WarehouseManagementContext>(configuration, DataConnectionHelper.ConnectionString.Warehouse);

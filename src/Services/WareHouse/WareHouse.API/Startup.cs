@@ -73,7 +73,7 @@ namespace WareHouse.API
         {
             SetLicense();
             //  services.AddEasyCachingAPI(Configuration);
-            services.AddCustomConfiguration(Configuration);
+            services.AddConfiguration(Configuration);
             services.AddMapper();
             services.AddValidator();
             // services.AddBehavior();
@@ -133,7 +133,7 @@ namespace WareHouse.API
             });
             app.ConfigureEventBusKafka();
             app.ConfigureRequestPipeline();
-            app.AppGraphQLServer();
+           // app.AppGraphQLServer();
         }
 
 

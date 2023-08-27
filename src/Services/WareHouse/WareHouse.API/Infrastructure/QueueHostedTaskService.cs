@@ -79,7 +79,7 @@ namespace WareHouse.API.Infrastructure
                             {
                                 if (item.Key.Contains(WareHouseBookEnum.Inward.ToString()))
                                 {
-                                    var model = await _repository.GetFirstAsync(item.Key.Replace(WareHouseBookEnum.Inward.ToString(),string.Empty));
+                                    var model = await _repository.GetByIdsync(item.Key.Replace(WareHouseBookEnum.Inward.ToString(),string.Empty));
                                     if (model is not null)
                                     {
                                         int view = (int)(model.Viewer ?? 0);
@@ -88,7 +88,7 @@ namespace WareHouse.API.Infrastructure
                                 }
                                 else
                                 {
-                                    var model = await _repositoryOut.GetFirstAsync(item.Key.Replace(WareHouseBookEnum.Outward.ToString(), string.Empty));
+                                    var model = await _repositoryOut.GetByIdsync(item.Key.Replace(WareHouseBookEnum.Outward.ToString(), string.Empty));
                                     if (model is not null)
                                     {
                                         int view = (int)(model.Viewer ?? 0);
@@ -97,7 +97,7 @@ namespace WareHouse.API.Infrastructure
                                 }
                                 
                             }
-                            var res = await _repository.UnitOfWork.SaveChangesAsync(stoppingToken);
+                            var res = await _repository.SaveChangesConfigureAwaitAsync(cancellationToken: stoppingToken);
                             numberNames.Clear();
                             ViewerBefore = 0;
                         }

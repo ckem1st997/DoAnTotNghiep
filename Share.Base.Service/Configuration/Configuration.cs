@@ -23,6 +23,8 @@ namespace Share.Base.Service.Configuration
 {
     public static class CustomConfigurationCore
     {
+
+
         public static void AddDataBaseContext<TDbContext>(this IServiceCollection services, IConfiguration configuration, string nameConnect, DatabaseType dbType = DatabaseType.MSSQL, QueryTrackingBehavior trackingBehavior = QueryTrackingBehavior.TrackAll) where TDbContext : DbContext
         {
             var sqlConnect = configuration.GetConnectionString(nameConnect);
@@ -119,6 +121,12 @@ namespace Share.Base.Service.Configuration
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
+        }
+
+
+        public static void AddMediatRCore(this IServiceCollection services)
+        {
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
         }
 
         //kafka

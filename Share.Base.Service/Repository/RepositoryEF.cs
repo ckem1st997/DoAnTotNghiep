@@ -11,27 +11,17 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 using static Dapper.SqlMapper;
 using Share.Base.Core.Infrastructure;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Share.Base.Service.Repository
 {
-    public class RepositoryEF<T> : IRepositoryEF<T>
-        where T : BaseEntity, new()
+    public class RepositoryEF<T> : IRepositoryEF<T> where T : BaseEntity
     {
-
-        //  _rep = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
-
         private readonly DbContext _context;
         private readonly DbSet<T> _dbSet;
         private readonly IQueryable<T> _query;
         private readonly string _connectionstring;
-
-
-        public DbContext UnitOfWork
-        {
-            get { return _context; }
-        }
-
-        public IQueryable<T> GetQueryable(bool tracking = false)
+        public IQueryable<T> GetQueryable(bool tracking = true)
         {
             return tracking ? _query : _query.AsNoTracking();
         }
@@ -47,7 +37,7 @@ namespace Share.Base.Service.Repository
 
 
 
-        public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
+        public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken))
         {
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -65,41 +55,14 @@ namespace Share.Base.Service.Repository
         }
 
 
-        public virtual async Task<T> GetFirstAsync(string id, CancellationToken cancellationToken = default)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            return await _dbSet.FirstOrDefaultAsync(x => x.Id.Equals(id) && !x.OnDelete);
-        }
-
-        public virtual async Task<T> GetFirstAsyncAsNoTracking(string id, CancellationToken cancellationToken = default)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id.Equals(id) && !x.OnDelete);
-        }
-
-        public virtual async Task<IEnumerable<T>> ListAllAsync()
-        {
-            return await _dbSet.Where(x => !string.IsNullOrEmpty(x.Id)).AsNoTracking().ToListAsync();
-        }
-
-        public async Task<IEnumerable<T>> ListByListId(IEnumerable<string> ids)
-        {
-            if (ids == null) throw new ArgumentNullException(nameof(ids));
-            var res = await _dbSet.Where(x => ids.ToList().Contains(x.Id)).ToListAsync();
-            return res;
-        }
-
         public virtual void Update(T entity)
         {
             if (entity is null)
                 throw new BaseException(nameof(entity));
             _dbSet.Update(entity);
-
-
         }
 
-        public virtual async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
             // ThrowIfDisposed();
@@ -124,6 +87,7 @@ namespace Share.Base.Service.Repository
 
         public bool AutoSaveChanges { get; set; } = true;
 
+        public DatabaseFacade Database => _context.Database;
 
         protected virtual async Task<bool> SaveChanges(CancellationToken cancellationToken)
         {
@@ -134,26 +98,37 @@ namespace Share.Base.Service.Repository
             return AutoSaveChanges;
         }
 
-        public IEnumerable<T> GetList(Func<T, bool> filter = null)
+        public IEnumerable<T> GetList(Func<T, bool> filter)
         {
             IEnumerable<T> query = _dbSet;
             if (filter != null)
                 query = query.Where(filter);
-            return query;
+            return query.ToList();
         }
 
-        public IQueryable<T> GetBy(Expression<Func<T, bool>> predicate)
+        public IQueryable<T> Where(Expression<Func<T, bool>> predicate)
         {
             return _query.AsNoTracking().Where(predicate);
         }
 
-        public async Task<IQueryable<T>> GetByAsync(Expression<Func<T, bool>> predicate)
+        public async Task<IQueryable<T>> WhereAsync(Expression<Func<T, bool>> predicate)
         {
             return await Task.FromResult(_query.AsNoTracking().Where(predicate));
         }
 
 
-        public async Task<int> SaveChangesConfigureAwaitAsync(bool configure = false, CancellationToken cancellationToken = default)
+        public IQueryable<T> WhereTracking(Expression<Func<T, bool>> predicate)
+        {
+            return _query.Where(predicate);
+        }
+
+        public async Task<IQueryable<T>> WhereTrackingAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await Task.FromResult(_query.Where(predicate));
+        }
+
+
+        public async Task<int> SaveChangesConfigureAwaitAsync(CancellationToken cancellationToken = default(CancellationToken), bool configure = false)
         {
             return await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(configure);
 
@@ -228,29 +203,41 @@ namespace Share.Base.Service.Repository
         {
             GC.SuppressFinalize(this);
         }
+
+        public async Task<IEnumerable<T>> DeteleSoftDelete(IEnumerable<string> ids, CancellationToken cancellationToken = default)
+        {
+            if (!ids.Any())
+                throw new BaseException("Danh sách mã xoá rỗng !");
+            var list = await _query.Where(x => ids.Contains(x.Id) && !x.OnDelete).ToListAsync();
+            if (!list.Any())
+                throw new BaseException("Danh sách cần xoá không tồn tại !");
+            list.ForEach(x =>
+            {
+                x.OnDelete = true;
+            });
+            return list;
+        }
+
+        public async Task<T> DeteleSoftDelete(string id, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new BaseException("Mã xoá rỗng !");
+            var entity = await _query.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            if (entity == null)
+                throw new BaseException("Danh sách cần xoá không tồn tại !");
+            entity.OnDelete = true;
+            return entity;
+        }
+
+        public async Task<T?> GetByIdsync(string id, CancellationToken cancellationToken = default, bool Tracking = false)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new BaseException("Chưa nhập mã định danh !");
+            if (!Tracking)
+                return await _query.AsNoTracking().FirstOrDefaultAsync(x => x.Id.Equals(id));
+            return await _query.FirstOrDefaultAsync(x => x.Id.Equals(id));
+        }
+
     }
-    //    try {
-    //    context.Add(myNewEntity);
-    //   var result = context.SaveChanges();
-    //    if(result==0){
-    //       dbTransaction.Rollback();
-    //        ... return  error
-    //}
-    //otherEntity.RefId = myNewEntity.Id;
-    //context.Update(otherEntity);
-    //// some other inserts and updates
-    //result = context.SaveChanges();
-    //if (result == 0)
-    //{
-    //    dbTransaction.Rollback();
-    //    ... return error
-    //     }
-    //dbTransaction.Commit();
-    //}
-    //catch
-    //{
-    //    dbTransaction.Rollback();
-    //    throw;
-    //}
 
 }

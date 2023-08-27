@@ -1,5 +1,4 @@
-﻿using Base.Events;
-using Share.Base.Core.Extensions;
+﻿using Share.Base.Core.Extensions;
 using Infrastructure;
 using Master.Service;
 using Master.SignalRHubs;
