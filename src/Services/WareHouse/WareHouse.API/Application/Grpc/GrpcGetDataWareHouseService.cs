@@ -3,7 +3,7 @@ using Grpc.Core;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
-using Microsoft.Identity.Web;
+//using Microsoft.Identity.Web;
 using Share.Base.Service.Repository;
 using System.Collections.Generic;
 using System.Data;

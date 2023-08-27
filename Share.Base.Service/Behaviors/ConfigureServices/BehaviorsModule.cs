@@ -1,12 +1,8 @@
-﻿using Autofac;
-using FluentValidation;
+﻿
+
+using Autofac;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Share.Base.Service.Behaviors.ConfigureServices
 {
@@ -14,14 +10,13 @@ namespace Share.Base.Service.Behaviors.ConfigureServices
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly)
-                .AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly).AsImplementedInterfaces();
 
-            builder.Register<ServiceFactory>(context =>
-            {
-                var componentContext = context.Resolve<IComponentContext>();
-                return t => { object o; return componentContext.TryResolve(t, out o) ? o : null; };
-            });
+            //builder.Register<ServiceFactory>(context =>
+            //{
+            //    var componentContext = context.Resolve<IComponentContext>();
+            //    return t => { object o; return componentContext.TryResolve(t, out o) ? o : null; };
+            //});
 
             // builder.RegisterGeneric(typeof(LoggingBehavior<,>)).As(typeof(IPipelineBehavior<,>));
             builder.RegisterGeneric(typeof(ValidatorBehavior<,>)).As(typeof(IPipelineBehavior<,>));

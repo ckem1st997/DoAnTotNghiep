@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
+using Share.Base.Core.Infrastructure;
+using Share.Base.Service.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,7 +69,7 @@ namespace Share.Base.Service.Attribute
 
             if (badIp)
             {
-                _logger.LogWarning("Forbidden Request from IP: {RemoteIp}", remoteIp);
+                _logger.Warning("Forbidden Request from IP: {RemoteIp}", remoteIp);
                 context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
                 return;
             }
