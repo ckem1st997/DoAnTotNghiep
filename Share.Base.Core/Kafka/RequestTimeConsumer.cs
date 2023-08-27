@@ -146,7 +146,7 @@ namespace Share.Base.Core.Kafka
                             var handler = scope.ResolveOptional(subscription.HandlerType);
                             if (handler == null) continue;
                             var eventType = _subsManager.GetEventTypeByName(eventName);
-                            var integrationEvent = JsonSerializer.Deserialize(message, eventType,
+                            var integrationEvent = System.Text.Json.JsonSerializer.Deserialize(message, eventType,
                                 new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
                             var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
 

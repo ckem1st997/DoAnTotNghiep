@@ -54,7 +54,6 @@
 	  <!--<ProjectReference Include="..\..\..\Share.Grpc\Share.Grpc.csproj" />-->
 	  <ProjectReference Include="..\..\..\..\Share.Base.Service\Share.Base.Service.csproj" />
 	  <ProjectReference Include="..\..\..\ShareModelFull\ShareModelFull.csproj" />
-	  <ProjectReference Include="..\..\Base\Base\Base.csproj" />
 	  <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
 	</ItemGroup>
 
