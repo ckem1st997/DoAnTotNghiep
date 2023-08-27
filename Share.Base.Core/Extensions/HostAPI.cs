@@ -28,8 +28,8 @@ namespace Share.Base.Core.Extensions
                     .MinimumLevel.Verbose()
                     .Enrich.WithProperty("ApplicationContext-" + getEnv, nameApp)
                     .Enrich.FromLogContext()
-                   //  .WriteTo.Console()
-                   .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl)
+                   .WriteTo.Console()
+                   .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl, queueLimitBytes: 1000000)
                    .ReadFrom.Configuration(configuration)
                     .CreateLogger();
         }
