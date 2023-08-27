@@ -91,7 +91,7 @@ namespace WareHouse.API
             //  services.AddHostedService<RequestTimeConsumer>();
 
             services.AddBackGrouService();
-            services.AddGraphQLServer<Query, WarehouseManagementContext>();
+           // services.AddGraphQLServer<Query, WarehouseManagementContext>();
         }
         public void ConfigureContainer(ContainerBuilder builder)
         {
