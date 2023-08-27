@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Share.Base.Core.Extensions;
 using WareHouse.API.Application.Queries.BaseModel;
 
 namespace WareHouse.API.Application.Validations.BaseValidator

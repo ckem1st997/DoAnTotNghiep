@@ -1,5 +1,5 @@
 ﻿using Base.Events;
-using Share.BaseCore.Extensions;
+using Share.Base.Core.Extensions;
 using Infrastructure;
 using Master.Service;
 using Master.SignalRHubs;
@@ -12,7 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Share.BaseCore.EventBus.Abstractions;
+using Share.Base.Core.EventBus.Abstractions;
+using Share.Base.Service.IntegrationEvents.Events;
 
 namespace Master.IntegrationEvents
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Share.BaseCore.Authozire;
+using Share.Base.Service.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;

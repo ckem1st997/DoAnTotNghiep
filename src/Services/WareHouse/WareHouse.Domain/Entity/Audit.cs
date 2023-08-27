@@ -1,4 +1,5 @@
-﻿using Share.BaseCore.BaseNop;
+﻿
+using Share.Base.Core.Infrastructure;
 using System;
 using System.Collections.Generic;
 

@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Share.BaseCore.Cache.CacheName;
-using Share.BaseCore.StackAndQueue;
-using StackExchange.Redis;
+using Share.Base.Core.StackAndQueue;
 using System;
 using System.Collections.Generic;
 using System.Linq;

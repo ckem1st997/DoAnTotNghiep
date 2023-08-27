@@ -13,7 +13,7 @@ using Serilog;
 using Share.BaseCore.Cache;
 using Share.BaseCore.Cache.CacheName;
 
-namespace Share.BaseCore.Behaviors
+namespace Share.Base.Service.Behaviors
 {
     public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : ICacheableMediatrQuery

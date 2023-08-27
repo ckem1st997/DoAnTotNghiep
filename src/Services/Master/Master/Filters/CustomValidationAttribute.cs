@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Share.BaseCore.Extensions;
+using Share.Base.Core.Extensions;
 
 namespace Master.Filters
 {

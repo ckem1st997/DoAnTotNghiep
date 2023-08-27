@@ -6,16 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Share.BaseCore.IRepositories;
 using Dapper;
 using MediatR;
 using Nest;
+using Share.Base.Service.Repository;
 using StackExchange.Profiling.Internal;
 using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Interface;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;
-
 namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
 {
     public static class TypeWareHouseBook
@@ -39,18 +38,18 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
     public class PaginatedWareHouseBookCommandHandler : IRequestHandler<PaginatedWareHouseBookCommand,
         IPaginatedList<WareHouseBookDTO>>
     {
-        private readonly IDapper _repository;
+        private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
         private readonly IPaginatedList<WareHouseBookDTO> _list;
         public readonly IUserSevice _context;
         private readonly IElasticClient _elasticClient;
 
 
-        public PaginatedWareHouseBookCommandHandler(IUserSevice context, IDapper repository, IPaginatedList<WareHouseBookDTO> list, IElasticClient elasticClient)
+        public PaginatedWareHouseBookCommandHandler(IUserSevice context, IPaginatedList<WareHouseBookDTO> list, IElasticClient elasticClient, IRepositoryEF<Domain.Entity.WareHouse> repository)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _list = list ?? throw new ArgumentNullException(nameof(list));
             _context = context;
             _elasticClient = elasticClient;
+            _repository = repository;
         }
 
         public async Task<IPaginatedList<WareHouseBookDTO>> Handle(PaginatedWareHouseBookCommand request,
@@ -86,7 +85,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
                 DynamicParameters parameterwh = new DynamicParameters();
                 parameterwh.Add("@WareHouseId", request.WareHouseId);
                 departmentIds =
-                    (List<string>)await _repository.GetList<string>(GetListChidren.ToString(), parameterwh,
+                    (List<string>)await _repository.QueryAsync<string>(GetListChidren.ToString(), parameterwh,
                         CommandType.Text);
                 departmentIds.Add(request.WareHouseId);
                 if (user.RoleNumber < 3)
@@ -288,8 +287,8 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
                 parameter.Add("@toDate", request.ToDate);
                 parameter.Add("@skip", request.Skip);
                 parameter.Add("@take", request.Take);
-                _list.Result = await _repository.GetList<WareHouseBookDTO>(sb.ToString(), parameter, CommandType.Text);
-                _list.totalCount = await _repository.GetAyncFirst<int>(sbCount.ToString(), parameter, CommandType.Text) - 1;
+                _list.Result = await _repository.QueryAsync<WareHouseBookDTO>(sb.ToString(), parameter, CommandType.Text);
+                _list.totalCount = await _repository.QueryFirstOrDefaultAsync<int>(sbCount.ToString(), parameter, CommandType.Text) - 1;
                 //     var results = await Task.WhenAll(_list);
 
                 #endregion

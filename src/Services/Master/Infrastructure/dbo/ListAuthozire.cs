@@ -2,7 +2,6 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using Share.BaseCore.BaseNop;
 
 namespace Infrastructure
 {

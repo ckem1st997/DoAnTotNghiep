@@ -1,5 +1,5 @@
 ﻿
-using Share.BaseCore.Extensions;
+using Share.Base.Core.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

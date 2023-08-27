@@ -1,7 +1,7 @@
-﻿using Base.Events;
-using GrpcGetDataToMaster;
+﻿using GrpcGetDataToMaster;
 //using GrpcGetDataToMaster;
 using Serilog;
+using Share.Base.Service.IntegrationEvents.Events;
 using System;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Model;

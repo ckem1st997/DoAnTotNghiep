@@ -1,4 +1,4 @@
-﻿using Base.Events;
+﻿using Share.Base.Service.IntegrationEvents.Events;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Model;
 

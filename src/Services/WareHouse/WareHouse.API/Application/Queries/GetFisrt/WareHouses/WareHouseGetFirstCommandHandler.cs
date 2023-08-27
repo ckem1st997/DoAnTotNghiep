@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Share.BaseCore.IRepositories;
+using Share.Base.Core.IRepositories;
 using MediatR;
 using WareHouse.API.Application.Model;
 

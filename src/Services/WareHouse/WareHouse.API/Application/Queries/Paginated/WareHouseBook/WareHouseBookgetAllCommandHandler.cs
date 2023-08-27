@@ -1,4 +1,4 @@
-﻿global using Share.BaseCore.IRepositories;
+﻿global using Share.Base.Service.Repository;
 using Dapper;
 using MediatR;
 using System;
@@ -19,11 +19,11 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
     public class WareHouseBookgetAllCommandHandler : IRequestHandler<WareHouseBookgetAllCommand,
         IPaginatedList<WareHouseBookDTO>>
     {
-        private readonly IDapper _repository;
+        private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
         private readonly IPaginatedList<WareHouseBookDTO> _list;
 
 
-        public WareHouseBookgetAllCommandHandler(IDapper repository, IPaginatedList<WareHouseBookDTO> list)
+        public WareHouseBookgetAllCommandHandler(IRepositoryEF<Domain.Entity.WareHouse> repository, IPaginatedList<WareHouseBookDTO> list)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _list = list ?? throw new ArgumentNullException(nameof(list));
@@ -49,7 +49,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouseBook
             sb.Append("inner join WareHouse on d1.WareHouseID=WareHouse.Id  ");
             sb.Append("group by d1.Id,d1.WareHouseID,d1.CreatedBy,d1.Deliver,d1.Reason,d1.Type,d1.VoucherCode,d1.VoucherDate,d1.ModifiedBy,d1.Receiver,d1.OnDelete,WareHouse.Name  ");
             sb.Append("order by d1.VoucherDate desc   ");
-            _list.Result = await _repository.GetList<WareHouseBookDTO>(sb.ToString(), new DynamicParameters(), CommandType.Text);
+            _list.Result = await _repository.QueryAsync<WareHouseBookDTO>(sb.ToString(), new DynamicParameters(), CommandType.Text);
             _list.totalCount = _list.Result.AsList().Count;
             return _list;
         }

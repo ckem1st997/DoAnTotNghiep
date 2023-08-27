@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using HotChocolate;
-using HotChocolate.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,26 +28,26 @@ namespace WareHouse.API.Infrastructure.GraphQL
             return list;
         }
 
-        [UseProjection]
-        [UseFiltering]
-        [UseSorting]
-        public IQueryable<Unit> GetUnits( WarehouseManagementContext context)
-             => context.Units;
-        [UseProjection]
-        [UseFiltering]
-        [UseSorting]
-        public IEnumerable<Unit> GetUnit()
-        {
-            var lisst=new List<Unit>();
-            for (int i = 0; i < 100000; i++)
-            {
-                lisst.Add(new Unit()
-                {
-                    Id = i.ToString(),
-                    UnitName = Guid.NewGuid().ToString(),
-                });
-            }
-            return lisst;
-        }
+        //[UseProjection]
+        //[UseFiltering]
+        //[UseSorting]
+        //public IQueryable<Unit> GetUnits( WarehouseManagementContext context)
+        //     => context.Units;
+        //[UseProjection]
+        //[UseFiltering]
+        //[UseSorting]
+        //public IEnumerable<Unit> GetUnit()
+        //{
+        //    var lisst=new List<Unit>();
+        //    for (int i = 0; i < 100000; i++)
+        //    {
+        //        lisst.Add(new Unit()
+        //        {
+        //            Id = i.ToString(),
+        //            UnitName = Guid.NewGuid().ToString(),
+        //        });
+        //    }
+        //    return lisst;
+        //}
     }
 }

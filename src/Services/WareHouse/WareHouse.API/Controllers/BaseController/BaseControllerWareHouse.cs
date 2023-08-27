@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using WareHouse.API.Application.Authentication;
-using WareHouse.API.Application.Extensions;
 
 namespace WareHouse.API.Controllers.BaseController
 {

@@ -1,0 +1,1 @@
+﻿global using Share.Base.Core.Infrastructure;

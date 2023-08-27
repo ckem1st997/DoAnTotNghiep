@@ -1,4 +1,4 @@
-﻿global using Share.BaseCore.Extensions;
+﻿global using Share.Base.Core.Extensions;
 global using Infrastructure;
 global using Master.Controllers.BaseController;
 global using Master.Models;
@@ -15,4 +15,3 @@ global using GrpcGetDataToMaster;
 global using Microsoft.AspNetCore.Authorization;
 global using KafKa.Net;
 global using Microsoft.Extensions.Logging;
-global using Share.BaseCore.BaseNop;

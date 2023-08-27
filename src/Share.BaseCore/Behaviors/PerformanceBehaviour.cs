@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Serilog;
 
-namespace Share.BaseCore.Behaviors
+namespace Share.Base.Service.Behaviors
 {
     public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
     {

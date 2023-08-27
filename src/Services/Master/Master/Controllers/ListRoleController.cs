@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Microsoft.AspNetCore.Mvc;
-using Share.BaseCore;
-using Share.BaseCore.Authozire;
+using Share.Base.Core;
+using Share.Base.Service.Security;
 using System.Data;
 using System.Text;
 

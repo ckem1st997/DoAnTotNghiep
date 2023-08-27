@@ -3,15 +3,13 @@ using Autofac.Core;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Share.BaseCore.Behaviors;
-using Share.BaseCore.Repositories;
 using System;
 using WareHouse.Infrastructure;
 using Nest;
-using Share.BaseCore.IRepositories;
-using Share.BaseCore.CustomConfiguration;
 using Infrastructure;
-using Share.BaseCore.BaseNop;
+using Share.Base.Core.Infrastructure;
+using Share.Base.Service.Configuration;
+using Share.Base.Service;
 
 namespace WareHouse.API.Infrastructure
 {

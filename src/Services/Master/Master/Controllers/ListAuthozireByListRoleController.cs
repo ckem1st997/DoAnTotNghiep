@@ -1,5 +1,7 @@
 ﻿
 
+using Infrastructure.dbo;
+
 namespace Master.Controllers
 {
     public class ListAuthozireByListRoleController : BaseControllerMaster

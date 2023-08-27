@@ -30,13 +30,12 @@ using Autofac.Extensions.DependencyInjection;
 using Autofac;
 using EasyCaching.Core;
 using Aspose.Diagram;
-using Share.BaseCore.Repositories;
-using Share.BaseCore;
+using Share.Base.Core;
 using Infrastructure;
-using Share.BaseCore.Filters;
-using Share.BaseCore.Behaviors;
+using Share.Base.Core.Filters;
 using Microsoft.Extensions.Logging;
-using Share.BaseCore.CustomConfiguration;
+using Share.Base.Service.Configuration;
+using Share.Base.Service;
 
 namespace WareHouse.API.ConfigureServices.CustomConfiguration
 {
@@ -51,12 +50,10 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
 
-            services.AddCustomConfigurationCore<WarehouseManagementContext, Startup>(configuration, DataConnectionHelper.ConnectionString.Warehouse);
-            services.AddCustomConfigurationCore<MasterdataContext, Startup>(configuration, DataConnectionHelper.ConnectionString.Master);
-
-
-            services.AddConfigurationCoreFilter<Startup>();
-            services.AddSwaggerCore();
+            services.AddDataBaseContext<WarehouseManagementContext>(configuration, DataConnectionHelper.ConnectionString.Warehouse);
+            services.AddDataBaseContext<MasterdataContext>(configuration, DataConnectionHelper.ConnectionString.Master);
+            services.AddFilter();
+            services.AddSwagger();
         }
 
     }

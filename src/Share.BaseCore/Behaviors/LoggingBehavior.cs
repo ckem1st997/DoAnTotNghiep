@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Share.BaseCore.Behaviors
+namespace Share.Base.Service.Behaviors
 {
     // log khi co Request
     // chạy đầu tiên sau đó đến các Behavior tiếp theo như cache, logging, validation, ...

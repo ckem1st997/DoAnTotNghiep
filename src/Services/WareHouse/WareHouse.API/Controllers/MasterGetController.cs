@@ -1,11 +1,13 @@
-﻿using Base.Events;
+﻿
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Nest;
 using Serilog;
 using Serilog.Context;
-using Share.BaseCore.Cache.CacheName;
-using Share.BaseCore.EventBus.Abstractions;
+using Share.Base.Core.EventBus.Abstractions;
+using Share.Base.Core.Extensions;
+using Share.Base.Service.Caching.CacheName;
+using Share.Base.Service.IntegrationEvents.Events;
 using System.Linq;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Authentication;

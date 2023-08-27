@@ -3,6 +3,7 @@ using Infrastructure.Configurations;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Infrastructure.dbo;
 #nullable disable
 
 #nullable disable

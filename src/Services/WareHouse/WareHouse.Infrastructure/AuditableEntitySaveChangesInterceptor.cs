@@ -8,8 +8,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WareHouse.Domain.Entity;
-using Share.BaseCore.Extensions;
-using Share.BaseCore.BaseNop;
+using Share.Base.Core.Extensions;
+using Share.Base.Core.Infrastructure;
 
 namespace WareHouse.Infrastructure
 {

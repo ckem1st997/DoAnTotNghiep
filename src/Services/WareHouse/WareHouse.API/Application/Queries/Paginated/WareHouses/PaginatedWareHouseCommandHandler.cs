@@ -1,6 +1,7 @@
 ﻿
 using Dapper;
 using MediatR;
+using Share.Base.Core.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -23,10 +24,10 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouses
     /// </summary>
     public class PaginatedWareHouseCommandHandler : IRequestHandler<PaginatedWareHouseCommand, IPaginatedList<WareHouseDTO>>
     {
-        private readonly IDapper _repository;
+        private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
         private readonly IPaginatedList<WareHouseDTO> _list;
 
-        public PaginatedWareHouseCommandHandler(IDapper repository, IPaginatedList<WareHouseDTO> list)
+        public PaginatedWareHouseCommandHandler(IRepositoryEF<Domain.Entity.WareHouse> repository, IPaginatedList<WareHouseDTO> list)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _list = list ?? throw new ArgumentNullException(nameof(list));
@@ -63,8 +64,8 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouses
             parameter.Add("@skip", request.Skip);
             parameter.Add("@take", request.Take);
             parameter.Add("@active", request.Active == true ? 1 : 0);
-            _list.Result = await _repository.GetList<WareHouseDTO>(sb.ToString(), parameter, CommandType.Text);
-            _list.totalCount = await _repository.GetAyncFirst<int>(ValidatorString.GetSqlCount(sb.ToString(), SqlEnd: "order"), parameter, CommandType.Text);
+            _list.Result = await _repository.QueryAsync<WareHouseDTO>(sb.ToString(), parameter, CommandType.Text);
+            _list.totalCount = await _repository.QueryFirstOrDefaultAsync<int>(ValidatorString.GetSqlCount(sb.ToString(), SqlEnd: "order"), parameter, CommandType.Text);
             return _list;
         }
     }

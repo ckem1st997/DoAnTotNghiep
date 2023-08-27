@@ -1,4 +1,4 @@
-﻿using Share.BaseCore.Extensions;
+﻿using Share.Base.Core.Extensions;
 using Infrastructure;
 using Master.Controllers.BaseController;
 using Master.Service;

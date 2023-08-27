@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 using Dapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Share.BaseCore.Cache;
+using Share.Base.Service.Caching;
+using Share.Base.Service.Repository;
 using WareHouse.API.Application.Authentication;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.BaseModel;
@@ -29,11 +30,11 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
     public class
         GetAllWareHouseCommandHandler : IRequestHandler<GetAllWareHouseCommand, IEnumerable<WareHouseDTO>>
     {
-        private readonly IDapper _repository;
+        private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
 
-        public GetAllWareHouseCommandHandler(IDapper repository)
+        public GetAllWareHouseCommandHandler(IRepositoryEF<Domain.Entity.WareHouse> repository)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _repository = repository;
         }
 
         public async Task<IEnumerable<WareHouseDTO>> Handle(GetAllWareHouseCommand request,
@@ -44,7 +45,7 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
             string sql = "select Id,ParentId,Code,Name,Path from WareHouse where Inactive =@active and OnDelete=0 ";
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@active", request.Active ? 1 : 0);
-            var models = await _repository.GetAllAync<WareHouseDTO>(sql, parameter, CommandType.Text);
+            var models = await _repository.QueryAsync<WareHouseDTO>(sql, parameter, CommandType.Text);
             return models;
         }
     }

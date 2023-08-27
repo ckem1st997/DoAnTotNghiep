@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Share.BaseCore.StackAndQueue;
+using Share.Base.Core.StackAndQueue;
 using ShareModels.Models;
 using System;
 using System.Collections.Generic;

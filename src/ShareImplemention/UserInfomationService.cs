@@ -2,11 +2,10 @@
 using GrpcGetDataToMaster;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
-using Nest;
 using Newtonsoft.Json;
 using Serilog;
-using Share.BaseCore.Authozire;
-using Share.BaseCore.Cache.CacheName;
+using Share.Base.Service.Caching.CacheName;
+using Share.Base.Service.Security;
 using ShareModels.Models;
 using System.Text;
 using System.Threading;

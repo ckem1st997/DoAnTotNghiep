@@ -1,4 +1,4 @@
-﻿using Share.BaseCore.Extensions;
+﻿using Share.Base.Core.Extensions;
 using Grpc.Core;
 using Infrastructure;
 using Master.Extension;
@@ -12,7 +12,7 @@ using Microsoft.Identity.Web;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Share.BaseCore.Cache.CacheName;
+using Share.Base.Service.Caching.CacheName;
 
 namespace GrpcGetDataToMaster
 {

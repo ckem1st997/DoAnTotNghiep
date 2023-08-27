@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web;
-using Share.BaseCore.Repositories;
+using Share.Base.Service.Repository;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
@@ -18,7 +18,7 @@ namespace GrpcGetDataToWareHouse
 
         private readonly IRepositoryEF<WareHouse.Domain.Entity.WareHouse> _dapper;
         private readonly ILogger<GrpcGetDataWareHouseService> _logger;
-        public GrpcGetDataWareHouseService(RepositoryEF<WareHouse.Domain.Entity.WareHouse> dapper , ILogger<GrpcGetDataWareHouseService> logger)
+        public GrpcGetDataWareHouseService(IRepositoryEF<WareHouse.Domain.Entity.WareHouse> dapper , ILogger<GrpcGetDataWareHouseService> logger)
         {
             _logger = logger;
             _dapper = dapper;

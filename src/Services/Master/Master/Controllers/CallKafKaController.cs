@@ -1,8 +1,8 @@
 ﻿
 
 
-using Share.BaseCore.EventBus.Abstractions;
-using Share.BaseCore.Kafka;
+using Share.Base.Core.EventBus.Abstractions;
+using Share.Base.Core.Kafka;
 
 namespace Master.Controllers
 {

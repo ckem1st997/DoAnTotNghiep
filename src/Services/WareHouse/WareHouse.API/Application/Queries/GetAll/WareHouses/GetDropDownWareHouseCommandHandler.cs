@@ -11,18 +11,16 @@ using WareHouse.API.Application.Model;
 
 namespace WareHouse.API.Application.Queries.GetAll.WareHouses
 {
-    public class
-        GetDropDownWareHouseCommandHandler : IRequestHandler<GetDropDownWareHouseCommand, IEnumerable<WareHouseDTO>>
+    public class GetDropDownWareHouseCommandHandler : IRequestHandler<GetDropDownWareHouseCommand, IEnumerable<WareHouseDTO>>
     {
-        private readonly IDapper _repository;
+        private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
 
-        public GetDropDownWareHouseCommandHandler(IDapper repository)
+        public GetDropDownWareHouseCommandHandler(IRepositoryEF<Domain.Entity.WareHouse> repository)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _repository = repository;
         }
 
-        public async Task<IEnumerable<WareHouseDTO>> Handle(GetDropDownWareHouseCommand request,
-            CancellationToken cancellationToken)
+        public async Task<IEnumerable<WareHouseDTO>> Handle(GetDropDownWareHouseCommand request,CancellationToken cancellationToken)
         {
             if (request == null)
                 return null;
@@ -34,7 +32,7 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
             string sql = "select Id,ParentId,Code,Name from WareHouse where Inactive =@active and OnDelete=0 ";
             DynamicParameters parameter = new DynamicParameters();
             parameter.Add("@active", showHidden ? 1 : 0);
-            var getAll = await _repository.GetAllAync<WareHouseDTO>(sql, parameter, CommandType.Text);
+            var getAll = await _repository.QueryAsync<WareHouseDTO>(sql, parameter, CommandType.Text);
             var result = getAll
                 .Select(s => new WareHouseDTO
                 {

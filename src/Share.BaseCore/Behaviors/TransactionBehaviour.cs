@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 
-namespace Share.BaseCore.Behaviors
+namespace Share.Base.Service.Behaviors
 {
     //check connect db khi có request xuống lấy db
     public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
@@ -40,7 +40,7 @@ namespace Share.BaseCore.Behaviors
         {
             var response = default(TResponse);
             var typeName = request.GetGenericTypeName();
-          //  bool count= _dbContext.ChangeTracker.Entries<BaseEntity>().Any();
+            //  bool count= _dbContext.ChangeTracker.Entries<BaseEntity>().Any();
             try
             {
 
@@ -83,7 +83,7 @@ namespace Share.BaseCore.Behaviors
                 if (_currentTransaction != null)
                     return null;
 
-                _currentTransaction = await this._dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+                _currentTransaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
 
                 return _currentTransaction;
             }
@@ -97,7 +97,7 @@ namespace Share.BaseCore.Behaviors
 
                 try
                 {
-                    await this._dbContext.SaveChangesAsync();
+                    await _dbContext.SaveChangesAsync();
                     await transaction.CommitAsync();
                 }
                 catch

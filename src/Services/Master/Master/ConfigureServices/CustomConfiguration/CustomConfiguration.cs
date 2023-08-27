@@ -21,7 +21,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Master.SignalRHubs;
 using MediatR;
-using Share.BaseCore.CustomConfiguration;
+using Share.Base.Core.CustomConfiguration;
 using Master.Controllers;
 
 namespace Master.ConfigureServices.CustomConfiguration

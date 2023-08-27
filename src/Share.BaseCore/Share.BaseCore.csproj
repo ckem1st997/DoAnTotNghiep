@@ -73,7 +73,8 @@
 		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.2" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="EventBus\Extensions\" />
+	  <Folder Include="IRepositories\" />
+	  <Folder Include="Repositories\" />
 	</ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿using Share.BaseCore.Extensions;
+﻿using Share.Base.Core.Extensions;
 using Master.Extension;
 using Master.Service;
 using Microsoft.AspNetCore.Authorization;

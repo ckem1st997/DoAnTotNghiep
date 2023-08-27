@@ -1,5 +1,6 @@
-﻿using Share.BaseCore.Authozire;
-using Share.BaseCore.BaseNop;
+﻿
+using Share.Base.Core.Infrastructure;
+using Share.Base.Service.Security;
 using System.Security.Claims;
 
 namespace Master.Controllers

@@ -28,7 +28,7 @@
     {
         "System",
         "System.Collections.Generic",
-        "Share.BaseCore"
+        "Share.Base.Core"
     };
 
     if (Options.UseDataAnnotations)
