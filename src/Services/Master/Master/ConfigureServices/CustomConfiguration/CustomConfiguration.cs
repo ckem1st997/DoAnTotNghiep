@@ -24,15 +24,15 @@ using MediatR;
 using Master.Controllers;
 using Share.Base.Service.Configuration;
 
-namespace Master.ConfigureServices.CustomConfiguration
+namespace Master.ConfigureServices.Configuration
 {
-    public static class CustomConfiguration
+    public static class Configuration
     {
-        public static void AddCustomConfiguration(this IServiceCollection services, IConfiguration configuration)
+        public static void AddConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
-            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddMediatRCore();
 
             services.AddDataBaseContext<MasterdataContext>(configuration, "MasterdataContext");
             services.AddFilter();

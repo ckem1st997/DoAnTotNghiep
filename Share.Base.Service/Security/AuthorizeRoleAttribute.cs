@@ -60,7 +60,6 @@ namespace Share.Base.Service.Security
             {
                 var res = new ResultMessageResponse()
                 {
-                    data = null,
                     message = "Bạn chưa xác thực người dùng !",
                     httpStatusCode = (int)HttpStatusCode.Unauthorized,
                 };
@@ -71,7 +70,6 @@ namespace Share.Base.Service.Security
             {
                 var res = new ResultMessageResponse()
                 {
-                    data = null,
                     message = "Bạn chưa có quyền thực hiện thao tác này !",
                     httpStatusCode = (int)HttpStatusCode.Forbidden,
                 };

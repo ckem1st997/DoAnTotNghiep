@@ -4,7 +4,7 @@ using Grpc.Net.Client.Web;
 using Grpc.Net.ClientFactory;
 using GrpcGetDataToMaster;
 using GrpcGetDataToWareHouse;
-using Master.ConfigureServices.CustomConfiguration;
+using Master.ConfigureServices.Configuration;
 using Master.Extension;
 using Master.IntegrationEvents;
 using Master.Models;
@@ -55,7 +55,7 @@ namespace Master
         {
             services.AddCache(Configuration);
             services.AddControllers();
-            services.AddCustomConfiguration(Configuration);
+            services.AddConfiguration(Configuration);
             services.AddSingleton<IKafKaConnection, KafKaConnection>();
             services.AddEventBus(Configuration);
             services.AddEventBusKafka();
@@ -102,7 +102,7 @@ namespace Master
                 endpoints.MapControllers();
                 endpoints.MapHub<ConnectRealTimeHub>("/signalr");
             });
-            app.ConfigureEventBusKafka();
+          //  app.ConfigureEventBusKafka();
             app.ConfigureRequestPipeline();
         }
 
