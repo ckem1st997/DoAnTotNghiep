@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Grpc.Core;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -27,27 +28,34 @@ namespace Share.Base.Core.Filters
         public void OnException(ExceptionContext context)
         {
             string getEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Environments.Development;
-
-
+            var typeException = context.Exception.GetType();
             Log.Error(context.Exception + "|" + context.Exception.Message);
-            if (context.Exception.GetType() == typeof(BaseException))
+            var jsonResult = new ResultMessageResponse();
+            context.Result = new InternalServerErrorObjectResult(jsonResult);
+            context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            if (typeException == typeof(BaseException))
             {
-                var problemDetails = new ValidationProblemDetails()
+                jsonResult = new ResultMessageResponse
                 {
-                    Instance = context.HttpContext.Request.Path,
-                    Status = StatusCodes.Status400BadRequest,
-                    Detail = "Please refer to the errors property for additional details."
-                };
-
-                problemDetails.Errors.Add("DomainValidations", new string[] { context.Exception.Message });
-
-                context.Result = new BadRequestObjectResult(problemDetails);
-                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    message = context.Exception.Message,
+                    httpStatusCode = (int)HttpStatusCode.InternalServerError,
+                    success = false
+                };              
             }
-
+            if (typeException == typeof(RpcException))
+            {
+                jsonResult = new ResultMessageResponse
+                {
+                    message = "Hệ thống xác thực và phân quyền đang xảy ra lỗi, xin vui lòng thử lại sau !",
+                    httpStatusCode = (int)HttpStatusCode.Unauthorized,
+                    success = false
+                };
+                context.Result = new UnauthorizedObjectResult(jsonResult);
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            }
             else
             {
-                var jsonResult = new ResultMessageResponse
+                jsonResult = new ResultMessageResponse
                 {
                     message = "Có lỗi ngoài ý muốn xảy ra, xin vui lòng liên hệ bộ phận liên quan !",
                     httpStatusCode = (int)HttpStatusCode.InternalServerError,
@@ -56,9 +64,8 @@ namespace Share.Base.Core.Filters
                 if (getEnv.Equals(Environments.Development))
                     jsonResult.message = context.Exception.Message;
 
-                context.Result = new InternalServerErrorObjectResult(jsonResult);
-                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
+
             context.ExceptionHandled = true;
         }
     }

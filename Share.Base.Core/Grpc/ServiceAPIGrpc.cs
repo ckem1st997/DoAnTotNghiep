@@ -24,15 +24,12 @@ namespace Share.Base.Core.Grpc
             services.AddGrpc(options =>
             {
                 options.EnableDetailedErrors = true;
-
             });
             services.AddTransient<GrpcExceptionInterceptor>();
-            AppContext.SetSwitch(
-  "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             var httpHandler = new HttpClientHandler();
             // Return `true` to allow certificates that are untrusted/invalid
-            httpHandler.ServerCertificateCustomValidationCallback =
-                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+            httpHandler.ServerCertificateCustomValidationCallback =HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
             services.AddGrpcClient<T>(o =>
             {
                 o.Address = new Uri(configuration.GetValue<string>("Grpc:Port"));

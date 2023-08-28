@@ -25,31 +25,27 @@ namespace Share.Base.Core.Grpc
             ClientInterceptorContext<TRequest, TResponse> context,
             AsyncUnaryCallContinuation<TRequest, TResponse> continuation)
         {
-            var metadata = new Metadata();
-            string accessToken = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"] ?? "";
-            if (!string.IsNullOrWhiteSpace(accessToken) && accessToken.StartsWith("Bearer"))
-            {
-                metadata.Add("Authorization", accessToken);
-            }
-            var callOption = context.Options.WithHeaders(metadata);
-            context = new ClientInterceptorContext<TRequest, TResponse>(context.Method, context.Host, callOption);
-            return base.AsyncUnaryCall(request, context, continuation);
-        }
 
-        private async Task<TResponse> HandleResponse<TResponse>(Task<TResponse> t)
-        {
             try
             {
+                var metadata = new Metadata();
                 string accessToken = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"] ?? "";
-
-                var response = await t;
-                return response;
+                if (!string.IsNullOrWhiteSpace(accessToken) && accessToken.StartsWith("Bearer"))
+                {
+                    metadata.Add("Authorization", accessToken);
+                }
+                var callOption = context.Options.WithHeaders(metadata);
+                context = new ClientInterceptorContext<TRequest, TResponse>(context.Method, context.Host, callOption);
+                return base.AsyncUnaryCall(request, context, continuation);
             }
             catch (RpcException e)
             {
                 Log.Error("Error calling via grpc: {Status} - {Message}", e.Status, e.Message);
-                return default;
+                throw e;
             }
+
         }
+
+     
     }
 }
