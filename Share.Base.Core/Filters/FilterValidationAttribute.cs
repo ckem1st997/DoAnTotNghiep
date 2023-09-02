@@ -9,7 +9,7 @@ namespace Share.Base.Core.Filters
     /// <summary>
     /// custom reponse message to validator by flutent
     /// </summary>
-    public class CustomValidationAttribute : ActionFilterAttribute
+    public class FilterValidationAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {

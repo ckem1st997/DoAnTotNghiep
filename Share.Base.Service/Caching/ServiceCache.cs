@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Share.Base.Core.Enum;
 using Share.Base.Service.Caching.CacheName;
 using StackExchange.Redis;
 
@@ -93,5 +94,63 @@ namespace Share.Base.Service.Caching
             //});
 
         }
+
+
+        /// <summary>
+        /// done HybridCachingProvider
+        /// </summary>
+        /// <param name="services"></param>
+        public static void AddEasyCachingCore(this IServiceCollection services, IConfiguration configuration, ConfigEasyCaching configEasyCaching = ConfigEasyCaching.Hybrid)
+        {
+            services.AddEasyCaching(option =>
+            {
+                Action<JsonSerializerSettings> serializerSettings = x =>
+                {
+                    x.MissingMemberHandling = MissingMemberHandling.Ignore;
+                    x.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    x.DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind;
+                    x.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+                    x.MaxDepth = 32;
+                };
+                option.WithJson(serializerSettings, CacheHelper.CacheConfig.WithJson_Name);
+
+                if (configEasyCaching.Equals(ConfigEasyCaching.InMemoryOnly) || configEasyCaching.Equals(ConfigEasyCaching.Hybrid))
+                    // local
+                    option.UseInMemory(CacheHelper.CacheConfig.InMemory);
+                if (configEasyCaching.Equals(ConfigEasyCaching.RedisOnly) || configEasyCaching.Equals(ConfigEasyCaching.Hybrid))
+                    // distributed
+                    option.UseRedis(config =>
+                {
+                    config.DBConfig.Endpoints.Add(new ServerEndPoint(configuration.GetSection("Redis")["Server"], configuration.GetValue<int>("Redis:Post")));
+                    config.DBConfig.Database = 5;
+                    config.DBConfig.AllowAdmin = true;
+                    config.SerializerName = CacheHelper.CacheConfig.WithJson_Name;
+                }, CacheHelper.CacheConfig.Redis).WithMessagePack(CacheHelper.CacheConfig.Redis);
+
+
+                if (configEasyCaching.Equals(ConfigEasyCaching.Hybrid))
+                    // combine local and distributed
+                    option.UseHybrid(config =>
+                {
+                    config.TopicName = CacheHelper.CacheConfig.TopicName;
+                    config.EnableLogging = true;
+
+                    // specify the local cache provider name after v0.5.4
+                    config.LocalCacheProviderName = CacheHelper.CacheConfig.InMemory;
+                    // specify the distributed cache provider name after v0.5.4
+                    config.DistributedCacheProviderName = CacheHelper.CacheConfig.Redis;
+                })
+                // use redis bus
+                .WithRedisBus(busConf =>
+                {
+                    busConf.Endpoints.Add(new ServerEndPoint(configuration.GetSection("Redis")["Server"], configuration.GetValue<int>("Redis:Post")));
+
+                    // do not forget to set the SerializerName for the bus here !!
+                    busConf.SerializerName = CacheHelper.CacheConfig.WithJson_Name;
+                });
+            });
+
+        }
+
     }
 }

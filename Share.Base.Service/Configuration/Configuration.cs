@@ -105,7 +105,7 @@ namespace Share.Base.Service.Configuration
             services.AddControllers(options =>
             {
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-                options.Filters.Add(typeof(CustomValidationAttribute));
+                options.Filters.Add(typeof(FilterValidationAttribute));
             })
                 // .AddApplicationPart(typeof(TStartup).Assembly)
                 .AddJsonOptions(options =>
