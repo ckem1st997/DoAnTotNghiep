@@ -16,7 +16,7 @@ namespace Share.Base.Service.Caching
         {
             services.AddDistributedMemoryCache();
             // Register the RedisCache service
-            //  services.AddMemoryCache();
+            //services.AddMemoryCache();
             var stringConnect = configuration.GetSection("Redis")["ConnectionString"];
             Console.WriteLine(stringConnect);
             var connect = new ConfigurationOptions

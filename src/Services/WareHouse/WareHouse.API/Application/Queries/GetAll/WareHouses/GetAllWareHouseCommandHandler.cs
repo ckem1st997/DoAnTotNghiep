@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Dapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Share.Base.Core.Infrastructure;
+using Share.Base.Service;
 using Share.Base.Service.Caching;
 using Share.Base.Service.Repository;
 using WareHouse.API.Application.Authentication;
@@ -27,14 +29,13 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
         public TimeSpan? SlidingExpiration { get; set; }
     }
 
-    public class
-        GetAllWareHouseCommandHandler : IRequestHandler<GetAllWareHouseCommand, IEnumerable<WareHouseDTO>>
+    public class GetAllWareHouseCommandHandler : IRequestHandler<GetAllWareHouseCommand, IEnumerable<WareHouseDTO>>
     {
         private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
 
-        public GetAllWareHouseCommandHandler(IRepositoryEF<Domain.Entity.WareHouse> repository)
+        public GetAllWareHouseCommandHandler()
         {
-            _repository = repository;
+            _repository = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.WareHouse>>(DataConnectionHelper.ConnectionString.Dashboard);
         }
 
         public async Task<IEnumerable<WareHouseDTO>> Handle(GetAllWareHouseCommand request,

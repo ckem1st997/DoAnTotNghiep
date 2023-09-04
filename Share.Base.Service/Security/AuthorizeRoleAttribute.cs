@@ -31,8 +31,6 @@ namespace Share.Base.Service.Security
             {
                 throw new ArgumentNullException(nameof(context));
             }
-            //test
-            await base.OnActionExecutionAsync(context, next);
             // get content param action
             //    public async Task<ActionResult<MemberDisplay?>> PostSave([ModelBinder(typeof(MemberBinder))] MemberSave contentItem)
             //var model = (MemberSave?)context.ActionArguments["contentItem"];

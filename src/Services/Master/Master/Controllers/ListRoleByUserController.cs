@@ -1,5 +1,4 @@
-﻿using Abp.Extensions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Master.Controllers
 {
@@ -141,7 +140,7 @@ namespace Master.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Edit(IEnumerable<string> ids, string id, string appId)
         {
-            if (id.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(id))
             {
                 return Ok(new ResultMessageResponse()
                 {

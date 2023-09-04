@@ -365,7 +365,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
+       // [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
         [Route("get-all")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -375,7 +375,7 @@ namespace WareHouse.API.Controllers
             var list = await _mediat.Send(new GetAllWareHouseCommand()
             {
                 Active = true,
-                BypassCache = false,
+                BypassCache = true,
                 CacheKey = string.Format(WareHouseCacheName.WareHouseGetAll, true)
             });
             var result = new ResultMessageResponse()
