@@ -78,6 +78,7 @@ namespace WareHouse.API
             services.AddValidator();
             // services.AddBehavior();
             services.AddCache(Configuration);
+            services.AddEasyCachingCore(Configuration);
             // services.AddEasyCachingAPI(Configuration);
             services.AddSingleton<IKafKaConnection, KafKaConnection>();
             services.AddEventBus(Configuration);

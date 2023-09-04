@@ -159,9 +159,6 @@ namespace Share.Base.Service.Configuration
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
                 options.RoutePrefix = string.Empty;
             });
-            //  var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            // đăng ký xử lý
-            //  eventBus.Subscribe<InwardIntegrationEvent, InwardIntegrationEventHandler>();
         }
         //public static void ConfigureEventBus(this IApplicationBuilder app)
         //{

@@ -54,12 +54,13 @@ namespace Master
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCache(Configuration);
+            services.AddEasyCachingCore(Configuration);
             services.AddControllers();
             services.AddConfiguration(Configuration);
             services.AddSingleton<IKafKaConnection, KafKaConnection>();
             services.AddEventBus(Configuration);
             services.AddEventBusKafka();
-            services.AddHostedService<RequestTimeConsumer>();
+           // services.AddHostedService<RequestTimeConsumer>();
             // call http to grpc
             services.AddApiGrpc<GrpcGetDataWareHouse.GrpcGetDataWareHouseClient>(Configuration);
             services.Configure<PasswordHasherOptions>(option =>
@@ -67,6 +68,7 @@ namespace Master
                 option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;
                 option.IterationCount = 12000;
             });
+
             services.AddApiAuthentication();
             services.AddApiCors();
             services.AddSignalR(options =>
@@ -86,8 +88,7 @@ namespace Master
             //  if (env.IsDevelopment())
             //  {
             app.UseDeveloperExceptionPage();
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            app.ConfigureSwagger();
             //  }
             app.UseHttpsRedirection();
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
