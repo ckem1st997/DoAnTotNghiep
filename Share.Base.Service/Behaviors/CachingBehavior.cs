@@ -15,7 +15,7 @@ using Share.Base.Service.Caching.CacheName;
 
 namespace Share.Base.Service.Behaviors
 {
-    public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : ICacheableMediatrQuery 
+    public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : ICacheableMediatrQuery
     {
         private readonly CacheSettings _settings;
         private readonly IHybridCachingManager _easyCachingProvider;
@@ -32,7 +32,7 @@ namespace Share.Base.Service.Behaviors
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             TResponse response;
-            if (request.BypassCache)
+            if (request.BypassCache || !_easyCachingProvider.IsConnectedRedis)
                 return await next();
             // nếu data null thì chạy đến request tiếp theo để lấy data và gán vào cache
             var cachedResponse = await _easyCachingProvider.HybridCachingProvider.GetAsync<TResponse>(request.CacheKey, cancellationToken: cancellationToken);
@@ -54,7 +54,6 @@ namespace Share.Base.Service.Behaviors
                 {
                     SlidingExpiration = slidingExpiration
                 };
-                //   var serializedData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(response));
                 await _easyCachingProvider.HybridCachingProvider.SetAsync<TResponse>(request.CacheKey, response, slidingExpiration, cancellationToken);
                 return response;
             }
