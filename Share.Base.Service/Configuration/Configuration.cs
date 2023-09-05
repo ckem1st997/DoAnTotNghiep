@@ -133,7 +133,7 @@ namespace Share.Base.Service.Configuration
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="services"></param>
-        public static void AddMediatRCore<T>(this IServiceCollection services) where T:class
+        public static void AddMediatRCore<T>(this IServiceCollection services) where T : class
         {
             // version 12.1
             services.AddMediatR(cfg =>

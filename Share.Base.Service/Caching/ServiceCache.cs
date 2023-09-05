@@ -57,7 +57,11 @@ namespace Share.Base.Service.Caching
         /// <param name="services"></param>
         public static void AddEasyCachingCore(this IServiceCollection services, IConfiguration configuration, ConfigEasyCaching configEasyCaching = ConfigEasyCaching.Hybrid)
         {
-            //services.AddSingleton<IHybridProviderFactory, DefaultHybridProviderFactory>();
+            services.AddSingleton(cfg =>
+            {
+                IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(configuration.GetSection("Redis")["ConnectionString"]);
+                return multiplexer.GetDatabase();
+            });
             //IHybridCachingManager
             services.AddSingleton<IHybridCachingManager, HybridCachingManager>();
             services.AddEasyCaching(option =>
