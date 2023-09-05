@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Share.Base.Service.Caching.CacheName.CacheHelper;
 
 namespace Share.Base.Service.Caching
 {
@@ -17,7 +18,7 @@ namespace Share.Base.Service.Caching
         public IHybridCachingProvider HybridCachingProvider { get; }
         public HybridCachingManager(IHybridProviderFactory hybridFactory)
         {
-            HybridCachingProvider = hybridFactory.GetHybridCachingProvider("h1");
+            HybridCachingProvider = hybridFactory.GetHybridCachingProvider(CacheConfig.ProviderNames.Hybrid);
         }
     }
 }
