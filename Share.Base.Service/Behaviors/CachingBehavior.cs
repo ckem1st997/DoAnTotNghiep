@@ -18,9 +18,9 @@ namespace Share.Base.Service.Behaviors
     public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : ICacheableMediatrQuery 
     {
         private readonly CacheSettings _settings;
-        private readonly IHybridCachingProvider _easyCachingProvider;
+        private readonly IHybridCachingManager _easyCachingProvider;
 
-        public CachingBehavior(IOptions<CacheSettings> settings,IHybridCachingProvider easyCachingProvider)
+        public CachingBehavior(IOptions<CacheSettings> settings, IHybridCachingManager easyCachingProvider)
         {
             _settings = settings.Value;
             //    _configuration = configuration;
@@ -35,7 +35,7 @@ namespace Share.Base.Service.Behaviors
             if (request.BypassCache)
                 return await next();
             // nếu data null thì chạy đến request tiếp theo để lấy data và gán vào cache
-            var cachedResponse = await _easyCachingProvider.GetAsync<TResponse>(request.CacheKey, cancellationToken: cancellationToken);
+            var cachedResponse = await _easyCachingProvider.HybridCachingProvider.GetAsync<TResponse>(request.CacheKey, cancellationToken: cancellationToken);
             if (cachedResponse.HasValue)
             {
                 response = cachedResponse.Value;
@@ -55,7 +55,7 @@ namespace Share.Base.Service.Behaviors
                     SlidingExpiration = slidingExpiration
                 };
                 //   var serializedData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(response));
-                await _easyCachingProvider.SetAsync<TResponse>(request.CacheKey, response, slidingExpiration, cancellationToken);
+                await _easyCachingProvider.HybridCachingProvider.SetAsync<TResponse>(request.CacheKey, response, slidingExpiration, cancellationToken);
                 return response;
             }
             return response;

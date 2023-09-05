@@ -57,7 +57,7 @@ namespace Share.Base.Service.Caching
         /// <param name="services"></param>
         public static void AddEasyCachingCore(this IServiceCollection services, IConfiguration configuration, ConfigEasyCaching configEasyCaching = ConfigEasyCaching.Hybrid)
         {
-            services.AddSingleton<IHybridProviderFactory, DefaultHybridProviderFactory>();
+            //services.AddSingleton<IHybridProviderFactory, DefaultHybridProviderFactory>();
             //IHybridCachingManager
             services.AddSingleton<IHybridCachingManager, HybridCachingManager>();
             services.AddEasyCaching(option =>
