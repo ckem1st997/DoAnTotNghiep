@@ -46,7 +46,7 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             services.AddScoped<IFakeData, FakeData>();
             services.AddScoped<IUserSevice, UserSevice>();
             services.AddScoped<ISignalRService, SignalRService>();
-            services.AddMediatRCore();
+            services.AddMediatRCore<Program>();
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
 
             services.AddDataBaseContext<WarehouseManagementContext>(configuration, DataConnectionHelper.ConnectionString.Warehouse);

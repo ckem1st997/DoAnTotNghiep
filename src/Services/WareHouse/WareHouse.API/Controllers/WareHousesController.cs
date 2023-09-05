@@ -375,7 +375,7 @@ namespace WareHouse.API.Controllers
             var list = await _mediat.Send(new GetAllWareHouseCommand()
             {
                 Active = true,
-                BypassCache = true,
+                BypassCache = false,
                 CacheKey = string.Format(WareHouseCacheName.WareHouseGetAll, true)
             });
             var result = new ResultMessageResponse()

@@ -15,7 +15,7 @@ using Share.Base.Service.Caching.CacheName;
 
 namespace Share.Base.Service.Behaviors
 {
-    public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : ICacheableMediatrQuery
+    public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : ICacheableMediatrQuery 
     {
         private readonly IDistributedCache _cache;
         private readonly CacheSettings _settings;

@@ -72,14 +72,11 @@ namespace WareHouse.API
         public void ConfigureServices(IServiceCollection services)
         {
             SetLicense();
-            //  services.AddEasyCachingAPI(Configuration);
             services.AddConfiguration(Configuration);
             services.AddMapper();
             services.AddValidator();
-            // services.AddBehavior();
             services.AddCache(Configuration);
             services.AddEasyCachingCore(Configuration);
-            // services.AddEasyCachingAPI(Configuration);
             services.AddSingleton<IKafKaConnection, KafKaConnection>();
             services.AddEventBus(Configuration);
             services.AddApiElastic(Configuration);
@@ -101,7 +98,7 @@ namespace WareHouse.API
             // for you.
             //   builder.ConfigureDBContext();
             builder.RegisterModule(new WareHouseModule());
-            builder.RegisterModule(new BehaviorsModule());
+           //builder.RegisterModule(new BehaviorsModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

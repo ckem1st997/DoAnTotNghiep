@@ -24,30 +24,9 @@ namespace WareHouse.API.Infrastructure
             builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().InstancePerLifetimeScope();
             builder.RegisterType<BaseEngine>().As<IEngine>().SingleInstance();
             //
-            //builder.RegisterType<WarehouseManagementContext>()
-            //     .Named<DbContext>(DataConnectionHelper.ConnectionStringNames.Warehouse)
-            //     .InstancePerDependency();
 
             builder.AddDbContext<WarehouseManagementContext>(DataConnectionHelper.ConnectionStringNames.Warehouse);
             builder.AddDbContext<MasterdataContext>(DataConnectionHelper.ConnectionStringNames.Master);
-
-            // mulplite connect to dbcontext
-            //builder.RegisterType<MasterdataContext>()
-            //    .Named<DbContext>(DataConnectionHelper.ConnectionStringNames.Master)
-            //    .InstancePerDependency();
-
-
-            // Register resolving delegate 
-            //builder.Register<Func<string, DbContext>>(c =>
-            //{
-            //    var cc = c.Resolve<IComponentContext>();
-            //    return connectionStringName => cc.ResolveNamed<DbContext>(connectionStringName);
-            //});
-            //builder.Register<Func<string, Lazy<DbContext>>>(c =>
-            //{
-            //    var cc = c.Resolve<IComponentContext>();
-            //    return connectionStringName => cc.ResolveNamed<Lazy<DbContext>>(connectionStringName);
-            //});
 
             builder.AddRegisterDbContext(true);
             //
@@ -72,18 +51,6 @@ namespace WareHouse.API.Infrastructure
             //          (pi, ctx) => pi.ParameterType == typeof(DbContext) && pi.Name == DataConnectionHelper.ParameterName,
             //          (pi, ctx) => EngineContext.Current.Resolve<DbContext>(DataConnectionHelper.ConnectionStringNames.Master)))
             //      .InstancePerLifetimeScope();
-
-
-
-            // Behavior
-            //   builder.RegisterGeneric(typeof(LoggingBehavior<,>))
-            //.Named(DataConnectionHelper.ConnectionStringNames.Warehouse, typeof(IPipelineBehavior<,>))
-            //.WithParameter(new ResolvedParameter(
-            //    // kiểu truyền vào và tên biến truyền vào qua hàm khởi tạo
-            //    (pi, ctx) => pi.ParameterType == typeof(DbContext) && pi.Name == DataConnectionHelper.ParameterName,
-            //    (pi, ctx) => EngineContext.Current.Resolve<DbContext>(DataConnectionHelper.ConnectionStringNames.Warehouse)))
-            //.InstancePerDependency();
-            //   builder.RegisterGeneric(typeof(TransactionBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
 
         }
     }

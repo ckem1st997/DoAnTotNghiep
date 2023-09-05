@@ -19,6 +19,7 @@ using Share.Base.Service.Repository;
 using Share.Base.Core.Infrastructure;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
+using Share.Base.Service.Behaviors;
 
 namespace Share.Base.Service.Configuration
 {
@@ -126,9 +127,22 @@ namespace Share.Base.Service.Configuration
         }
 
 
-        public static void AddMediatRCore(this IServiceCollection services)
+
+        /// <summary>
+        /// chú ý đọc doc của thư viện
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="services"></param>
+        public static void AddMediatRCore<T>(this IServiceCollection services) where T:class
         {
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+            // version 12.1
+            services.AddMediatR(cfg =>
+            {
+                //  cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
+                cfg.RegisterServicesFromAssembly(typeof(T).Assembly);
+                cfg.AddOpenBehavior(typeof(CachingBehavior<,>));
+                cfg.AddOpenBehavior(typeof(ValidatorBehavior<,>));
+            });
             //services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         }
 

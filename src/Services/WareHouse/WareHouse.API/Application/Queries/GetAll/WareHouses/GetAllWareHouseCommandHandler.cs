@@ -35,7 +35,7 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
 
         public GetAllWareHouseCommandHandler()
         {
-            _repository = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.WareHouse>>(DataConnectionHelper.ConnectionString.Dashboard);
+            _repository = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse);
         }
 
         public async Task<IEnumerable<WareHouseDTO>> Handle(GetAllWareHouseCommand request,
