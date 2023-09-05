@@ -1,4 +1,5 @@
-﻿using EasyCaching.Core.Configurations;
+﻿using EasyCaching.Core;
+using EasyCaching.Core.Configurations;
 using EasyCaching.Serialization.SystemTextJson.Configurations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,29 +15,30 @@ namespace Share.Base.Service.Caching
     {
         public static void AddCache(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDistributedMemoryCache();
+            //services.AddDistributedMemoryCache();
             // Register the RedisCache service
             //services.AddMemoryCache();
-            var stringConnect = configuration.GetSection("Redis")["ConnectionString"];
-            Console.WriteLine(stringConnect);
-            var connect = new ConfigurationOptions
-            {
-                Password = configuration.GetSection("Redis")["Password"],
-                EndPoints = { stringConnect },
-                AbortOnConnectFail = false,
-                ConnectTimeout = 1000
-            };
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.ConfigurationOptions = connect;
-            });
+            //var stringConnect = configuration.GetSection("Redis")["ConnectionString"];
+            //Console.WriteLine(stringConnect);
+            ////var connect = new ConfigurationOptions
+            ////{
+            ////   // Password = configuration.GetSection("Redis")["Password"],
+            ////    EndPoints = { stringConnect },
+            ////    AbortOnConnectFail = false,
+            ////    ConnectTimeout = 1000
+            ////};
+            //services.AddStackExchangeRedisCache(options =>
+            //{
+            //    options.Configuration = stringConnect;
+            //    options.InstanceName = CacheHelper.CacheConfig.Redis; // Tên của Redis instance (nếu cần)
+            //});
             //Configure other services up here
-            services.AddSingleton(cfg =>
-            {
-                IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(connect);
-                return multiplexer.GetDatabase();
-            });
-            services.AddSingleton<ICacheExtension, CacheExtension>();
+            //services.AddSingleton(cfg =>
+            //{
+            //    IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(stringConnect);
+            //    return multiplexer.GetDatabase();
+            //});
+           // services.AddSingleton<ICacheExtension, CacheExtension>();
             // nếu dùng Singleton thì sẽ run hàm khởi tạo một lần duy nhất cho đến khi service được khởi động lại
             // mà nếu như vậy thì lúc đầu connect thế nào thì suốt quá trình chạy service sẽ connect kiểu đó
             // nên là trong quá trình có sập redis hay không, không ảnh hưởng vì phụ thuộc vào lúc start service
@@ -46,54 +48,6 @@ namespace Share.Base.Service.Caching
         }
 
 
-        public static void AddEasyCachingAPI(this IServiceCollection services, IConfiguration configuration)
-        {
-            var stringConnect = configuration.GetSection("Redis")["ConnectionString"];
-
-            services.AddEasyCaching(option =>
-            {
-                option.UseRedis(config =>
-                {
-                    config.DBConfig.Endpoints.Add(new ServerEndPoint(configuration.GetSection("Redis")["Server"], int.Parse(configuration.GetSection("Redis")["Port"])));
-                    config.EnableLogging = true;
-                    config.SerializerName = "redis";
-                }, "redis")
-                .WithMessagePack("redis");
-                Action<JsonSerializerSettings> serializerSettings = x =>
-                {
-                    x.MissingMemberHandling = MissingMemberHandling.Ignore;
-                    x.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                    x.DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind;
-                    x.DateFormatHandling = DateFormatHandling.IsoDateFormat;
-                    x.MaxDepth = 32;
-                };
-                option.WithJson(serializerSettings, "json");
-            });
-
-
-            //services.AddEasyCaching(delegate (EasyCachingOptions options)
-            //{
-            //    options.UseInMemory(configuration, CachingHelper.Configs.ProviderNames.InMemory, CachingHelper.Configs.ConfigSectionNames.InMemory);
-            //    options.UseRedis(configuration, CachingHelper.Configs.ProviderNames.Redis, CachingHelper.Configs.ConfigSectionNames.Redis);
-            //    options.UseHybrid(delegate (HybridCachingOptions config)
-            //    {
-            //        config.TopicName = CachingHelper.Configs.HybridTopicName;
-            //        config.EnableLogging = true;
-            //        config.LocalCacheProviderName = CachingHelper.Configs.ProviderNames.InMemory;
-            //        config.DistributedCacheProviderName = CachingHelper.Configs.ProviderNames.Redis;
-            //    }, CachingHelper.Configs.ProviderNames.Hybrid).WithRedisBus(configuration, CachingHelper.Configs.ConfigSectionNames.RedisBus);
-            //    Action<JsonSerializerSettings> jsonSerializerSettingsConfigure = delegate (JsonSerializerSettings x)
-            //    {
-            //        x.MissingMemberHandling = MissingMemberHandling.Ignore;
-            //        x.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            //        x.DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind;
-            //        x.DateFormatHandling = DateFormatHandling.IsoDateFormat;
-            //        x.MaxDepth = 32;
-            //    };
-            //    options.WithJson(jsonSerializerSettingsConfigure, CachingHelper.SerializerNames.Json);
-            //});
-
-        }
 
 
         /// <summary>
@@ -102,6 +56,9 @@ namespace Share.Base.Service.Caching
         /// <param name="services"></param>
         public static void AddEasyCachingCore(this IServiceCollection services, IConfiguration configuration, ConfigEasyCaching configEasyCaching = ConfigEasyCaching.Hybrid)
         {
+            services.AddSingleton<IHybridProviderFactory, DefaultHybridProviderFactory>();
+            //IHybridCachingManager
+            services.AddSingleton<IHybridCachingManager, HybridCachingManager>();
             services.AddEasyCaching(option =>
             {
                 Action<JsonSerializerSettings> serializerSettings = x =>
@@ -121,8 +78,8 @@ namespace Share.Base.Service.Caching
                     // distributed
                     option.UseRedis(config =>
                 {
-                    config.DBConfig.Endpoints.Add(new ServerEndPoint(configuration.GetSection("Redis")["Server"], configuration.GetValue<int>("Redis:Post")));
-                    config.DBConfig.Database = 5;
+                    config.DBConfig.Configuration = configuration.GetSection("Redis")["ConnectionString"];
+                    //config.DBConfig.Database = 5;
                     config.DBConfig.AllowAdmin = true;
                     config.SerializerName = CacheHelper.CacheConfig.WithJson_Name;
                 }, CacheHelper.CacheConfig.Redis).WithMessagePack(CacheHelper.CacheConfig.Redis);
@@ -143,8 +100,7 @@ namespace Share.Base.Service.Caching
                 // use redis bus
                 .WithRedisBus(busConf =>
                 {
-                    busConf.Endpoints.Add(new ServerEndPoint(configuration.GetSection("Redis")["Server"], configuration.GetValue<int>("Redis:Post")));
-
+                    busConf.Configuration= configuration.GetSection("RedisBus")["ConnectionString"];
                     // do not forget to set the SerializerName for the bus here !!
                     busConf.SerializerName = CacheHelper.CacheConfig.WithJson_Name;
                 });
@@ -153,4 +109,5 @@ namespace Share.Base.Service.Caching
         }
 
     }
+
 }

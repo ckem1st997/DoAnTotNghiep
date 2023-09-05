@@ -1,4 +1,5 @@
 ﻿
+using EasyCaching.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Nest;
@@ -6,6 +7,7 @@ using Serilog;
 using Serilog.Context;
 using Share.Base.Core.EventBus.Abstractions;
 using Share.Base.Core.Extensions;
+using Share.Base.Service.Caching;
 using Share.Base.Service.Caching.CacheName;
 using Share.Base.Service.IntegrationEvents.Events;
 using System.Linq;
@@ -27,11 +29,11 @@ namespace WareHouse.API.Controllers
         private readonly IUserSevice _userSevice;
         private readonly IEventBus _eventBus;
         private readonly IElasticSearchClient<WareHouseBookDTO> _elasticSearchClient;
-        private readonly ICacheExtension _cacheExtension;
+        private readonly IHybridCachingManager _cacheExtension;
         private readonly WarehouseManagementContext _dbContext;
 
 
-        public MasterGetController(IElasticClient elasticClient, IMediator mediat, IUserSevice userSevice, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient, IEventBus eventBus, ICacheExtension cacheExtension, WarehouseManagementContext dbContext)
+        public MasterGetController(IElasticClient elasticClient, IMediator mediat, IUserSevice userSevice, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient, IEventBus eventBus, IHybridCachingManager cacheExtension, WarehouseManagementContext dbContext)
         {
             _elasticClient = elasticClient;
             _mediat = mediat;
@@ -132,11 +134,11 @@ namespace WareHouse.API.Controllers
         [HttpGet("CanConnectRedis")]
         public IActionResult CanConnectRedis()
         {
-            var checkConnectoDb = _cacheExtension.IsConnected;
+            var checkConnectoDb = _cacheExtension.HybridCachingProvider.Name;
 
             return Ok(new ResultMessageResponse()
             {
-                success = checkConnectoDb
+                success = checkConnectoDb !=null
 
             });
         }     
@@ -155,18 +157,18 @@ namespace WareHouse.API.Controllers
         [HttpGet("DeleteAllCache")]
         public async Task<IActionResult> DeleteAllCache()
         {
-            if (!_cacheExtension.IsConnected)
+            if (_cacheExtension.HybridCachingProvider.Name ==null)
                 return Ok(new ResultMessageResponse()
                 {
                     data = "Không kết nối được tới Redis",
                     success = false
 
                 });
-            var res = await _cacheExtension.RemoveAll();
+             await _cacheExtension.HybridCachingProvider.RemoveAsync("1");
             return Ok(new ResultMessageResponse()
             {
                 data = "Xóa thành công !",
-                success = !res.IsNull
+    
 
             });
         }

@@ -1,4 +1,5 @@
-﻿using GrpcGetDataToWareHouse;
+﻿using EasyCaching.Core;
+using GrpcGetDataToWareHouse;
 using Infrastructure;
 using Master.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -23,7 +24,7 @@ using BaseId = GrpcGetDataToWareHouse.BaseId;
 
 namespace Master.Service
 {
-  //  [Authorize]
+    //  [Authorize]
     public class UserService : IUserService
     {
         private readonly MasterdataContext _context;
@@ -31,20 +32,18 @@ namespace Master.Service
         private readonly IHttpContextAccessor _httpContext;
         private readonly IPaginatedList<UserMaster> _list;
         private readonly GrpcGetDataWareHouse.GrpcGetDataWareHouseClient _client;
-        private readonly IDistributedCache _cache;
-        private readonly ICacheExtension _cacheExtension;
+        private readonly IHybridCachingProvider _cacheExtension;
 
 
         public UserMaster User => GetUser();
 
-        public UserService(GrpcGetDataWareHouse.GrpcGetDataWareHouseClient client, IPaginatedList<UserMaster> list, MasterdataContext context, IConfiguration configuration, IHttpContextAccessor httpContext, IDistributedCache cache, ICacheExtension cacheExtension)
+        public UserService(GrpcGetDataWareHouse.GrpcGetDataWareHouseClient client, IPaginatedList<UserMaster> list, MasterdataContext context, IConfiguration configuration, IHttpContextAccessor httpContext, IDistributedCache cache, IHybridCachingProvider cacheExtension)
         {
             _context = context;
             _configuration = configuration;
             _httpContext = httpContext;
             _list = list;
             _client = client;
-            _cache = cache;
             _cacheExtension = cacheExtension;
         }
 
@@ -231,50 +230,45 @@ namespace Master.Service
 
         public async Task CacheListRole(string userId)
         {
-            if (_cacheExtension.IsConnected)
+
+            var slidingExpiration = TimeSpan.FromDays(10);
+            List<string> listRole = new List<string>();
+            // get list roleid by userid
+            List<string> listRoleOne = await _context.ListRoleByUsers.Where(x => x.UserId.Equals(userId)).Select(x => x.ListRoleId).ToListAsync();
+
+            if (listRoleOne.Any())
+                listRole.AddRange(listRoleOne);
+
+
+            // get list authozrireid by userid
+
+            List<string> checkListAuthozire = await _context.ListAuthozireRoleByUsers.Where(x => x.UserId.Equals(userId)).Select(x => x.ListAuthozireId).ToListAsync();
+            // get list roleid by authozreid
+            if (checkListAuthozire.Any())
             {
-                var slidingExpiration = TimeSpan.FromDays(10);
-                var options = new DistributedCacheEntryOptions
-                {
-                    SlidingExpiration = slidingExpiration
-                };
-                List<string> listRole = new List<string>();
-                // get list roleid by userid
-                List<string> listRoleOne = await _context.ListRoleByUsers.Where(x => x.UserId.Equals(userId)).Select(x => x.ListRoleId).ToListAsync();
-
-                if (listRoleOne.Any())
-                    listRole.AddRange(listRoleOne);
-
-
-                // get list authozrireid by userid
-
-                List<string> checkListAuthozire = await _context.ListAuthozireRoleByUsers.Where(x => x.UserId.Equals(userId)).Select(x => x.ListAuthozireId).ToListAsync();
-                // get list roleid by authozreid
-                if (checkListAuthozire.Any())
-                {
-                    List<string> listRoleTwo = await _context.ListAuthozireByListRoles.Where(x => checkListAuthozire.Contains(x.AuthozireId)).Select(x => x.ListRoleId).ToListAsync();
-                    if (listRoleTwo.Any())
-                        listRole.AddRange(listRoleTwo);
-                }
-                List<string> res = new List<string>();
-                if (listRole.Any())
-                    res.AddRange(await _context.ListRoles.Where(x => listRole.Contains(x.Id)).Select(x => x.Key).ToListAsync());
-
-                byte[] serializedData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(res));
-                await _cache.SetAsync(string.Format(UserListRoleCacheName.UserListRoleCache, userId), serializedData, options);
+                List<string> listRoleTwo = await _context.ListAuthozireByListRoles.Where(x => checkListAuthozire.Contains(x.AuthozireId)).Select(x => x.ListRoleId).ToListAsync();
+                if (listRoleTwo.Any())
+                    listRole.AddRange(listRoleTwo);
             }
+            List<string> res = new List<string>();
+            if (listRole.Any())
+                res.AddRange(await _context.ListRoles.Where(x => listRole.Contains(x.Id)).Select(x => x.Key).ToListAsync());
+
+            byte[] serializedData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(res));
+            await _cacheExtension.SetAsync(string.Format(UserListRoleCacheName.UserListRoleCache, userId), serializedData, slidingExpiration);
+
 
         }
 
         public async Task RemoveCacheListRole(string userId)
         {
-            await _cacheExtension.RemoveAllKeysBy(string.Format(UserListRoleCacheName.UserListRoleCache, userId));
+            await _cacheExtension.RemoveByPrefixAsync(string.Format(UserListRoleCacheName.UserListRoleCache, userId));
         }
 
 
         public async Task RemoveAllCacheListRoleByUser()
         {
-            await _cacheExtension.RemoveAllKeysBy(UserListRoleCacheName.Prefix);
+            await _cacheExtension.RemoveByPrefixAsync(UserListRoleCacheName.Prefix);
         }
 
 
@@ -291,22 +285,13 @@ namespace Master.Service
         [AllowAnonymous]
         public async Task CacheListRoleInactiveFalse()
         {
-            if (_cacheExtension.IsConnected)
+            var slidingExpiration = TimeSpan.FromDays(10);
+            // get list roleid by userid
+            var listRoleFalse = await GetListRoleInactiveFalse();
+            if (listRoleFalse.Any())
             {
-                var slidingExpiration = TimeSpan.FromDays(10);
-                var options = new DistributedCacheEntryOptions
-                {
-                    SlidingExpiration = slidingExpiration
-                };
-
-                // get list roleid by userid
-                var listRoleFalse = await GetListRoleInactiveFalse();
-                if (listRoleFalse.Any())
-                {
-                    byte[] serializedData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(listRoleFalse));
-                    await _cache.SetAsync(string.Format(ListRoleCacheName.UserListRoleCache, false), serializedData, options);
-                }
-
+                byte[] serializedData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(listRoleFalse));
+                await _cacheExtension.SetAsync(string.Format(ListRoleCacheName.UserListRoleCache, false), serializedData, slidingExpiration);
             }
         }
 
@@ -325,7 +310,7 @@ namespace Master.Service
         [AllowAnonymous]
         public async Task RemoveCacheListRoleInactiveFalse()
         {
-            await _cacheExtension.RemoveAllKeysBy(string.Format(ListRoleCacheName.UserListRoleCache, false));
+            await _cacheExtension.RemoveByPrefixAsync(string.Format(ListRoleCacheName.UserListRoleCache, false));
         }
     }
 }

@@ -27,13 +27,15 @@ using Share.Base.Core.Infrastructure;
 using Share.Base.Service;
 using Share.Base.Service.Security;
 using Share.Base.Core.Extensions;
+using EasyCaching.Core;
+using Share.Base.Service.Caching;
 
 namespace WareHouse.API.Controllers
 {
     public class WareHousesController : BaseController
     {
         private readonly IMediator _mediat;
-        private readonly ICacheExtension _cacheExtension;
+        private readonly IHybridCachingManager _cacheExtension;
         private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
         private readonly IRepositoryEF<Domain.Entity.Outward> _repository1;
         private readonly IRepositoryEF<Domain.Entity.Inward> _repository2;
@@ -41,7 +43,7 @@ namespace WareHouse.API.Controllers
         private readonly IElasticSearchClient<WareHouseBookDTO> _elasticSearchClient;
 
 
-        public WareHousesController(IMediator mediat, ICacheExtension cacheExtension, IElasticClient elasticClient, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient)
+        public WareHousesController(IMediator mediat, IHybridCachingManager cacheExtension, IElasticClient elasticClient, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient)
         {
             _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
@@ -597,7 +599,7 @@ namespace WareHouse.API.Controllers
         {
             var res = await _mediat.Send(new DeleteWareHouseCommand() { Id = listIds });
             if (res)
-                await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
+                await _cacheExtension.HybridCachingProvider.RemoveByPrefixAsync(WareHouseCacheName.Prefix);
             var result = new ResultMessageResponse()
             {
                 success = res

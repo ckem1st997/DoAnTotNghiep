@@ -17,41 +17,27 @@ namespace Share.Base.Service.Behaviors
 {
     public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : ICacheableMediatrQuery 
     {
-        private readonly IDistributedCache _cache;
         private readonly CacheSettings _settings;
-        // private readonly IConfiguration _configuration;
-        private readonly ICacheExtension _cacheExtension;
         private readonly IHybridCachingProvider _easyCachingProvider;
 
-        public CachingBehavior(ICacheExtension cacheExtension, IOptions<CacheSettings> settings, IDistributedCache cache, IHybridCachingProvider easyCachingProvider)
+        public CachingBehavior(IOptions<CacheSettings> settings,IHybridCachingProvider easyCachingProvider)
         {
             _settings = settings.Value;
             //    _configuration = configuration;
-            _cacheExtension = cacheExtension;
-            _cache = cache;
+            //_cacheExtension = cacheExtension;
+            //_cache = cache;
             _easyCachingProvider = easyCachingProvider;
         }
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             TResponse response;
-            // nếu không cache thì sẽ chạy đến request tiếp theo, ở đây là Handle Mediatr
-            // nếu không connect được thì lấy data ở dưới db
-
             if (request.BypassCache)
                 return await next();
-            if (!_cacheExtension.IsConnected)
-            {
-                Log.Information("Redis not connected !");
-                return await next();
-            }
             // nếu data null thì chạy đến request tiếp theo để lấy data và gán vào cache
-            // var cachedResponse = await _cache.GetAsync(request.CacheKey, cancellationToken);
             var cachedResponse = await _easyCachingProvider.GetAsync<TResponse>(request.CacheKey, cancellationToken: cancellationToken);
             if (cachedResponse.HasValue)
-            // if (cachedResponse is not null)
             {
-                // response = JsonConvert.DeserializeObject<TResponse>(Encoding.UTF8.GetString(cachedResponse));
                 response = cachedResponse.Value;
                 Log.Information($"Fetched from Cache -> '{request.CacheKey}'.");
             }
@@ -69,11 +55,9 @@ namespace Share.Base.Service.Behaviors
                     SlidingExpiration = slidingExpiration
                 };
                 //   var serializedData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(response));
-                //  await _cache.SetAsync(request.CacheKey, serializedData, options, cancellationToken);
                 await _easyCachingProvider.SetAsync<TResponse>(request.CacheKey, response, slidingExpiration, cancellationToken);
                 return response;
             }
-            // cuối cùng trả về kết quả cho controller
             return response;
         }
     }
