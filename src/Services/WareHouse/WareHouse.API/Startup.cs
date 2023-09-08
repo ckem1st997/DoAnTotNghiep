@@ -108,20 +108,11 @@ namespace WareHouse.API
             // {
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
             app.UseDeveloperExceptionPage();
-            app.ConfigureSwagger();
             //  }
 
             //   app.UseHttpsRedirection();
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
-            app.UseMiddleware<RemoteIpAddressMiddleware>();
-            app.UseRouting();
-            app.UseGrpcWeb();
-            app.UseCors("AllowAll");
-            app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseBuiderAPI();
+            
 
             app.UseEndpoints(endpoints =>
             {
@@ -130,10 +121,6 @@ namespace WareHouse.API
             });
             app.ConfigureEventBusKafka();
             app.ConfigureRequestPipeline();
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
             // app.AppGraphQLServer();
         }
 

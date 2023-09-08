@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
-
+﻿using Google.Protobuf.WellKnownTypes;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HttpOverrides;
+using Serilog;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -21,7 +23,9 @@ namespace Share.Base.Core.Extensions
         public static void ConfigureRequestPipeline(this IApplicationBuilder application)
         {
             EngineContext.Current.ConfigureRequestPipeline(application);
-        }
+        }   
+        /// <param name="application">Builder for configuring an application's request pipeline</param>
+      
 
         //public static void ConfigureDBContext(this IServiceCollection application, WebApplicationBuilder web)
         //{

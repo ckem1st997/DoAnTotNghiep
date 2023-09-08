@@ -20,13 +20,30 @@ using Share.Base.Core.Infrastructure;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Share.Base.Service.Behaviors;
+using Microsoft.AspNetCore.HttpOverrides;
+using Share.Base.Service.Middleware;
 
 namespace Share.Base.Service.Configuration
 {
-    public static class CustomConfigurationCore
+    public static class ConfigurationCore
     {
 
+        public static void UseBuiderAPI(this IApplicationBuilder app)
+        {
 
+            app.ConfigureSwagger();
+            app.UseSerilogRequestLogging();
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+            app.UseMiddleware<RemoteIpAddressMiddleware>();
+            app.UseRouting();
+            app.UseGrpcWeb();
+            app.UseCors("AllowAll");
+            app.UseAuthentication();
+            app.UseAuthorization();
+        }
         public static void AddDataBaseContext<TDbContext>(this IServiceCollection services, IConfiguration configuration, string nameConnect, DatabaseType dbType = DatabaseType.MSSQL, QueryTrackingBehavior trackingBehavior = QueryTrackingBehavior.TrackAll) where TDbContext : DbContext
         {
             var sqlConnect = configuration.GetConnectionString(nameConnect);

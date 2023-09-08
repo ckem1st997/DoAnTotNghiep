@@ -30,6 +30,8 @@ namespace Share.Base.Core.Filters
             string getEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Environments.Development;
             var typeException = context.Exception.GetType();
             Log.Error(context.Exception + "|" + context.Exception.Message);
+            Log.Error($"Exception Method: {context.Exception.TargetSite.Name}");
+            Log.Error($"Type Exception: {context.Exception.GetType().FullName}");
             var jsonResult = new ResultMessageResponse();
             context.Result = new InternalServerErrorObjectResult(jsonResult);
             context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
