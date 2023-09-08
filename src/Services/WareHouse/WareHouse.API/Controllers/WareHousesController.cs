@@ -367,13 +367,22 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-       // [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
+        // [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
         [Route("get-all")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetAll()
         {
+            //for (int i = 0; i < 10000; i++)
+            //{
+            //    await _mediat.Send(new GetAllWareHouseCommand()
+            //    {
+            //        Active = true,
+            //        BypassCache = false,
+            //        CacheKey = string.Format(WareHouseCacheName.WareHouseGetAll, true)
+            //    });
+            //}
             var list = await _mediat.Send(new GetAllWareHouseCommand()
             {
                 Active = true,
