@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Set working directory
-        run:  cd /Share.Base.Service
+        run:  cd ./Share.Base.Service
       - name: Check out code
         uses: actions/checkout@v3
       
