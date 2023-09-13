@@ -30,7 +30,7 @@ jobs:
         run: dotnet build -c Release
 
       - name: Pack NuGet package
-        run: dotnet pack -c Release
+        run: dotnet pack -c Release --id
 
       - name: Publish NuGet Package
         run: |
