@@ -30,11 +30,11 @@ jobs:
         run: dotnet build -c Release
 
       - name: Pack NuGet package
-        run: dotnet pack -c Release --id Base.Core.Dev.97
+        run: dotnet pack -c Release
 
       - name: Publish NuGet Package
         run: |
          nuget setApiKey ${{ secrets.NUGET_API_KEY }}
-         dotnet nuget push  **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+         dotnet nuget push  **/*.nupkg --source https://api.nuget.org/v3/index.json
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
