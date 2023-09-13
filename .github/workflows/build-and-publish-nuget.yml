@@ -23,8 +23,8 @@ jobs:
         run: |
             cd ./Share.Base.Service
             dotnet restore 
-            dotnet build --configuration Release --no-restore
-            dotnet pack --no-build --configuration Release
+            dotnet build -c Release
+            dotnet pack -c Release
             dotnet nuget push  Share.Base.Service.1.0.1.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols --skip-duplicate
     
       - name: Build and Push Share.Base.Core
