@@ -1,0 +1,30 @@
+name: Build and Publish NuGet Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0
+
+      - name: Build
+        run: dotnet build -c Release
+
+      - name: Package
+        run: dotnet pack -c Release
+
+      - name: Publish NuGet Package
+        run: dotnet nuget push **/*.nupkg --source Dev-97-Loop
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
