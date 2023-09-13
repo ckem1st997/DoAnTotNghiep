@@ -18,6 +18,12 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.x
+      - uses: actions/checkout@master
+      - uses: nuget/setup-nuget@v1
+        with:
+          nuget-api-key: ${{ secrets.NUGET_API_KEY }}
+          nuget-version: '5.x'    
+      - run: nuget restore DoAnTotNghiep.sln
 
       - name: Build and Push Share.Base.Service
         run: |
