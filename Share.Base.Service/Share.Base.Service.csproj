@@ -10,6 +10,7 @@
 	  <Company>DEV</Company>
 	  <PackageDescription>PACKAGE_DESCRIPTION</PackageDescription>
 	  <RepositoryUrl>https://github.com/ckem1st997/DoAnTotNghiepY</RepositoryUrl>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
