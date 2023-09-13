@@ -11,10 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
-        uses: actions/checkout@v3
       - name: Set working directory
         run:  cd Share.Base.Service
+      - name: Check out code
+        uses: actions/checkout@v3
+      
       - name: Check out dotnet
         uses: actions/setup-dotnet@v3
         with:
