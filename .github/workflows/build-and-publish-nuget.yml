@@ -18,22 +18,14 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.x
-
-
-      - name: publish on version change
-        id: publish_nuget
-        uses: brandedoutcast/publish-nuget@v2
-        with:
-          PROJECT_FILE_PATH: ./Share.Base.Service/Share.Base.Service.csproj
-          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-          VERSION_REGEX: ^\s*<(Package|)Version>(.*)<\/(Package|)Version>\s*$
       - name: Build and Push Share.Base.Service
         run: |
             cd ./Share.Base.Service
             dotnet restore --locked-mode
             dotnet build -c Release
             dotnet pack -c Release
-            dotnet nuget push  **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate --source https://api.nuget.org/v3/index.json
+            nuget delete Share.Base.Service 1.0.0 -ApiKey ${{ secrets.NUGET_API_KEY }}
+            dotnet nuget push  **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
     
       - name: Build and Push Share.Base.Core
         run: |
