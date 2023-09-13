@@ -19,9 +19,17 @@ jobs:
         with:
           dotnet-version: 6.x
 
-      - name: Set working directory
+      - name: Build and Push Share.Base.Service
         run: |
             cd ./Share.Base.Service
+            dotnet restore --locked-mode
+            dotnet build -c Release
+            dotnet pack -c Release
+            dotnet nuget push  **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate --source https://api.nuget.org/v3/index.json
+    
+      - name: Build and Push Share.Base.Core
+        run: |
+            cd ./Share.Base.Core
             dotnet restore --locked-mode
             dotnet build -c Release
             dotnet pack -c Release
