@@ -19,10 +19,12 @@ jobs:
           cache: true
 
       - name: Build
-        run: dotnet build -c Release
+        run: | 
+             cd Share.Base.Service
+             build -c Release
+             dotnet pack -c Release
 
-      - name: Package
-        run: dotnet pack -c Release
+      
 
       - name: Publish NuGet Package
         run: dotnet nuget push **/*.nupkg --source Dev-97-Loop
