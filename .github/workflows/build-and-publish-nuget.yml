@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+      - name: Set working directory
+        run:  cd Share.Base.Service
       - name: Check out dotnet
         uses: actions/setup-dotnet@v3
         with:
@@ -20,8 +22,7 @@ jobs:
           cache: true
       - run: dotnet restore --locked-mode
       - name: Build
-        run: | 
-             cd Share.Base.Service
+        run: |
              build -c Release
              dotnet pack -c Release     
              
