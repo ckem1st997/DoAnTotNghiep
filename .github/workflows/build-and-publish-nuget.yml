@@ -31,11 +31,7 @@ jobs:
 
       - name: Pack NuGet package
         run: dotnet pack -c Release
-
-      - name: Set Api Key NuGet package
-        run: nuget setApiKey ${{ secrets.NUGET_API_KEY }}
         
       - name: Publish NuGet Package
-        run: dotnet nuget push  **/*.nupkg --source https://api.nuget.org/v3/index.json
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push  **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate --source https://api.nuget.org/v3/index.json
+
