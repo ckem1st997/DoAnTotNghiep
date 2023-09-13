@@ -29,6 +29,6 @@ jobs:
              dotnet pack -c Release     
              
       - name: Publish NuGet Package
-        run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push BaseCoreDev.1.0.0.nupkg --source https://api.nuget.org/v3/index.json
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
