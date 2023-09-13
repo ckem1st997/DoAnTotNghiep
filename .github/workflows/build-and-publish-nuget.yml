@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Display NUGET_API_KEY
-        run: echo "NUGET_API_KEY is $NUGET_API_KEY"
+        run: echo "NUGET_API_KEY is ${{ secrets.NUGET_API_KEY }}
       - name: Checkout code
         uses: actions/checkout@v3
 
