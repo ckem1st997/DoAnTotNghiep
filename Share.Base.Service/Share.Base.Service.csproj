@@ -4,6 +4,12 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  <PackageId>Share.Base.Service</PackageId>
+	  <Version>1.0.0</Version>
+	  <Authors>DEV97</Authors>
+	  <Company>DEV</Company>
+	  <PackageDescription>PACKAGE_DESCRIPTION</PackageDescription>
+	  <RepositoryUrl>https://github.com/ckem1st997/DoAnTotNghiepY</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
