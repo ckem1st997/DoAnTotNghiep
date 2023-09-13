@@ -25,7 +25,7 @@ jobs:
             dotnet restore 
             dotnet build -c Release
             dotnet pack -c Release
-            nuget delete **/* -ApiKey ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+            #nuget delete **/* -ApiKey ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
             dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
     
       - name: Build and Push Share.Base.Core
