@@ -1,9 +1,10 @@
-name: Build and Publish NuGet Package
+name: Build and Publish NuGet 
 
 on:
   push:
-    branches:
-      - main
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
 
 jobs:
   build:
