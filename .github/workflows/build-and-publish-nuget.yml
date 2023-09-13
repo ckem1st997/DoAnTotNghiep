@@ -22,7 +22,7 @@ jobs:
       - name: Build and Push Share.Base.Service
         run: |
             cd ./Share.Base.Service
-            #dotnet restore --locked-mode
+            dotnet restore 
             dotnet build -c Release
             dotnet pack -c Release
             dotnet nuget push  **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
