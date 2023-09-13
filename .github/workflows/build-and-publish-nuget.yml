@@ -12,12 +12,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.x
           cache: true
-
+      - run: dotnet restore --locked-mode
       - name: Build
         run: | 
              cd Share.Base.Service
