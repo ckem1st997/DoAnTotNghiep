@@ -1,12 +1,11 @@
 name: Build and Publish NuGet 
 
-
 on:
   push:
     branches: ["master"]
   pull_request:
     branches: ["master"]
-
+    
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,22 +18,20 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.x
-
-      - name: Set working directory
-        run: cd ./Share.Base.Service
-
-      - name: Restore NuGet packages
-        run: dotnet restore --locked-mode
-
-      - name: Build
-        run: dotnet build -c Release
-
-      - name: Pack NuGet package
-        run: dotnet pack -c Release --id Base.Core.Dev.97
-
-      - name: Publish NuGet Package
+          
+      - name: Build and Push Share.Base.Service
         run: |
-         nuget setApiKey ${{ secrets.NUGET_API_KEY }}
-         dotnet nuget push  **/*.nupkg --api-key oy2k4cvkvy5xj5woh4bajz3id4eonk4ujomg6z4fhpjitq --source https://api.nuget.org/v3/index.json
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+            cd ./Share.Base.Service
+            dotnet restore 
+            dotnet build -c Release
+            dotnet pack -c Release
+            dotnet nuget push  **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+    
+      - name: Build and Push Share.Base.Core
+        run: |
+            cd ./Share.Base.Core
+            dotnet restore --locked-mode
+            dotnet build -c Release
+            dotnet pack -c Release
+            dotnet nuget push  **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate --source https://api.nuget.org/v3/index.json
+      
