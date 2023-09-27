@@ -1,0 +1,95 @@
+curl https://releases.rancher.com/install-docker/20.10.sh | sh
+
+sudo apt-get update
+
+
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x ./kubectl
+sudo mv ./kubectl /usr/local/bin/kubectl
+
+
+curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+sudo apt-get install apt-transport-https --yes
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt-get update
+sudo apt-get install helm
+
+
+wget -q -O - https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | TAG=v5.4.6 bash
+
+
+
+//bo qua
+kubectl -n cattle-system exec -it rancher-6757f6b675-rj42p -- /bin/bash
+kubectl -n cattle-system exec -it rancher-6757f6b675-97vtb -- /bin/bash
+
+kubectl -n cattle-system patch deployment rancher -p '{"spec": {"template": {"spec": {"containers": [{"name": "rancher", "ports": [{"containerPort": 8888, "protocol": "TCP"}]}]}}}}'
+//
+
+
+k3d cluster create testcluster
+
+
+helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+kubectl create namespace cattle-system
+
+# If you have installed the CRDs manually instead of with the `--set installCRDs=true` option added to your Helm install command, you should upgrade your CRD resources before upgrading the Helm chart:
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.7.1/cert-manager.crds.yaml
+# Add the Jetstack Helm repository
+helm repo add jetstack https://charts.jetstack.io
+# Update your local Helm chart repository cache
+helm repo update
+# Install the cert-manager Helm chart
+helm install cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --version v1.7.1
+
+
+
+
+
+helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+
+
+helm install rancher rancher-stable/rancher \
+  --namespace cattle-system \
+  --set hostname=rancher.my.org \
+  --set bootstrapPassword=admin \
+  --set replicas=2 \
+  --set service.type=LoadBalancer
+
+docker run -d --name=rancher-server --restart=unless-stopped -p 8383:8383 --privileged rancher/rancher:v2.4.18
+kubectl -n cattle-system rollout status deploy/rancher
+ docker logs b0766b829514 2>&1 | grep "Bootstrap Password:" ==> trả về password để vô setup
+krCcESY7g3DL38Yr
+ 
+helm upgrade rancher rancher-stable/rancher \
+  --namespace cattle-system \
+  --set hostname=http://103.77.173.200/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://xamvn.vc/r/mbtm-thuy-moon.391229/page-22#post-8026434
