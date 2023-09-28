@@ -71,7 +71,7 @@ helm upgrade rancher rancher-stable/rancher \
 
 
 
-
+  Node-port: sẽ call thông chủ yếu trong mạng local, có thể dùng internal ip hoặc extenal
 
 
 
