@@ -97,9 +97,9 @@ namespace WareHouse.API
                 endpoints.MapGrpcService<GrpcGetDataWareHouseService>().EnableGrpcWeb();
                 endpoints.MapControllers();
             });
+            //local
             app.ConfigureEventBusKafka();
-            app.ConfigureRequestPipeline();
-            // app.AppGraphQLServer();
+
         }
 
 
