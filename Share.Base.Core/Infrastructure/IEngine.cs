@@ -24,9 +24,9 @@ namespace Share.Base.Core.Infrastructure
         /// <param name="scope">Scope</param>
         /// <typeparam name="T">Type of resolved service</typeparam>
         /// <returns>Resolved service</returns>
-        T Resolve<T>(string name = null, params Parameter[] parameters) where T : class;
+        T Resolve<T>(string name=null, params Parameter[] parameters) where T : class;
 
-        object Resolve(Type type, string name = null, params Parameter[] parameters);
+        object Resolve(Type type, string name, params Parameter[] parameters);
 
         /// <summary>
         /// Resolve dependencies

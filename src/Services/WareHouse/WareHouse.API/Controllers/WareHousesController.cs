@@ -463,21 +463,17 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseCreateKey.Warehouse)]
+        //  [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseCreateKey.Warehouse)]
         [Route("create")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreateAsync()
+        public IActionResult Create()
         {
-            var mode = new WareHouseDTO()
+            var mode = new WareHouseCommands()
             {
-                Id = Guid.NewGuid().ToString(),
                 Code = Extension.GetVoucherCode("WH")
-
             };
-            if (mode != null)
-                await GetDataToDrop(mode);
             var result = new MessageResponse()
             {
                 data = mode,
@@ -569,34 +565,34 @@ namespace WareHouse.API.Controllers
         //}
 
 
-        //[AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseCreateKey.Warehouse)]
-        //[Route("create")]
-        //[HttpPost]
-        //[ProducesResponseType((int)HttpStatusCode.OK)]
-        //[ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        //public async Task<IActionResult> Create(WareHouseCommands wareHouseCommands)
-        //{
-        //    var check = await _mediat.Send(new WareHouseCodeCommand()
-        //    {
-        //        Code = wareHouseCommands.Code.Trim()
-        //    });
-        //    if (check)
-        //    {
-        //        return Ok(new MessageResponse()
-        //        {
-        //            success = false,
-        //            message = "Mã đã tồn tại, xin vui lòng chọn mã khác !"
-        //        });
-        //    }
-        //    var data = await _mediat.Send(new CreateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
-        //    if (data)
-        //        await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
-        //    var result = new MessageResponse()
-        //    {
-        //        success = data
-        //    };
-        //    return Ok(result);
-        //}
+        // [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseCreateKey.Warehouse)]
+        [Route("create")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Create(WareHouseCommands wareHouseCommands)
+        {
+            //var check = await _mediat.Send(new WareHouseCodeCommand()
+            //{
+            //    Code = wareHouseCommands.Code.Trim()
+            //});
+            //if (check)
+            //{
+            //    return Ok(new MessageResponse()
+            //    {
+            //        success = false,
+            //        message = "Mã đã tồn tại, xin vui lòng chọn mã khác !"
+            //    });
+            //}
+            //var data = await _mediat.Send(new CreateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
+            //if (data)
+            //    await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
+            //var result = new MessageResponse()
+            //{
+            //    success = data
+            //};
+            return Ok(1);
+        }
 
         [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseDeleteKey.Warehouse)]
         [Route("delete")]

@@ -12,6 +12,7 @@ using Microsoft.Data.SqlClient;
 using static Dapper.SqlMapper;
 using Share.Base.Core.Infrastructure;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Share.Base.Core.Extensions;
 
 namespace Share.Base.Service.Repository
 {
@@ -44,6 +45,8 @@ namespace Share.Base.Service.Repository
             // ThrowIfDisposed();
             if (entity is null)
                 throw new BaseException(nameof(entity));
+            if (entity.Id.IsNullOrEmpty())
+                throw new BaseException(nameof(entity.Id));
             return (await _dbSet.AddAsync(entity)).Entity;
         }
 
@@ -51,6 +54,8 @@ namespace Share.Base.Service.Repository
         {
             if (entity is null)
                 throw new BaseException(nameof(entity));
+            if (entity.Id.IsNullOrEmpty())
+                throw new BaseException(nameof(entity.Id));
             _dbSet.Remove(entity);
         }
 
@@ -59,19 +64,21 @@ namespace Share.Base.Service.Repository
         {
             if (entity is null)
                 throw new BaseException(nameof(entity));
+            if (entity.Id.IsNullOrEmpty())
+                throw new BaseException(nameof(entity.Id));
             _dbSet.Update(entity);
         }
 
         public virtual async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default(CancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            // ThrowIfDisposed();
             if (entity == null)
             {
                 throw new BaseException(nameof(entity));
             }
+            if (entity.Id.IsNullOrEmpty())
+                throw new BaseException(nameof(entity.Id));
             _dbSet.Attach(entity);
-            //   entity.ConcurrencyStamp = Guid.NewGuid().ToString();
             _dbSet.Update(entity);
             try
             {
@@ -208,7 +215,7 @@ namespace Share.Base.Service.Repository
         {
             if (!ids.Any())
                 throw new BaseException("Danh sách mã xoá rỗng !");
-            var list = await _query.Where(x => ids.Contains(x.Id) && !x.OnDelete).ToListAsync();
+            var list = await _query.Where(x => ids.Contains(x.Id) && !x.OnDelete).ToListAsync(cancellationToken: cancellationToken);
             if (!list.Any())
                 throw new BaseException("Danh sách cần xoá không tồn tại !");
             list.ForEach(x =>
@@ -222,7 +229,7 @@ namespace Share.Base.Service.Repository
         {
             if (string.IsNullOrEmpty(id))
                 throw new BaseException("Mã xoá rỗng !");
-            var entity = await _query.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            var entity = await _query.FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken: cancellationToken);
             if (entity == null)
                 throw new BaseException("Danh sách cần xoá không tồn tại !");
             entity.OnDelete = true;

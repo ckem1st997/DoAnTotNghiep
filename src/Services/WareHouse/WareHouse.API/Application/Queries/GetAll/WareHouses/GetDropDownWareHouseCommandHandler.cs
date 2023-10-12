@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Dapper;
 using MediatR;
 using WareHouse.API.Application.Model;
+using Share.Base.Service;
+using Share.Base.Service.Attribute;
+using Share.Base.Service.Repository;
 
 namespace WareHouse.API.Application.Queries.GetAll.WareHouses
 {
@@ -15,12 +18,12 @@ namespace WareHouse.API.Application.Queries.GetAll.WareHouses
     {
         private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
 
-        public GetDropDownWareHouseCommandHandler(IRepositoryEF<Domain.Entity.WareHouse> repository)
+        public GetDropDownWareHouseCommandHandler()
         {
-            _repository = repository;
+            _repository = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse) ?? throw new ArgumentException(nameof(IRepositoryEF<Domain.Entity.WareHouse>));
         }
 
-        public async Task<IEnumerable<WareHouseDTO>> Handle(GetDropDownWareHouseCommand request,CancellationToken cancellationToken)
+        public async Task<IEnumerable<WareHouseDTO>> Handle(GetDropDownWareHouseCommand request, CancellationToken cancellationToken)
         {
             if (request == null)
                 return null;

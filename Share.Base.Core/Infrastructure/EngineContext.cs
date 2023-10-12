@@ -24,23 +24,29 @@ namespace Share.Base.Core.Infrastructure
             Singleton<IEngine>.Instance = engine;
         }
 
+        public static IEngine EngineResolve
+        {
+            get
+            {
+                return EngineContext.Current;
+            }
+        }
         #endregion
 
         #region Properties
 
         /// <summary>
-        /// Gets the singleton Nop engine used to access Nop services.
+        /// Gets the singleton  engine used to access  services.
         /// </summary>
         public static IEngine Current
         {
             get
             {
-                if (Singleton<IEngine>.Instance == null)
-                {
-                    Create();
-                }
-
-                return Singleton<IEngine>.Instance;
+                //if (Singleton<IEngine>.Instance == null)
+                //{
+                //    Create();
+                //}
+                return Singleton<IEngine>.Instance ?? Create();
             }
         }
 
