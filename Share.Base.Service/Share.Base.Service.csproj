@@ -1,24 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-	  <PackageId>Share.Base.Service</PackageId>
-	  <Version>1.0.1</Version>
-	  <Authors>DEV97</Authors>
-	  <Company>DEV</Company>
-	  <PackageDescription>PACKAGE_DESCRIPTION</PackageDescription>
-	  <RepositoryUrl>https://github.com/ckem1st997/DoAnTotNghiepY</RepositoryUrl>
-	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.2" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.2" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Share.Base.Core\Share.Base.Core.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Share.Base.Core\Share.Base.Core.csproj" />
+	</ItemGroup>
 
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="xcopy /y &quot;$(TargetDir)*.dll&quot; &quot;.\Core\&quot;" />
+	</Target>
 </Project>
