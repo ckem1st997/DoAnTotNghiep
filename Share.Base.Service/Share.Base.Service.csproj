@@ -14,7 +14,7 @@
 		<ProjectReference Include="..\Share.Base.Core\Share.Base.Core.csproj" />
 	</ItemGroup>
 
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	<!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 	  <Exec Command="xcopy /y &quot;$(TargetDir)*.dll&quot; &quot;.\Core\&quot;" />
-	</Target>
+	</Target>-->
 </Project>
