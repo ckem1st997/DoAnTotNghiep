@@ -39,7 +39,6 @@ namespace Share.Base.Service.Configuration
         // vào properties của dự án rồi bào build==> post build ==> điền xcopy /y "$(TargetDir)*.dll" ".\Core\"
         // "$(TargetDir)*.dll" : tất cả fill dll
         // ".\Core\" : thư mục lưu
-        public static void UseBuiderAPI(this IApplicationBuilder app)
         public static void UseAPI(this IApplicationBuilder app)
         {
             app.ConfigureSwagger();
@@ -84,7 +83,7 @@ namespace Share.Base.Service.Configuration
         #region Authozire
         public static void AddApiAuthentication(this IServiceCollection services)
         {
-            
+
             //
             services.AddScoped<IAuthozireExtensionForMaster, AuthozireExtensionForMaster>();
 
