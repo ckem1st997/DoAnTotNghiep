@@ -27,7 +27,9 @@ namespace Share.Base.Service.Configuration
 {
     public static class ConfigurationCore
     {
-
+        // vào properties của dự án rồi bào build==> post build ==> điền xcopy /y "$(TargetDir)*.dll" ".\Core\"
+        // "$(TargetDir)*.dll" : tất cả fill dll
+        // ".\Core\" : thư mục lưu
         public static void UseBuiderAPI(this IApplicationBuilder app)
         {
 

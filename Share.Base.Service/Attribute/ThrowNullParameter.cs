@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Share.Base.Service.Attribute
 {
-   [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class ThrowNullParameter : ActionFilterAttribute
     {
         private readonly string _parameterName;
@@ -33,3 +33,4 @@ namespace Share.Base.Service.Attribute
             }
         }
     }
+}
