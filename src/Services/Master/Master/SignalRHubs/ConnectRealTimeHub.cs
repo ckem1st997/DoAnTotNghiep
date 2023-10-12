@@ -30,7 +30,7 @@ namespace Master.SignalRHubs
         public async Task WareHouseBookTrachking(string id)
         {
             GetUserByService();
-            var res = new ResultMessageResponse()
+            var res = new MessageResponse()
             {
                 data = id,
                 success = _userService != null,
@@ -43,7 +43,7 @@ namespace Master.SignalRHubs
         public async Task CreateWareHouseBookTrachking(string type)
         {
             GetUserByService();
-            var res = new ResultMessageResponse()
+            var res = new MessageResponse()
             {
                 data = type,
                 success = _userService != null,
@@ -54,7 +54,7 @@ namespace Master.SignalRHubs
         public async Task AsyncWareHouseBookTrachking()
         {
             GetUserByService();
-            var res = new ResultMessageResponse()
+            var res = new MessageResponse()
             {
                 success = _userService != null,
                 message = _userService != null ? _userService.User.UserName+" vừa đồng bộ hóa giữa Sql và Elastic" : "Không tìm thấy dữ liệu"
@@ -66,7 +66,7 @@ namespace Master.SignalRHubs
         public async Task DeleteWareHouseBookTrachking(string type,string id)
         {
             GetUserByService();
-            var res = new ResultMessageResponse()
+            var res = new MessageResponse()
             {
                 data = id,
                 success = _userService != null,
@@ -78,7 +78,7 @@ namespace Master.SignalRHubs
         public async Task HistoryTrachking()
         {
             GetUserByService();
-            var res = new ResultMessageResponse()
+            var res = new MessageResponse()
             {
                 data=_userService.User.Id,
                 success = _userService != null

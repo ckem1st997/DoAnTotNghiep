@@ -13,7 +13,6 @@ using Share.Base.Service.IntegrationEvents.Events;
 using System.Linq;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Authentication;
-using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Model;
 using WareHouse.API.Application.Queries.Paginated.WareHouseBook;
 using WareHouse.API.Infrastructure.ElasticSearch;
@@ -75,7 +74,7 @@ namespace WareHouse.API.Controllers
                 }
 
             }
-            return Ok(new ResultMessageResponse()
+            return base.Ok(new MessageResponse()
             {
                 success = res.Result.Any()
             });
@@ -88,7 +87,7 @@ namespace WareHouse.API.Controllers
             var res = await _mediat.Send(new WareHouseBookgetAllCommand());
 
             var resElastic = await _elasticSearchClient.CountAllAsync();
-            return Ok(new ResultMessageResponse()
+            return base.Ok(new MessageResponse()
             {
                 data = res.totalCount + " - " + resElastic,
                 success = res.totalCount > 0 || resElastic > 0
@@ -105,13 +104,13 @@ namespace WareHouse.API.Controllers
             if(res.IsValid)
             {
                 var resCount = await _mediat.Send(new WareHouseBookgetAllCommand());
-                return Ok(new ResultMessageResponse()
+                return base.Ok(new MessageResponse()
                 {
                     success = resCount.totalCount>0
 
                 });
             }
-            return Ok(new ResultMessageResponse()
+            return base.Ok(new MessageResponse()
             {
                 success = false
 
@@ -123,7 +122,7 @@ namespace WareHouse.API.Controllers
         {
              var checkConnectoDb = await _dbContext.Database.CanConnectAsync();
 
-            return Ok(new ResultMessageResponse()
+            return base.Ok(new MessageResponse()
             {
                 success = checkConnectoDb
 
@@ -136,7 +135,7 @@ namespace WareHouse.API.Controllers
         {
             var checkConnectoDb = _cacheExtension.HybridCachingProvider.Name;
 
-            return Ok(new ResultMessageResponse()
+            return base.Ok(new MessageResponse()
             {
                 success = checkConnectoDb !=null
 
@@ -147,7 +146,7 @@ namespace WareHouse.API.Controllers
         {
             var checkConnectoDb = await _elasticClient.Cluster.HealthAsync();
 
-            return Ok(new ResultMessageResponse()
+            return base.Ok(new MessageResponse()
             {
                 success = checkConnectoDb.IsValid
 
@@ -158,14 +157,14 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> DeleteAllCache()
         {
             if (_cacheExtension.HybridCachingProvider.Name ==null)
-                return Ok(new ResultMessageResponse()
+                return base.Ok(new MessageResponse()
                 {
                     data = "Không kết nối được tới Redis",
                     success = false
 
                 });
              await _cacheExtension.HybridCachingProvider.RemoveAsync("1");
-            return Ok(new ResultMessageResponse()
+            return base.Ok(new MessageResponse()
             {
                 data = "Xóa thành công !",
     

@@ -19,7 +19,7 @@ namespace Master.Controllers
         public IActionResult GetList()
         {
             var list = _context.ListApps.Where(x => x.Id != null);
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 data = list,
                 totalCount = list.Count()
@@ -34,7 +34,7 @@ namespace Master.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Create()
         {
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 success = true,
                 data = new ListApp()
@@ -50,7 +50,7 @@ namespace Master.Controllers
         {
             if (list is null)
             {
-                return Ok(new ResultMessageResponse()
+                return Ok(new MessageResponse()
                 {
                     success = true,
                     data = "Không nhận được dữ liệu"
@@ -58,7 +58,7 @@ namespace Master.Controllers
             }
             list.Id = Guid.NewGuid().ToString();
             await _context.ListApps.AddAsync(list);
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 success = await _context.SaveChangesAsync() > 0
             });
@@ -74,7 +74,7 @@ namespace Master.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return Ok(new ResultMessageResponse()
+                return Ok(new MessageResponse()
                 {
                     success = true,
                     message = "Chưa nhập mã Id !"
@@ -82,7 +82,7 @@ namespace Master.Controllers
             }
 
             var res = await _context.ListApps.FirstOrDefaultAsync(x => x.Id.Equals(id));
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 success = res != null,
                 data = res
@@ -98,7 +98,7 @@ namespace Master.Controllers
         {
             if (list is null)
             {
-                return Ok(new ResultMessageResponse()
+                return Ok(new MessageResponse()
                 {
                     success = true,
                     data = "Không nhận được dữ liệu"
@@ -106,7 +106,7 @@ namespace Master.Controllers
             }
             _context.ListApps.Update(list);
             var res = await _context.SaveChangesAsync();
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 success = res > 0
             });
@@ -128,7 +128,7 @@ namespace Master.Controllers
                 res = await _context.SaveChangesAsync() > 0;
             }
 
-            var result = new ResultMessageResponse()
+            var result = new MessageResponse()
             {
                 success = res
             };

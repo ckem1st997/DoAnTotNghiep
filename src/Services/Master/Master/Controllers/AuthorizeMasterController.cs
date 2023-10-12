@@ -27,7 +27,7 @@ namespace Master.Controllers
         public async Task<IActionResult> GetLisst([FromQuery] SearchModel search)
         {
             var list = await _userService.GetListUserAsync(search.Pages, search.Number, search.Id, search.Key);
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 data = list.Result,
                 totalCount = list.totalCount
@@ -48,7 +48,7 @@ namespace Master.Controllers
             var user = _userService.GetUserById(id);
             if (user == null)
             {
-                var result = new ResultMessageResponse()
+                var result = new MessageResponse()
                 {
                     success = false,
                     message = "Tài khoản không tồn tại !"
@@ -58,7 +58,7 @@ namespace Master.Controllers
             var check = _userService.User;
             if (check.RoleNumber < user.RoleNumber)
             {
-                var result = new ResultMessageResponse()
+                var result = new MessageResponse()
                 {
                     success = false,
                     message = "Bạn không có quyền phân quyền tài khoản này !"
@@ -82,7 +82,7 @@ namespace Master.Controllers
                 RoleSelect = SelectListRole.Get()
             };
 
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 success = true,
                 data = res
@@ -100,7 +100,7 @@ namespace Master.Controllers
             var user = _userService.CheckUser(model.UserName);
             if (user)
             {
-                var re = new ResultMessageResponse()
+                var re = new MessageResponse()
                 {
                     success = false,
                     message = "Tài khoản không tồn tại !"
@@ -110,7 +110,7 @@ namespace Master.Controllers
             var check = _userService.User;
             if (check.RoleNumber < model.RoleNumber)
             {
-                var res1 = new ResultMessageResponse()
+                var res1 = new MessageResponse()
                 {
                     success = false,
                     message = "Bạn không được phần quyền lớn hơn vai trò của bạn !"
@@ -134,7 +134,7 @@ namespace Master.Controllers
             };
             var result = await _userService.SetRoleToUser(res);
             // var result = true;
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 success = result
             });
@@ -167,13 +167,13 @@ namespace Master.Controllers
                 map.Password = user.Password;
                 map.OnDelete = user.OnDelete;
                 var res = await _userService.UpdateUser(map);
-                var result = new ResultMessageResponse()
+                var result = new MessageResponse()
                 {
                     success = res,
                 };
                 return Ok(result);
             }
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 success = false,
                 message = "UserName không tồn tại !"
@@ -191,13 +191,13 @@ namespace Master.Controllers
             var res = _userService.User;
 
             if (res is null)
-                return Unauthorized(new ResultMessageResponse()
+                return Unauthorized(new MessageResponse()
                 {
                     data = null,
                     message = "Bạn chưa đặp nhập !",
                     httpStatusCode = (int)HttpStatusCode.Unauthorized,
                 });
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 data = _userService.User
             });
@@ -224,13 +224,13 @@ namespace Master.Controllers
             if (_userService.CheckUser(model.Username))
             {
                 var res = await _userService.Register(map);
-                var result = new ResultMessageResponse()
+                var result = new MessageResponse()
                 {
                     success = res,
                 };
                 return Ok(result);
             }
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 success = false,
                 message = "UserName đã tồn tại !"
@@ -252,19 +252,19 @@ namespace Master.Controllers
                 Remember = model.Remember
             };
             if (_userService.CheckUser(model.Username))
-                return Ok(new ResultMessageResponse()
+                return Ok(new MessageResponse()
                 {
                     success = false,
                     message = "Tài khoản không tồn tại !"
                 });
             if (!(await _userService.CheckActiveUser(model.Username)))
-                return Ok(new ResultMessageResponse()
+                return Ok(new MessageResponse()
                 {
                     success = false,
                     message = "Tài khoản chưa được kích hoạt !"
                 });
             if (!(await _userService.Login(map)))
-                return Ok(new ResultMessageResponse()
+                return Ok(new MessageResponse()
                 {
                     success = false,
                     message = "Tài khoản hoặc mật khẩu chưa chính xác !"
@@ -287,7 +287,7 @@ namespace Master.Controllers
                 Jwt = res,
                 User = _userService.GetUserByUserName(model.Username),
             };
-            var result = new ResultMessageResponse()
+            var result = new MessageResponse()
             {
                 data = response,
                 success = !string.IsNullOrEmpty(res),

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Share.Base.Core.Extensions
 {
-    internal static class SqlQueryExtensions
+    internal static class SqlQuery
     {
         public static async Task<List<T>> GetFromQueryAsync<T>(
             this DbContext dbContext,

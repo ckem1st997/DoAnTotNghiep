@@ -1,6 +1,4 @@
-﻿
-
-using KafKa.Net;
+﻿using KafKa.Net;
 using Share.Base.Core.EventBus.Abstractions;
 using Share.Base.Core.EventBus;
 using Share.Base.Core.Kafka;
@@ -22,15 +20,24 @@ using Microsoft.AspNetCore.Builder;
 using Share.Base.Service.Behaviors;
 using Microsoft.AspNetCore.HttpOverrides;
 using Share.Base.Service.Middleware;
+using Elastic.Apm.Api;
+using Share.Base.Service.Caching;
+using Elasticsearch.Net;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Nest;
+using Share.Base.Service.Security;
+using System.Text;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
+using Nest.JsonNetSerializer;
+using Newtonsoft.Json;
 
 namespace Share.Base.Service.Configuration
 {
     public static class ConfigurationCore
     {
-
-        public static void UseBuiderAPI(this IApplicationBuilder app)
+        public static void UseAPI(this IApplicationBuilder app)
         {
-
             app.ConfigureSwagger();
             app.UseSerilogRequestLogging();
             app.UseForwardedHeaders(new ForwardedHeadersOptions
@@ -44,6 +51,185 @@ namespace Share.Base.Service.Configuration
             app.UseAuthentication();
             app.UseAuthorization();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T">Program</typeparam>
+        /// <param name="services"></param>
+        /// <param name="Configuration"></param>
+        public static void AddConfigureAPI<T>(this IServiceCollection services, IConfiguration Configuration) where T : class
+        {
+            services.AddControllers();
+            services.AddEasyCachingCore(Configuration);
+            services.AddFilter();
+            services.AddSwagger();
+            services.AddMediatR<T>();
+            services.AddApiCors();
+            services.AddApiElastic(Configuration);
+            services.AddApiAuthentication();
+            services.AddApiVersioning(x =>
+            {
+                x.DefaultApiVersion = new ApiVersion(1, 0);
+                x.AssumeDefaultVersionWhenUnspecified = true;
+                x.ReportApiVersions = true;
+            });
+            services.AddHttpContextAccessor();
+
+        }
+        #region Authozire
+        public static void AddApiAuthentication(this IServiceCollection services)
+        {
+            
+            //
+            services.AddScoped<IAuthozireExtensionForMaster, AuthozireExtensionForMaster>();
+
+            // Adding Authentication  
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+
+            // Adding Jwt Bearer  
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = AuthozireStringHelper.JWT.ValidAudience,
+                    ValidIssuer = AuthozireStringHelper.JWT.ValidIssuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthozireStringHelper.JWT.Secret))
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        // If the request is for our hub...
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            path.StartsWithSegments("/signalr"))
+                        {
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+        }
+        #endregion
+
+
+        #region elk
+        public static void AddApiElastic(this IServiceCollection services, IConfiguration Configuration)
+        {
+
+            services.AddScoped<IElasticClient, ElasticClient>(sp =>
+            {
+                var connectionPool = new SingleNodeConnectionPool(new Uri(Configuration.GetValue<string>("Elastic:Url")));
+                var settings = new ConnectionSettings(connectionPool, (builtInSerializer, connectionSettings) =>
+                    new JsonNetSerializer(builtInSerializer, connectionSettings, () => new JsonSerializerSettings
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+
+                    })).DefaultIndex(Configuration.GetValue<string>("Elastic:Index")).DisableDirectStreaming()
+                    .PrettyJson()
+                    .RequestTimeout(TimeSpan.FromSeconds(2))
+                    .OnRequestCompleted(apiCallDetails =>
+                    {
+                        var list = new List<string>();
+                        // log out the request and the request body, if one exists for the type of request
+                        if (apiCallDetails.RequestBodyInBytes != null)
+                        {
+                            Log.Information(
+                                $"{apiCallDetails.HttpMethod} {apiCallDetails.Uri} " +
+                                $"{Encoding.UTF8.GetString(apiCallDetails.RequestBodyInBytes)}");
+                        }
+                        else
+                        {
+                            Log.Information($"{apiCallDetails.HttpMethod} {apiCallDetails.Uri}");
+                        }
+
+                        // log out the response and the response body, if one exists for the type of response
+                        if (apiCallDetails.ResponseBodyInBytes != null)
+                        {
+                            Log.Information($"Status: {apiCallDetails.HttpStatusCode}" +
+                                        $"{Encoding.UTF8.GetString(apiCallDetails.ResponseBodyInBytes)}");
+                        }
+                        else
+                        {
+                            Log.Information($"Status: {apiCallDetails.HttpStatusCode}");
+                        }
+                    });
+                return new ElasticClient(settings);
+            });
+
+        }
+
+        public static void AddApiLogging(this IServiceCollection services, IConfiguration configuration)
+        {
+            //services.AddLogging(loggingBuilder =>
+            //{
+            //    var seqServerUrl = configuration["Serilog:SeqServerUrl"];
+
+            //    loggingBuilder.AddSeq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl,
+            //        apiKey: "0QEfAbE4THZTcUu6I7bQ");
+            //});
+        }
+        #endregion
+
+        #region cors
+
+        public static void AddApiCors(this IServiceCollection services)
+        {
+            services.AddCors(o => o.AddPolicy("AllowAll", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
+            }));
+        }
+        #endregion
+
+
+        #region kafka
+        public static void AddKafKaConnection(this IServiceCollection services, IConfiguration Configuration)
+        {
+            services.AddSingleton<IKafKaConnection, KafKaConnection>();
+            services.AddEventBus(Configuration);
+        }
+        //kafka
+        public static void AddEventBus(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton<IEventBus, EventKafKa>(
+                sp =>
+                {
+                    var subscriptionClientName = configuration["SubscriptionClientName"];
+                    var kafkaPersistentConnection = sp.GetRequiredService<IKafKaConnection>();
+                    // var logger = sp.GetRequiredService<ILogger<EventKafKa>>();
+                    var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+
+                    return new EventKafKa(configuration, kafkaPersistentConnection, eventBusSubcriptionsManager, subscriptionClientName);
+                }
+            );
+
+            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+            // thêm xử lí event trong app
+            //   services.AddTransient<TestIntegrationEventHandler>();
+        }
+
+        #endregion
+
+
+        #region database
         public static void AddDataBaseContext<TDbContext>(this IServiceCollection services, IConfiguration configuration, string nameConnect, DatabaseType dbType = DatabaseType.MSSQL, QueryTrackingBehavior trackingBehavior = QueryTrackingBehavior.TrackAll) where TDbContext : DbContext
         {
             var sqlConnect = configuration.GetConnectionString(nameConnect);
@@ -54,11 +240,8 @@ namespace Share.Base.Service.Configuration
                     {
                         sqlOptions.MigrationsAssembly(typeof(TDbContext).GetTypeInfo().Assembly.GetName().Name);
                         sqlOptions.EnableRetryOnFailure(
-                        // Số lần tái thử tối đa
                         maxRetryCount: 15,
-                        // Thời gian chờ tối đa giữa các lần tái thử
                         maxRetryDelay: TimeSpan.FromSeconds(10),
-                        // Danh sách mã lỗi cụ thể để tái thử, null nếu muốn tái thử cho tất cả các lỗi 
                         errorNumbersToAdd: null
                         );
                     });
@@ -113,6 +296,32 @@ namespace Share.Base.Service.Configuration
             builder.RegisterType<TDbContext>().Named<DbContext>(ConnectionStringNames).InstancePerDependency();
         }
 
+        #endregion
+
+
+
+
+
+        #region extension
+        public static void ConfigureSwagger(this IApplicationBuilder app)
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                options.RoutePrefix = "swagger";
+            });
+        }
+
+
+        public static void AddSwagger(this IServiceCollection services)
+        {
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
+            });
+        }
         public static void AddFilter(this IServiceCollection services)
         {
             services.Configure<ApiBehaviorOptions>(options =>
@@ -134,64 +343,28 @@ namespace Share.Base.Service.Configuration
         }
 
 
-        public static void AddSwagger(this IServiceCollection services)
-        {
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
-            });
-        }
-
-
 
         /// <summary>
         /// chú ý đọc doc của thư viện
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="services"></param>
-        public static void AddMediatRCore<T>(this IServiceCollection services) where T : class
+        public static void AddMediatR<T>(this IServiceCollection services) where T : class
         {
             // version 12.1
             services.AddMediatR(cfg =>
             {
-                //  cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
                 cfg.RegisterServicesFromAssembly(typeof(T).Assembly);
                 cfg.AddOpenBehavior(typeof(CachingBehavior<,>));
                 cfg.AddOpenBehavior(typeof(ValidatorBehavior<,>));
             });
-            //services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         }
 
-        //kafka
-        public static void AddEventBus(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddSingleton<IEventBus, EventKafKa>(
-                sp =>
-                {
-                    var subscriptionClientName = configuration["SubscriptionClientName"];
-                    var kafkaPersistentConnection = sp.GetRequiredService<IKafKaConnection>();
-                    // var logger = sp.GetRequiredService<ILogger<EventKafKa>>();
-                    var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+        #endregion
 
-                    return new EventKafKa(configuration, kafkaPersistentConnection, eventBusSubcriptionsManager, subscriptionClientName);
-                }
-            );
 
-            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-            // thêm xử lí event trong app
-            //   services.AddTransient<TestIntegrationEventHandler>();
-        }
 
-        public static void ConfigureSwagger(this IApplicationBuilder app)
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-                options.RoutePrefix = string.Empty;
-            });
-        }
+
         //public static void ConfigureEventBus(this IApplicationBuilder app)
         //{
         //    var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();

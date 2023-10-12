@@ -19,7 +19,7 @@ namespace Master.Filters
                     .SelectMany(v => v.Errors)
                     .Select(v => v.ErrorMessage)
                     .ToList();
-                var responseObj = new ResultMessageResponse
+                var responseObj = new MessageResponse
                 {
                     code = "200",
                     message = "Đã xảy ra lỗi với dữ liệu đầu vào !",

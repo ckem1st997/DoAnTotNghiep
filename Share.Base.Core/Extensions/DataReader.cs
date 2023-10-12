@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Share.Base.Core.Extensions
 {
-    internal static class DataReaderExtensions
+    internal static class DataReader
     {
         public static bool ColumnExists(this IDataReader reader, string columnName)
         {

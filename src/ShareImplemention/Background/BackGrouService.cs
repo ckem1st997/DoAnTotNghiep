@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Share.Base.Core.StackAndQueue;
+using Share.Base.Core.StackQueue;
 using System;
 using System.Collections.Generic;
 using System.Linq;

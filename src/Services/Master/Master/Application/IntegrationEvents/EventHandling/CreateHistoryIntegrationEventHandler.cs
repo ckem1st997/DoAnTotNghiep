@@ -51,7 +51,7 @@ namespace Master.IntegrationEvents
             Log.Information("Result to event: " + (res > 0).ToString() + "");
             if (res > 0)
             {
-                var ress = new ResultMessageResponse()
+                var ress = new MessageResponse()
                 {
                     data = request.UserName,
                     success = res > 0

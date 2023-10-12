@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.Base.Core.Extensions
+namespace Share.Base.Core.Infrastructure
 {
     [Serializable]
-    public partial class ResultMessageResponse
+    public partial class MessageResponse
     {
         public bool success { get; set; }
 
@@ -29,14 +29,14 @@ namespace Share.Base.Core.Extensions
 
         public Dictionary<string, IEnumerable<string>> errors { get; set; }
 
-        public ResultMessageResponse()
+        public MessageResponse()
         {
             success = true;
             httpStatusCode = 200;
             errors = new Dictionary<string, IEnumerable<string>>();
         }
 
-        public ResultMessageResponse(ResultMessageResponse obj)
+        public MessageResponse(MessageResponse obj)
         {
             success = obj.success;
             code = obj.code;

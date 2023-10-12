@@ -11,7 +11,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using WareHouse.API.Application.Authentication;
-using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Model;
 using WareHouse.Domain.Entity;
 
@@ -47,7 +46,7 @@ namespace WareHouse.API.Controllers
         {
             var res = await _ifakeData.GetCreateBy();
 
-            var result = new ResultMessageResponse()
+            var result = new MessageResponse()
             {
                 data = res,
                 success = true,
@@ -76,7 +75,7 @@ namespace WareHouse.API.Controllers
             }
          var res=   await _repositoryEFData.SaveChangesConfigureAwaitAsync();
 
-            var result = new ResultMessageResponse()
+            var result = new MessageResponse()
             {
                 data = res,
                 success = true,
@@ -158,7 +157,7 @@ namespace WareHouse.API.Controllers
             var res4 = await _repositoryEFData.QueryAsync<ListApp>("usp_GetListAppByCriteria", pa, commandType: System.Data.CommandType.StoredProcedure);
             var resc4 = watch4.ElapsedMilliseconds;
 
-            var result = new ResultMessageResponse()
+            var result = new MessageResponse()
             {
                 data = new
                 {

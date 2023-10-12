@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Share.Base.Core.Extensions;
 using System.Net;
-using WareHouse.API.Application.Message;
 
 namespace WareHouse.API.Controllers
 {
@@ -17,7 +16,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Role()
         {
-            return Ok(new ResultMessageResponse()
+            return base.Ok(new MessageResponse()
             {
                 success = true,
                 message = "This is API to check Authzire !"

@@ -3,8 +3,12 @@ using System;
 
 namespace Share.Base.Core.Extensions
 {
-    public static class ExtensionFull
+    public static class Extension
     {
+        public static bool IsNullOrEmpty(this string v)
+        {
+            return string.IsNullOrEmpty(v);
+        }
         public static string GetDateToSqlRaw(DateTime? date)
         {
             return "" + date.Value.Year + "-" + date.Value.Month + "-" + date.Value.Day + "  00:00:00  ";

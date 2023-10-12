@@ -7,7 +7,7 @@ using WareHouse.API.Application.Model;
 
 namespace WareHouse.API.Application.Queries.GetFisrt.WareHouses
 {
-    public class WareHouseGetFirstCommand : Model.BaseModel, IRequest<WareHouseDTO>
+    public class WareHouseGetFirstCommand : Share.Base.Core.Infrastructure.BaseModel, IRequest<WareHouseDTO>
     {
     }
 

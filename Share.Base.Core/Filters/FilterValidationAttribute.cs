@@ -19,10 +19,11 @@ namespace Share.Base.Core.Filters
                     .SelectMany(v => v.Errors)
                     .Select(v => v.ErrorMessage)
                     .ToList();
-                var responseObj = new ResultMessageResponse
+                var errorsString = errors.AnyList() ? string.Join("|", errors) : "Đã xảy ra lỗi với dữ liệu đầu vào !";
+                var responseObj = new MessageResponse
                 {
                     code = "200",
-                    message = "Đã xảy ra lỗi với dữ liệu đầu vào !",
+                    message = errorsString,
                     errors = new Dictionary<string, IEnumerable<string>>()
                     {
                         {

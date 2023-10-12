@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
-namespace Share.Base.Core.StackAndQueue
+namespace Share.Base.Core.StackQueue
 {
     public interface IBackgroundTaskQueue<T>
     {

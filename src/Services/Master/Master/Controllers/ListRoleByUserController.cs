@@ -20,7 +20,7 @@ namespace Master.Controllers
         public IActionResult GetList()
         {
             var list = _context.ListRoleByUsers.Where(x => x.Id != null);
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 data = list,
                 totalCount = list.Count()
@@ -34,7 +34,7 @@ namespace Master.Controllers
         public IActionResult GetListId(string id, string appId)
         {
             var list = _context.ListRoleByUsers.Where(x => x.Id != null && x.UserId.Equals(id) && x.AppId.Equals(appId)).Select(x => x.ListRoleId);
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 data = list,
                 totalCount = list.Count()
@@ -49,7 +49,7 @@ namespace Master.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Create()
         {
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 success = true,
                 data = new ListRoleByUser()
@@ -65,7 +65,7 @@ namespace Master.Controllers
         {
             if (list is null)
             {
-                return Ok(new ResultMessageResponse()
+                return Ok(new MessageResponse()
                 {
                     success = true,
                     data = "Không nhận được dữ liệu"
@@ -76,7 +76,7 @@ namespace Master.Controllers
             var res = await _context.SaveChangesAsync() > 0;
             if (res)
                 await _userService.RemoveCacheListRole(list.UserId);
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 success = res
             });
@@ -92,7 +92,7 @@ namespace Master.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return Ok(new ResultMessageResponse()
+                return Ok(new MessageResponse()
                 {
                     success = true,
                     message = "Chưa nhập mã Id !"
@@ -100,7 +100,7 @@ namespace Master.Controllers
             }
 
             var res = await _context.ListRoleByUsers.FirstOrDefaultAsync(x => x.Id.Equals(id));
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 success = res != null,
                 data = res
@@ -116,7 +116,7 @@ namespace Master.Controllers
         {
             if (list is null)
             {
-                return Ok(new ResultMessageResponse()
+                return Ok(new MessageResponse()
                 {
                     success = true,
                     data = "Không nhận được dữ liệu"
@@ -127,7 +127,7 @@ namespace Master.Controllers
             if (res)
                 await _userService.RemoveCacheListRole(list.UserId);
 
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 success = res
             });
@@ -142,7 +142,7 @@ namespace Master.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return Ok(new ResultMessageResponse()
+                return Ok(new MessageResponse()
                 {
                     success = true,
                     data = "Không nhận được dữ liệu"
@@ -168,7 +168,7 @@ namespace Master.Controllers
             if (res)
                 await _userService.RemoveCacheListRole(id);
 
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 success = res
             });
@@ -191,7 +191,7 @@ namespace Master.Controllers
                 res = await _context.SaveChangesAsync() > 0;
             }
 
-            var result = new ResultMessageResponse()
+            var result = new MessageResponse()
             {
                 success = res
             };

@@ -23,9 +23,6 @@ namespace Share.Base.Service.Behaviors
         public CachingBehavior(IOptions<CacheSettings> settings, IHybridCachingManager easyCachingProvider)
         {
             _settings = settings.Value;
-            //    _configuration = configuration;
-            //_cacheExtension = cacheExtension;
-            //_cache = cache;
             _easyCachingProvider = easyCachingProvider;
         }
 
@@ -34,26 +31,21 @@ namespace Share.Base.Service.Behaviors
             TResponse response;
             if (request.BypassCache || !_easyCachingProvider.IsConnectedRedis)
                 return await next();
-            // nếu data null thì chạy đến request tiếp theo để lấy data và gán vào cache
             var cachedResponse = await _easyCachingProvider.HybridCachingProvider.GetAsync<TResponse>(request.CacheKey, cancellationToken: cancellationToken);
             if (cachedResponse.HasValue)
             {
                 response = cachedResponse.Value;
-                Log.Information($"Fetched from Cache -> '{request.CacheKey}'.");
+                Log.Information($"Get data from Cache -> '{request.CacheKey}'...");
             }
             else
             {
                 response = await GetResponseAndAddToCache();
-                Log.Information($"Added to Cache -> '{request.CacheKey}'.");
+                Log.Information($"Added data to Cache -> '{request.CacheKey}'...");
             }
             async Task<TResponse> GetResponseAndAddToCache()
             {
                 response = await next();
                 var slidingExpiration = request.SlidingExpiration ?? TimeSpan.FromDays(_settings.SlidingExpiration);
-                var options = new DistributedCacheEntryOptions
-                {
-                    SlidingExpiration = slidingExpiration
-                };
                 await _easyCachingProvider.HybridCachingProvider.SetAsync<TResponse>(request.CacheKey, response, slidingExpiration, cancellationToken);
                 return response;
             }

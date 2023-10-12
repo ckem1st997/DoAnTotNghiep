@@ -21,6 +21,10 @@ namespace Share.Base.Core.Infrastructure
     /// </summary>
     public class BaseEntity : BaseEntityGeneric<string>
     {
+        //public string? CreateBy { get; set; }
+        //public string? LastUpdateBy { get; set; }
+        //public DateTime CreateDate { get; set; }
+        //public DateTime? LastUpdateDate { get; set; }
         public bool OnDelete { get; set; }
     }
 }

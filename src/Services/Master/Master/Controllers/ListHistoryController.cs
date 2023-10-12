@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Share.Base.Core.Infrastructure;
 
 namespace Master.Controllers
 {
@@ -31,7 +32,7 @@ namespace Master.Controllers
             if (user.RoleNumber < 3)
                 list = list.Where(x => x.UserName.Equals(user.UserName));
             list = list.OrderByDescending(x => x.CreateDate);
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 data = list,
                 success = list != null

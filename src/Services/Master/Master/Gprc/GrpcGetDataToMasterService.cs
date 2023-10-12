@@ -53,7 +53,7 @@ namespace GrpcGetDataToMaster
             var res = await _masterdataContext.SaveChangesAsync();
             if (res > 0)
             {
-                var ress = new ResultMessageResponse()
+                var ress = new MessageResponse()
                 {
                     data = request.UserName,
                     success = res > 0

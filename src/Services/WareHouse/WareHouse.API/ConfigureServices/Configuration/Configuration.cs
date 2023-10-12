@@ -35,6 +35,8 @@ using Share.Base.Core.Filters;
 using Microsoft.Extensions.Logging;
 using Share.Base.Service.Configuration;
 using Share.Base.Service;
+using WareHouse.API.Application.AutoMapper.ConfigureServices;
+using WareHouse.API.Application.Validations.ConfigureServices;
 
 namespace WareHouse.API.ConfigureServices.CustomConfiguration
 {
@@ -46,13 +48,11 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
             services.AddScoped<IFakeData, FakeData>();
             services.AddScoped<IUserSevice, UserSevice>();
             services.AddScoped<ISignalRService, SignalRService>();
-            services.AddMediatRCore<Program>();
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
-
             services.AddDataBaseContext<WarehouseManagementContext>(configuration, DataConnectionHelper.ConnectionString.Warehouse);
             services.AddDataBaseContext<MasterdataContext>(configuration, DataConnectionHelper.ConnectionString.Master);
-            services.AddFilter();
-            services.AddSwagger();
+            services.AddMapper();
+            services.AddValidator();
         }
 
     }

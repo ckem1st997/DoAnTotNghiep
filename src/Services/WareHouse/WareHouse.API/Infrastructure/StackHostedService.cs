@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Share.Base.Core.StackAndQueue;
 using ShareModels.Models;
 using System;
 using System.Collections.Generic;
@@ -9,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Serilog;
 using System.Threading;
+using Share.Base.Core.StackQueue;
 
 namespace WareHouse.API.Infrastructure
 {

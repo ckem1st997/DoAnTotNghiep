@@ -57,7 +57,7 @@ namespace Share.Base.Service.Security
 
             if (!checkRole && _userService is null || !checkRole && check401)
             {
-                var res = new ResultMessageResponse()
+                var res = new MessageResponse()
                 {
                     message = "Bạn chưa xác thực người dùng !",
                     httpStatusCode = (int)HttpStatusCode.Unauthorized,
@@ -67,7 +67,7 @@ namespace Share.Base.Service.Security
             }
             else if (!checkRole)
             {
-                var res = new ResultMessageResponse()
+                var res = new MessageResponse()
                 {
                     message = "Bạn chưa có quyền thực hiện thao tác này !",
                     httpStatusCode = (int)HttpStatusCode.Forbidden,

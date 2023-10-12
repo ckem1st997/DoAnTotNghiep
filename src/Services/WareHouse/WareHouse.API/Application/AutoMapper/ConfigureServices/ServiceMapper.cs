@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WareHouse.API.Application.AutoMapper.WareHouses;
 
 namespace WareHouse.API.Application.AutoMapper.ConfigureServices
 {

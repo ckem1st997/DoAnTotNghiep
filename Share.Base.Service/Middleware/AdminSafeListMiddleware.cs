@@ -83,7 +83,7 @@ namespace Share.Base.Service.Middleware
             var clientIp = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
 
             Log.Information("Request from Remote IP address: {RemoteIp}", remoteIp);
-            Log.Debug("Request from X-Forwarded-For address: {RemoteIp}", clientIp);
+            Log.Information("Request from X-Forwarded-For address: {RemoteIp}", clientIp);
 
             await _next.Invoke(context);
         }

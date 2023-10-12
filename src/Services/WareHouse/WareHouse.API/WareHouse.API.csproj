@@ -7,15 +7,15 @@
 		<DockerComposeProjectPath>..\..\..\..\docker-compose1.dcproj</DockerComposeProjectPath>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Remove="Application\HealthChecks\**" />
+	  <Content Remove="Application\HealthChecks\**" />
+	  <EmbeddedResource Remove="Application\HealthChecks\**" />
+	  <None Remove="Application\HealthChecks\**" />
+	</ItemGroup>
+	<ItemGroup>
 		
 		<PackageReference Include="MiniProfiler.Integrations" Version="2.5.1" />
 
-	</ItemGroup>
-	<ItemGroup>
-		<Folder Include="Application\Commands\Create\" />
-		<Folder Include="Application\Commands\Update\" />
-		<Folder Include="Application\Extensions\" />
-		<Folder Include="Application\HealthChecks\" />
 	</ItemGroup>
 	<ItemGroup>
 		<!--<ProjectReference Include="..\..\..\Share.Grpc\Share.Grpc.csproj" />-->

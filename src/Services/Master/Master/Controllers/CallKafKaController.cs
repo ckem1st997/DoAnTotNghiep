@@ -37,13 +37,13 @@ namespace Master.Controllers
         //    _logger.LogInformation("----- Sending integration event: {IntegrationEventId} at MasterAPI - ({@IntegrationEvent})", inward.Id, typeof(InwardIntegrationEvent));
         //    // var user = _userService.User;
         //    // if (user.RoleNumber != 3 && !user.WarehouseId.Contains(inward.WareHouseId))
-        //    //     return Ok(new ResultMessageResponse()
+        //    //     return Ok(new MessageResponse()
         //    //     {
         //    //         success = true,
         //    //         message = "Bạn không có quyền thao tác với kho này !"
         //    //     });         
         //    _eventBus.Publish(inward);
-        //    return Ok(new ResultMessageResponse()
+        //    return Ok(new MessageResponse()
         //    {
         //        success = true,
         //        message = "Thành công, xin vui lòng kiểm tra lại sau !"

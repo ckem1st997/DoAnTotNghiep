@@ -14,7 +14,7 @@ namespace Share.Base.Core.Extensions
     /// <summary>
     /// Represents extensions of IApplicationBuilder
     /// </summary>
-    public static class ApplicationBuilderExtensions
+    public static class ApplicationBuilder
     {
         /// <summary>
         /// Configure the application HTTP request pipeline

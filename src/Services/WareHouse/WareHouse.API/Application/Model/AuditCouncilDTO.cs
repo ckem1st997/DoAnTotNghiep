@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Share.Base.Core.Infrastructure;
+using System;
 using System.Collections.Generic;
 
 #nullable disable

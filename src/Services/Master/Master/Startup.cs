@@ -29,7 +29,6 @@ using Share.Base.Core.Grpc;
 using Share.Base.Core.Kafka;
 using Share.Base.Service.Caching;
 using Share.Base.Service.Configuration;
-using Share.Base.Service.Security.ConfigureServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,14 +52,11 @@ namespace Master
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCache(Configuration);
-            services.AddEasyCachingCore(Configuration);
-            services.AddControllers();
+            services.AddConfigureAPI<Program>(Configuration);
             services.AddConfiguration(Configuration);
-            services.AddSingleton<IKafKaConnection, KafKaConnection>();
-            services.AddEventBus(Configuration);
+            // setup local
             services.AddEventBusKafka();
-           // services.AddHostedService<RequestTimeConsumer>();
+            // services.AddHostedService<RequestTimeConsumer>();
             // call http to grpc
             services.AddApiGrpc<GrpcGetDataWareHouse.GrpcGetDataWareHouseClient>(Configuration);
             services.Configure<PasswordHasherOptions>(option =>
@@ -103,7 +99,7 @@ namespace Master
                 endpoints.MapControllers();
                 endpoints.MapHub<ConnectRealTimeHub>("/signalr");
             });
-          //  app.ConfigureEventBusKafka();
+            //  app.ConfigureEventBusKafka();
             app.ConfigureRequestPipeline();
         }
 

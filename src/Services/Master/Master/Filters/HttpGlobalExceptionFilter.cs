@@ -49,7 +49,7 @@ namespace Master.Filters
             }
             else
             {
-                var jsonResult=new ResultMessageResponse{
+                var jsonResult=new MessageResponse{
                     message="Có lỗi ngoài ý muốn xảy ra, xin vui lòng liên hệ bộ phận liên quan !",
                     httpStatusCode=(int)HttpStatusCode.InternalServerError,
                     success=false

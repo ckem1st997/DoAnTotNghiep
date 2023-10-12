@@ -7,7 +7,7 @@ using WareHouse.API.Application.Commands.Models;
 using WareHouse.API.Application.Model;
 using WareHouse.Domain.Entity;
 
-namespace WareHouse.API.Application.AutoMapper.WareHouses
+namespace WareHouse.API.Application.AutoMapper
 {
     public class WareHouseCommandProfile : Profile
     {
@@ -17,7 +17,7 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
                 .ForMember(x => x.OutwardWareHouses, opt => opt.Ignore())
                 .ForMember(x => x.OutwardToWareHouses, opt => opt.Ignore())
                 .ForMember(x => x.BeginningWareHouses, opt => opt.Ignore())
-               // .ForMember(x => x.DomainEvents, opt => opt.Ignore())
+                // .ForMember(x => x.DomainEvents, opt => opt.Ignore())
                 .ForMember(x => x.Audits, opt => opt.Ignore())
                 .ForMember(x => x.Inwards, opt => opt.Ignore())
                 .ForMember(x => x.OnDelete, opt => opt.Ignore())
@@ -28,7 +28,7 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
                 .ForMember(x => x.OutwardWareHouses, opt => opt.Ignore())
                 .ForMember(x => x.OutwardToWareHouses, opt => opt.Ignore())
                 .ForMember(x => x.BeginningWareHouses, opt => opt.Ignore())
-             //   .ForMember(x => x.DomainEvents, opt => opt.Ignore())
+                //   .ForMember(x => x.DomainEvents, opt => opt.Ignore())
                 .ForMember(x => x.Audits, opt => opt.Ignore())
                 .ForMember(x => x.Inwards, opt => opt.Ignore())
                 .ForMember(x => x.OnDelete, opt => opt.Ignore())
@@ -37,7 +37,7 @@ namespace WareHouse.API.Application.AutoMapper.WareHouses
                    .ForMember(x => x.WareHouseDTOs, opt => opt.Ignore());
 
 
-           
+
         }
     }
 }

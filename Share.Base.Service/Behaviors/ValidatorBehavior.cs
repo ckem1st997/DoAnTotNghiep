@@ -25,15 +25,8 @@ namespace Share.Base.Service.Behaviors
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            // var typeName = request.GetGenericTypeName();
-
-            Log.Information("----- Validating command ");
-
-            var failures = _validators
-                .Select(v => v.Validate(request))
-                .SelectMany(result => result.Errors)
-                .Where(error => error != null)
-                .ToList();
+            Log.Information("----- Validating properties -----");
+            var failures = _validators.Select(v => v.Validate(request)).SelectMany(result => result.Errors).Where(error => error != null);
 
             if (failures.Any())
             {
@@ -43,8 +36,7 @@ namespace Share.Base.Service.Behaviors
                 {
                     error = error + " " + item.PropertyName + " " + item.ErrorMessage;
                 }
-                throw new BaseException(
-                    $"Command Validation Errors for type (Models Validator) {typeof(TRequest).Name} .Message:{error} ", new ValidationException("Validation exception", failures));
+                throw new BaseException($"Command Validation Errors for type (Models Validator) {typeof(TRequest).Name} .Message:{error} ", new ValidationException("Validation exception", failures));
             }
 
             return await next();

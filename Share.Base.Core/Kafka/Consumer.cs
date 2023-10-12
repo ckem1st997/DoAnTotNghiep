@@ -23,11 +23,11 @@ namespace Share.Base.Core.Kafka
     ///     A simple example demonstrating how to set up a Kafka consumer as an
     ///     IHostedService.
     /// </summary>
-    public sealed class RequestTimeConsumer : BackgroundService
+    public sealed class Consumer : BackgroundService
     {
         private readonly IKafKaConnection _kafKaConnection;
         private readonly string topic;
-        private readonly IConsumer<string, byte[]> kafkaConsumer;
+        private readonly IConsumer<string, byte[]> _kafkaConsumer;
         private readonly string Topic = "WareHouse-KafKa";
         private readonly ILogger<EventKafKa> _logger;
         private readonly IEventBusSubscriptionsManager _subsManager;
@@ -35,12 +35,12 @@ namespace Share.Base.Core.Kafka
         const string BROKER_NAME = "event_bus";
         const string AUTOFAC_SCOPE_NAME = "event_bus";
 
-        public RequestTimeConsumer(IKafKaConnection kafKaConnection, ILogger<EventKafKa> logger,
+        public Consumer(IKafKaConnection kafKaConnection, ILogger<EventKafKa> logger,
             ILifetimeScope autofac, IEventBusSubscriptionsManager subsManager)
         {
             topic = Topic;
             _kafKaConnection = kafKaConnection;
-            kafkaConsumer = _kafKaConnection.ConsumerConfig;
+            _kafkaConsumer = _kafKaConnection.ConsumerConfig;
             _autofac = autofac;
             _subsManager = subsManager;
             _logger = logger;
@@ -82,7 +82,7 @@ namespace Share.Base.Core.Kafka
                 }
                 else
                 {
-                    kafkaConsumer.Subscribe(topic);
+                    _kafkaConsumer.Subscribe(topic);
 
                     try
                     {
@@ -95,19 +95,19 @@ namespace Share.Base.Core.Kafka
 
                         }
 
-                        var cr = kafkaConsumer.Consume(cancellationToken);
+                        var cr = _kafkaConsumer.Consume(cancellationToken);
                         if (cr.Message != null)
                         {
                             var message = Encoding.UTF8.GetString(cr.Value);
                             await ProcessEvent(cr.Key, message);
                         }
 
-                        kafkaConsumer.StoreOffset(cr);
+                        _kafkaConsumer.StoreOffset(cr);
                     }
                     catch (ConsumeException e)
                     {
                         Log.Error($"Consume error: {e.Error.Code}");
-                        kafkaConsumer.Close();
+                        _kafkaConsumer.Close();
                         if (e.Error.IsFatal)
                         {
                             break;
@@ -117,7 +117,7 @@ namespace Share.Base.Core.Kafka
 
 
             }
-            kafkaConsumer.Close();
+            _kafkaConsumer.Close();
 
         }
 
@@ -134,9 +134,9 @@ namespace Share.Base.Core.Kafka
                     {
                         if (subscription.IsDynamic)
                         {
-                            IDynamicIntegrationEventHandler handler =
-                                scope.ResolveOptional(subscription.HandlerType) as IDynamicIntegrationEventHandler;
-                            if (handler == null) continue;
+                            var handler =scope.ResolveOptional(subscription.HandlerType) as IDynamicIntegrationEventHandler;
+                            if (handler == null) 
+                                continue;
                             using dynamic eventData = JsonDocument.Parse(message);
                             await Task.Yield();
                             await handler.Handle(eventData);
@@ -151,8 +151,7 @@ namespace Share.Base.Core.Kafka
                             var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
 
                             await Task.Yield();
-                            await (Task)concreteType.GetMethod("Handle")
-                                .Invoke(handler, new object[] { integrationEvent });
+                            await (Task)concreteType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
                         }
                     }
                 }
@@ -164,15 +163,9 @@ namespace Share.Base.Core.Kafka
         }
         public override async Task StopAsync(CancellationToken stoppingToken)
         {
-            Log.Information($"{nameof(RequestTimeConsumer)} is stopping.");
+            Log.Information($"{nameof(Consumer)} is stopping.");
 
             await base.StopAsync(stoppingToken);
         }
-        //public override void Dispose()
-        //{
-        //    kafkaConsumer?.Close(); // Commit offsets and leave the group cleanly.
-        //    kafkaConsumer?.Dispose();
-        //    base.Dispose();
-        //}
     }
 }

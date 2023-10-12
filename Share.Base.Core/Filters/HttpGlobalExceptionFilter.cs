@@ -32,12 +32,12 @@ namespace Share.Base.Core.Filters
             Log.Error(context.Exception + "|" + context.Exception.Message);
             Log.Error($"Exception Method: {context.Exception.TargetSite.Name}");
             Log.Error($"Type Exception: {context.Exception.GetType().FullName}");
-            var jsonResult = new ResultMessageResponse();
+            var jsonResult = new MessageResponse();
             context.Result = new InternalServerErrorObjectResult(jsonResult);
             context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             if (typeException == typeof(BaseException))
             {
-                jsonResult = new ResultMessageResponse
+                jsonResult = new MessageResponse
                 {
                     message = context.Exception.Message,
                     httpStatusCode = (int)HttpStatusCode.InternalServerError,
@@ -46,7 +46,7 @@ namespace Share.Base.Core.Filters
             }
             if (typeException == typeof(RpcException))
             {
-                jsonResult = new ResultMessageResponse
+                jsonResult = new MessageResponse
                 {
                     message = "Hệ thống xác thực và phân quyền đang xảy ra lỗi, xin vui lòng thử lại sau !",
                     httpStatusCode = (int)HttpStatusCode.Unauthorized,
@@ -57,7 +57,7 @@ namespace Share.Base.Core.Filters
             }
             else
             {
-                jsonResult = new ResultMessageResponse
+                jsonResult = new MessageResponse
                 {
                     message = "Có lỗi ngoài ý muốn xảy ra, xin vui lòng liên hệ bộ phận liên quan !",
                     httpStatusCode = (int)HttpStatusCode.InternalServerError,

@@ -32,11 +32,7 @@ namespace Master.ConfigureServices.Configuration
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
-            services.AddMediatRCore<Program>();
-
             services.AddDataBaseContext<MasterdataContext>(configuration, "MasterdataContext");
-            services.AddFilter();
-            services.AddSwagger();
         }
 
     }

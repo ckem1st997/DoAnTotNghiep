@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using StackExchange.Redis;
 using WareHouse.API.Application.Commands.Delete;
 using WareHouse.API.Application.Commands.Models;
-using WareHouse.API.Application.Message;
 using WareHouse.API.Application.Queries.BaseModel;
 using WareHouse.API.Application.Queries.GetAll.WareHouses;
 using WareHouse.API.Application.Queries.GetFisrt.WareHouses;
@@ -69,7 +68,7 @@ namespace WareHouse.API.Controllers
                 }
             }
 
-            return Ok(new ResultMessageResponse()
+            return base.Ok(new MessageResponse()
             {
                 success = res.Result.Any()
             });
@@ -81,7 +80,7 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> CountDataWareHouseBook()
         {
             var res = await _elasticClient.CountAsync<WareHouseBookDTO>();
-            return Ok(new ResultMessageResponse()
+            return base.Ok(new MessageResponse()
             {
                 data = res
             });
@@ -93,7 +92,7 @@ namespace WareHouse.API.Controllers
         {
             var res = await _elasticClient.DeleteByQueryAsync<WareHouseBookDTO>(d => d.MatchAll());
 
-            return Ok(new ResultMessageResponse()
+            return base.Ok(new MessageResponse()
             {
                 data = res
             });
@@ -106,7 +105,7 @@ namespace WareHouse.API.Controllers
         {
             ware.Id = Guid.NewGuid().ToString();
             var res = await _elasticSearchClient.InsertOrUpdateAsync(ware);
-            return Ok(new ResultMessageResponse()
+            return base.Ok(new MessageResponse()
             {
                 data = await _elasticClient.SearchAsync<WareHouseBookDTO>(s => s.From(0).Size(150))
             });
@@ -118,7 +117,7 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> UpdateDataWareHouseBook([FromBody] WareHouseBookDTO ware)
         {
             var res = await _elasticSearchClient.InsertOrUpdateAsync(ware);
-            return Ok(new ResultMessageResponse()
+            return base.Ok(new MessageResponse()
             {
                 data = await _elasticClient.SearchAsync<WareHouseBookDTO>(s => s.From(0).Size(150))
             });
@@ -129,7 +128,7 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> DeleteDataWareHouseBook(IEnumerable<string> listIds)
         {
             var res = await _elasticSearchClient.DeleteManyAsync(listIds);
-            return Ok(new ResultMessageResponse()
+            return base.Ok(new MessageResponse()
             {
                 data = await _elasticClient.SearchAsync<WareHouseBookDTO>(s => s.From(0).Size(150))
             });
@@ -157,7 +156,7 @@ namespace WareHouse.API.Controllers
             var t = await _elasticClient.CountAsync<
                 WareHouseBookDTO>(s => s.Query(q => q.Term(t => t.WareHouseName, query) || q.Match(mq => mq.Field(f => f.WareHouseName).Query(query))));
             list.totalCount = t.Count;
-            return Ok(new ResultMessageResponse()
+            return base.Ok(new MessageResponse()
             {
                 data = list
             });
@@ -321,7 +320,7 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> IndexAsync([FromQuery] PaginatedWareHouseCommand paginatedList)
         {
             var data = await _mediat.Send(paginatedList);
-            var result = new ResultMessageResponse()
+            var result = new MessageResponse()
             {
                 data = data.Result,
                 success = true,
@@ -339,7 +338,7 @@ namespace WareHouse.API.Controllers
         public async Task<IActionResult> GetByIdAsync([FromQuery] WareHouseGetFirstCommand firstCommand)
         {
             var data = await _mediat.Send(firstCommand);
-            var result = new ResultMessageResponse()
+            var result = new MessageResponse()
             {
                 data = data,
                 success = true
@@ -358,7 +357,7 @@ namespace WareHouse.API.Controllers
             paginatedList.CacheKey = string.Format(WareHouseCacheName.WareHouseDropDown, paginatedList.Active);
             paginatedList.BypassCache = false;
             var data = await _mediat.Send(paginatedList);
-            var result = new ResultMessageResponse()
+            var result = new MessageResponse()
             {
                 data = data,
                 success = true,
@@ -389,7 +388,7 @@ namespace WareHouse.API.Controllers
                 BypassCache = false,
                 CacheKey = string.Format(WareHouseCacheName.WareHouseGetAll, true)
             });
-            var result = new ResultMessageResponse()
+            var result = new MessageResponse()
             {
                 data = list
             };
@@ -411,7 +410,7 @@ namespace WareHouse.API.Controllers
             });
             paginatedList.WareHouseDTOs = list;
             var data = await _mediat.Send(paginatedList);
-            var result = new ResultMessageResponse()
+            var result = new MessageResponse()
             {
                 data = data,
                 success = true,
@@ -436,7 +435,7 @@ namespace WareHouse.API.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                var resError = new ResultMessageResponse()
+                var resError = new MessageResponse()
                 {
                     success = false,
                     message = "Chưa nhập Id của kho !"
@@ -449,13 +448,13 @@ namespace WareHouse.API.Controllers
             };
             var resc = await _mediat.Send(commandCheck);
             if (resc is null)
-                return Ok(new ResultMessageResponse()
+                return base.Ok(new MessageResponse()
                 {
                     success = false,
                     message = "Không tồn tại !"
                 });
             await GetDataToDrop(resc);
-            var result = new ResultMessageResponse()
+            var result = new MessageResponse()
             {
                 data = resc,
                 success = resc != null
@@ -474,12 +473,12 @@ namespace WareHouse.API.Controllers
             var mode = new WareHouseDTO()
             {
                 Id = Guid.NewGuid().ToString(),
-                Code = ExtensionFull.GetVoucherCode("WH")
+                Code = Extension.GetVoucherCode("WH")
 
             };
             if (mode != null)
                 await GetDataToDrop(mode);
-            var result = new ResultMessageResponse()
+            var result = new MessageResponse()
             {
                 data = mode,
                 success = mode != null
@@ -496,7 +495,7 @@ namespace WareHouse.API.Controllers
         {
             if (string.IsNullOrEmpty(Id))
             {
-                var resError = new ResultMessageResponse()
+                var resError = new MessageResponse()
                 {
                     success = false,
                     message = "Chưa nhập Id của kho !"
@@ -510,7 +509,7 @@ namespace WareHouse.API.Controllers
             var data = await _mediat.Send(commandCheck);
             if (data != null)
                 await GetDataToDrop(data);
-            var result = new ResultMessageResponse()
+            var result = new MessageResponse()
             {
                 data = data,
                 success = data != null
@@ -543,7 +542,7 @@ namespace WareHouse.API.Controllers
         //public async Task<IActionResult> Edit(WareHouseCommands wareHouseCommands)
         //{
         //    if (wareHouseCommands is null)
-        //        return Ok(new ResultMessageResponse()
+        //        return Ok(new MessageResponse()
         //        {
         //            success = false,
         //            message = "Không tồn tại !"
@@ -554,7 +553,7 @@ namespace WareHouse.API.Controllers
         //    };
         //    var resc = await _mediat.Send(commandCheck);
         //    if (resc is null)
-        //        return Ok(new ResultMessageResponse()
+        //        return Ok(new MessageResponse()
         //        {
         //            success = false,
         //            message = "Không tồn tại !"
@@ -562,7 +561,7 @@ namespace WareHouse.API.Controllers
         //    var res = await _mediat.Send(new UpdateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
         //    if (res)
         //        await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
-        //    var result = new ResultMessageResponse()
+        //    var result = new MessageResponse()
         //    {
         //        success = res
         //    };
@@ -583,7 +582,7 @@ namespace WareHouse.API.Controllers
         //    });
         //    if (check)
         //    {
-        //        return Ok(new ResultMessageResponse()
+        //        return Ok(new MessageResponse()
         //        {
         //            success = false,
         //            message = "Mã đã tồn tại, xin vui lòng chọn mã khác !"
@@ -592,7 +591,7 @@ namespace WareHouse.API.Controllers
         //    var data = await _mediat.Send(new CreateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
         //    if (data)
         //        await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
-        //    var result = new ResultMessageResponse()
+        //    var result = new MessageResponse()
         //    {
         //        success = data
         //    };
@@ -609,7 +608,7 @@ namespace WareHouse.API.Controllers
             var res = await _mediat.Send(new DeleteWareHouseCommand() { Id = listIds });
             if (res)
                 await _cacheExtension.HybridCachingProvider.RemoveByPrefixAsync(WareHouseCacheName.Prefix);
-            var result = new ResultMessageResponse()
+            var result = new MessageResponse()
             {
                 success = res
             };

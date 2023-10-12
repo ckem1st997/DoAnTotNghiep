@@ -50,8 +50,6 @@ using Microsoft.AspNetCore.HttpOverrides;
 using WareHouse.API.Application.Validations.ConfigureServices;
 using Share.Base.Service.Caching;
 using Share.Base.Service.Configuration;
-using Share.Base.Service.Behaviors.ConfigureServices;
-using Share.Base.Service.Security.ConfigureServices;
 using Share.Base.Service.Middleware;
 using Share.Base.Core.Extensions;
 
@@ -72,33 +70,15 @@ namespace WareHouse.API
         public void ConfigureServices(IServiceCollection services)
         {
             SetLicense();
+            services.AddConfigureAPI<Program>(Configuration);
+            // local
             services.AddConfiguration(Configuration);
-            services.AddMapper();
-            services.AddValidator();
-            services.AddCache(Configuration);
-            services.AddEasyCachingCore(Configuration);
-            services.AddSingleton<IKafKaConnection, KafKaConnection>();
-            services.AddEventBus(Configuration);
-            services.AddApiElastic(Configuration);
             services.AddApiGrpc<GrpcGetData.GrpcGetDataClient>(Configuration);
-            services.AddApiAuthentication();
-            services.AddApiCors();
             services.AddServiceConfigImplementAPI();
-            //  services.AddHostedService<QueueHostedTaskService>();
-
-            //  services.AddHostedService<RequestTimeConsumer>();
-
-            services.AddBackGrouService();
-            // services.AddGraphQLServer<Query, WarehouseManagementContext>();
         }
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            // Register your own things directly with Autofac here. Don't
-            // call builder.Populate(), that happens in AutofacServiceProviderFactory
-            // for you.
-            //   builder.ConfigureDBContext();
             builder.RegisterModule(new WareHouseModule());
-           //builder.RegisterModule(new BehaviorsModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -111,9 +91,7 @@ namespace WareHouse.API
             //  }
 
             //   app.UseHttpsRedirection();
-            app.UseBuiderAPI();
-            
-
+            app.UseAPI();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<GrpcGetDataWareHouseService>().EnableGrpcWeb();

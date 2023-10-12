@@ -14,7 +14,7 @@ namespace Master.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Role()
         {
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 success = true,
                 message = "This is API to check Authzire !"

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Share.Base.Core.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace WareHouse.API.Application.Commands.Models
 {
-    public partial class WareHouseCommands : BaseCommands
+    public partial class WareHouseCommands : BaseCommand
     {
         public string Code { get; set; }
         public string Name { get; set; }

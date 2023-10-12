@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Share.Base.Core.Extensions
 {
-    public static class GenericTypeExtensions
+    public static class GenericType
     {
         public static string GetGenericTypeName(this Type type)
         {

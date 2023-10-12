@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Share.Base.Core.Enum
 {
-    public enum ConfigEasyCaching
+    public enum EasyCachingType
     {
         InMemoryOnly,
         RedisOnly,

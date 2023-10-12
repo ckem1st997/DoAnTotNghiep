@@ -14,48 +14,11 @@ namespace Share.Base.Service.Caching
 {
     public static class ServiceCache
     {
-        public static void AddCache(this IServiceCollection services, IConfiguration configuration)
-        {
-            //services.AddDistributedMemoryCache();
-            // Register the RedisCache service
-            //services.AddMemoryCache();
-            //var stringConnect = configuration.GetSection("Redis")["ConnectionString"];
-            //Console.WriteLine(stringConnect);
-            ////var connect = new ConfigurationOptions
-            ////{
-            ////   // Password = configuration.GetSection("Redis")["Password"],
-            ////    EndPoints = { stringConnect },
-            ////    AbortOnConnectFail = false,
-            ////    ConnectTimeout = 1000
-            ////};
-            //services.AddStackExchangeRedisCache(options =>
-            //{
-            //    options.Configuration = stringConnect;
-            //    options.InstanceName = CacheHelper.CacheConfig.Redis; // Tên của Redis instance (nếu cần)
-            //});
-            //Configure other services up here
-            //services.AddSingleton(cfg =>
-            //{
-            //    IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(stringConnect);
-            //    return multiplexer.GetDatabase();
-            //});
-            // services.AddSingleton<ICacheExtension, CacheExtension>();
-            // nếu dùng Singleton thì sẽ run hàm khởi tạo một lần duy nhất cho đến khi service được khởi động lại
-            // mà nếu như vậy thì lúc đầu connect thế nào thì suốt quá trình chạy service sẽ connect kiểu đó
-            // nên là trong quá trình có sập redis hay không, không ảnh hưởng vì phụ thuộc vào lúc start service
-            // là connect có redis hay không
-            //  services.AddSingleton<ICacheExtension, CacheExtension>();
-
-        }
-
-
-
-
         /// <summary>
         /// done HybridCachingProvider
         /// </summary>
         /// <param name="services"></param>
-        public static void AddEasyCachingCore(this IServiceCollection services, IConfiguration configuration, ConfigEasyCaching configEasyCaching = ConfigEasyCaching.Hybrid)
+        public static void AddEasyCachingCore(this IServiceCollection services, IConfiguration configuration, EasyCachingType configEasyCaching = EasyCachingType.Hybrid)
         {
             services.AddSingleton(cfg =>
             {
@@ -76,13 +39,13 @@ namespace Share.Base.Service.Caching
                 };
                 option.WithJson(serializerSettings, CacheHelper.CacheConfig.WithJson_Name);
 
-                if (configEasyCaching.Equals(ConfigEasyCaching.InMemoryOnly) || configEasyCaching.Equals(ConfigEasyCaching.Hybrid))
+                if (configEasyCaching.Equals(EasyCachingType.InMemoryOnly) || configEasyCaching.Equals(EasyCachingType.Hybrid))
                     // local
                     option.UseInMemory(c =>
                     {
                         c.EnableLogging = true;
                     }, CacheHelper.CacheConfig.InMemory);
-                if (configEasyCaching.Equals(ConfigEasyCaching.RedisOnly) || configEasyCaching.Equals(ConfigEasyCaching.Hybrid))
+                if (configEasyCaching.Equals(EasyCachingType.RedisOnly) || configEasyCaching.Equals(EasyCachingType.Hybrid))
                     // distributed
                     option.UseRedis(config =>
                 {
@@ -94,7 +57,7 @@ namespace Share.Base.Service.Caching
                 }, CacheHelper.CacheConfig.Redis).WithMessagePack(CacheHelper.CacheConfig.Redis);
 
 
-                if (configEasyCaching.Equals(ConfigEasyCaching.Hybrid))
+                if (configEasyCaching.Equals(EasyCachingType.Hybrid))
                     // combine local and distributed
                     option.UseHybrid(config =>
                 {
@@ -105,11 +68,9 @@ namespace Share.Base.Service.Caching
                     // specify the distributed cache provider name after v0.5.4
                     config.DistributedCacheProviderName = CacheHelper.CacheConfig.Redis;
                 }, CacheConfig.ProviderNames.Hybrid)
-                // use redis bus
                 .WithRedisBus(busConf =>
                 {
                     busConf.Configuration = configuration.GetSection("RedisBus")["ConnectionString"];
-                    // do not forget to set the SerializerName for the bus here !!
                     busConf.SerializerName = CacheHelper.CacheConfig.WithJson_Name;
                 });
             });

@@ -35,7 +35,7 @@ namespace Master.Controllers
         public IActionResult GetUser()
         {
             var user = _userService.User;
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 data = user,
                 success = user != null
@@ -101,7 +101,7 @@ namespace Master.Controllers
 
 
 
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 data = res,
             });
@@ -123,7 +123,7 @@ namespace Master.Controllers
             if (user.RoleNumber < 3)
                 list = list.Where(x => x.UserName.Equals(user.UserName));
             list = list.OrderByDescending(x => x.CreateDate);
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 data = list.AsEnumerable(),
                 success = list != null
@@ -141,7 +141,7 @@ namespace Master.Controllers
             var user = _userService.User;
             var listHistory = _context.HistoryNotications.Where(_x => listIds.Contains(_x.Id));
             if (!listHistory.Any())
-                return Ok(new ResultMessageResponse()
+                return Ok(new MessageResponse()
                 {
                     success = false
                 });
@@ -150,7 +150,7 @@ namespace Master.Controllers
                 item.UserNameRead = item.UserNameRead + "," + user.UserName;
             }
             var res = await _context.SaveChangesAsync();
-            return Ok(new ResultMessageResponse()
+            return Ok(new MessageResponse()
             {
                 success = res == listHistory.Count()
             });
