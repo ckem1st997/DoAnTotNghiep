@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F46AC2F7-0E92-462D-A4F2-F48E4CEAC507}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
+		C:\Users\Administrator\Desktop\k8s.txt = C:\Users\Administrator\Desktop\k8s.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{B0C8ADA7-C3D5-4661-AFCB-AED2523646B8}"
@@ -34,9 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareImplemention", "src\Sh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareModels", "src\ShareModels\ShareModels.csproj", "{74E61B00-7C6B-44DE-9474-08A65FDF8B59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Share.Base.Core", "Share.Base.Core\Share.Base.Core.csproj", "{B703F001-0BFF-4A89-9C76-2B96E47B0D89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Share.Base.Core", "Share.Base.Core\Share.Base.Core.csproj", "{B703F001-0BFF-4A89-9C76-2B96E47B0D89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Share.Base.Service", "Share.Base.Service\Share.Base.Service.csproj", "{14F6733C-22C4-41B0-B866-F6204EFA7924}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Share.Base.Service", "Share.Base.Service\Share.Base.Service.csproj", "{14F6733C-22C4-41B0-B866-F6204EFA7924}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

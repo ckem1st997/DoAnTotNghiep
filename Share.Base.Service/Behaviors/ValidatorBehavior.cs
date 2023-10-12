@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+
 namespace Share.Base.Service.Behaviors
 {
     // xử lí validator trước khi đến điểm cuối, tức là xử lí trong đường ống trước khi đến điểm cuối MediatR để xử lí
