@@ -17,12 +17,11 @@ namespace Share.Base.Core.Filters
             {
                 var errors = context.ModelState.Values.Where(v => v.Errors.Count > 0)
                     .SelectMany(v => v.Errors)
-                    .Select(v => v.ErrorMessage)
-                    .ToList();
+                    .Select(v => v.ErrorMessage);
                 var errorsString = errors.AnyList() ? string.Join("|", errors) : "Đã xảy ra lỗi với dữ liệu đầu vào !";
                 var responseObj = new MessageResponse
                 {
-                    code = "200",
+                    code = "500",
                     message = errorsString,
                     errors = new Dictionary<string, IEnumerable<string>>()
                     {
@@ -36,7 +35,7 @@ namespace Share.Base.Core.Filters
 
                 context.Result = new JsonResult(responseObj)
                 {
-                    StatusCode = 200
+                    StatusCode = 500
                 };
             }
         }

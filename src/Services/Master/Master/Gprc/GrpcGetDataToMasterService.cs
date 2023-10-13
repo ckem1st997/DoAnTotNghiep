@@ -13,6 +13,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Share.Base.Service.Caching.CacheName;
+using Share.Base.Service.Caching;
 
 namespace GrpcGetDataToMaster
 {
@@ -23,11 +24,11 @@ namespace GrpcGetDataToMaster
         private readonly MasterdataContext _masterdataContext;
         private readonly IUserService _userService;
         private readonly IHubContext<ConnectRealTimeHub> _hubContext;
-        private readonly ICacheExtension _cacheExtension;
+        private readonly IHybridCachingManager _cacheExtension;
 
 
 
-        public GrpcGetDataToMasterService(IHubContext<ConnectRealTimeHub> hubContext, IUserService userService, MasterdataContext masterdataContext, ICacheExtension cacheExtension)
+        public GrpcGetDataToMasterService(IHubContext<ConnectRealTimeHub> hubContext, IUserService userService, MasterdataContext masterdataContext, IHybridCachingManager cacheExtension)
         {
             _userService = userService;
             _masterdataContext = masterdataContext;
@@ -197,7 +198,7 @@ namespace GrpcGetDataToMaster
             if (request is null || string.IsNullOrEmpty(request.UserId) || string.IsNullOrEmpty(request.RoleKey))
                 return new SaveChange() { Check = false };
             bool res = await _userService.CheckAuthozireByUserIdAndRoleKey(request.UserId, request.RoleKey);
-            if (_cacheExtension.IsConnected)
+            if (_cacheExtension.IsConnectedRedis)
             {
                 await _userService.RemoveCacheListRole(request.UserId);
                 await _userService.CacheListRole(request.UserId);
@@ -211,7 +212,7 @@ namespace GrpcGetDataToMaster
         public override async Task<ListRoleInactiveFalse> GetListRoleInactiveFalse(Params request, ServerCallContext context)
         {
             var res = await _userService.GetListRoleInactiveFalse();
-            if (_cacheExtension.IsConnected)
+            if (_cacheExtension.IsConnectedRedis)
             {
                 await _userService.RemoveCacheListRoleInactiveFalse();
                 await _userService.CacheListRoleInactiveFalse();

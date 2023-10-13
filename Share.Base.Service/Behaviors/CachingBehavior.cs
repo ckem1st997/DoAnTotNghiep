@@ -17,19 +17,17 @@ namespace Share.Base.Service.Behaviors
 {
     public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : ICacheableMediatrQuery
     {
-        private readonly CacheSettings _settings;
         private readonly IHybridCachingManager _easyCachingProvider;
 
-        public CachingBehavior(IOptions<CacheSettings> settings, IHybridCachingManager easyCachingProvider)
+        public CachingBehavior(IHybridCachingManager easyCachingProvider)
         {
-            _settings = settings.Value;
             _easyCachingProvider = easyCachingProvider;
         }
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             TResponse response;
-            if (request.BypassCache || !_easyCachingProvider.IsConnectedRedis)
+            if (request.BypassCache || _easyCachingProvider is null || !_easyCachingProvider.IsConnectedRedis)
                 return await next();
             var cachedResponse = await _easyCachingProvider.HybridCachingProvider.GetAsync<TResponse>(request.CacheKey, cancellationToken: cancellationToken);
             if (cachedResponse.HasValue)
@@ -45,7 +43,7 @@ namespace Share.Base.Service.Behaviors
             async Task<TResponse> GetResponseAndAddToCache()
             {
                 response = await next();
-                var slidingExpiration = request.SlidingExpiration ?? TimeSpan.FromDays(_settings.SlidingExpiration);
+                var slidingExpiration = request.SlidingExpiration ?? TimeSpan.FromDays(CachingDefaults.DayCacheTime);
                 await _easyCachingProvider.HybridCachingProvider.SetAsync<TResponse>(request.CacheKey, response, slidingExpiration, cancellationToken);
                 return response;
             }

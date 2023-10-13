@@ -34,50 +34,5 @@ namespace Share.Base.Service.Caching
         /// <param name="cacheTime"></param>
         /// <returns></returns>
         Task<T> GetDbAsync<T>(string key, Func<Task<T>> acquirer, int? cacheTime = null);
-
-    }
-
-    [SingletonDependency]
-    public class HybridCachingManager : IHybridCachingManager
-    {
-        private readonly IDatabase _db;
-        public IHybridCachingProvider HybridCachingProvider { get; }
-        public HybridCachingManager(IHybridProviderFactory hybridFactory, IDatabase db)
-        {
-            HybridCachingProvider = hybridFactory.GetHybridCachingProvider(CacheConfig.ProviderNames.Hybrid);
-            _db = db ?? throw new ArgumentNullException(nameof(db));
-        }
-
-        public bool IsConnectedRedis
-        {
-            get { return _db.Multiplexer.IsConnected; }
-        }
-
-
-        public virtual T GetDb<T>(string key, Func<T> acquirer, int? cacheTime = null)
-        {
-            var duration = cacheTime.HasValue && cacheTime.Value > 0
-                ? TimeSpan.FromMinutes(cacheTime.Value)
-                : TimeSpan.FromMinutes(CachingDefaults.CacheTime);
-            var cacheValue = HybridCachingProvider.Get(key, acquirer, duration);
-            if (cacheValue.HasValue)
-                return cacheValue.Value;
-
-            var result = acquirer();
-            return result;
-        }
-
-        public virtual async Task<T> GetDbAsync<T>(string key, Func<Task<T>> acquirer, int? cacheTime = null)
-        {
-            var duration = cacheTime.HasValue && cacheTime.Value > 0
-                ? TimeSpan.FromMinutes(cacheTime.Value)
-                : TimeSpan.FromMinutes(CachingDefaults.CacheTime);
-            var cacheValue = await HybridCachingProvider.GetAsync(key, acquirer, duration);
-            if (cacheValue.HasValue)
-                return cacheValue.Value;
-
-            var result = await acquirer();
-            return result;
-        }
     }
 }

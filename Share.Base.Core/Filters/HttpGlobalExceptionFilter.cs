@@ -42,9 +42,20 @@ namespace Share.Base.Core.Filters
                     message = context.Exception.Message,
                     httpStatusCode = (int)HttpStatusCode.InternalServerError,
                     success = false
-                };              
+                };
             }
-            if (typeException == typeof(RpcException))
+            else if (typeException == typeof(UnauthorizedAccessException))
+            {
+                jsonResult = new MessageResponse
+                {
+                    message = "Bạn chưa xác thực, xin vui lòng đăng nhập lại !",
+                    httpStatusCode = (int)HttpStatusCode.Unauthorized,
+                    success = false
+                };
+                context.Result = new UnauthorizedObjectResult(jsonResult);
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            }
+            else if (typeException == typeof(RpcException))
             {
                 jsonResult = new MessageResponse
                 {

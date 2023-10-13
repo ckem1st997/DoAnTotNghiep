@@ -5,6 +5,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using Serilog;
 using Share.Base.Core.AutoDependencyInjection.InjectionAttribute;
+using Share.Base.Service.Caching;
 using Share.Base.Service.Caching.CacheName;
 using Share.Base.Service.Security;
 using ShareModels.Models;
@@ -18,9 +19,9 @@ namespace ShareImplemention
     {
         private readonly GrpcGetData.GrpcGetDataClient _client;
         private readonly IDistributedCache _cache;
-        private readonly ICacheExtension _cacheExtension;
+        private readonly IHybridCachingManager _cacheExtension;
 
-        public UserInfomationService(GrpcGetData.GrpcGetDataClient client, IDistributedCache cache, ICacheExtension cacheExtension)
+        public UserInfomationService(GrpcGetData.GrpcGetDataClient client, IDistributedCache cache, IHybridCachingManager cacheExtension)
         {
             _client = client;
             _cache = cache;
@@ -41,7 +42,7 @@ namespace ShareImplemention
             // list active false
             // var listRoleCache = await _cache.GetAsync(string.Format(ListRoleCacheName.UserListRoleCache, false));
             var listRoleFalse = new List<string>();
-            var listRoleCache = _cacheExtension.IsConnected? await _cache.GetAsync(string.Format(ListRoleCacheName.UserListRoleCache, false)):default;
+            var listRoleCache = _cacheExtension.IsConnectedRedis? await _cache.GetAsync(string.Format(ListRoleCacheName.UserListRoleCache, false)):default;
             if (listRoleCache is null)
             {
                 var listRoleGrpc = await _client.GetListRoleInactiveFalseAsync(new Params());
@@ -77,7 +78,7 @@ namespace ShareImplemention
                 return false;
 
             // get list role by user
-            var cachedResponse = _cacheExtension.IsConnected ? await _cache.GetAsync(string.Format(UserListRoleCacheName.UserListRoleCache, idUser)):default;
+            var cachedResponse = _cacheExtension.IsConnectedRedis ? await _cache.GetAsync(string.Format(UserListRoleCacheName.UserListRoleCache, idUser)):default;
 
             // trước là check, có thì true, không thì check bằng grpc
             // giờ chech luôn
