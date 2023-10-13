@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
 
-namespace Share.Base.Service.BaseImplement
+namespace Share.Base.Service.Controller
 {
     // [Authorize(Roles = "Admin,Manager,User")]
     // [Authorize]

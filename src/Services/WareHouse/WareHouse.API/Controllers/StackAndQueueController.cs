@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Share.Base.Core.StackQueue;
+using Share.Base.Service.Controller;
 using ShareModels.Models;
 using System.Threading;
 using System.Threading.Tasks;

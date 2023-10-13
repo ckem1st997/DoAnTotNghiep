@@ -15,5 +15,8 @@ namespace Share.Base.Core.Extensions
         public static Stream PdfLicenseStream = new MemoryStream(Convert.FromBase64String(LicenseKey));
 
         public static Stream WordsLicenseStream = new MemoryStream(Convert.FromBase64String(LicenseKey));
+
     }
+
+
 }

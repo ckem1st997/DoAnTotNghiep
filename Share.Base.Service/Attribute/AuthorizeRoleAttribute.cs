@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Share.Base.Core.Extensions;
 using Share.Base.Core.Infrastructure;
+using Share.Base.Service.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.Base.Service.Security
+namespace Share.Base.Service.Attribute
 {
     public class AuthorizeRoleAttribute : ActionFilterAttribute
     {
@@ -41,7 +42,7 @@ namespace Share.Base.Service.Security
             // create instance of IUserInfomationService not contractor
             IUserInfomationService _userService = EngineContext.Current.Resolve<IUserInfomationService>();
             // chưa xác thực
-            if (!context.HttpContext.User.Identity.IsAuthenticated)
+            if (context.HttpContext.User.Identity != null && !context.HttpContext.User.Identity.IsAuthenticated)
             {
                 checkRole = await _userService.GetAuthozireByUserId("IsAuthenticatedFalse", _keyRole);
                 check401 = true;

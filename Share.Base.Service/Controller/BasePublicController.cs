@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Share.Base.Service.BaseImplement
+namespace Share.Base.Service.Controller
 {
     [AllowAnonymous]
     [Route("api/v{v:apiVersion}/[controller]")]

@@ -396,9 +396,6 @@ namespace Share.Base.Service.Configuration
 
         #endregion
 
-
-
-
         //public static void ConfigureEventBus(this IApplicationBuilder app)
         //{
         //    var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();

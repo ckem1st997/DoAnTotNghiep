@@ -1,11 +1,13 @@
 ﻿using Share.Base.Core.Infrastructure;
+using Share.Base.Service.Attribute;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.Base.Service.Security
+namespace Share.Base.Service.Security.ListRole
 {
     public static class AuthozireListKey
     {
@@ -13,10 +15,14 @@ namespace Share.Base.Service.Security
         {
             public static class GlobalCreateKey
             {
+                [KeyNameRole("Tạo mới kho !")]
+
                 public const string Global = "Global.Create";
             }
             public static class GlobalEditKey
             {
+                [KeyNameRole("Tạo mới kho !")]
+
                 public const string Global = "Global.Edit";
             }
             public static class GlobalDeleteKey
@@ -32,7 +38,9 @@ namespace Share.Base.Service.Security
         {
             public static class WarehouseCreateKey
             {
+                [KeyNameRole("Tạo mới kho !")]
                 public const string Warehouse = "Warehouse.Warehouse.Create";
+                [KeyNameRole("Tạo mới đơn vị tính !")]
                 public const string Unit = "Warehouse.Unit.Create";
                 public const string WareHouseItem = "Warehouse.WareHouseItem.Create";
                 public const string WareHouseItemCategory = "Warehouse.WareHouseItemCategory.Create";

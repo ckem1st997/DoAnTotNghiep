@@ -84,11 +84,11 @@ namespace WareHouse.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // if (env.IsDevelopment())
-            // {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
-            app.UseDeveloperExceptionPage();
-            //  }
 
             //   app.UseHttpsRedirection();
             app.UseAPI();
@@ -103,7 +103,7 @@ namespace WareHouse.API
         }
 
 
-        private static void SetLicense()
+        public static void SetLicense()
         {
             new Aspose.BarCode.License().SetLicense(AsposeHelper.BarCodeLicenseStream);
             new Aspose.Cells.License().SetLicense(AsposeHelper.CellsLicenseStream);

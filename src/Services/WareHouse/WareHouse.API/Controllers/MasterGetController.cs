@@ -9,6 +9,7 @@ using Share.Base.Core.EventBus.Abstractions;
 using Share.Base.Core.Extensions;
 using Share.Base.Service.Caching;
 using Share.Base.Service.Caching.CacheName;
+using Share.Base.Service.Controller;
 using Share.Base.Service.IntegrationEvents.Events;
 using System.Linq;
 using System.Threading.Tasks;
