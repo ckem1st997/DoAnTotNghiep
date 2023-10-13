@@ -71,14 +71,15 @@
 		<PackageReference Include="Autofac" Version="6.3.0" />
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.2.0" />-->
 
-		<PackageReference Include="EasyCaching.Bus.Redis" Version="1.7.0" />
-		<PackageReference Include="EasyCaching.Core" Version="1.7.0" />
-		<PackageReference Include="EasyCaching.HybridCache" Version="1.7.0" />
-		<PackageReference Include="EasyCaching.InMemory" Version="1.7.0" />
-		<PackageReference Include="EasyCaching.Redis" Version="1.7.0" />
-		<PackageReference Include="EasyCaching.Serialization.Json" Version="1.7.0" />
-		<PackageReference Include="EasyCaching.Serialization.MessagePack" Version="1.7.0" />
-		<PackageReference Include="EasyCaching.Serialization.SystemTextJson" Version="1.7.0" />
+		<PackageReference Include="EasyCaching.Bus.Redis" Version="1.9.1" />
+		<PackageReference Include="EasyCaching.Core" Version="1.9.1" />
+		<PackageReference Include="EasyCaching.HybridCache" Version="1.9.1" />
+		<PackageReference Include="EasyCaching.InMemory" Version="1.9.1" />
+		<PackageReference Include="EasyCaching.Redis" Version="1.9.1" />
+		<PackageReference Include="EasyCaching.Serialization.Json" Version="1.9.1" />
+		<PackageReference Include="EasyCaching.Serialization.MessagePack" Version="1.9.1" />
+		<PackageReference Include="EasyCaching.Serialization.SystemTextJson" Version="1.9.1" />
+		<PackageReference Include="EFCoreSecondLevelCacheInterceptor" Version="3.9.2" />
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.7.1" />
 		<!--<PackageReference Include="GraphQL" Version="7.2.1" />

@@ -32,6 +32,9 @@ using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 using Nest.JsonNetSerializer;
 using Newtonsoft.Json;
 using Share.Base.Service.Validator;
+using EFCoreSecondLevelCacheInterceptor;
+using static Share.Base.Service.Caching.CacheName.CacheHelper;
+using Microsoft.Extensions.Options;
 
 namespace Share.Base.Service.Configuration
 {
@@ -112,6 +115,24 @@ namespace Share.Base.Service.Configuration
             services.AddHttpContextAccessor();
             services.AddValidator();
         }
+
+        #region cache ef
+        //AddEFSecondLevelCache
+        public static void AddEFSecondLevelCache(this IServiceCollection services)
+        {
+            services.AddEFSecondLevelCache(options =>
+        options.UseEasyCachingCoreProvider(CacheConfig.ProviderNames.Hybrid, isHybridCache: true)
+        .DisableLogging(false)
+        .UseCacheKeyPrefix("EF_")
+         .CacheAllQueries(CacheExpirationMode.Absolute, TimeSpan.FromSeconds(CachingDefaults.DayCacheTime * CachingDefaults.CacheTime))
+         .SkipCachingResults(result => result.Value == null || (result.Value is EFTableRows rows && rows.RowsCount == 0))
+         );
+        }
+
+
+        #endregion
+
+
         #region Authozire
         public static void AddApiAuthentication(this IServiceCollection services)
         {
