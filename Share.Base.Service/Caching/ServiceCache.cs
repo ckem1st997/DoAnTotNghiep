@@ -26,7 +26,7 @@ namespace Share.Base.Service.Caching
                 return multiplexer.GetDatabase();
             });
             //IHybridCachingManager
-            services.AddSingleton<IHybridCachingManager, HybridCachingManager>();
+            // services.AddSingleton<IHybridCachingManager, HybridCachingManager>();
             services.AddEasyCaching(option =>
             {
                 Action<JsonSerializerSettings> serializerSettings = x =>

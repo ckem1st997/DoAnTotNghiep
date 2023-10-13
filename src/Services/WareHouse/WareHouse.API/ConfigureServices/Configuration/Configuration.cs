@@ -44,10 +44,8 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
     {
         public static void AddConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped(typeof(IElasticSearchClient<>), typeof(ElasticSearchClient<>));        
-            services.AddScoped<IFakeData, FakeData>();
-            services.AddScoped<IUserSevice, UserSevice>();
-            services.AddScoped<ISignalRService, SignalRService>();
+            // generic phải tự đăng ký
+            services.AddScoped(typeof(IElasticSearchClient<>), typeof(ElasticSearchClient<>));
             services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
             services.AddDataBaseContext<WarehouseManagementContext>(configuration, DataConnectionHelper.ConnectionString.Warehouse);
             services.AddDataBaseContext<MasterdataContext>(configuration, DataConnectionHelper.ConnectionString.Master);

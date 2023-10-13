@@ -1,6 +1,7 @@
 ﻿using GrpcGetDataToMaster;
 //using GrpcGetDataToMaster;
 using Serilog;
+using Share.Base.Core.AutoDependencyInjection.InjectionAttribute;
 using Share.Base.Service.IntegrationEvents.Events;
 using System;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace WareHouse.API.Application.Authentication
     // thử xoá connect service grpc, rồi import sharegrpcfull và chạy thử
     // nếu được thì sẽ có một nơi chứa cả file server và client
     // các service muốn dùng dạng nào thì có thể import vô mà cấu hình
+    [ScopedDependency]
     public class UserSevice : IUserSevice
     {
         private readonly GrpcGetData.GrpcGetDataClient _client;

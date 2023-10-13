@@ -1,4 +1,5 @@
 ﻿using EasyCaching.Core;
+using Share.Base.Core.AutoDependencyInjection.InjectionAttribute;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,7 @@ namespace Share.Base.Service.Caching
 
     }
 
+    [SingletonDependency]
     public class HybridCachingManager : IHybridCachingManager
     {
         private readonly IDatabase _db;

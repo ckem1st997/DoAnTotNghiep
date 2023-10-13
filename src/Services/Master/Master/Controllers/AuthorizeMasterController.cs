@@ -269,7 +269,7 @@ namespace Master.Controllers
                     success = false,
                     message = "Tài khoản hoặc mật khẩu chưa chính xác !"
                 });
-            IAuthozireExtensionForMaster iAuthenForMaster = EngineContext.Current.Resolve<IAuthozireExtensionForMaster>();
+            IAuthorizeExtension iAuthenForMaster = EngineContext.Current.Resolve<IAuthorizeExtension>();
             string userId = _userService.GetUserByUserName(model.Username).Id;
             List<Claim> authClaims = new List<Claim>
                             {

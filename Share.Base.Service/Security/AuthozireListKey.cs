@@ -115,26 +115,26 @@ namespace Share.Base.Service.Security.ListRole
         }
         // name biến truyền qua hàm khơir tạo
         public const string ParameterName = "role";
-        public static List<string> GetAllKey()
-        {
-            List<string> strings = new List<string>();
-            strings.AddRange(typeof(WarehouseKey.WarehouseCreateKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(WarehouseKey.WarehouseEditKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(WarehouseKey.WarehouseDeleteKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(WarehouseKey.WarehouseReadKey).GetAllPublicConstantValues<string>());
-            //
-            strings.AddRange(typeof(MasterKey.MasterCreateKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(MasterKey.MasterEditKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(MasterKey.MasterDeleteKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(MasterKey.MasterReadKey).GetAllPublicConstantValues<string>());
-            //
-            strings.AddRange(typeof(GlobalKey.GlobalCreateKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(GlobalKey.GlobalDeleteKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(GlobalKey.GlobalEditKey).GetAllPublicConstantValues<string>());
-            strings.AddRange(typeof(GlobalKey.GlobalReadKey).GetAllPublicConstantValues<string>());
+        //public static List<string> GetAllKey()
+        //{
+        //    List<string> strings = new List<string>();
+        //    strings.AddRange(typeof(WarehouseKey.WarehouseCreateKey).GetAllPublicConstantValues<string>());
+        //    strings.AddRange(typeof(WarehouseKey.WarehouseEditKey).GetAllPublicConstantValues<string>());
+        //    strings.AddRange(typeof(WarehouseKey.WarehouseDeleteKey).GetAllPublicConstantValues<string>());
+        //    strings.AddRange(typeof(WarehouseKey.WarehouseReadKey).GetAllPublicConstantValues<string>());
+        //    //
+        //    strings.AddRange(typeof(MasterKey.MasterCreateKey).GetAllPublicConstantValues<string>());
+        //    strings.AddRange(typeof(MasterKey.MasterEditKey).GetAllPublicConstantValues<string>());
+        //    strings.AddRange(typeof(MasterKey.MasterDeleteKey).GetAllPublicConstantValues<string>());
+        //    strings.AddRange(typeof(MasterKey.MasterReadKey).GetAllPublicConstantValues<string>());
+        //    //
+        //    strings.AddRange(typeof(GlobalKey.GlobalCreateKey).GetAllPublicConstantValues<string>());
+        //    strings.AddRange(typeof(GlobalKey.GlobalDeleteKey).GetAllPublicConstantValues<string>());
+        //    strings.AddRange(typeof(GlobalKey.GlobalEditKey).GetAllPublicConstantValues<string>());
+        //    strings.AddRange(typeof(GlobalKey.GlobalReadKey).GetAllPublicConstantValues<string>());
 
-            return strings;
-        }
+        //    return strings;
+        //}
 
 
     }

@@ -52,6 +52,7 @@ using Share.Base.Service.Caching;
 using Share.Base.Service.Configuration;
 using Share.Base.Service.Middleware;
 using Share.Base.Core.Extensions;
+using Share.Base.Core.AutoDependencyInjection;
 
 namespace WareHouse.API
 {
@@ -74,11 +75,12 @@ namespace WareHouse.API
             // local
             services.AddConfiguration(Configuration);
             services.AddApiGrpc<GrpcGetData.GrpcGetDataClient>(Configuration);
-            services.AddServiceConfigImplementAPI();
         }
         public void ConfigureContainer(ContainerBuilder builder)
         {
+            var markingAssembly = Configuration["ProjectCommonName"];
             builder.RegisterModule(new WareHouseModule());
+            builder.RegisterDIContainer(markingAssembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

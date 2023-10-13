@@ -7,12 +7,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Share.Base.Service.Security
 {
     public static class GetKeyRoleHelper
     {
-        public static List<SelectListItem> GetKeyItems()
+        public static List<SelectListItem> GetKeyItems(bool getText = true)
         {
             List<SelectListItem> items = new List<SelectListItem>();
 
@@ -26,10 +27,13 @@ namespace Share.Base.Service.Security
 
                 foreach (FieldInfo field in fields)
                 {
-                    string value = field.GetValue(null).ToString();
+                    string value = field.GetValue(null)?.ToString() ?? string.Empty;
+                    if (value.IsNullOrEmpty())
+                        continue;
                     string text = GetKeyNameRoleAttributeText(field);
-                    if (!text.IsNullOrEmpty())
-                        items.Add(new SelectListItem { Value = value, Text = text });
+                    if (getText && text.IsNullOrEmpty())
+                        continue;
+                    items.Add(new SelectListItem { Value = value, Text = text });
                 }
             }
 
@@ -40,9 +44,10 @@ namespace Share.Base.Service.Security
         {
             var attributes = field.GetCustomAttributes(typeof(KeyNameRoleAttribute), false);
 
-            if (attributes.Length > 0)
+            if (attributes != null && attributes.Length > 0)
             {
-                return ((KeyNameRoleAttribute)attributes.FirstOrDefault()).Name;
+                var nameRole = attributes.FirstOrDefault() as KeyNameRoleAttribute;
+                return nameRole?.Name ?? "";
             }
 
             return string.Empty;

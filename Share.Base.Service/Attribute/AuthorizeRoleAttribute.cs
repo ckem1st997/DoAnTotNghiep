@@ -49,8 +49,8 @@ namespace Share.Base.Service.Attribute
             }
             else
             {
-                IAuthozireExtensionForMaster iAuthenForMaster = EngineContext.Current.Resolve<IAuthozireExtensionForMaster>();
-                string userId = iAuthenForMaster.GetClaimType("id");
+                IAuthorizeExtension iAuthenForMaster = EngineContext.Current.Resolve<IAuthorizeExtension>();
+                string userId = iAuthenForMaster.ClaimType("id");
                 // xác thực rồi
                 if (_userService != null && !string.IsNullOrEmpty(userId))
                     checkRole = await _userService.GetAuthozireByUserId(userId, _keyRole);

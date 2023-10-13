@@ -1,8 +1,10 @@
 ﻿using GrpcGetDataToMaster;
+using Share.Base.Core.AutoDependencyInjection.InjectionAttribute;
 using System.Threading.Tasks;
 
 namespace WareHouse.API.Application.SignalRService
 {
+    [ScopedDependency]
     public class SignalRService : ISignalRService
     {
         private readonly GrpcGetData.GrpcGetDataClient _client;

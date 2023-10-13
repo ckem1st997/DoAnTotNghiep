@@ -23,13 +23,13 @@ namespace Master.Controllers
         [Route("get-list-key")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult GetList()
+        public IActionResult GetList(bool getText)
         {
-            List<string> strings = AuthozireListKey.GetAllKey();
+            var res = GetKeyRoleHelper.GetKeyItems(getText);
             return Ok(new MessageResponse()
             {
-                data = strings,
-                totalCount = strings.Count
+                data = res,
+                totalCount = res.Count
             });
         }
 
@@ -380,7 +380,7 @@ namespace Master.Controllers
                 });
             }
             _context.ListRoles.Update(list);
-            var res = await _context.SaveChangesAsync()>0;
+            var res = await _context.SaveChangesAsync() > 0;
             if (res)
             {
                 await _userService.RemoveCacheListRoleInactiveFalse();

@@ -10,14 +10,21 @@ namespace Share.Base.Service.Security
     /// <summary>
     /// using in service master manager authozire
     /// </summary>
-    public partial interface IAuthozireExtensionForMaster
+    public partial interface IAuthorizeExtension
     {
         /// <summary>
         /// implemention in service master manager authozire : GenerateJWT
         /// </summary>
         public string GenerateJWT(IList<Claim> claims, int time);
         // public Task<string> GenerateRefreshToken();
-        public string GetClaimType(string type);
-        public bool CheckUserIsAuthenticated();
+        bool IsAuthenticated { get; }
+
+        string UserName { get; }
+        string Token { get; }
+        string AcessToken { get; }
+
+        string ClaimType(string type);
+
+        string RoleHealCheck { get; }
     }
 }

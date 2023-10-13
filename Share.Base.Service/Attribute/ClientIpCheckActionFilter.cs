@@ -43,13 +43,13 @@ namespace Share.Base.Service.Attribute
             _logger.Debug("Remote IpAddress: {RemoteIp}", remoteIp);
             var ip = _safelist.Split(';');
             var badIp = true;
-            IAuthozireExtensionForMaster iAuthenForMaster = EngineContext.Current.Resolve<IAuthozireExtensionForMaster>();
+            IAuthorizeExtension iAuthenForMaster = EngineContext.Current.Resolve<IAuthorizeExtension>();
 
-            if (remoteIp.IsIPv4MappedToIPv6)
+            if (remoteIp != null && remoteIp.IsIPv4MappedToIPv6)
             {
                 remoteIp = remoteIp.MapToIPv4();
             }
-            var testIp = IPAddress.Parse(iAuthenForMaster.GetClaimType("IpAddress"));
+            var testIp = IPAddress.Parse(iAuthenForMaster.ClaimType("IpAddress"));
 
             if (testIp.Equals(remoteIp))
             {

@@ -5,6 +5,7 @@ using Polly;
 using Polly.Retry;
 using Serilog;
 using Serilog.Core;
+using Share.Base.Core.AutoDependencyInjection.InjectionAttribute;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ using System.Threading.Tasks;
 
 namespace Share.Base.Core.Kafka
 {
+    [SingletonDependency]
     public class KafKaConnection : IKafKaConnection
     {
         private readonly ILogger<KafKaConnection> _logger;

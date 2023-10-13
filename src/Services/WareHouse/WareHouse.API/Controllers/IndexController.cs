@@ -9,9 +9,10 @@ namespace WareHouse.API.Controllers
 {
     public class IndexController : BaseController
     {
-        public IndexController()
+        private readonly IAuthorizeExtension _authorizeExtension;
+        public IndexController(IAuthorizeExtension authorizeExtension)
         {
-
+            _authorizeExtension = authorizeExtension;
         }
         [Route("role")]
         [HttpGet]
@@ -22,7 +23,7 @@ namespace WareHouse.API.Controllers
             return base.Ok(new MessageResponse()
             {
                 success = true,
-                message = "This is API to check Authzire !"
+                message = "This is API to check Authorize !"
             });
         }
 
@@ -30,9 +31,9 @@ namespace WareHouse.API.Controllers
         [Route("get-list-key")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult GetList()
+        public IActionResult GetList(bool getText)
         {
-            var strings = GetKeyRoleHelper.GetKeyItems();
+            var strings = GetKeyRoleHelper.GetKeyItems(getText);
             return Ok(new MessageResponse()
             {
                 data = strings,

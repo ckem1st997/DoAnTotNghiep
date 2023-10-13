@@ -116,7 +116,7 @@ namespace Share.Base.Service.Configuration
         {
 
             //
-            services.AddScoped<IAuthozireExtensionForMaster, AuthozireExtensionForMaster>();
+            // services.AddScoped<IAuthorizeExtension, AuthorizeExtension>();
 
             // Adding Authentication  
             services.AddAuthentication(options =>
@@ -237,7 +237,7 @@ namespace Share.Base.Service.Configuration
         #region kafka
         public static void AddKafKaConnection(this IServiceCollection services, IConfiguration Configuration)
         {
-            services.AddSingleton<IKafKaConnection, KafKaConnection>();
+            //  services.AddSingleton<IKafKaConnection, KafKaConnection>();
             services.AddEventBus(Configuration);
         }
         //kafka

@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using Serilog;
+using Share.Base.Core.AutoDependencyInjection.InjectionAttribute;
 using Share.Base.Service.Caching.CacheName;
 using Share.Base.Service.Security;
 using ShareModels.Models;
@@ -12,6 +13,7 @@ using System.Threading;
 
 namespace ShareImplemention
 {
+    [ScopedDependency]
     public class UserInfomationService : IUserInfomationService
     {
         private readonly GrpcGetData.GrpcGetDataClient _client;
