@@ -20,7 +20,7 @@ namespace WareHouse.API.Controllers
 
     //[CheckRole(LevelCheck.READ)]
 
-    public class GetDataGPRCController : BaseController
+    public class GetDataGPRCController : ApiController
     {
         private readonly IFakeData _ifakeData;
         private readonly GrpcGetData.GrpcGetDataClient _client;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WareHouse.API.Controllers
 {
-    public class StackAndQueueController : BaseController
+    public class StackAndQueueController : ApiController
     {
         private readonly IBackgroundTaskQueue<QueueModel> _taskQueue;
         private readonly IBackgroundTaskStack<StackModel> _taskStack;

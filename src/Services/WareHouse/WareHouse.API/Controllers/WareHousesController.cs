@@ -31,12 +31,12 @@ using Share.Base.Service.Caching;
 using Share.Base.Service.Controller;
 using Share.Base.Service.Attribute;
 using Share.Base.Service.Security.ListRole;
+using Microsoft.Extensions.Logging;
 
 namespace WareHouse.API.Controllers
 {
-    public class WareHousesController : BaseController
+    public class WareHousesController : ApiController
     {
-        private readonly IMediator _mediat;
         private readonly IHybridCachingManager _cacheExtension;
         private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
         private readonly IRepositoryEF<Domain.Entity.Outward> _repository1;
@@ -45,9 +45,8 @@ namespace WareHouse.API.Controllers
         private readonly IElasticSearchClient<WareHouseBookDTO> _elasticSearchClient;
 
 
-        public WareHousesController(IMediator mediat, IHybridCachingManager cacheExtension, IElasticClient elasticClient, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient)
+        public WareHousesController(IHybridCachingManager cacheExtension, IElasticClient elasticClient, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient)
         {
-            _mediat = mediat ?? throw new ArgumentNullException(nameof(mediat));
             _cacheExtension = cacheExtension ?? throw new ArgumentNullException(nameof(cacheExtension));
             _repository = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse); ;
             _repository1 = EngineContext.Current.Resolve<IRepositoryEF<Outward>>(DataConnectionHelper.ConnectionStringNames.Warehouse); ;
@@ -61,7 +60,7 @@ namespace WareHouse.API.Controllers
         [HttpGet("FakeDataWareHouseBook")]
         public async Task<IActionResult> FakeDataWareHouseBook()
         {
-            var res = await _mediat.Send(new WareHouseBookgetAllCommand());
+            var res = await _mediator.Send(new WareHouseBookgetAllCommand());
             for (int i = 0; i < 5000; i++)
             {
                 foreach (var item in res.Result)
@@ -315,14 +314,14 @@ namespace WareHouse.API.Controllers
 
         #region R
 
-        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
+        //  [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> IndexAsync([FromQuery] PaginatedWareHouseCommand paginatedList)
         {
-            var data = await _mediat.Send(paginatedList);
+            var data = await _mediator.Send(paginatedList);
             var result = new MessageResponse()
             {
                 data = data.Result,
@@ -340,7 +339,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetByIdAsync([FromQuery] WareHouseGetFirstCommand firstCommand)
         {
-            var data = await _mediat.Send(firstCommand);
+            var data = await _mediator.Send(firstCommand);
             var result = new MessageResponse()
             {
                 data = data,
@@ -359,7 +358,7 @@ namespace WareHouse.API.Controllers
         {
             paginatedList.CacheKey = string.Format(WareHouseCacheName.WareHouseDropDown, paginatedList.Active);
             paginatedList.BypassCache = false;
-            var data = await _mediat.Send(paginatedList);
+            var data = await _mediator.Send(paginatedList);
             var result = new MessageResponse()
             {
                 data = data,
@@ -378,14 +377,15 @@ namespace WareHouse.API.Controllers
         {
             //for (int i = 0; i < 10000; i++)
             //{
-            //    await _mediat.Send(new GetAllWareHouseCommand()
+            //    await _mediator.Send(new GetAllWareHouseCommand()
             //    {
             //        Active = true,
             //        BypassCache = false,
             //        CacheKey = string.Format(WareHouseCacheName.WareHouseGetAll, true)
             //    });
             //}
-            var list = await _mediat.Send(new GetAllWareHouseCommand()
+            Information("test log !");
+            var list = await _mediator.Send(new GetAllWareHouseCommand()
             {
                 Active = true,
                 BypassCache = false,
@@ -405,14 +405,14 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetTreeViewAsync([FromQuery] GetTreeWareHouseCommand paginatedList)
         {
-            var list = await _mediat.Send(new GetAllWareHouseCommand()
+            var list = await _mediator.Send(new GetAllWareHouseCommand()
             {
                 Active = paginatedList.Active,
                 BypassCache = false,
                 CacheKey = string.Format(WareHouseCacheName.WareHouseGetAll, paginatedList.Active)
             });
             paginatedList.WareHouseDTOs = list;
-            var data = await _mediat.Send(paginatedList);
+            var data = await _mediator.Send(paginatedList);
             var result = new MessageResponse()
             {
                 data = data,
@@ -449,7 +449,7 @@ namespace WareHouse.API.Controllers
             {
                 Id = id
             };
-            var resc = await _mediat.Send(commandCheck);
+            var resc = await _mediator.Send(commandCheck);
             if (resc is null)
                 return base.Ok(new MessageResponse()
                 {
@@ -505,7 +505,7 @@ namespace WareHouse.API.Controllers
             {
                 Id = Id
             };
-            var data = await _mediat.Send(commandCheck);
+            var data = await _mediator.Send(commandCheck);
             if (data != null)
                 await GetDataToDrop(data);
             var result = new MessageResponse()
@@ -526,7 +526,7 @@ namespace WareHouse.API.Controllers
                 BypassCache = false,
                 CacheKey = string.Format(WareHouseCacheName.WareHouseDropDown, true)
             };
-            var dataWareHouse = await _mediat.Send(getWareHouse);
+            var dataWareHouse = await _mediator.Send(getWareHouse);
             res.WareHouseDTOs = dataWareHouse;
             return res;
         }
@@ -550,14 +550,14 @@ namespace WareHouse.API.Controllers
         //    {
         //        Id = wareHouseCommands.Id
         //    };
-        //    var resc = await _mediat.Send(commandCheck);
+        //    var resc = await _mediator.Send(commandCheck);
         //    if (resc is null)
         //        return Ok(new MessageResponse()
         //        {
         //            success = false,
         //            message = "Không tồn tại !"
         //        });
-        //    var res = await _mediat.Send(new UpdateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
+        //    var res = await _mediator.Send(new UpdateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
         //    if (res)
         //        await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
         //    var result = new MessageResponse()
@@ -575,7 +575,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(WareHouseCommands wareHouseCommands)
         {
-            //var check = await _mediat.Send(new WareHouseCodeCommand()
+            //var check = await _mediator.Send(new WareHouseCodeCommand()
             //{
             //    Code = wareHouseCommands.Code.Trim()
             //});
@@ -587,7 +587,7 @@ namespace WareHouse.API.Controllers
             //        message = "Mã đã tồn tại, xin vui lòng chọn mã khác !"
             //    });
             //}
-            //var data = await _mediat.Send(new CreateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
+            //var data = await _mediator.Send(new CreateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
             //if (data)
             //    await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
             //var result = new MessageResponse()
@@ -604,7 +604,7 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(IEnumerable<string> listIds)
         {
-            var res = await _mediat.Send(new DeleteWareHouseCommand() { Id = listIds });
+            var res = await _mediator.Send(new DeleteWareHouseCommand() { Id = listIds });
             if (res)
                 await _cacheExtension.HybridCachingProvider.RemoveByPrefixAsync(WareHouseCacheName.Prefix);
             var result = new MessageResponse()

@@ -21,7 +21,7 @@ namespace Share.Base.Core.Filters
                 var errorsString = errors.AnyList() ? string.Join("|", errors) : "Đã xảy ra lỗi với dữ liệu đầu vào !";
                 var responseObj = new MessageResponse
                 {
-                    code = "500",
+                    httpStatusCode = 500,
                     message = errorsString,
                     errors = new Dictionary<string, IEnumerable<string>>()
                     {

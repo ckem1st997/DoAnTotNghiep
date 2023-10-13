@@ -2,6 +2,8 @@
 using Dapper;
 using MediatR;
 using Share.Base.Core.Extensions;
+using Share.Base.Service;
+using Share.Base.Service.Repository;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -22,18 +24,16 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouses
     ///--CREATE INDEX WareHouse_index_name
     ///--ON WareHouse(Name, Address, Description, OnDelete);
     /// </summary>
-    public class PaginatedWareHouseCommandHandler : IRequestHandler<PaginatedWareHouseCommand, IPaginatedList<WareHouseDTO>>
+    public class PaginatedWareHouseCommandHandler : IRequestHandler<PaginatedWareHouseCommand, PaginatedList<WareHouseDTO>>
     {
         private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
-        private readonly IPaginatedList<WareHouseDTO> _list;
 
-        public PaginatedWareHouseCommandHandler(IRepositoryEF<Domain.Entity.WareHouse> repository, IPaginatedList<WareHouseDTO> list)
+        public PaginatedWareHouseCommandHandler()
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            _list = list ?? throw new ArgumentNullException(nameof(list));
+            _repository = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse) ?? throw new ArgumentNullException(nameof(_repository));
         }
 
-        public async Task<IPaginatedList<WareHouseDTO>> Handle(PaginatedWareHouseCommand request,
+        public async Task<PaginatedList<WareHouseDTO>> Handle(PaginatedWareHouseCommand request,
             CancellationToken cancellationToken)
         {
             if (request == null)
@@ -41,6 +41,7 @@ namespace WareHouse.API.Application.Queries.Paginated.WareHouses
             request.KeySearch = request.KeySearch?.Trim().Replace("=", "");
             if (request.KeySearch == null)
                 request.KeySearch = "";
+            var _list = new PaginatedList<WareHouseDTO>();
             StringBuilder sbCount = new StringBuilder();
             sbCount.Append("SELECT COUNT(*) FROM ( select Id,Code,Name,Address,Description,Inactive from WareHouse where ");
             StringBuilder sb = new StringBuilder();

@@ -22,7 +22,7 @@ using WareHouse.Infrastructure;
 namespace WareHouse.API.Controllers
 {
 
-    public class MasterGetController : BaseController
+    public class MasterGetController : ApiController
     {
         private readonly IElasticClient _elasticClient;
         private readonly IMediator _mediat;

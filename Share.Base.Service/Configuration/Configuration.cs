@@ -31,6 +31,7 @@ using System.Text;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 using Nest.JsonNetSerializer;
 using Newtonsoft.Json;
+using Share.Base.Service.Validator;
 
 namespace Share.Base.Service.Configuration
 {
@@ -109,7 +110,7 @@ namespace Share.Base.Service.Configuration
                 x.ReportApiVersions = true;
             });
             services.AddHttpContextAccessor();
-
+            services.AddValidator();
         }
         #region Authozire
         public static void AddApiAuthentication(this IServiceCollection services)

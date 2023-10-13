@@ -1,4 +1,5 @@
-﻿using Share.Base.Core.AutoDependencyInjection.InjectionAttribute;
+﻿using Microsoft.EntityFrameworkCore;
+using Share.Base.Core.AutoDependencyInjection.InjectionAttribute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace WareHouse.API.Application.Interface
 {
-    [ScopedDependency]
-    public class PaginatedList<T>:IPaginatedList<T>
+    public class PaginatedList<T>
     {
         public IEnumerable<T> Result { get; set; }
 
@@ -15,8 +15,14 @@ namespace WareHouse.API.Application.Interface
 
         public PaginatedList()
         {
-            Result = null;
             totalCount = 0;
+        }
+
+
+        public async Task Get(IQueryable<T> queryable, int skip, int take)
+        {
+            Result = await queryable.Skip(skip).Take(take).ToListAsync();
+            totalCount = await queryable.CountAsync();
         }
     }
 

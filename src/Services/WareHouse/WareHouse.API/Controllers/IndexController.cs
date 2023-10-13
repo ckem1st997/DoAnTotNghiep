@@ -7,7 +7,7 @@ using System.Net;
 
 namespace WareHouse.API.Controllers
 {
-    public class IndexController : BaseController
+    public class IndexController : ApiController
     {
         private readonly IAuthorizeExtension _authorizeExtension;
         public IndexController(IAuthorizeExtension authorizeExtension)

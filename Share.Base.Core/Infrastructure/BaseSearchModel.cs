@@ -1,13 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace WareHouse.API.Application.Queries.BaseModel
+namespace Share.Base.Core.Infrastructure
 {
     public class BaseSearchModel
     {
 
         [DataMember]
-        public string KeySearch { get; set; }
+        public string? KeySearch { get; set; }
 
         [DataMember]
         public bool? Active { get; set; }

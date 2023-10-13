@@ -46,7 +46,6 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
         {
             // generic phải tự đăng ký
             services.AddScoped(typeof(IElasticSearchClient<>), typeof(ElasticSearchClient<>));
-            services.AddScoped(typeof(IPaginatedList<>), typeof(PaginatedList<>));
             services.AddDataBaseContext<WarehouseManagementContext>(configuration, DataConnectionHelper.ConnectionString.Warehouse);
             services.AddDataBaseContext<MasterdataContext>(configuration, DataConnectionHelper.ConnectionString.Master);
             services.AddMapper();
