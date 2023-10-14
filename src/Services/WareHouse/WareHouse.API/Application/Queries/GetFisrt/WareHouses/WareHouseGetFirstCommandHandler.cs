@@ -3,6 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using Share.Base.Service;
+using Share.Base.Service.Repository;
 using WareHouse.API.Application.Model;
 
 namespace WareHouse.API.Application.Queries.GetFisrt.WareHouses
@@ -16,9 +18,9 @@ namespace WareHouse.API.Application.Queries.GetFisrt.WareHouses
         private readonly IMapper _mapper;
         private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
 
-        public WareHouseGetFirstCommandHandler(IRepositoryEF<Domain.Entity.WareHouse> repository, IMapper mapper)
+        public WareHouseGetFirstCommandHandler(IMapper mapper)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _repository = EngineContext.Current.Resolve<IRepositoryEF<Domain.Entity.WareHouse>>(DataConnectionHelper.ConnectionStringNames.Warehouse) ?? throw new ArgumentNullException(nameof(_repository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
@@ -26,7 +28,7 @@ namespace WareHouse.API.Application.Queries.GetFisrt.WareHouses
         {
             if (request?.Id is null)
                 return null;
-            var res = await _repository.GetByIdsync(request.Id);
+            var res = await _repository.GetByIdsync(request.Id, cancellationToken);
             return _mapper.Map<WareHouseDTO>(res);
         }
     }

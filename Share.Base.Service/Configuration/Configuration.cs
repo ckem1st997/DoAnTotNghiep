@@ -51,7 +51,7 @@ namespace Share.Base.Service.Configuration
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
-            app.UseMiddleware<RemoteIpAddressMiddleware>();
+            //  app.UseMiddleware<RemoteIpAddressMiddleware>();
             app.UseRouting();
             app.UseGrpcWeb();
             app.UseCors("AllowAll");
@@ -114,6 +114,7 @@ namespace Share.Base.Service.Configuration
             });
             services.AddHttpContextAccessor();
             services.AddValidator();
+            //services.AddEFSecondLevelCache();
         }
 
         #region cache ef
@@ -124,7 +125,8 @@ namespace Share.Base.Service.Configuration
         options.UseEasyCachingCoreProvider(CacheConfig.ProviderNames.Hybrid, isHybridCache: true)
         .DisableLogging(false)
         .UseCacheKeyPrefix("EF_")
-         .CacheAllQueries(CacheExpirationMode.Absolute, TimeSpan.FromSeconds(CachingDefaults.DayCacheTime * CachingDefaults.CacheTime))
+          // .CacheAllQueriesExceptContainingTableNames(CacheExpirationMode.Absolute, TimeSpan.FromSeconds(CachingDefaults.DayCacheTime * CachingDefaults.CacheTime), realTableNames)
+          .CacheAllQueries(CacheExpirationMode.Absolute, TimeSpan.FromSeconds(CachingDefaults.DayCacheTime * CachingDefaults.CacheTime))
          .SkipCachingResults(result => result.Value == null || (result.Value is EFTableRows rows && rows.RowsCount == 0))
          );
         }

@@ -332,7 +332,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
+        // [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
         [Route("get-by-id")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
