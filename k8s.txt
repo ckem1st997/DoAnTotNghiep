@@ -75,6 +75,12 @@ helm upgrade rancher rancher-stable/rancher \
 
 
 
+==//
+cài k3s
+curl -sfL https://get.k3s.io | K3S_KUBE_VERSION=v1.26.8 sh -
+
+move sang kubectl
+ scp root@ubuntu:/etc/rancher/k3s/k3s.yaml ~/.kube/config
 
 
 
