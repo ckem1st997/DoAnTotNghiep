@@ -293,6 +293,7 @@ namespace Share.Base.Service.Configuration
             var sqlConnect = configuration.GetConnectionString(nameConnect);
             services.AddDbContextPool<TDbContext>(options =>
             {
+                if(dbType == DatabaseType.MSSQL)
                 options.UseSqlServer(sqlConnect,
                     sqlServerOptionsAction: sqlOptions =>
                     {
@@ -303,6 +304,12 @@ namespace Share.Base.Service.Configuration
                         errorNumbersToAdd: null
                         );
                     });
+                else if(dbType == DatabaseType.Oracle)
+                    options.UseOracle(sqlConnect,
+                   oracleOptionsAction: sqlOptions =>
+                   {
+                       sqlOptions.MigrationsAssembly(typeof(TDbContext).GetTypeInfo().Assembly.GetName().Name);
+                   });
                 options.LogTo(Log.Information, LogLevel.Information, Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.UtcTime).EnableSensitiveDataLogging();
                 options.UseQueryTrackingBehavior(trackingBehavior);
             }

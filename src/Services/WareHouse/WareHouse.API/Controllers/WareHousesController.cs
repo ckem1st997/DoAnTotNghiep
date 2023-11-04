@@ -314,7 +314,8 @@ namespace WareHouse.API.Controllers
 
         #region R
 
-        //  [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
+        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
+     //  [Authorize]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -332,7 +333,7 @@ namespace WareHouse.API.Controllers
         }
 
 
-        // [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
+        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
         [Route("get-by-id")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]

@@ -1,40 +1,18 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Grpc.Net.Client.Web;
-using Grpc.Net.ClientFactory;
-using GrpcGetDataToMaster;
 using GrpcGetDataToWareHouse;
 using Master.ConfigureServices.Configuration;
-using Master.Extension;
 using Master.IntegrationEvents;
-using Master.Models;
-using Master.Service;
 using Master.SignalRHubs;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Share.Base.Core.AutoDependencyInjection;
 using Share.Base.Core.Grpc;
-using Share.Base.Core.Kafka;
-using Share.Base.Service.Caching;
 using Share.Base.Service.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Master
 {
@@ -65,8 +43,8 @@ namespace Master
                 option.IterationCount = 12000;
             });
 
-            services.AddApiAuthentication();
-            services.AddApiCors();
+            // services.AddApiAuthentication();
+            //  services.AddApiCors();
             services.AddSignalR(options =>
             {
                 // Global filters will run first
@@ -75,7 +53,11 @@ namespace Master
 
         }
 
-
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            var markingAssembly = Configuration["ProjectCommonName"];
+            builder.RegisterDIContainer(markingAssembly);
+        }
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

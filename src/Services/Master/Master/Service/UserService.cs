@@ -37,7 +37,7 @@ namespace Master.Service
 
         public UserMaster User => GetUser();
 
-        public UserService(GrpcGetDataWareHouse.GrpcGetDataWareHouseClient client, IPaginatedList<UserMaster> list, MasterdataContext context, IConfiguration configuration, IHttpContextAccessor httpContext, IDistributedCache cache, IHybridCachingProvider cacheExtension)
+        public UserService(GrpcGetDataWareHouse.GrpcGetDataWareHouseClient client, IPaginatedList<UserMaster> list, MasterdataContext context, IConfiguration configuration, IHttpContextAccessor httpContext,IHybridCachingProvider cacheExtension)
         {
             _context = context;
             _configuration = configuration;
