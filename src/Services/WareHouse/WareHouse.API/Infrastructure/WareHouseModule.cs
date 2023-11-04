@@ -26,7 +26,7 @@ namespace WareHouse.API.Infrastructure
             //
 
             builder.AddDbContext<WarehouseManagementContext>(DataConnectionHelper.ConnectionStringNames.Warehouse);
-            builder.AddDbContext<MasterdataContext>(DataConnectionHelper.ConnectionStringNames.Master);
+          //  builder.AddDbContext<MasterdataContext>(DataConnectionHelper.ConnectionStringNames.Master);
 
             builder.AddRegisterDbContext(true);
             //

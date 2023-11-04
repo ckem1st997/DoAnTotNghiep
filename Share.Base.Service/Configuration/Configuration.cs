@@ -35,6 +35,7 @@ using Share.Base.Service.Validator;
 using EFCoreSecondLevelCacheInterceptor;
 using static Share.Base.Service.Caching.CacheName.CacheHelper;
 using Microsoft.Extensions.Options;
+using BaseHA.Core.Behaviors;
 
 namespace Share.Base.Service.Configuration
 {
@@ -359,6 +360,9 @@ namespace Share.Base.Service.Configuration
         public static void AddDbContext<TDbContext>(this ContainerBuilder builder, string ConnectionStringNames) where TDbContext : DbContext
         {
             builder.RegisterType<TDbContext>().Named<DbContext>(ConnectionStringNames).InstancePerDependency();
+          
+            //builder.RegisterType<TDbContext>().Named<DbContext>(ConnectionStringNames).InstancePerLifetimeScope();
+
         }
 
         #endregion
@@ -422,6 +426,7 @@ namespace Share.Base.Service.Configuration
                 cfg.RegisterServicesFromAssembly(typeof(T).Assembly);
                 cfg.AddOpenBehavior(typeof(CachingBehavior<,>));
                 cfg.AddOpenBehavior(typeof(ValidatorBehavior<,>));
+                cfg.AddOpenBehavior(typeof(TransactionBehavior<,>));
             });
         }
 

@@ -315,7 +315,7 @@ namespace WareHouse.API.Controllers
         #region R
 
         [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
-     //  [Authorize]
+        //  [Authorize]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -486,7 +486,7 @@ namespace WareHouse.API.Controllers
             return Ok(result);
         }
 
-        [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseEditKey.Warehouse)]
+       // [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseEditKey.Warehouse)]
         [Route("edit")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -576,26 +576,16 @@ namespace WareHouse.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(WareHouseCommands wareHouseCommands)
         {
-            //var check = await _mediator.Send(new WareHouseCodeCommand()
-            //{
-            //    Code = wareHouseCommands.Code.Trim()
-            //});
-            //if (check)
-            //{
-            //    return Ok(new MessageResponse()
-            //    {
-            //        success = false,
-            //        message = "Mã đã tồn tại, xin vui lòng chọn mã khác !"
-            //    });
-            //}
-            //var data = await _mediator.Send(new CreateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
-            //if (data)
-            //    await _cacheExtension.RemoveAllKeysBy(WareHouseCacheName.Prefix);
-            //var result = new MessageResponse()
-            //{
-            //    success = data
-            //};
-            return Ok(1);
+           
+            var data = await _mediator.Send(new CreateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
+            if (data)
+                await _cacheExtension.HybridCachingProvider.RemoveByPrefixAsync(WareHouseCacheName.Prefix);
+            await _mediator.Send(new CreateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
+            var result = new MessageResponse()
+            {
+                success = data
+            };
+            return Ok(result);
         }
 
         [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseDeleteKey.Warehouse)]
