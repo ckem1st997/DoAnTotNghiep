@@ -81,7 +81,12 @@ curl -sfL https://get.k3s.io | K3S_KUBE_VERSION=v1.26.8 sh -
 
 move sang kubectl
  scp root@ubuntu:/etc/rancher/k3s/k3s.yaml ~/.kube/config
-
+//
+cấu hình nhiều domain trên cùng một ip của máy chủ
+khi người dùng truy cập vào domain nào thì dns sẽ phân giải ip và gửi yêu cầu đó tới ip của máy chủ được cấu hình gán vào domain
+trong yêu cầu đó sẽ có tên host là domain mà người dùng truy cập 
+trong cấu hình ingress resource, có mục cấu hình host là gì
+ingress controller sẽ dựa vào cấu hình đó so sánh với host có trong yêu cầu gửi tới và ánh xạ, gửi yêu cầu đó tới service được setup
 
 
 
