@@ -294,18 +294,18 @@ namespace Share.Base.Service.Configuration
             var sqlConnect = configuration.GetConnectionString(nameConnect);
             services.AddDbContextPool<TDbContext>(options =>
             {
-                if(dbType == DatabaseType.MSSQL)
-                options.UseSqlServer(sqlConnect,
-                    sqlServerOptionsAction: sqlOptions =>
-                    {
-                        sqlOptions.MigrationsAssembly(typeof(TDbContext).GetTypeInfo().Assembly.GetName().Name);
-                        sqlOptions.EnableRetryOnFailure(
-                        maxRetryCount: 15,
-                        maxRetryDelay: TimeSpan.FromSeconds(10),
-                        errorNumbersToAdd: null
-                        );
-                    });
-                else if(dbType == DatabaseType.Oracle)
+                if (dbType == DatabaseType.MSSQL)
+                    options.UseSqlServer(sqlConnect,
+                        sqlServerOptionsAction: sqlOptions =>
+                        {
+                            sqlOptions.MigrationsAssembly(typeof(TDbContext).GetTypeInfo().Assembly.GetName().Name);
+                            sqlOptions.EnableRetryOnFailure(
+                            maxRetryCount: 15,
+                            maxRetryDelay: TimeSpan.FromSeconds(10),
+                            errorNumbersToAdd: null
+                            );
+                        });
+                else if (dbType == DatabaseType.Oracle)
                     options.UseOracle(sqlConnect,
                    oracleOptionsAction: sqlOptions =>
                    {
@@ -360,7 +360,7 @@ namespace Share.Base.Service.Configuration
         public static void AddDbContext<TDbContext>(this ContainerBuilder builder, string ConnectionStringNames) where TDbContext : DbContext
         {
             builder.RegisterType<TDbContext>().Named<DbContext>(ConnectionStringNames).InstancePerDependency();
-          
+
             //builder.RegisterType<TDbContext>().Named<DbContext>(ConnectionStringNames).InstancePerLifetimeScope();
 
         }
@@ -426,7 +426,7 @@ namespace Share.Base.Service.Configuration
                 cfg.RegisterServicesFromAssembly(typeof(T).Assembly);
                 cfg.AddOpenBehavior(typeof(CachingBehavior<,>));
                 cfg.AddOpenBehavior(typeof(ValidatorBehavior<,>));
-                cfg.AddOpenBehavior(typeof(TransactionBehavior<,>));
+                // cfg.AddOpenBehavior(typeof(TransactionBehavior<,>));
             });
         }
 

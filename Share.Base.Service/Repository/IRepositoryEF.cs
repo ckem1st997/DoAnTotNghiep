@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using static Dapper.SqlMapper;
 using Share.Base.Core.Infrastructure;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Share.Base.Service.Repository
 {
@@ -61,8 +62,21 @@ namespace Share.Base.Service.Repository
         public Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
         void Delete(T entity);
         void Delete(IEnumerable<T> entity);
-        Task<int> SaveChangesConfigureAwaitAsync(CancellationToken cancellationToken = default(CancellationToken),bool configure = false);
+        Task<int> SaveChangesConfigureAwaitAsync(CancellationToken cancellationToken = default(CancellationToken), bool configure = false);
         Task<IEnumerable<T>> DeteleSoftDelete(IEnumerable<string> ids, CancellationToken cancellationToken = default(CancellationToken));
         Task<T> DeteleSoftDelete(string id, CancellationToken cancellationToken = default(CancellationToken));
+        Task RollbackTransaction(IDbContextTransaction transaction, CancellationToken cancellationToken);
+        Task CommitTransactionAsync(IDbContextTransaction transaction, CancellationToken cancellationToken, bool configure);
+        Task<IDbContextTransaction> BeginTransactionAsync();
+
+        /// <summary>
+        /// tạo ra một transaction, nếu quá trình thực hiện xảy ra lỗi sẽ tiến hành rollback lại toàn bộ data
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="func"></param>
+        /// <param name="cancellationToken"></param>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        Task<T> SaveChangesConfigureAwaitAsync<T>(Func<Task<T>> func, CancellationToken cancellationToken = default, bool configure = false);
     }
 }

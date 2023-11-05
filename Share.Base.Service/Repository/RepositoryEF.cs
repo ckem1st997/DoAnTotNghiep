@@ -13,6 +13,13 @@ using static Dapper.SqlMapper;
 using Share.Base.Core.Infrastructure;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Share.Base.Core.Extensions;
+using Elastic.Apm.Api;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Serilog.Context;
+using Serilog;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Threading;
+using System.Data;
 
 namespace Share.Base.Service.Repository
 {
@@ -141,6 +148,39 @@ namespace Share.Base.Service.Repository
 
         }
 
+
+        public async Task<T> SaveChangesConfigureAwaitAsync<T>(Func<Task<T>> func, CancellationToken cancellationToken = default(CancellationToken), bool configure = false)
+        {
+            if (func is null)
+            {
+                throw new ArgumentNullException(nameof(func));
+            }
+
+            var strategy = _context.Database.CreateExecutionStrategy();
+            var response=default(T);
+            await strategy.ExecuteAsync(async () =>
+            {
+                Guid transactionId;
+
+                using (var transaction = await BeginTransactionAsync())
+                using (LogContext.PushProperty("TransactionContext", transaction.TransactionId))
+                {
+                    Log.Information("----- Begin transaction {TransactionId}", transaction.TransactionId);
+                    response =await func();
+
+                    Log.Information("----- Commit transaction {TransactionId}", transaction.TransactionId);
+                    await CommitTransactionAsync(transaction,cancellationToken,configure);
+
+                    transactionId = transaction.TransactionId;
+                }
+
+            });
+
+            return response;
+
+
+        }
+
         public async Task AddAsync(IEnumerable<T> entity, CancellationToken cancellationToken = default)
         {
             if (entity is null)
@@ -244,6 +284,60 @@ namespace Share.Base.Service.Repository
                 return await _query.AsNoTracking().FirstOrDefaultAsync(x => x.Id.Equals(id));
             return await _query.FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
+
+
+
+        #region private
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _context.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+        }
+
+        public async Task CommitTransactionAsync(IDbContextTransaction transaction, CancellationToken cancellationToken, bool configure)
+        {
+            if (transaction == null)
+                throw new ArgumentNullException(nameof(transaction));
+
+            try
+            {
+                await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(configure);
+                await transaction.CommitAsync(cancellationToken);
+            }
+            catch
+            {
+                await RollbackTransaction(transaction, cancellationToken);
+                throw;
+            }
+            finally
+            {
+                if (transaction != null)
+                {
+                    await transaction.DisposeAsync();
+                }
+            }
+        }
+
+        public async Task RollbackTransaction(IDbContextTransaction transaction, CancellationToken cancellationToken)
+        {
+            try
+            {
+
+                if (transaction != null)
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                }
+            }
+            finally
+            {
+                if (transaction != null)
+                {
+                    await transaction.DisposeAsync();
+                }
+            }
+        }
+
+        #endregion
 
     }
 

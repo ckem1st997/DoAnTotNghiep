@@ -61,14 +61,17 @@ namespace WareHouse.API.Application.Commands.Delete
 
             if (request is null)
                 return false;
-            var entity = _mapper.Map<Domain.Entity.WareHouse>(request.WareHouseCommands);
-            await _repository.AddAsync(entity, cancellationToken);
-            var search=await _repository.GetByIdsync(entity.Id,cancellationToken);
 
-            await _repository.AddAsync(entity, cancellationToken);
 
-           // var res = await _repository.SaveChangesConfigureAwaitAsync(cancellationToken: cancellationToken);
-            return true;
+            var res = await _repository.SaveChangesConfigureAwaitAsync(async () =>
+            {
+
+                var entity = _mapper.Map<Domain.Entity.WareHouse>(request.WareHouseCommands);
+                await _repository.AddAsync(entity, cancellationToken);
+                var res = await _repository.SaveChangesConfigureAwaitAsync(cancellationToken: cancellationToken);
+                return res;
+            }, cancellationToken: cancellationToken);
+            return res > 0;
         }
     }
 }
