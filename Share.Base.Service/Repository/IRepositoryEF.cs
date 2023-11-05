@@ -78,5 +78,10 @@ namespace Share.Base.Service.Repository
         /// <param name="configure"></param>
         /// <returns></returns>
         Task<T> SaveChangesConfigureAwaitAsync<T>(Func<Task<T>> func, CancellationToken cancellationToken = default, bool configure = false);
+        int SaveChanges();
+        void RollbackTransaction(IDbContextTransaction transaction);
+        void CommitTransaction(IDbContextTransaction transaction, CancellationToken cancellationToken, bool configure);
+        IDbContextTransaction BeginTransaction();
+        T SaveChangesConfigureAwaitAsync<T>(Func<T> func, CancellationToken cancellationToken = default, bool configure = false);
     }
 }

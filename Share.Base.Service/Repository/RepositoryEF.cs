@@ -20,6 +20,7 @@ using Serilog;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Threading;
 using System.Data;
+using Oracle.ManagedDataAccess.Client;
 
 namespace Share.Base.Service.Repository
 {
@@ -29,6 +30,7 @@ namespace Share.Base.Service.Repository
         private readonly DbSet<T> _dbSet;
         private readonly IQueryable<T> _query;
         private readonly string _connectionstring;
+        private readonly DbConnection _sqlConnection;
         public IQueryable<T> GetQueryable(bool tracking = true)
         {
             return tracking ? _query : _query.AsNoTracking();
@@ -41,6 +43,13 @@ namespace Share.Base.Service.Repository
             _dbSet = _context.Set<T>();
             _query = _dbSet.AsQueryable();
             _connectionstring = _context.Database.GetConnectionString() ?? throw new ArgumentNullException("GetConnectionString is null !");
+            if (context.Database.IsSqlServer())
+                _sqlConnection = new SqlConnection(_connectionstring);
+            else if (context.Database.IsOracle())
+                _sqlConnection = new OracleConnection(_connectionstring);
+            else
+                throw new ArgumentException("Not database config !");
+
         }
 
 
@@ -148,6 +157,41 @@ namespace Share.Base.Service.Repository
 
         }
 
+        public int SaveChanges()
+        {
+            return _context.SaveChanges();
+        }
+        public T SaveChangesConfigureAwaitAsync<T>(Func<T> func, CancellationToken cancellationToken = default(CancellationToken), bool configure = false)
+        {
+            if (func is null)
+            {
+                throw new ArgumentNullException(nameof(func));
+            }
+
+            var strategy = _context.Database.CreateExecutionStrategy();
+            var response = default(T);
+            strategy.Execute(() =>
+           {
+               Guid transactionId;
+
+               using (var transaction = BeginTransaction())
+               using (LogContext.PushProperty("TransactionContext", transaction.TransactionId))
+               {
+                   Log.Information("----- Begin transaction {TransactionId}", transaction.TransactionId);
+                   response = func();
+
+                   Log.Information("----- Commit transaction {TransactionId}", transaction.TransactionId);
+                   CommitTransaction(transaction, cancellationToken, configure);
+
+                   transactionId = transaction.TransactionId;
+               }
+
+           });
+
+            return response;
+        }
+
+
 
         public async Task<T> SaveChangesConfigureAwaitAsync<T>(Func<Task<T>> func, CancellationToken cancellationToken = default(CancellationToken), bool configure = false)
         {
@@ -157,7 +201,7 @@ namespace Share.Base.Service.Repository
             }
 
             var strategy = _context.Database.CreateExecutionStrategy();
-            var response=default(T);
+            var response = default(T);
             await strategy.ExecuteAsync(async () =>
             {
                 Guid transactionId;
@@ -166,10 +210,10 @@ namespace Share.Base.Service.Repository
                 using (LogContext.PushProperty("TransactionContext", transaction.TransactionId))
                 {
                     Log.Information("----- Begin transaction {TransactionId}", transaction.TransactionId);
-                    response =await func();
+                    response = await func();
 
                     Log.Information("----- Commit transaction {TransactionId}", transaction.TransactionId);
-                    await CommitTransactionAsync(transaction,cancellationToken,configure);
+                    await CommitTransactionAsync(transaction, cancellationToken, configure);
 
                     transactionId = transaction.TransactionId;
                 }
@@ -181,11 +225,13 @@ namespace Share.Base.Service.Repository
 
         }
 
+
+
         public async Task AddAsync(IEnumerable<T> entity, CancellationToken cancellationToken = default)
         {
             if (entity is null)
                 throw new BaseException(nameof(entity));
-            await _dbSet.AddRangeAsync(entity);
+            await _dbSet.AddRangeAsync(entity, cancellationToken);
         }
 
         public void Update(IEnumerable<T> entity)
@@ -204,43 +250,43 @@ namespace Share.Base.Service.Repository
 
         public DbConnection GetDbconnection()
         {
-            return new SqlConnection(_connectionstring);
+            return _sqlConnection;
         }
 
         public async Task<T1> QueryFirstOrDefaultAsync<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
-            using var connection = new SqlConnection(_connectionstring);
+            using var connection = _sqlConnection;
             return await connection.QueryFirstOrDefaultAsync<T1>(sp, parms, commandType: commandType);
         }
 
         public T1 QueryFirst<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
-            using var connection = new SqlConnection(_connectionstring);
+            using var connection = _sqlConnection;
             return connection.QueryFirst<T1>(sp, parms, commandType: commandType);
         }
 
         public async Task<IEnumerable<T1>> QueryAsync<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
-            using var connection = new SqlConnection(_connectionstring);
+            using var connection = _sqlConnection;
             return await connection.QueryAsync<T1>(sp, parms, commandType: commandType);
         }
 
         public IEnumerable<T1> Query<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
-            using var connection = new SqlConnection(_connectionstring);
+            using var connection = _sqlConnection;
             return connection.Query<T1>(sp, parms, commandType: commandType);
         }
 
         public async Task<GridReader> QueryMultipleAsync(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
-            using var connection = new SqlConnection(_connectionstring);
+            using var connection = _sqlConnection;
             return await connection.QueryMultipleAsync(sp, param: parms, commandType: commandType);
         }
 
 
         public GridReader QueryMultiple(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
-            using var connection = new SqlConnection(_connectionstring);
+            using var connection = _sqlConnection;
             return connection.QueryMultiple(sp, param: parms, commandType: commandType);
         }
 
@@ -289,6 +335,48 @@ namespace Share.Base.Service.Repository
 
         #region private
 
+        public IDbContextTransaction BeginTransaction()
+        {
+            return _context.Database.BeginTransaction(IsolationLevel.ReadCommitted);
+        }
+
+        public void CommitTransaction(IDbContextTransaction transaction, CancellationToken cancellationToken, bool configure)
+        {
+            if (transaction == null)
+                throw new ArgumentNullException(nameof(transaction));
+
+            try
+            {
+                _context.SaveChanges();
+                transaction.Commit();
+            }
+            catch
+            {
+                RollbackTransaction(transaction);
+                throw;
+            }
+            finally
+            {
+                transaction?.Dispose();
+            }
+        }
+
+        public void RollbackTransaction(IDbContextTransaction transaction)
+        {
+            try
+            {
+
+                transaction?.Rollback();
+            }
+            finally
+            {
+                transaction?.Dispose();
+            }
+        }
+
+
+
+
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
             return await _context.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
@@ -336,6 +424,7 @@ namespace Share.Base.Service.Repository
                 }
             }
         }
+
 
         #endregion
 

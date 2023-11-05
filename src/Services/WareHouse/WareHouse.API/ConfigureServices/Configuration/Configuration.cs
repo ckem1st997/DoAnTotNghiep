@@ -37,6 +37,7 @@ using Share.Base.Service.Configuration;
 using Share.Base.Service;
 using WareHouse.API.Application.AutoMapper.ConfigureServices;
 using WareHouse.API.Application.Validations.ConfigureServices;
+using Share.Base.Core.Enum;
 
 namespace WareHouse.API.ConfigureServices.CustomConfiguration
 {
@@ -46,7 +47,7 @@ namespace WareHouse.API.ConfigureServices.CustomConfiguration
         {
             // generic phải tự đăng ký
             services.AddScoped(typeof(IElasticSearchClient<>), typeof(ElasticSearchClient<>));
-            services.AddDataBaseContext<WarehouseManagementContext>(configuration, DataConnectionHelper.ConnectionString.Warehouse);
+            services.AddDataBaseContext<WarehouseManagementContext>(configuration, DataConnectionHelper.ConnectionString.Warehouse, DatabaseType.Oracle);
             services.AddDataBaseContext<MasterdataContext>(configuration, DataConnectionHelper.ConnectionString.Master);
             services.AddMapper();
             services.AddValidator();
