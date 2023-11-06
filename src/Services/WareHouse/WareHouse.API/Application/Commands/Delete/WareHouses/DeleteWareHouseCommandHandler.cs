@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Share.Base.Core.CQRS;
 using Share.Base.Service;
 using Share.Base.Service.Repository;
 using System;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using WareHouse.API.Application.Commands.Models;
 
 namespace WareHouse.API.Application.Commands.Delete
@@ -38,7 +40,7 @@ namespace WareHouse.API.Application.Commands.Delete
 
     //
 
-    public partial class CreateWareHouseCommand : IRequest<bool>
+    public partial class CreateWareHouseCommand : ICommandBase<bool>
     {
         [DataMember] public WareHouseCommands WareHouseCommands { get; set; }
 
