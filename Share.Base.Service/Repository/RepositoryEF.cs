@@ -49,7 +49,6 @@ namespace Share.Base.Service.Repository
                 _sqlConnection = new OracleConnection(_connectionstring);
             else
                 throw new ArgumentException("Not database config !");
-
         }
 
 
@@ -85,7 +84,7 @@ namespace Share.Base.Service.Repository
             _dbSet.Update(entity);
         }
 
-        public DatabaseFacade Database => _context.Database;   
+        public DatabaseFacade Database => _context.Database;
 
         public IEnumerable<T> GetList(Func<T, bool> filter)
         {
@@ -355,7 +354,7 @@ namespace Share.Base.Service.Repository
 
             try
             {
-                await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(configure);
+                //await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(configure);
                 await transaction.CommitAsync(cancellationToken);
             }
             catch

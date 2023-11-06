@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -29,8 +30,8 @@ namespace Share.Base.Core.Filters
         {
             string getEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Environments.Development;
             var typeException = context.Exception.GetType();
-            Log.Error(context.Exception + "|" + context.Exception.Message);
-            Log.Error($"Exception Method: {context.Exception.TargetSite.Name}");
+            Log.Error(context.Exception + "|" + context.Exception.Message + " | " + context.Exception.InnerException?.Message);
+            Log.Error($"Exception Method: {context.Exception.TargetSite?.Name}");
             Log.Error($"Type Exception: {context.Exception.GetType().FullName}");
             var jsonResult = new MessageResponse();
             context.Result = new InternalServerErrorObjectResult(jsonResult);
@@ -43,6 +44,8 @@ namespace Share.Base.Core.Filters
                     httpStatusCode = (int)HttpStatusCode.InternalServerError,
                     success = false
                 };
+                context.Result = new ObjectResult(jsonResult);
+
             }
             else if (typeException == typeof(UnauthorizedAccessException))
             {
@@ -66,6 +69,39 @@ namespace Share.Base.Core.Filters
                 context.Result = new UnauthorizedObjectResult(jsonResult);
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
             }
+            else if (typeException == typeof(DbUpdateException))
+            {
+                string errorMessage = context.Exception.InnerException?.Message ?? "";
+                string dataMessage = "Có lỗi xảy ra khi cập nhật cơ sở dữ liệu. ";
+                if (errorMessage.Contains("PRIMARY KEY constraint"))
+                {
+                    dataMessage += "Khóa chính hoặc dữ liệu đã tồn tại trong cơ sở dữ liệu !";
+                }
+                else if (errorMessage.Contains("REFERENCE constraint"))
+                {
+                    dataMessage += "Thao tác với dữ liệu chưa chính xác, xin vui lòng thử lại !";
+                }
+                else if (errorMessage.Contains("INSERT INTO"))
+                {
+                    dataMessage += "Lỗi khi thêm dữ liệu !";
+                }
+                else if (errorMessage.Contains("UPDATE"))
+                {
+                    dataMessage += "Lỗi khi cập nhật dữ liệu !";
+                }
+                else if (errorMessage.Contains("DELETE"))
+                {
+                    dataMessage += "Lỗi khi xóa dữ liệu !";
+                }
+                jsonResult = new MessageResponse
+                {
+                    message = dataMessage,
+                    httpStatusCode = (int)HttpStatusCode.InternalServerError,
+                    success = false
+                };
+                context.Result = new ObjectResult(jsonResult);
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
             else
             {
                 jsonResult = new MessageResponse
@@ -76,6 +112,7 @@ namespace Share.Base.Core.Filters
                 };
                 if (getEnv.Equals(Environments.Development))
                     jsonResult.message = context.Exception.Message;
+                context.Result = new ObjectResult(jsonResult);
 
             }
 

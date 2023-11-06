@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Share.Base.Core.CQRS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using WareHouse.API.Application.Commands.Models;
 
 namespace WareHouse.API.Application.Commands.Delete
 {
-    public partial class DeleteWareHouseCommand : IRequest<bool>
+    public partial class DeleteWareHouseCommand : ICommandBase<bool>
     {
         [DataMember] public IEnumerable<string> Id { get; set; }
 

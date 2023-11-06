@@ -580,7 +580,6 @@ namespace WareHouse.API.Controllers
             var data = await _mediator.Send(new CreateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
             if (data)
                 await _cacheExtension.HybridCachingProvider.RemoveByPrefixAsync(WareHouseCacheName.Prefix);
-            await _mediator.Send(new CreateWareHouseCommand() { WareHouseCommands = wareHouseCommands });
             var result = new MessageResponse()
             {
                 success = data

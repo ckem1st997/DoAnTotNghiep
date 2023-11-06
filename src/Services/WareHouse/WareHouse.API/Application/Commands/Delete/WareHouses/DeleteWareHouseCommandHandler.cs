@@ -14,7 +14,7 @@ using WareHouse.API.Application.Commands.Models;
 
 namespace WareHouse.API.Application.Commands.Delete
 {
-    public partial class DeleteWareHouseCommandHandler : IRequestHandler<DeleteWareHouseCommand, bool>
+    public partial class DeleteWareHouseCommandHandler : IRequestBaseHandler<DeleteWareHouseCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
         private readonly IMapper _mapper;
@@ -47,7 +47,7 @@ namespace WareHouse.API.Application.Commands.Delete
     }
 
 
-    public partial class CreateWareHouseCommandHandler : IRequestHandler<CreateWareHouseCommand, bool>
+    public partial class CreateWareHouseCommandHandler : IRequestBaseHandler<CreateWareHouseCommand, bool>
     {
         private readonly IRepositoryEF<Domain.Entity.WareHouse> _repository;
         private readonly IMapper _mapper;
@@ -70,6 +70,11 @@ namespace WareHouse.API.Application.Commands.Delete
 
                 var entity = _mapper.Map<Domain.Entity.WareHouse>(request.WareHouseCommands);
                 await _repository.AddAsync(entity, cancellationToken);
+
+                // await _repository.SaveChangesConfigureAwaitAsync(cancellationToken: cancellationToken);
+
+                //var resđ= await _repository.GetByIdsync(entity.Id);
+                // await _repository.AddAsync(entity, cancellationToken);
                 var res = await _repository.SaveChangesConfigureAwaitAsync(cancellationToken: cancellationToken);
                 return res;
             }, cancellationToken: cancellationToken);
