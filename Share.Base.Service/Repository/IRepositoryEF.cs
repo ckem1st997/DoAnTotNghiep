@@ -59,7 +59,6 @@ namespace Share.Base.Service.Repository
         /// <param name="entity"></param>
         void Update(T entity);
         void Update(IEnumerable<T> entity);
-        public Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
         void Delete(T entity);
         void Delete(IEnumerable<T> entity);
         Task<int> SaveChangesConfigureAwaitAsync(CancellationToken cancellationToken = default(CancellationToken), bool configure = false);
@@ -83,5 +82,6 @@ namespace Share.Base.Service.Repository
         void CommitTransaction(IDbContextTransaction transaction, CancellationToken cancellationToken, bool configure);
         IDbContextTransaction BeginTransaction();
         T SaveChangesConfigureAwaitAsync<T>(Func<T> func, CancellationToken cancellationToken = default, bool configure = false);
+        Task AddAsync(IEnumerable<T> entity, CancellationToken cancellationToken = default);
     }
 }

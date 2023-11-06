@@ -85,41 +85,7 @@ namespace Share.Base.Service.Repository
             _dbSet.Update(entity);
         }
 
-        public virtual async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            if (entity == null)
-            {
-                throw new BaseException(nameof(entity));
-            }
-            if (entity.Id.IsNullOrEmpty())
-                throw new BaseException(nameof(entity.Id));
-            _dbSet.Attach(entity);
-            _dbSet.Update(entity);
-            try
-            {
-                return await SaveChanges(cancellationToken);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return await Task.FromResult(false);
-            }
-        }
-
-
-
-        public bool AutoSaveChanges { get; set; } = true;
-
-        public DatabaseFacade Database => _context.Database;
-
-        protected virtual async Task<bool> SaveChanges(CancellationToken cancellationToken)
-        {
-            if (AutoSaveChanges)
-            {
-                return await _context.SaveChangesAsync(cancellationToken) > 0;
-            }
-            return AutoSaveChanges;
-        }
+        public DatabaseFacade Database => _context.Database;   
 
         public IEnumerable<T> GetList(Func<T, bool> filter)
         {
