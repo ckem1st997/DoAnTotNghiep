@@ -88,7 +88,9 @@ trong yêu cầu đó sẽ có tên host là domain mà người dùng truy cậ
 trong cấu hình ingress resource, có mục cấu hình host là gì
 ingress controller sẽ dựa vào cấu hình đó so sánh với host có trong yêu cầu gửi tới và ánh xạ, gửi yêu cầu đó tới service được setup
 
-
+cài dashboard hạ tầng
+https://learn.netdata.cloud/docs/installing/kubernetes
+chú ý chọn clusterip 19999 rồi ingress như thường
 
 
 
