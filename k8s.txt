@@ -93,7 +93,7 @@ https://learn.netdata.cloud/docs/installing/kubernetes
 chú ý chọn clusterip 19999 rồi ingress như thường
 
 
-
+git submodule add http://192.168.3.147:8181/hacom/share/hacom.sharedrefs Sharedrefs
 
 
 
