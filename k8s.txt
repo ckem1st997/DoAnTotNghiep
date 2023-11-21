@@ -96,6 +96,33 @@ chú ý chọn clusterip 19999 rồi ingress như thường
 git submodule add http://192.168.3.147:8181/hacom/share/hacom.sharedrefs Sharedrefs
 
 
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: abc@123
+      POSTGRES_DB: dbjira,dbkong
+    volumes:
+      - postgres_data_back-up:/var/lib/postgresql/data
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6376:6379"
+    command: ["redis-server", "--requirepass", "abc@123"]
+    volumes:
+      - redis_data_back-up:/data
+
+volumes:
+  postgres_data_back-up:
+  redis_data_back-up:
 
 
 
