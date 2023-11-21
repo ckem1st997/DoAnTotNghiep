@@ -147,7 +147,7 @@ volumes:
   redis_data:
   redis_data_back-up:
 
-
+==> ui cảu redis, nếu không có user thì có thể bỏ qua
 version: '3'
 services:
   rancher:
