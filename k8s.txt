@@ -163,6 +163,36 @@ services:
       #- SSL_CERT_PATH=/etc/rancher/ssl/myserver.crt
      # - SSL_KEY_PATH=/etc/rancher/ssl/myserver.key
 
+==>jira
+version: '3'
+
+services:
+  jira:
+    image: teamatldocker/jira
+    ports:
+      - "8083:8080"
+    volumes:
+      - /path/to/jira/data:/var/atlassian/application-data/jira
+    environment:
+      - JVM_MINIMUM_MEMORY=1024m
+      - JVM_MAXIMUM_MEMORY=2048m
+      - ATL_PROXY_NAME=
+      - ATL_PROXY_PORT=
+      - ATL_PROXY_SCHEME=
+      - ATL_TOMCAT_PORT=8083
+      - DATABASE_URL=jdbc:postgresql://192.168.3.96:5432/dbjira
+      - DATABASE_DRIVER=org.postgresql.Driver
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=abc@123
+      - ATL_DB_TYPE=postgres
+      - ATL_JDBC_URL=jdbc:postgresql://192.168.3.96:5432/dbjira
+    networks:
+      - jiranet
+
+
+networks:
+  jiranet:
+    driver: bridge
 
 
 
