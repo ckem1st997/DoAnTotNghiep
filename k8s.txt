@@ -107,7 +107,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: abc@123
-      POSTGRES_DB: dbjira,dbkong
+      POSTGRES_DB: dbjira
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - postgres_data_back-up:/var/lib/postgresql/data-backup
