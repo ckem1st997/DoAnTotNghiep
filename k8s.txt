@@ -125,6 +125,20 @@ volumes:
   redis_data_back-up:
 
 
+version: '3'
+services:
+  rancher:
+    image: rancher/rancher:v2.7.9
+    ports:
+      - "8333:80"
+      - "8443:443"
+    privileged: true
+    volumes:
+      - /opt/rancher:/var/lib/rancher
+    environment:
+      - CATTLE_SYSTEM_CATALOG=bundled
+      #- SSL_CERT_PATH=/etc/rancher/ssl/myserver.crt
+     # - SSL_KEY_PATH=/etc/rancher/ssl/myserver.key
 
 
 
@@ -132,4 +146,3 @@ volumes:
 
 
 
-https://xamvn.vc/r/mbtm-thuy-moon.391229/page-22#post-8026434
