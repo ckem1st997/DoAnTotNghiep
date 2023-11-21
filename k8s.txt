@@ -109,7 +109,8 @@ services:
       POSTGRES_PASSWORD: abc@123
       POSTGRES_DB: dbjira,dbkong
     volumes:
-      - postgres_data_back-up:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_back-up:/var/lib/postgresql/data-backup
 
   redis:
     image: redis
@@ -118,10 +119,32 @@ services:
       - "6376:6379"
     command: ["redis-server", "--requirepass", "abc@123"]
     volumes:
-      - redis_data_back-up:/data
+      - redis_data:/data
+      - redis_data_back-up:/data-backup
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - "8383:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - postgres
+
+  redisinsight:
+    image: redislabs/redisinsight
+    restart: always
+    ports:
+      - "8301:8001"
+    depends_on:
+      - redis
 
 volumes:
+  postgres_data:
   postgres_data_back-up:
+  redis_data:
   redis_data_back-up:
 
 
