@@ -193,6 +193,62 @@ services:
 networks:
   jiranet:
     driver: bridge
+==>tool ngon c2
+version: '3.6'
+
+services:
+  jira:
+    image: teamatldocker/jira
+    ports:
+      - "8083:8080"
+    volumes:
+      - /var/volumn/jira/data:/var/atlassian/application-data/jira
+    environment:
+      - JVM_MINIMUM_MEMORY=1024m
+      - JVM_MAXIMUM_MEMORY=2048m
+      - ATL_PROXY_NAME=
+      - ATL_PROXY_PORT=
+      - ATL_PROXY_SCHEME=
+      - ATL_TOMCAT_PORT=8083
+      - DATABASE_URL=jdbc:postgresql://192.168.3.162:5432/dbjira
+      - DATABASE_DRIVER=org.postgresql.Driver
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=abc@123
+      - ATL_DB_TYPE=postgres
+      - ATL_JDBC_URL=jdbc:postgresql://192.168.3.162:5432/dbjira
+    networks:
+      - jiranet
+
+  gitlab:
+    image: gitlab/gitlab-ce
+    ports:
+      - "8929:8929"
+      
+    hostname: 'gitlab.example.com'
+    restart: always
+    volumes:
+      - /var/volumn/gitlab/config:/etc/gitlab
+      - /var/volumn/gitlab/logs:/var/log/gitlab
+      - /var/volumn/gitlab/data:/var/opt/gitlab
+      - /var/volumn/gitlab/backup:/var/opt/gitlab/backups
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://gitlab.example.com:8929'
+        gitlab_rails['gitlab_shell_ssh_port'] = 22
+        postgresql['enable'] = false
+        gitlab_rails['db_adapter'] = "postgresql"
+        gitlab_rails['db_encoding'] = "unicode"
+        gitlab_rails['db_host'] = "192.168.3.162"  # Thay đổi địa chỉ IP cụ thể của PostgreSQL của bạn
+        gitlab_rails['db_port'] = "5432"          # Thay đổi cổng PostgreSQL của bạn nếu cần
+        gitlab_rails['db_database'] = "db-gitlab"    # Thay đổi tên cơ sở dữ liệu của bạn
+        gitlab_rails['db_username'] = "postgres"  # Thay đổi tên người dùng PostgreSQL của bạn
+        gitlab_rails['db_password'] = "abc@123"   # Thay đổi mật khẩu PostgreSQL của bạn
+    networks:
+      - jiranet
+
+networks:
+  jiranet:
+    driver: bridge
 
 
 
