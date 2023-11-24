@@ -251,7 +251,7 @@ networks:
     driver: bridge
 
 
-vào setting ci/cd  runner new project... và làm theo hướng dẫn, chú ý cài đặt tags trong rujnner phải trùng với trong gitlab.yml
+vào setting ci/cd  runner new project... và làm theo hướng dẫn, chú ý cài đặt tags trong runner phải trùng với trong gitlab.yml
 
 
 
