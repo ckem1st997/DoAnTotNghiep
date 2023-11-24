@@ -250,11 +250,20 @@ networks:
   jiranet:
     driver: bridge
 
-
+cài git runner bằng lệnh apt...
 vào setting ci/cd  runner new project... và làm theo hướng dẫn, chú ý cài đặt tags trong runner phải trùng với trong gitlab.yml
-chạy gitlab-runner chọn docker
 
 nano /home/gitlab-runner/.bash_logout  commen hoặc xóa file nếu lỗi chạy shell
+
+
+==> để call http
+{
+  "insecure-registries": ["gitlab.mycompany.com:4567"]
+}
+/etc/docker/daemon.json
+sudo systemctl status docker
+sudo systemctl start docker
+sudo systemctl restart docker
 
 
 
