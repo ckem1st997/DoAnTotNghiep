@@ -254,6 +254,7 @@ networks:
 vào setting ci/cd  runner new project... và làm theo hướng dẫn, chú ý cài đặt tags trong runner phải trùng với trong gitlab.yml
 chạy gitlab-runner chọn docker
 
+nano /home/gitlab-runner/.bash_logout  commen hoặc xóa file nếu lỗi chạy shell
 
 
 
