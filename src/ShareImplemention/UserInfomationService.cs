@@ -41,8 +41,16 @@ namespace ShareImplemention
             // var listRoleCache = await _cache.GetAsync(string.Format(ListRoleCacheName.UserListRoleCache, false));
             var listRoleFalse = new List<string>();
             var listRoleCache = _cacheExtension.IsConnectedRedis ? await _cacheExtension.GetDbAsync<List<string>>(string.Format(ListRoleCacheName.UserListRoleCache, false)) : default;
-            if (listRoleCache is not null)
+            if (listRoleCache is null)
+            {
+                var listRoleGrpc = await _client.GetListRoleInactiveFalseAsync(new Params());
+                listRoleFalse = listRoleGrpc.ListRoleInactiveFalse_.ToList();
+            }
+            else
+            {
                 listRoleFalse = listRoleCache;
+            }
+
             if (listRoleFalse is not null && listRoleFalse.Any())
             {
                 // listRoleCache là null thì get by grpc
