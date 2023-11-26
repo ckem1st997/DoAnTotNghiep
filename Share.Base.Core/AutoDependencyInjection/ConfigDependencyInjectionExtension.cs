@@ -10,9 +10,9 @@ namespace Share.Base.Core.AutoDependencyInjection
 {
     public static class DependencyInjectionExtension
     {
-        public static void RegisterDIContainer(this ContainerBuilder builder, string projectCommonName)
+        public static void RegisterDIContainer(this ContainerBuilder builder)
         {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName != null && (x.FullName.Contains(projectCommonName) || x.FullName.Contains("Share.Base"))).ToList();
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
             foreach (var assembly in assemblies)
             {
                 #region auto register with Transient

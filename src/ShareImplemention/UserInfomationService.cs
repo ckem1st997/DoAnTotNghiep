@@ -18,13 +18,11 @@ namespace ShareImplemention
     public class UserInfomationService : IUserInfomationService
     {
         private readonly GrpcGetData.GrpcGetDataClient _client;
-        private readonly IDistributedCache _cache;
         private readonly IHybridCachingManager _cacheExtension;
 
-        public UserInfomationService(GrpcGetData.GrpcGetDataClient client, IDistributedCache cache, IHybridCachingManager cacheExtension)
+        public UserInfomationService(GrpcGetData.GrpcGetDataClient client, IHybridCachingManager cacheExtension)
         {
             _client = client;
-            _cache = cache;
             _cacheExtension = cacheExtension;
         }
 
@@ -42,17 +40,9 @@ namespace ShareImplemention
             // list active false
             // var listRoleCache = await _cache.GetAsync(string.Format(ListRoleCacheName.UserListRoleCache, false));
             var listRoleFalse = new List<string>();
-            var listRoleCache = _cacheExtension.IsConnectedRedis? await _cache.GetAsync(string.Format(ListRoleCacheName.UserListRoleCache, false)):default;
-            if (listRoleCache is null)
-            {
-                var listRoleGrpc = await _client.GetListRoleInactiveFalseAsync(new Params());
-                listRoleFalse = listRoleGrpc.ListRoleInactiveFalse_.ToList();
-            }
-            else
-            {
-                listRoleFalse = JsonConvert.DeserializeObject<List<string>>(Encoding.UTF8.GetString(listRoleCache));
-
-            }
+            var listRoleCache = _cacheExtension.IsConnectedRedis ? await _cacheExtension.GetDbAsync<List<string>>(string.Format(ListRoleCacheName.UserListRoleCache, false)) : default;
+            if (listRoleCache is not null)
+                listRoleFalse = listRoleCache;
             if (listRoleFalse is not null && listRoleFalse.Any())
             {
                 // listRoleCache là null thì get by grpc
@@ -78,13 +68,13 @@ namespace ShareImplemention
                 return false;
 
             // get list role by user
-            var cachedResponse = _cacheExtension.IsConnectedRedis ? await _cache.GetAsync(string.Format(UserListRoleCacheName.UserListRoleCache, idUser)):default;
+            var cachedResponse = _cacheExtension.IsConnectedRedis ? await _cacheExtension.GetDbAsync<List<string>>(string.Format(UserListRoleCacheName.UserListRoleCache, idUser)) : default;
 
             // trước là check, có thì true, không thì check bằng grpc
             // giờ chech luôn
             if (cachedResponse is not null)
             {
-                var resList = JsonConvert.DeserializeObject<List<string>>(Encoding.UTF8.GetString(cachedResponse));
+                var resList = cachedResponse;
                 //if (resList is not null && resList.Contains(authRole))
                 return resList is not null && resList.Contains(authRole);
             }

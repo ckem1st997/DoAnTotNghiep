@@ -41,9 +41,8 @@ namespace WareHouse.API
         }
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            var markingAssembly = Configuration["ProjectCommonName"];
             builder.RegisterModule(new WareHouseModule());
-            builder.RegisterDIContainer(markingAssembly);
+            builder.RegisterDIContainer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

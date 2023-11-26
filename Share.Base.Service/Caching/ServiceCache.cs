@@ -25,8 +25,6 @@ namespace Share.Base.Service.Caching
                 IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(configuration.GetSection("Redis")["ConnectionString"]);
                 return multiplexer.GetDatabase();
             });
-            //IHybridCachingManager
-            // services.AddSingleton<IHybridCachingManager, HybridCachingManager>();
             services.AddEasyCaching(option =>
             {
                 Action<JsonSerializerSettings> serializerSettings = x =>
@@ -50,7 +48,6 @@ namespace Share.Base.Service.Caching
                     option.UseRedis(config =>
                 {
                     config.DBConfig.Configuration = configuration.GetSection("Redis")["ConnectionString"];
-                    //config.DBConfig.Database = 5;
                     config.DBConfig.AllowAdmin = true;
                     config.EnableLogging = true;
                     config.SerializerName = CacheHelper.CacheConfig.WithJson_Name;
