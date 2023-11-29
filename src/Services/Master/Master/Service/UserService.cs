@@ -10,6 +10,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Share.Base.Service.Caching;
 using Share.Base.Service.Caching.CacheName;
 using StackExchange.Redis;
 using System;
@@ -32,12 +33,12 @@ namespace Master.Service
         private readonly IHttpContextAccessor _httpContext;
         private readonly IPaginatedList<UserMaster> _list;
         private readonly GrpcGetDataWareHouse.GrpcGetDataWareHouseClient _client;
-        private readonly IHybridCachingProvider _cacheExtension;
+        private readonly IHybridCachingManager _cacheExtension;
 
 
         public UserMaster User => GetUser();
 
-        public UserService(GrpcGetDataWareHouse.GrpcGetDataWareHouseClient client, IPaginatedList<UserMaster> list, MasterdataContext context, IConfiguration configuration, IHttpContextAccessor httpContext,IHybridCachingProvider cacheExtension)
+        public UserService(GrpcGetDataWareHouse.GrpcGetDataWareHouseClient client, IPaginatedList<UserMaster> list, MasterdataContext context, IConfiguration configuration, IHttpContextAccessor httpContext, IHybridCachingManager cacheExtension)
         {
             _context = context;
             _configuration = configuration;
@@ -253,22 +254,20 @@ namespace Master.Service
             List<string> res = new List<string>();
             if (listRole.Any())
                 res.AddRange(await _context.ListRoles.Where(x => listRole.Contains(x.Id)).Select(x => x.Key).ToListAsync());
-
-            byte[] serializedData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(res));
-            await _cacheExtension.SetAsync(string.Format(UserListRoleCacheName.UserListRoleCache, userId), serializedData, slidingExpiration);
+            await _cacheExtension.HybridCachingProvider.SetAsync(string.Format(UserListRoleCacheName.UserListRoleCache, userId), res, slidingExpiration);
 
 
         }
 
         public async Task RemoveCacheListRole(string userId)
         {
-            await _cacheExtension.RemoveByPrefixAsync(string.Format(UserListRoleCacheName.UserListRoleCache, userId));
+            await _cacheExtension.HybridCachingProvider.RemoveByPrefixAsync(string.Format(UserListRoleCacheName.UserListRoleCache, userId));
         }
 
 
         public async Task RemoveAllCacheListRoleByUser()
         {
-            await _cacheExtension.RemoveByPrefixAsync(UserListRoleCacheName.Prefix);
+            await _cacheExtension.HybridCachingProvider.RemoveByPrefixAsync(UserListRoleCacheName.Prefix);
         }
 
 
@@ -288,11 +287,8 @@ namespace Master.Service
             var slidingExpiration = TimeSpan.FromDays(10);
             // get list roleid by userid
             var listRoleFalse = await GetListRoleInactiveFalse();
-            if (listRoleFalse.Any())
-            {
-                byte[] serializedData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(listRoleFalse));
-                await _cacheExtension.SetAsync(string.Format(ListRoleCacheName.UserListRoleCache, false), serializedData, slidingExpiration);
-            }
+            if (listRoleFalse.AnyList())
+                await _cacheExtension.HybridCachingProvider.SetAsync(string.Format(ListRoleCacheName.UserListRoleCache, false), listRoleFalse, slidingExpiration);
         }
 
 
@@ -310,7 +306,7 @@ namespace Master.Service
         [AllowAnonymous]
         public async Task RemoveCacheListRoleInactiveFalse()
         {
-            await _cacheExtension.RemoveByPrefixAsync(string.Format(ListRoleCacheName.UserListRoleCache, false));
+            await _cacheExtension.HybridCachingProvider.RemoveByPrefixAsync(string.Format(ListRoleCacheName.UserListRoleCache, false));
         }
     }
 }

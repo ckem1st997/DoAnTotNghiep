@@ -24,6 +24,7 @@ namespace Share.Base.Service.Caching
         /// <param name="cacheTime"></param>
         /// <returns></returns>
         T GetDb<T>(string key, Func<T> acquirer, int? cacheTime = null);
+        T GetDb<T>(string key);
 
         /// <summary>
         /// Nếu Get Cache fail thì sẽ lấy dữ liệu từ Database (Local > Redis > Database)
@@ -34,5 +35,6 @@ namespace Share.Base.Service.Caching
         /// <param name="cacheTime"></param>
         /// <returns></returns>
         Task<T> GetDbAsync<T>(string key, Func<Task<T>> acquirer, int? cacheTime = null);
+        Task<T> GetDbAsync<T>(string key);
     }
 }

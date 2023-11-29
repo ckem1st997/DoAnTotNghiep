@@ -52,5 +52,27 @@ namespace Share.Base.Service.Caching
             var result = await acquirer();
             return result;
         }
+
+        public virtual async Task<T> GetDbAsync<T>(string key)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentException($"'{nameof(key)}' cannot be null or empty.", nameof(key));
+            }
+
+            var cacheValue = await HybridCachingProvider.GetAsync<T>(key);
+            return cacheValue.Value;
+        }
+
+        public virtual T GetDb<T>(string key)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentException($"'{nameof(key)}' cannot be null or empty.", nameof(key));
+            }
+
+            var cacheValue = HybridCachingProvider.Get<T>(key);
+            return cacheValue.Value;
+        }
     }
 }

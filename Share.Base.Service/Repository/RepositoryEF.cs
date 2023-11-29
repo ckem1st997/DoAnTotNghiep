@@ -220,38 +220,38 @@ namespace Share.Base.Service.Repository
 
         public async Task<T1> QueryFirstOrDefaultAsync<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
-            using var connection = _sqlConnection;
+            var connection = _sqlConnection;
             return await connection.QueryFirstOrDefaultAsync<T1>(sp, parms, commandType: commandType);
         }
 
         public T1 QueryFirst<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
-            using var connection = _sqlConnection;
+            var connection = _sqlConnection;
             return connection.QueryFirst<T1>(sp, parms, commandType: commandType);
         }
 
         public async Task<IEnumerable<T1>> QueryAsync<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
-            using var connection = _sqlConnection;
+            var connection = _sqlConnection;
             return await connection.QueryAsync<T1>(sp, parms, commandType: commandType);
         }
 
         public IEnumerable<T1> Query<T1>(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
-            using var connection = _sqlConnection;
+            var connection = _sqlConnection;
             return connection.Query<T1>(sp, parms, commandType: commandType);
         }
 
         public async Task<GridReader> QueryMultipleAsync(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
-            using var connection = _sqlConnection;
+            var connection = _sqlConnection;
             return await connection.QueryMultipleAsync(sp, param: parms, commandType: commandType);
         }
 
 
         public GridReader QueryMultiple(string sp, DynamicParameters parms, System.Data.CommandType commandType = System.Data.CommandType.Text)
         {
-            using var connection = _sqlConnection;
+            var connection = _sqlConnection;
             return connection.QueryMultiple(sp, param: parms, commandType: commandType);
         }
 

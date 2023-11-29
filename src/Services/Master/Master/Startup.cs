@@ -55,8 +55,7 @@ namespace Master
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            var markingAssembly = Configuration["ProjectCommonName"];
-            builder.RegisterDIContainer(markingAssembly);
+            builder.RegisterDIContainer();
         }
 
 

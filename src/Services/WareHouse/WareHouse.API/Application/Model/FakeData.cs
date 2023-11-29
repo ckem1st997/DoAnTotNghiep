@@ -1,6 +1,7 @@
 ﻿using Aspose.Cells;
 using GrpcGetDataToMaster;
 using Microsoft.AspNetCore.Hosting;
+using Share.Base.Core.AutoDependencyInjection.InjectionAttribute;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,7 +24,7 @@ namespace WareHouse.API.Application.Model
         public List<BaseSelectDTO> GetListAccountIdentifier(IWebHostEnvironment _hostingEnvironment);
     }
 
-    
+    [ScopedDependency]    
     
     public class FakeData: IFakeData
     {
