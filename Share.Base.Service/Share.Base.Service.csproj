@@ -14,6 +14,20 @@
 		<ProjectReference Include="..\Share.Base.Core\Share.Base.Core.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="Proto\getdata.proto">
+	    <GrpcServices>Both</GrpcServices>
+	  </None>
+	  <None Update="Proto\getdatawh.proto">
+	    <GrpcServices>Both</GrpcServices>
+	  </None>
+	</ItemGroup>
+	<Protobuf Include="Proto\getdata.proto" GrpcServices="Both">
+		<!--<Link>Protos\getdata.proto</Link>-->
+	</Protobuf>
+	<Protobuf Include="Proto\getdatawh.proto" GrpcServices="Both">
+		<!--<Link>Protos\getdatawh.proto</Link>-->
+	</Protobuf>
 	<!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 	  <Exec Command="xcopy /y &quot;$(TargetDir)*.dll&quot; &quot;.\Core\&quot;" />
 	</Target>-->
