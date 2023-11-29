@@ -47,7 +47,7 @@ interface ExampleFlatNode {
 export class ListRoleShowToAuthozireComponent implements OnInit {
 
 
-
+title:string="Phân quyền theo chức năng !";
   @Input() item: ModelDialog | undefined;
   //
   files5: TreeNode<ListRole>[] = [];

@@ -16,9 +16,9 @@ namespace Master.Controllers
         [Route("get-list")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult GetList()
+        public async Task<IActionResult> GetList()
         {
-            var list = _context.ListApps.Where(x => x.Id != null);
+            var list = await _context.ListApps.Where(x => x.Id != null).ToListAsync();
             return Ok(new MessageResponse()
             {
                 data = list,
@@ -122,7 +122,7 @@ namespace Master.Controllers
         {
             bool res = false;
             var get = _context.ListApps.Where(x => listIds.Contains(x.Id));
-            if (get != null && get.Count()>0)
+            if (get != null && get.Count() > 0)
             {
                 _context.ListApps.RemoveRange(get);
                 res = await _context.SaveChangesAsync() > 0;

@@ -27,19 +27,19 @@ namespace WareHouse.API.Controllers
         private readonly IElasticClient _elasticClient;
         private readonly IMediator _mediat;
         private readonly IUserSevice _userSevice;
-        private readonly IEventBus _eventBus;
+      //  private readonly IEventBus _eventBus;
         private readonly IElasticSearchClient<WareHouseBookDTO> _elasticSearchClient;
         private readonly IHybridCachingManager _cacheExtension;
         private readonly WarehouseManagementContext _dbContext;
 
 
-        public MasterGetController(IElasticClient elasticClient, IMediator mediat, IUserSevice userSevice, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient, IEventBus eventBus, IHybridCachingManager cacheExtension, WarehouseManagementContext dbContext)
+        public MasterGetController(IElasticClient elasticClient, IMediator mediat, IUserSevice userSevice, IElasticSearchClient<WareHouseBookDTO> elasticSearchClient,  IHybridCachingManager cacheExtension, WarehouseManagementContext dbContext)
         {
             _elasticClient = elasticClient;
             _mediat = mediat;
             _userSevice = userSevice;
             _elasticSearchClient = elasticSearchClient;
-            _eventBus = eventBus;
+          // _eventBus = eventBus;
             _cacheExtension = cacheExtension;
             _dbContext = dbContext;
         }
@@ -66,9 +66,9 @@ namespace WareHouse.API.Controllers
                 using (LogContext.PushProperty("IntegrationEvent", $"{kafkaModel.Id}"))
                 {
                     Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel})");
-                    if (_eventBus.IsConnectedProducer())
-                        _eventBus.Publish(kafkaModel);
-                    else
+                    //if (_eventBus.IsConnectedProducer())
+                    //    _eventBus.Publish(kafkaModel);
+                    //else
                         await _userSevice.CreateHistory(kafkaModel);
                     Log.Information($"----- Sending integration event: {kafkaModel.Id} at CreateHistoryIntegrationEvent - ({kafkaModel}) done...");
 

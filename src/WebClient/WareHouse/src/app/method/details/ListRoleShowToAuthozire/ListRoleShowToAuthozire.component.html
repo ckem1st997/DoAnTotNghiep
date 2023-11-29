@@ -1,4 +1,6 @@
+<div mat-dialog-title>{{title}}</div>
 <div class=" ">
+
   <!-- <p-multiSelect [options]="foods" defaultLabel="Select a App" optionValue="id" (selectionChange)='selectEvent($event)'
     [(ngModel)]="selectedValue" optionLabel="name"></p-multiSelect> -->
   <p-cascadeSelect [(ngModel)]="selectedValue" [options]="foods" (onChange)='selectEvent($event)' optionLabel="name"
