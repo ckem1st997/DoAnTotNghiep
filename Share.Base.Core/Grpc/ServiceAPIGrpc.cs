@@ -24,6 +24,7 @@ namespace Share.Base.Core.Grpc
             services.AddGrpc(options =>
             {
                 options.EnableDetailedErrors = true;
+                options.Interceptors.Add<ServerLoggerInterceptor>();
             });
             services.AddTransient<GrpcExceptionInterceptor>();
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);

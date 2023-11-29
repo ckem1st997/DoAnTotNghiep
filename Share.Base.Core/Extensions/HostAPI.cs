@@ -25,7 +25,7 @@ namespace Share.Base.Core.Extensions
             var seqServerUrl = configuration["Serilog:SeqServerUrl"];
             var logstashUrl = configuration["Serilog:LogstashgUrl"];
             return new LoggerConfiguration()
-                    .MinimumLevel.Verbose()
+                    .MinimumLevel.Information()
                     .Enrich.WithProperty("ApplicationContext-" + getEnv, nameApp)
                     .Enrich.FromLogContext()
                    .WriteTo.Console()
@@ -42,8 +42,6 @@ namespace Share.Base.Core.Extensions
           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .AddJsonFile($"appsettings.{getEnv ?? "Production"}.json", optional: true)
                 .AddEnvironmentVariables();
-
-            var config = builder.Build();
             return builder.Build();
         }
 
@@ -61,7 +59,7 @@ namespace Share.Base.Core.Extensions
                 Host.CreateDefaultBuilder(args)
                         .ConfigureLogging(logging =>
                         {
-                            logging.AddFilter("Grpc", LogLevel.Debug);
+                            logging.AddFilter("Grpc", LogLevel.Information);
                         })
                  .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                     .ConfigureWebHostDefaults(webBuilder =>
@@ -78,9 +76,8 @@ namespace Share.Base.Core.Extensions
                                 listenOptions.Protocols = HttpProtocols.Http2;
                             });
                         });
-                        //     }
                         webBuilder.UseStartup<T>();
-                    }).UseSerilog();
+                    }).UseSerilog().UseConsoleLifetime();
 
     }
 }
