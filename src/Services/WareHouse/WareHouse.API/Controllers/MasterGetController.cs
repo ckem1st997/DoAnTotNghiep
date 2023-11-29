@@ -164,7 +164,7 @@ namespace WareHouse.API.Controllers
                     success = false
 
                 });
-             await _cacheExtension.HybridCachingProvider.RemoveAsync("1");
+             await _cacheExtension.HybridCachingProvider.RemoveByPrefixAsync(CacheName.All);
             return base.Ok(new MessageResponse()
             {
                 data = "Xóa thành công !",

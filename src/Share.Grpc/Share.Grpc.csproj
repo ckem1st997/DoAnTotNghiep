@@ -16,6 +16,14 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Serilog" Version="2.10.0" />
+
+
+		<Protobuf Include="Proto\getdata.proto" GrpcServices="Both">
+			<!--<Link>Protos\getdata.proto</Link>-->
+		</Protobuf>
+		<Protobuf Include="Proto\getdatawh.proto" GrpcServices="Both">
+			<!--<Link>Protos\getdatawh.proto</Link>-->
+		</Protobuf>
 	</ItemGroup>
 
 </Project>

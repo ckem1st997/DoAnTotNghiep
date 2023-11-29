@@ -315,7 +315,6 @@ namespace WareHouse.API.Controllers
         #region R
 
         [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
-        //  [Authorize]
         [Route("get-list")]
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -429,7 +428,6 @@ namespace WareHouse.API.Controllers
 
         #region CUD
 
-        // //[CheckRole(LevelCheck.READ)]
         [AuthorizeRole(AuthozireListKey.WarehouseKey.WarehouseReadKey.Warehouse)]
         [Route("details")]
         [HttpGet]

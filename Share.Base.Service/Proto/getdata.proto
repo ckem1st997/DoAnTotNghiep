@@ -1,0 +1,132 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "GrpcGetDataToMaster";
+
+package MasterApi;
+//import "google/protobuf/timestamp.proto";
+// note: -sự lặp lại-tương đương với list hoặc IEnumerable<T>
+// đặt tên file không dùng chữ hoa
+
+//Service Gprc
+service GrpcGetData {
+	rpc GetCreateBy(Params) returns (ListCreateBy) {}
+	rpc GetDepartment(Params) returns (ListGetDepartment) {}
+	rpc GetEmployee(Params) returns (ListGetEmployee) {}
+	rpc GetStation(Params) returns (ListGetStation) {}
+	rpc GetProject(Params) returns (ListGetProject) {}
+	rpc GetCustomer(Params) returns (ListGetCustomer) {}
+    rpc GetUser(Params) returns (User) {}
+    rpc GetUserById(BaseId) returns (User) {}
+    rpc CallChangeByWareHouseBook(BaseId) returns (BaseId) {}
+    // histoty
+    rpc CreateHistory(HistotyModel) returns (SaveChange) {}
+    rpc ActiveHistory(BaseId) returns (SaveChange) {}
+    rpc CheckAuthozireByUserIdAndRoleKey(CheckAuthozireByUserIdAndRoleKeyModel) returns (SaveChange) {}
+    rpc GetListRoleInactiveFalse(Params) returns (ListRoleInactiveFalse) {}
+
+}
+
+message CheckAuthozireByUserIdAndRoleKeyModel{
+      string userId =1;
+      string roleKey  =2;
+}
+
+
+message HistotyModel{
+      string userName =1;
+      string method  =2;
+      string body  =3;
+      bool  read =4;
+      string link  =5;
+}
+
+
+message User{
+  string UserName =1;
+        string Password =2;
+        bool InActive =3;
+        string     Role =4;
+        int32  RoleNumber =5;
+        bool   Read =6;
+        bool  Create =7;
+        bool  Edit =8;
+        bool   Delete =9;
+        string    WarehouseId =10;
+        string Id=11;
+        string  ListWarehouseId=12;
+}
+message SaveChange{
+    bool check=1;
+}
+message BaseId{
+    string id=1;
+}
+message BaseWareHouseBook{
+    string id=1;
+	    string type=2;
+
+}
+message Params {
+ // string name =1;
+}
+message ListCreateBy{
+    repeated BaseSelectDTO listCreateBy=1;
+
+}
+
+message BaseSelectDTO{
+    string id=1;
+    string name =2;
+}
+
+message ListGetDepartment{
+    repeated BaseSelectDTO listGetDepartment=1;
+
+}
+
+
+message ListGetEmployee{
+    repeated BaseSelectDTO listGetEmployee=1;
+
+}
+
+
+message ListRoleInactiveFalse{
+    repeated string listRoleInactiveFalse=1;
+
+}
+
+
+message ListGetStation{
+    repeated BaseSelectDTO listGetStation=1;
+
+}
+
+
+message ListGetProject{
+    repeated BaseSelectDTO listGetProject=1;
+
+}
+
+
+message ListGetCustomer{
+    repeated BaseSelectDTO listGetCustomer=1;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

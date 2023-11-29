@@ -7,6 +7,7 @@ using Share.Base.Core.Infrastructure;
 using Share.Base.Service.Security;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -32,6 +33,9 @@ namespace Share.Base.Service.Attribute
             {
                 throw new ArgumentNullException(nameof(context));
             }
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             // get content param action
             //    public async Task<ActionResult<MemberDisplay?>> PostSave([ModelBinder(typeof(MemberBinder))] MemberSave contentItem)
             //var model = (MemberSave?)context.ActionArguments["contentItem"];
@@ -55,7 +59,7 @@ namespace Share.Base.Service.Attribute
                 if (_userService != null && !string.IsNullOrEmpty(userId))
                     checkRole = await _userService.GetAuthozireByUserId(userId, _keyRole);
             }
-
+          
             if (!checkRole && _userService is null || !checkRole && check401)
             {
                 var res = new MessageResponse()
@@ -76,6 +80,8 @@ namespace Share.Base.Service.Attribute
                 context.Result = new ObjectResult(res);
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
             }
+            stopwatch.Stop();
+            LogExtension.Information($"Thời gian xác thực và kiểm tra phân quyền: {stopwatch.ElapsedMilliseconds}");
             await base.OnActionExecutionAsync(context, next);
         }
     }

@@ -40,10 +40,10 @@ export class MasterhomeComponent implements OnInit, OnDestroy {
 
 
   CanConnectElastic() {
-    this.master.CanConnectElastic().subscribe(res => {
-      this.checkElastic = res.success;
-    }
-    )
+    // this.master.CanConnectElastic().subscribe(res => {
+    //   this.checkElastic = res.success;
+    // }
+    // )
   }
 
 
@@ -57,36 +57,36 @@ export class MasterhomeComponent implements OnInit, OnDestroy {
 
 
   DeleteAllElastic() {
-    this.master.DeleteAllElastic().subscribe(res => {
-      if (res.success) {
-        this.GetIndexSqlElastic();
-        this.notifierService.notify('success', 'Đã xóa dữ liệu thành công !');
-      }
-      else
-        this.notifierService.notify('error', 'Có lỗi xảy ra, chưa xóa dữ liệu thành công !');
-    }
-    )
+    // this.master.DeleteAllElastic().subscribe(res => {
+    //   if (res.success) {
+    //     this.GetIndexSqlElastic();
+    //     this.notifierService.notify('success', 'Đã xóa dữ liệu thành công !');
+    //   }
+    //   else
+    //     this.notifierService.notify('error', 'Có lỗi xảy ra, chưa xóa dữ liệu thành công !');
+    // }
+    // )
   }
 
 
 
   GetIndexSqlElastic() {
-    this.master.GetIndexSqlElastic().subscribe(res => {
-      if (res.success)
-        this.indexString = res.data;
-    });
+    // this.master.GetIndexSqlElastic().subscribe(res => {
+    //   if (res.success)
+    //     this.indexString = res.data;
+    // });
   }
 
   AsyncSqlElastic() {
-    this.master.AsyncSqlElastic().subscribe(res => {
-      if (res.success) {
-        this.GetIndexSqlElastic();
-        this.notifierService.notify('success', 'Đã cập nhật dữ liệu thành công !');
-        this.signalRService.SendAsyncWareHouseBookTrachking();
-      }
-      else
-        this.notifierService.notify('error', 'Có lỗi xảy ra, chưa update thành công !');
-    })
+    // this.master.AsyncSqlElastic().subscribe(res => {
+    //   if (res.success) {
+    //     this.GetIndexSqlElastic();
+    //     this.notifierService.notify('success', 'Đã cập nhật dữ liệu thành công !');
+    //     this.signalRService.SendAsyncWareHouseBookTrachking();
+    //   }
+    //   else
+    //     this.notifierService.notify('error', 'Có lỗi xảy ra, chưa update thành công !');
+    // })
 
   }
   DeleteAllCache() {

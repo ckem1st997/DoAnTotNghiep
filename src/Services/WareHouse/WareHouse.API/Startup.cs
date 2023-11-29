@@ -37,7 +37,7 @@ namespace WareHouse.API
             services.AddConfigureAPI<Program>(Configuration);
             // local
             services.AddConfiguration(Configuration);
-            services.AddApiGrpc<GrpcGetData.GrpcGetDataClient>(Configuration);
+            services.AddApiGrpc<GrpcGetData.GrpcGetDataClient>(Configuration.GetValue<string>("Grpc:Port"));
         }
         public void ConfigureContainer(ContainerBuilder builder)
         {

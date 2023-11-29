@@ -20,8 +20,8 @@
 	<ItemGroup>
 		<!--<ProjectReference Include="..\..\..\Share.Grpc\Share.Grpc.csproj" />-->
 		<ProjectReference Include="..\..\..\..\Share.Base.Service\Share.Base.Service.csproj" />
-		<ProjectReference Include="..\..\..\ShareImplemention\ShareImplemention.csproj" />
-		<ProjectReference Include="..\..\..\ShareModelFull\ShareModelFull.csproj" />
+		<!--<ProjectReference Include="..\..\..\ShareImplemention\ShareImplemention.csproj" />-->
+		<!--<ProjectReference Include="..\..\..\ShareModelFull\ShareModelFull.csproj" />-->
 		<!--<ProjectReference Include="..\..\..\ShareModelFull\ShareModelFull.csproj" />-->
 		<ProjectReference Include="..\..\Master\Infrastructure\Infrastructure.csproj" />
 		<ProjectReference Include="..\WareHouse.Domain\WareHouse.Domain.csproj" />

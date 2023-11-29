@@ -19,7 +19,7 @@ namespace Share.Base.Core.Grpc
         /// <typeparam name="T"></typeparam>
         /// <param name="services"></param>
         /// <param name="configuration"></param>
-        public static void AddApiGrpc<T>(this IServiceCollection services, IConfiguration configuration) where T : class
+        public static void AddApiGrpc<T>(this IServiceCollection services, string post) where T : class
         {
             services.AddGrpc(options =>
             {
@@ -32,7 +32,7 @@ namespace Share.Base.Core.Grpc
             httpHandler.ServerCertificateCustomValidationCallback =HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
             services.AddGrpcClient<T>(o =>
             {
-                o.Address = new Uri(configuration.GetValue<string>("Grpc:Port"));
+                o.Address = new Uri(post);
             }).AddInterceptor<GrpcExceptionInterceptor>(InterceptorScope.Client)
                 .ConfigurePrimaryHttpMessageHandler(() => new GrpcWebHandler(httpHandler));
         }

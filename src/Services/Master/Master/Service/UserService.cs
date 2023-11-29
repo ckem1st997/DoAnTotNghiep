@@ -287,7 +287,7 @@ namespace Master.Service
             var slidingExpiration = TimeSpan.FromDays(10);
             // get list roleid by userid
             var listRoleFalse = await GetListRoleInactiveFalse();
-            if (listRoleFalse.AnyList())
+            if (listRoleFalse != null)
                 await _cacheExtension.HybridCachingProvider.SetAsync(string.Format(ListRoleCacheName.UserListRoleCache, false), listRoleFalse, slidingExpiration);
         }
 

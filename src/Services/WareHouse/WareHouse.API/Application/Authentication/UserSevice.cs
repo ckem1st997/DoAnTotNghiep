@@ -1,5 +1,5 @@
-﻿using GrpcGetDataToMaster;
-//using GrpcGetDataToMaster;
+﻿
+using GrpcGetDataToMaster;
 using Serilog;
 using Share.Base.Core.AutoDependencyInjection.InjectionAttribute;
 using Share.Base.Service.IntegrationEvents.Events;

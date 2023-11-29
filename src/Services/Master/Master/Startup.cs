@@ -36,7 +36,8 @@ namespace Master
             services.AddEventBusKafka();
             // services.AddHostedService<RequestTimeConsumer>();
             // call http to grpc
-            services.AddApiGrpc<GrpcGetDataWareHouse.GrpcGetDataWareHouseClient>(Configuration);
+            
+            services.AddApiGrpc<GrpcGetDataWareHouse.GrpcGetDataWareHouseClient>(Configuration.GetValue<string>("Grpc:Port"));
             services.Configure<PasswordHasherOptions>(option =>
             {
                 option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;
