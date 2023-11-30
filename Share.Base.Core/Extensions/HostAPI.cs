@@ -77,7 +77,7 @@ namespace Share.Base.Core.Extensions
                             });
                         });
                         webBuilder.UseStartup<T>();
-                    }).UseSerilog().UseConsoleLifetime();
+                    }).UseSerilog();
 
     }
 }
