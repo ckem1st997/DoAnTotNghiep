@@ -24,9 +24,6 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<Protobuf Include="Proto\authozireGrpcCall.proto">
-			<GrpcServices>Both</GrpcServices>
-		</Protobuf>
 		<Protobuf Include="Proto\getdata.proto" GrpcServices="Both">
 			<!--<Link>Protos\getdata.proto</Link>-->
 		</Protobuf>

@@ -1,22 +1,11 @@
-﻿using Share.Base.Core.Extensions;
-using Grpc.Core;
-using Infrastructure;
-using Master.Extension;
-using Master.Service;
-using Master.SignalRHubs;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Logging;
-using Microsoft.Identity.Web;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Share.Base.Service.Caching.CacheName;
-using Share.Base.Service.Caching;
-using GrpcAuthMaster;
+﻿
 
-namespace GrpcGetDataToMaster
+using GrpcAuthMaster;
+using Master.SignalRHubs;
+using Microsoft.AspNetCore.SignalR;
+using Share.Base.Service.Caching;
+
+namespace GrpcAuthMaster
 {
     //  [Authorize]
     public class GrpcGetDataToMasterService : MasterAuth.MasterAuthBase
