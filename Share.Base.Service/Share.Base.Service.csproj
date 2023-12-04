@@ -7,6 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="Proto\authozireGrpcCall.proto" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.2" />
 	</ItemGroup>
 
@@ -20,14 +24,20 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<Protobuf Include="Proto\authozireGrpcCall.proto">
+			<GrpcServices>Both</GrpcServices>
+		</Protobuf>
 		<Protobuf Include="Proto\getdata.proto" GrpcServices="Both">
 			<!--<Link>Protos\getdata.proto</Link>-->
 		</Protobuf>
 		<Protobuf Include="Proto\getdatawh.proto" GrpcServices="Both">
 			<!--<Link>Protos\getdatawh.proto</Link>-->
 		</Protobuf>
+		<Protobuf Include="Proto\authozireGrpcCall.proto" GrpcServices="Both">
+			<!--<Link>Protos\getdatawh.proto</Link>-->
+		</Protobuf>
 	</ItemGroup>
-	
+
 
 	<!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 	  <Exec Command="xcopy /y &quot;$(TargetDir)*.dll&quot; &quot;.\Core\&quot;" />

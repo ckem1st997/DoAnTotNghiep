@@ -14,11 +14,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Share.Base.Service.Caching.CacheName;
 using Share.Base.Service.Caching;
+using GrpcAuthMaster;
 
 namespace GrpcGetDataToMaster
 {
     //  [Authorize]
-    public class GrpcGetDataToMasterService : GrpcGetData.GrpcGetDataBase
+    public class GrpcGetDataToMasterService : MasterAuth.MasterAuthBase
     {
 
         private readonly MasterdataContext _masterdataContext;
