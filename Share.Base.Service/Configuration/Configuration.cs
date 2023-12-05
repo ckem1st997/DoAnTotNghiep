@@ -36,6 +36,8 @@ using EFCoreSecondLevelCacheInterceptor;
 using static Share.Base.Service.Caching.CacheName.CacheHelper;
 using Microsoft.Extensions.Options;
 using BaseHA.Core.Behaviors;
+using Share.Base.Core.Grpc;
+using GrpcAuthMaster;
 
 namespace Share.Base.Service.Configuration
 {
@@ -115,6 +117,8 @@ namespace Share.Base.Service.Configuration
             });
             services.AddHttpContextAccessor();
             services.AddValidator();
+            // grpc for auth
+            services.AddApiGrpc<MasterAuth.MasterAuthClient>(Configuration.GetValue<string>("Grpc:Port"));
             //services.AddEFSecondLevelCache();
         }
 

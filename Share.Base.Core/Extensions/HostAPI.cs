@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Sinks.Elasticsearch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,7 @@ namespace Share.Base.Core.Extensions
                     .Enrich.WithProperty("ApplicationContext-" + getEnv, nameApp)
                     .Enrich.FromLogContext()
                    .WriteTo.Console()
+                   // .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://192.168.3.162:9200")))
                    .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl, queueLimitBytes: 1000000)
                    .ReadFrom.Configuration(configuration)
                     .CreateLogger();

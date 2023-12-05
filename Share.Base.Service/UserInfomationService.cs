@@ -1,6 +1,6 @@
 ﻿
 
-using GrpcGetDataToMaster;
+using GrpcAuthMaster;
 using Share.Base.Core.AutoDependencyInjection.InjectionAttribute;
 using Share.Base.Service.Caching;
 using Share.Base.Service.Caching.CacheName;
@@ -11,10 +11,10 @@ namespace Share.Base.Service
     [ScopedDependency]
     public class UserInfomationService : IUserInfomationService
     {
-        private readonly GrpcGetData.GrpcGetDataClient _client;
+        private readonly MasterAuth.MasterAuthClient _client;
         private readonly IHybridCachingManager _cacheExtension;
 
-        public UserInfomationService(GrpcGetData.GrpcGetDataClient client, IHybridCachingManager cacheExtension)
+        public UserInfomationService(MasterAuth.MasterAuthClient client, IHybridCachingManager cacheExtension)
         {
             _client = client;
             _cacheExtension = cacheExtension;

@@ -32,6 +32,8 @@ using Share.Base.Service.Controller;
 using Share.Base.Service.Attribute;
 using Share.Base.Service.Security.ListRole;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using Newtonsoft.Json;
 
 namespace WareHouse.API.Controllers
 {
@@ -328,6 +330,7 @@ namespace WareHouse.API.Controllers
                 success = true,
                 totalCount = data.totalCount
             };
+            Log.Information("wh: "+JsonConvert.SerializeObject(result));
             return Ok(result);
         }
 

@@ -234,13 +234,13 @@ export class HomeComponent implements OnInit,OnDestroy {
   }
 
   GetData() {
-    this.SetHeightDashboard();
-    this.getIn();
-    this.getOut();
-    this.getIndex();
-    this.getHistory();
-    this.getChartToYear(2021);
-    this.getChartToWarehouse();
+    // this.SetHeightDashboard();
+    // this.getIn();
+    // this.getOut();
+    // this.getIndex();
+    // this.getHistory();
+    // this.getChartToYear(2021);
+    // this.getChartToWarehouse();
   }
   getIn() {
     this.dashboard.getTopInward().subscribe(
