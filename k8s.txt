@@ -337,12 +337,17 @@ services:
       - "9300:9300"
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      cluster.name: "docker-cluster"
+      network.host: 0.0.0.0
+      discovery.zen.minimum_master_nodes: 1
+      discovery.type: single-node
 
 volumes:
   postgres_data:
   postgres_data_back-up:
   redis_data:
   redis_data_back-up:
+
 
 ==>
 
