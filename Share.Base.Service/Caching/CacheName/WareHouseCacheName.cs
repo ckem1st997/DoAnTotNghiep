@@ -46,6 +46,12 @@
         public const string Prefix = CacheName.All + "UserListRole-";
     }
 
+    public static class UserCacheName
+    {
+        public const string UserCache = CacheName.All + "UserCache-{0}";
+        public const string Prefix = CacheName.All + "UserCache-";
+    }
+
     public static class ListRoleCacheName
     {
         public const string UserListRoleCache = CacheName.All + "ListRole-{0}";

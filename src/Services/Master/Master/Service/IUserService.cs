@@ -27,7 +27,7 @@ namespace Master.Service
         public Task<bool> SetRoleToUser(UserMaster model);
         public Task<bool> CheckActiveUser(string userName);
         public UserMaster GetUserById(string id);
-        public UserMaster GetUserByUserName(string userName);
+        public Task<UserMaster> GetUserByUserNameAsync(string userName);
         public Task<bool> CheckAuthozireByUserIdAndRoleKey(string userId, string roleKey);
         public Task CacheListRole(string userId);
         public Task CacheListRoleInactiveFalse();

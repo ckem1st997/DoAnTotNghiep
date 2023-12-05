@@ -31,7 +31,7 @@ namespace Share.Base.Service.Caching
         {
             var duration = cacheTime.HasValue && cacheTime.Value > 0
                 ? TimeSpan.FromMinutes(cacheTime.Value)
-                : TimeSpan.FromMinutes(CachingDefaults.CacheTime);
+                : TimeSpan.FromMinutes(CachingDefaults.DayCacheTime);
             var cacheValue = HybridCachingProvider.Get(key, acquirer, duration);
             if (cacheValue.HasValue)
                 return cacheValue.Value;
@@ -44,7 +44,7 @@ namespace Share.Base.Service.Caching
         {
             var duration = cacheTime.HasValue && cacheTime.Value > 0
                 ? TimeSpan.FromMinutes(cacheTime.Value)
-                : TimeSpan.FromMinutes(CachingDefaults.CacheTime);
+                : TimeSpan.FromMinutes(CachingDefaults.DayCacheTime);
             var cacheValue = await HybridCachingProvider.GetAsync(key, acquirer, duration);
             if (cacheValue.HasValue)
                 return cacheValue.Value;

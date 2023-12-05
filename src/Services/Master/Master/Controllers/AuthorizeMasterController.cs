@@ -270,22 +270,22 @@ namespace Master.Controllers
                     message = "Tài khoản hoặc mật khẩu chưa chính xác !"
                 });
             IAuthorizeExtension iAuthenForMaster = EngineContext.Current.Resolve<IAuthorizeExtension>();
-            string userId = _userService.GetUserByUserName(model.Username).Id;
+            var user = await _userService.GetUserByUserNameAsync(model.Username);
             List<Claim> authClaims = new List<Claim>
                             {
                                 new Claim(ClaimTypes.Name, model.Username),
-                                new Claim("id", userId),
+                                new Claim("id", user.Id),
                             };
             var res = iAuthenForMaster.GenerateJWT(authClaims, 7);
             if (!string.IsNullOrEmpty(res))
             {
-                await _userService.RemoveCacheListRole(userId);
-                await _userService.CacheListRole(userId);
+                await _userService.RemoveCacheListRole(user.Id);
+                await _userService.CacheListRole(user.Id);
             }
             var response = new ResponseLogin()
             {
                 Jwt = res,
-                User = _userService.GetUserByUserName(model.Username),
+                User = user,
             };
             var result = new MessageResponse()
             {

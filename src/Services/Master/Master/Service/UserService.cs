@@ -50,7 +50,11 @@ namespace Master.Service
 
         private async Task<bool> ValidateAdmin(string username, string password)
         {
-            var admin = await _context.UserMasters.AsNoTracking().FirstOrDefaultAsync(x => x.UserName.Equals(username) && x.InActive == true && !x.OnDelete);
+
+            var admin = await _cacheExtension.GetDbAsync(string.Format(UserCacheName.UserCache, username), async () =>
+            {
+                return await _context.UserMasters.AsNoTracking().FirstOrDefaultAsync(x => x.UserName.Equals(username) && x.InActive == true && !x.OnDelete);
+            });
             return admin != null && new PasswordHasher<UserMaster>().VerifyHashedPassword(new UserMaster(), admin.Password, password) == PasswordVerificationResult.Success;
         }
         public async Task<bool> Register(RegisterModel model)
@@ -190,18 +194,24 @@ namespace Master.Service
         {
             if (string.IsNullOrEmpty(userName))
                 throw new ArgumentNullException(nameof(userName));
-            var user = await _context.UserMasters.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && x.OnDelete == false);
-            return user.InActive;
+            var res = await _cacheExtension.GetDbAsync(string.Format(UserCacheName.UserCache, userName), async () =>
+            {
+                var user = await _context.UserMasters.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && x.OnDelete == false);
+                return user;
+            });
+            return res.InActive;
         }
 
-        public UserMaster GetUserByUserName(string userName)
+        public async Task<UserMaster> GetUserByUserNameAsync(string userName)
         {
             if (string.IsNullOrEmpty(userName))
             {
                 throw new ArgumentException($"'{nameof(userName)}' cannot be null or empty.", nameof(userName));
             }
-            var res = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.UserName.Equals(userName) && x.OnDelete == false);
-            // res.Password = "";
+            var res = await _cacheExtension.GetDbAsync(string.Format(UserCacheName.UserCache, userName), async () =>
+          {
+              return await _context.UserMasters.AsNoTracking().FirstOrDefaultAsync(x => x.UserName.Equals(userName) && x.OnDelete == false);
+          });
             return res;
         }
 
@@ -255,8 +265,6 @@ namespace Master.Service
             if (listRole.Any())
                 res.AddRange(await _context.ListRoles.Where(x => listRole.Contains(x.Id)).Select(x => x.Key).ToListAsync());
             await _cacheExtension.HybridCachingProvider.SetAsync(string.Format(UserListRoleCacheName.UserListRoleCache, userId), res, slidingExpiration);
-
-
         }
 
         public async Task RemoveCacheListRole(string userId)

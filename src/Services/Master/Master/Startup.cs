@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using GrpcAuthMaster;
 using GrpcGetDataToWareHouse;
 using Master.ConfigureServices.Configuration;
 using Master.IntegrationEvents;
@@ -36,7 +37,7 @@ namespace Master
             services.AddEventBusKafka();
             // services.AddHostedService<RequestTimeConsumer>();
             // call http to grpc
-            
+
             services.AddApiGrpc<GrpcGetDataWareHouse.GrpcGetDataWareHouseClient>(Configuration.GetValue<string>("Grpc:Port"));
             services.Configure<PasswordHasherOptions>(option =>
             {
@@ -84,7 +85,5 @@ namespace Master
             //  app.ConfigureEventBusKafka();
             app.ConfigureRequestPipeline();
         }
-
-
     }
 }
