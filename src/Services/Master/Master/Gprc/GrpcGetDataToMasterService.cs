@@ -1,6 +1,7 @@
 ﻿
 
 using GrpcAuthMaster;
+using Master.Extension;
 using Master.SignalRHubs;
 using Microsoft.AspNetCore.SignalR;
 using Share.Base.Service.Caching;
