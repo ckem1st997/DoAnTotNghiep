@@ -23,15 +23,14 @@ namespace Share.Base.Core.Extensions
         public static Serilog.ILogger CreateSerilogLogger(IConfiguration configuration, string nameApp)
         {
 
-            var seqServerUrl = configuration["Serilog:SeqServerUrl"];
-            var logstashUrl = configuration["Serilog:LogstashgUrl"];
+            var seqServerUrl = configuration["Elasticsearch"];
             return new LoggerConfiguration()
                     .MinimumLevel.Information()
                     .Enrich.WithProperty("ApplicationContext-" + getEnv, nameApp)
                     .Enrich.FromLogContext()
                    .WriteTo.Console()
-                   // .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://192.168.3.162:9200")))
-                   .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl, queueLimitBytes: 1000000)
+                   .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(seqServerUrl)))
+                   //.WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl, queueLimitBytes: 1000000)
                    .ReadFrom.Configuration(configuration)
                     .CreateLogger();
         }
