@@ -325,13 +325,13 @@ services:
       - "1433:1433"
     user: root
     volumes:
-      - ./sql-data:/var/opt/mssql/data
+      - sql-data:/var/opt/mssql/data
 
   elasticsearch:
     container_name: elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
     volumes:
-     - ./elk/elasticsearch/data:/usr/share/elasticsearch/data
+     - elasticsearch-data:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -344,10 +344,11 @@ services:
 
 volumes:
   postgres_data:
+  sql-data:
+  elasticsearch-data:
   postgres_data_back-up:
   redis_data:
   redis_data_back-up:
-
 
 ==>
 
