@@ -889,4 +889,6 @@ networks:
   elastic:
     driver: bridge
 
+///////////
+docker exec -it bf5620aa2c71 logstash-plugin install logstash-input-http
 
