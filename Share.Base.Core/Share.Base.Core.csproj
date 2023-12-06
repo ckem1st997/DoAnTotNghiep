@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.25.1" />
 		<PackageReference Include="protobuf-net.Grpc.AspNetCore" Version="1.0.152" />
 		<PackageReference Include="EasyCaching.Bus.Redis" Version="1.9.1" />
 		<PackageReference Include="EasyCaching.Core" Version="1.9.1" />
@@ -30,8 +31,8 @@
 		<PackageReference Include="MediatR.Contracts" Version="2.0.1" />
 		<PackageReference Include="NEST" Version="7.17.4" />
 		<PackageReference Include="NEST.JsonNetSerializer" Version="7.17.4" />
-		<PackageReference Include="Elastic.Apm" Version="1.16.1" />
-		<PackageReference Include="Elastic.Apm.AspNetCore" Version="1.16.1" />
+		<!--<PackageReference Include="Elastic.Apm" Version="1.25.1" />
+		<PackageReference Include="Elastic.Apm.AspNetCore" Version="1.16.1" />-->
 		<PackageReference Include="Elasticsearch.Net" Version="7.17.4" />
 		<PackageReference Include="Oracle.EntityFrameworkCore" Version="6.21.61" />
 		<PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.120" />

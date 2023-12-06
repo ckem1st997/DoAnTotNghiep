@@ -38,6 +38,7 @@ using Microsoft.Extensions.Options;
 using BaseHA.Core.Behaviors;
 using Share.Base.Core.Grpc;
 using GrpcAuthMaster;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Share.Base.Service.Configuration
 {

@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Elastic.Apm.NetCoreAll;
 using GrpcAuthMaster;
 using GrpcGetDataToWareHouse;
 using Master.ConfigureServices.Configuration;
@@ -84,6 +85,8 @@ namespace Master
             });
             //  app.ConfigureEventBusKafka();
             app.ConfigureRequestPipeline();
+            app.UseAllElasticApm(Configuration);
+
         }
     }
 }

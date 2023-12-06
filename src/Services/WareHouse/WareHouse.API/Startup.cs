@@ -16,6 +16,7 @@ using Share.Base.Core.Grpc;
 using Share.Base.Service.Configuration;
 using Share.Base.Core.Extensions;
 using Share.Base.Core.AutoDependencyInjection;
+using Elastic.Apm.NetCoreAll;
 
 namespace WareHouse.API
 {
@@ -62,6 +63,7 @@ namespace WareHouse.API
             });
             //local
             app.ConfigureEventBusKafka();
+            app.UseAllElasticApm(Configuration);
 
         }
 
