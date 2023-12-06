@@ -429,3 +429,144 @@ networks:
   elastic:
     driver: bridge
 
+/////////
+
+
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: abc@123
+      POSTGRES_DB: dbjira
+      NODE_PG_FORCE_NATIVE: 1
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_back-up:/var/lib/postgresql/data-backup
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--requirepass", "abc@123"]
+    volumes:
+      - redis_data:/data
+      - redis_data_back-up:/data-backup
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - "8383:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - postgres
+
+  redisinsight:
+    image: redislabs/redisinsight
+    restart: always
+    ports:
+      - "8384:8001"
+    depends_on:
+      - redis
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "abc@1234567890"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    user: root
+    volumes:
+      - sql-data:/var/opt/mssql/data
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
+    volumes:
+     - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      cluster.name: "docker-cluster"
+      network.host: 0.0.0.0
+      discovery.zen.minimum_master_nodes: 1
+      discovery.type: single-node
+      cluster.routing.allocation.disk.threshold_enabled: false
+    ulimits:
+      memlock:
+        hard: -1
+        soft: -1
+    healthcheck:
+      interval: 20s
+      retries: 10
+      test: curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'
+    networks:
+    - elastic
+    
+  apm-server:
+    image: docker.elastic.co/apm/apm-server:7.17.15
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      kibana:
+        condition: service_healthy
+    cap_add: ["CHOWN", "DAC_OVERRIDE", "SETGID", "SETUID"]
+    cap_drop: ["ALL"]
+    ports:
+    - 8200:8200
+
+    command: >
+       apm-server -e
+         -E apm-server.rum.enabled=true
+         -E setup.kibana.host=kibana:5601
+         -E setup.template.settings.index.number_of_replicas=0
+         -E apm-server.kibana.enabled=true
+         -E apm-server.kibana.host=kibana:5601
+         -E output.elasticsearch.hosts=["elasticsearch:9200"]
+    healthcheck:
+      interval: 10s
+      retries: 12
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:8200/
+    networks:
+    - elastic
+
+    
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.15
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+    - 5601:5601
+    networks:
+    - elastic
+    healthcheck:
+      interval: 10s
+      retries: 20
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:5601/api/status
+
+volumes:
+  postgres_data:
+  sql-data:
+  elasticsearch-data:
+  postgres_data_back-up:
+  redis_data:
+  redis_data_back-up:
+networks:
+  elastic:
+    driver: bridge
+
