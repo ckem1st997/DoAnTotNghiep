@@ -728,4 +728,60 @@ volumes:
 networks:
   elastic:
     driver: bridge
+//////////////elk
 
+version: '3.8'
+
+services:
+  elasticsearch:
+    container_name: elasticsearch
+    restart: always
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - elk
+    environment:
+      ES_JAVA_OPTS: "-Xmx512m -Xms256m"
+      discovery.type: single-node
+      cluster.name: "docker-cluster"
+      network.host: 0.0.0.0
+      discovery.zen.minimum_master_nodes: 1
+      #ELASTIC_PASSWORD: abc@123
+
+  logstash:
+    container_name: logstash
+    restart: unless-stopped
+    image: docker.elastic.co/logstash/logstash:7.17.5
+    
+    command: >
+      sh -c '
+        logstash-plugin install logstash-input-http
+      '
+    volumes:
+      - ./elk/logstash/config:/usr/share/logstash/config
+      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline
+      - ./elk/logstash/data:/usr/share/logstash/data
+      - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline:ro
+    ports:
+      - "5044:5044"
+
+      - "8080:8080"
+    environment:
+      LS_JAVA_OPTS: "-Xmx512m -Xms256m"
+   #   network.host: 0.0.0.0
+    #  path.config: "/usr/share/logstash/pipeline"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+volumes:
+  es_data:
+networks:
+  elk:
+    driver: bridge
