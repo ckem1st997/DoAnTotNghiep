@@ -1,3 +1,10 @@
+// dọn dẹp docker
+Bạn đã gửi
+docker buildx prune --all
+Bạn đã gửi
+docker builder prune --all
+
+
 curl https://releases.rancher.com/install-docker/20.10.sh | sh
 
 sudo apt-get update
