@@ -909,12 +909,14 @@ docker run -d --name oracle-db \
   -e DB_CHARACTERSET=AL32UTF8 \
   -e DB_MEMORY=5GB \
   -e ORACLE_PWD=abc@123Hac0m \
+  -e NLS_LANG=VIETNAMESE_VIETNAM.AL32UTF8 \
   -p 1521:1521 \
   -p 5500:5500 \
   --network oracle-net \
   -v $(pwd)/data:/opt/oracle/oradata \
   -v data-oracle:/opt/oracle/oradata \
   container-registry.oracle.com/database/enterprise:19.3.0.0
+
 
 docker exec -it oracle-db sqlplus -L sys/abc@123Hac0m//localhost:1521/ORCLCDB as sysdba @healthcheck.sql
 
