@@ -899,3 +899,22 @@ networks:
 ///////////
 docker exec -it bf5620aa2c71 logstash-plugin install logstash-input-http
 
+/// oracle
+docker login container-registry.oracle.com
+hopxc1997@gmail.com    
+Aa
+docker run -d --name oracle-db \
+  -e DB_SID=ORCLCDB \
+  -e DB_PDB=ORCLPDB1 \
+  -e DB_CHARACTERSET=AL32UTF8 \
+  -e DB_MEMORY=5GB \
+  -e ORACLE_PWD=abc@123Hac0m \
+  -p 1521:1521 \
+  -p 5500:5500 \
+  --network oracle-net \
+  -v $(pwd)/data:/opt/oracle/oradata \
+  -v data-oracle:/opt/oracle/oradata \
+  container-registry.oracle.com/database/enterprise:19.3.0.0
+
+docker exec -it oracle-db sqlplus -L sys/abc@123Hac0m//localhost:1521/ORCLCDB as sysdba @healthcheck.sql
+
