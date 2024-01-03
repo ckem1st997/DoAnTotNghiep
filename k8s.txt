@@ -5,6 +5,7 @@ Bạn đã gửi
 docker builder prune --all
 sudo du -h --max-depth=1 /var/lib/docker
 sudo du -h --max-depth=1 /var/lib/docker | sort -rh
+sudo du -h --max-depth=1 /var/lib/docker | sort -h
 
 curl https://releases.rancher.com/install-docker/20.10.sh | sh
 
