@@ -6,7 +6,9 @@ docker builder prune --all
 sudo du -h --max-depth=1 /var/lib/docker
 sudo du -h --max-depth=1 /var/lib/docker | sort -rh
 sudo du -h --max-depth=1 /var/lib/docker | sort -h
-
+k3s
+sudo k3s crictl imagesđể xem những hình ảnh nào đã được kéo cục bộ
+sudo k3s crictl rmi --pruneđể xóa bất kỳ hình ảnh nào hiện không được sử dụng bởi vùng chứa đang chạy
 curl https://releases.rancher.com/install-docker/20.10.sh | sh
 
 sudo apt-get update
