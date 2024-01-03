@@ -11,6 +11,12 @@ sudo k3s crictl imagesđể xem những hình ảnh nào đã được kéo cụ
 sudo k3s crictl rmi --pruneđể xóa bất kỳ hình ảnh nào hiện không được sử dụng bởi vùng chứa đang chạy
 curl https://releases.rancher.com/install-docker/20.10.sh | sh
 
+Theo mặc định, kubelet tích cực lưu trữ hình ảnh vào bộ nhớ đệm cho đến khi đĩa chứa kho hình ảnh đầy khoảng 85%. 
+Bạn muốn điều chỉnh các giá trị --image-gc-high-thresholdvà --image-gc-low-thresholdnếu điều này không phù hợp với bạn. Xem tài liệu kubelet để biết thêm chi tiết:
+https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/
+
+
+
 sudo apt-get update
 
 
