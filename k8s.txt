@@ -3,7 +3,7 @@ Bạn đã gửi
 docker buildx prune --all
 Bạn đã gửi
 docker builder prune --all
-
+sudo du -h --max-depth=1 /var/lib/docker
 
 curl https://releases.rancher.com/install-docker/20.10.sh | sh
 
