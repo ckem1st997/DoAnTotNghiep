@@ -14,8 +14,8 @@ curl https://releases.rancher.com/install-docker/20.10.sh | sh
 Theo mặc định, kubelet tích cực lưu trữ hình ảnh vào bộ nhớ đệm cho đến khi đĩa chứa kho hình ảnh đầy khoảng 85%. 
 Bạn muốn điều chỉnh các giá trị --image-gc-high-thresholdvà --image-gc-low-thresholdnếu điều này không phù hợp với bạn. Xem tài liệu kubelet để biết thêm chi tiết:
 https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/
-
-
+gitlab
+12345679hopnk
 
 sudo apt-get update
 
