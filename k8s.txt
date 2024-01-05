@@ -24,7 +24,7 @@ Entertains
 Champions
 
 ScyllaDB’s close-to-the-metal architecture handles millions of OPS with predictable single-digit millisecond latencies.
-
+keydb nhanh hơn redis
 
 
 
