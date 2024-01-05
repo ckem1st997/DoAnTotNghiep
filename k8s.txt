@@ -1,3 +1,34 @@
+ScyllaDB
+Connects
+
+Explores
+
+Houses
+
+Delivers
+
+Shops
+
+Trades
+
+Informs
+
+Records
+
+Empowers
+
+Drives
+
+Entertains
+
+Champions
+
+ScyllaDB’s close-to-the-metal architecture handles millions of OPS with predictable single-digit millisecond latencies.
+
+
+
+
+
 // dọn dẹp docker
 Bạn đã gửi
 docker buildx prune --all
