@@ -27,7 +27,7 @@ ScyllaDB’s close-to-the-metal architecture handles millions of OPS with predic
 keydb nhanh hơn redis
 Refit: The automatic type-safe REST library for .NET Core, Xamarin and .NET
 sqlsugar
-
+novu
 
 // dọn dẹp docker
 Bạn đã gửi
