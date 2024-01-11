@@ -1,28 +1,4 @@
 ScyllaDB
-Connects
-
-Explores
-
-Houses
-
-Delivers
-
-Shops
-
-Trades
-
-Informs
-
-Records
-
-Empowers
-
-Drives
-
-Entertains
-
-Champions
-
 ScyllaDB’s close-to-the-metal architecture handles millions of OPS with predictable single-digit millisecond latencies.
 keydb nhanh hơn redis
 Refit: The automatic type-safe REST library for .NET Core, Xamarin and .NET
@@ -37,6 +13,7 @@ docker builder prune --all
 sudo du -h --max-depth=1 /var/lib/docker
 sudo du -h --max-depth=1 /var/lib/docker | sort -rh
 sudo du -h --max-depth=1 /var/lib/docker | sort -h
+
 k3s
 sudo k3s crictl imagesđể xem những hình ảnh nào đã được kéo cục bộ
 sudo k3s crictl rmi --pruneđể xóa bất kỳ hình ảnh nào hiện không được sử dụng bởi vùng chứa đang chạy
@@ -49,7 +26,6 @@ gitlab
 12345679hopnk
 
 sudo apt-get update
-
 cài nginx rồi xóa trong workload traefik đi
 vào phần install app sẽ show hết các thành phần liên quan
 
