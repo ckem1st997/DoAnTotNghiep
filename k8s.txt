@@ -1,3 +1,7 @@
+gitlab-rails console
+
+Feature.disable(:log_response_length)
+
 cài
 
 sudo apt update
