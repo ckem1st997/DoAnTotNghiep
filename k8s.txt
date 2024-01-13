@@ -1,3 +1,4 @@
+https://grid.glideapps.com/
 gitlab-rails console
 
 Feature.disable(:log_response_length)
