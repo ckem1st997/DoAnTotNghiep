@@ -1,3 +1,8 @@
+get token 
+curl -X POST --user elastic:changeme   "localhost:9201/_security/service/elastic/fleet-server/credential/token/token1?pretty"
+
+
+
 Token Access: thêm project for shareRef
 
 https://grid.glideapps.com/
