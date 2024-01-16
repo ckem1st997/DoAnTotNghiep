@@ -1,3 +1,90 @@
+
+version: '2.3'
+
+services:
+  apm-server:
+    restart: on-failure
+    image: docker.elastic.co/apm/apm-server:8.7.0
+    cap_add: ["CHOWN", "DAC_OVERRIDE", "SETGID", "SETUID"]
+    cap_drop: ["ALL"]
+    ports:
+      - 8200:8200
+    command: >
+       apm-server -e
+         -E apm-server.rum.enabled=true
+         -E setup.kibana.host=kibana:5601
+         -E setup.template.settings.index.number_of_replicas=0
+         -E apm-server.kibana.enabled=true
+         -E apm-server.kibana.host=kibana:5601
+         -E output.elasticsearch.username=elastic
+         -E output.elasticsearch.password=changeme
+         -E output.elasticsearch.hosts=["192.168.3.162:9201"]
+    mem_limit: 1g
+    healthcheck:
+      interval: 10s
+      retries: 12
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:8200/
+    networks:
+    - elastic
+  
+
+
+
+
+
+  kibana:
+    restart: on-failure
+    image: docker.elastic.co/kibana/kibana:8.7.0
+    environment:
+      ELASTICSEARCH_HOSTS: http://192.168.3.162:9201
+    #  ELASTICSEARCH_USERNAME: "elastic/kibana"
+      ELASTICSEARCH_PASSWORD: "changeme"
+      ELASTICSEARCH_SERVICEACCOUNTTOKEN: "AAEAAWVsYXN0aWMva2liYW5hL3Rva2VuMTo0QlhVVFAyV1R2eXUzNV9ub05UcDNn"
+      server.name: kibana
+      server.host: 0.0.0.0
+      elasticsearch.hosts: http://192.168.3.162:9201
+      monitoring.ui.container.elasticsearch.enabled: true
+      ELASTICSEARCH_URL: http://192.168.3.162:9201
+   #   elasticsearch.username: "elastic/kibana"
+    #  elasticsearch.password: "changeme"
+   #   elasticsearch.serviceAccountToken: "AAEAAWVsYXN0aWMva2liYW5hL3Rva2VuMTo0QlhVVFAyV1R2eXUzNV9ub05UcDNn"
+      KIBANA_SYSTEM_PASSWORD: "abc@123"
+      xpack.security.encryptionKey: "4JhT9pWqU5Oz7yXmRvF1AeB6lP8dK2cN"
+    mem_limit: 1294967296
+    ports:
+      - 5601:5601
+    networks:
+      - elastic
+    healthcheck:
+      interval: 10s
+      retries: 20
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:5601/api/status
+
+volumes: 
+  elasticsearch-data:
+  logstash-data:
+networks:
+  elastic:
+    driver: bridge
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 get token 
 curl -X POST --user elastic:changeme   "localhost:9201/_security/service/elastic/fleet-server/credential/token/token1?pretty"
 curl -X POST --user elastic:changeme   "localhost:9201/_security/service/elastic/kabana/credential/token/token1?pretty"
