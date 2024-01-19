@@ -1,4 +1,128 @@
 
+-- DROP SCHEMA dbo;
+
+CREATE SCHEMA dbo;
+-- MasterData.dbo.ListApp definition
+
+-- Drop table
+
+-- DROP TABLE MasterData.dbo.ListApp;
+
+CREATE TABLE MasterData.dbo.ListApp (
+	Id nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Name nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	OnDelete bit NULL,
+	Description nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	IsAPI bit NULL,
+	InActive bit NULL,
+	SoftShow int NULL,
+	ParentId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT PK_ListApp PRIMARY KEY (Id)
+);
+
+
+-- MasterData.dbo.ListAuthozire definition
+
+-- Drop table
+
+-- DROP TABLE MasterData.dbo.ListAuthozire;
+
+CREATE TABLE MasterData.dbo.ListAuthozire (
+	Id nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Name nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	OnDelete bit NULL,
+	Description nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	InActive bit NULL,
+	SoftShow int NULL,
+	ParentId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT PK_ListAuthozire PRIMARY KEY (Id)
+);
+
+
+-- MasterData.dbo.ListAuthozireByListRole definition
+
+-- Drop table
+
+-- DROP TABLE MasterData.dbo.ListAuthozireByListRole;
+
+CREATE TABLE MasterData.dbo.ListAuthozireByListRole (
+	Id nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	AppId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	ListRoleId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	OnDelete bit NULL,
+	AuthozireId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	CONSTRAINT PK__ListAuth__3214EC07F6C9D6BE PRIMARY KEY (Id)
+);
+
+
+-- MasterData.dbo.ListAuthozireRoleByUser definition
+
+-- Drop table
+
+-- DROP TABLE MasterData.dbo.ListAuthozireRoleByUser;
+
+CREATE TABLE MasterData.dbo.ListAuthozireRoleByUser (
+	Id nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	ListAuthozireId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	OnDelete bit NULL,
+	UserId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT PK_ListAuthozireRoleByUser PRIMARY KEY (Id)
+);
+
+
+-- MasterData.dbo.ListRole definition
+
+-- Drop table
+
+-- DROP TABLE MasterData.dbo.ListRole;
+
+CREATE TABLE MasterData.dbo.ListRole (
+	Id nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	AppId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Name nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	OnDelete bit NULL,
+	Description nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	InActive bit NULL,
+	[Key] nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	ParentId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	SoftShow int NULL,
+	IsAPI bit NULL
+);
+
+
+-- MasterData.dbo.ListRoleByUser definition
+
+-- Drop table
+
+-- DROP TABLE MasterData.dbo.ListRoleByUser;
+
+CREATE TABLE MasterData.dbo.ListRoleByUser (
+	Id nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	UserId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	OnDelete bit NULL,
+	ListRoleId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	AppId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+);
+
+
+-- MasterData.dbo.UserMaster definition
+
+-- Drop table
+
+-- DROP TABLE MasterData.dbo.UserMaster;
+
+CREATE TABLE MasterData.dbo.UserMaster (
+	Id nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	UserName nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Password nvarchar(250) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	InActive bit DEFAULT 1 NOT NULL,
+	OnDelete bit DEFAULT 0 NOT NULL,
+	[Role] nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	RoleNumber int NOT NULL,
+	CONSTRAINT PK__UserMast__3214EC07C07223C3 PRIMARY KEY (Id)
+);
+
+
 version: '2.3'
 
 services:
