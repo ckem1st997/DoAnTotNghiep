@@ -1,6 +1,302 @@
+
+-- DROP SCHEMA dbo;
+
+CREATE SCHEMA dbo;
+-- MasterData.dbo.ListApp definition
+
+-- Drop table
+
+-- DROP TABLE MasterData.dbo.ListApp;
+
+CREATE TABLE MasterData.dbo.ListApp (
+	Id nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Name nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	OnDelete bit NULL,
+	Description nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	IsAPI bit NULL,
+	InActive bit NULL,
+	SoftShow int NULL,
+	ParentId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT PK_ListApp PRIMARY KEY (Id)
+);
+
+
+-- MasterData.dbo.ListAuthozire definition
+
+-- Drop table
+
+-- DROP TABLE MasterData.dbo.ListAuthozire;
+
+CREATE TABLE MasterData.dbo.ListAuthozire (
+	Id nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Name nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	OnDelete bit NULL,
+	Description nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	InActive bit NULL,
+	SoftShow int NULL,
+	ParentId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT PK_ListAuthozire PRIMARY KEY (Id)
+);
+
+
+-- MasterData.dbo.ListAuthozireByListRole definition
+
+-- Drop table
+
+-- DROP TABLE MasterData.dbo.ListAuthozireByListRole;
+
+CREATE TABLE MasterData.dbo.ListAuthozireByListRole (
+	Id nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	AppId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	ListRoleId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	OnDelete bit NULL,
+	AuthozireId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	CONSTRAINT PK__ListAuth__3214EC07F6C9D6BE PRIMARY KEY (Id)
+);
+
+
+-- MasterData.dbo.ListAuthozireRoleByUser definition
+
+-- Drop table
+
+-- DROP TABLE MasterData.dbo.ListAuthozireRoleByUser;
+
+CREATE TABLE MasterData.dbo.ListAuthozireRoleByUser (
+	Id nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	ListAuthozireId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	OnDelete bit NULL,
+	UserId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT PK_ListAuthozireRoleByUser PRIMARY KEY (Id)
+);
+
+
+-- MasterData.dbo.ListRole definition
+
+-- Drop table
+
+-- DROP TABLE MasterData.dbo.ListRole;
+
+CREATE TABLE MasterData.dbo.ListRole (
+	Id nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	AppId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Name nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	OnDelete bit NULL,
+	Description nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	InActive bit NULL,
+	[Key] nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	ParentId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	SoftShow int NULL,
+	IsAPI bit NULL
+);
+
+
+-- MasterData.dbo.ListRoleByUser definition
+
+-- Drop table
+
+-- DROP TABLE MasterData.dbo.ListRoleByUser;
+
+CREATE TABLE MasterData.dbo.ListRoleByUser (
+	Id nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	UserId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	OnDelete bit NULL,
+	ListRoleId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	AppId nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+);
+
+
+-- MasterData.dbo.UserMaster definition
+
+-- Drop table
+
+-- DROP TABLE MasterData.dbo.UserMaster;
+
+CREATE TABLE MasterData.dbo.UserMaster (
+	Id nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	UserName nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Password nvarchar(250) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	InActive bit DEFAULT 1 NOT NULL,
+	OnDelete bit DEFAULT 0 NOT NULL,
+	[Role] nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	RoleNumber int NOT NULL,
+	CONSTRAINT PK__UserMast__3214EC07C07223C3 PRIMARY KEY (Id)
+);
+
+
+version: '2.3'
+
+services:
+  apm-server:
+    restart: on-failure
+    image: docker.elastic.co/apm/apm-server:8.7.0
+    cap_add: ["CHOWN", "DAC_OVERRIDE", "SETGID", "SETUID"]
+    cap_drop: ["ALL"]
+    ports:
+      - 8200:8200
+    command: >
+       apm-server -e
+         -E apm-server.rum.enabled=true
+         -E setup.kibana.host=kibana:5601
+         -E setup.template.settings.index.number_of_replicas=0
+         -E apm-server.kibana.enabled=true
+         -E apm-server.kibana.host=kibana:5601
+         -E output.elasticsearch.username=elastic
+         -E output.elasticsearch.password=changeme
+         -E output.elasticsearch.hosts=["192.168.3.162:9201"]
+    mem_limit: 1g
+    healthcheck:
+      interval: 10s
+      retries: 12
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:8200/
+    networks:
+    - elastic
+  
+
+
+
+
+
+  kibana:
+    restart: on-failure
+    image: docker.elastic.co/kibana/kibana:8.7.0
+    environment:
+      ELASTICSEARCH_HOSTS: http://192.168.3.162:9201
+    #  ELASTICSEARCH_USERNAME: "elastic/kibana"
+      ELASTICSEARCH_PASSWORD: "changeme"
+      ELASTICSEARCH_SERVICEACCOUNTTOKEN: "AAEAAWVsYXN0aWMva2liYW5hL3Rva2VuMTo0QlhVVFAyV1R2eXUzNV9ub05UcDNn"
+      server.name: kibana
+      server.host: 0.0.0.0
+      elasticsearch.hosts: http://192.168.3.162:9201
+      monitoring.ui.container.elasticsearch.enabled: true
+      ELASTICSEARCH_URL: http://192.168.3.162:9201
+   #   elasticsearch.username: "elastic/kibana"
+    #  elasticsearch.password: "changeme"
+   #   elasticsearch.serviceAccountToken: "AAEAAWVsYXN0aWMva2liYW5hL3Rva2VuMTo0QlhVVFAyV1R2eXUzNV9ub05UcDNn"
+      KIBANA_SYSTEM_PASSWORD: "abc@123"
+      xpack.security.encryptionKey: "4JhT9pWqU5Oz7yXmRvF1AeB6lP8dK2cN"
+    mem_limit: 1294967296
+    ports:
+      - 5601:5601
+    networks:
+      - elastic
+    healthcheck:
+      interval: 10s
+      retries: 20
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:5601/api/status
+
+volumes: 
+  elasticsearch-data:
+  logstash-data:
+networks:
+  elastic:
+    driver: bridge
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+get token 
+curl -X POST --user elastic:changeme   "localhost:9201/_security/service/elastic/fleet-server/credential/token/token1?pretty"
+curl -X POST --user elastic:changeme   "localhost:9201/_security/service/elastic/kabana/credential/token/token1?pretty"
+  kibana:
+    restart: on-failure
+    image: docker.elastic.co/kibana/kibana:8.7.0
+    environment:
+      ELASTICSEARCH_HOSTS: http://192.168.3.162:9201
+    #  ELASTICSEARCH_USERNAME: "elastic/kibana"
+      ELASTICSEARCH_PASSWORD: "changeme"
+      ELASTICSEARCH_SERVICEACCOUNTTOKEN: "AAEAAWVsYXN0aWMva2liYW5hL3Rva2VuMTo0QlhVVFAyV1R2eXUzNV9ub05UcDNn"
+      server.name: kibana
+      server.host: 0.0.0.0
+      elasticsearch.hosts: http://192.168.3.162:9201
+      monitoring.ui.container.elasticsearch.enabled: true
+      ELASTICSEARCH_URL: http://192.168.3.162:9201
+   #   elasticsearch.username: "elastic/kibana"
+    #  elasticsearch.password: "changeme"
+   #   elasticsearch.serviceAccountToken: "AAEAAWVsYXN0aWMva2liYW5hL3Rva2VuMTo0QlhVVFAyV1R2eXUzNV9ub05UcDNn"
+      KIBANA_SYSTEM_PASSWORD: "abc@123"
+      xpack.security.encryptionKey: "4JhT9pWqU5Oz7yXmRvF1AeB6lP8dK2cN"
+    mem_limit: 1294967296
+    ports:
+      - 5601:5601
+    networks:
+      - elastic
+    healthcheck:
+      interval: 10s
+      retries: 20
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:5601/api/status
+
+
+Token Access: thêm project for shareRef
+
+https://grid.glideapps.com/
+gitlab-rails console
+
+Feature.disable(:log_response_length)
+
+cài
+
+sudo apt update
+sudo apt install openjdk-11-jre
+
+Copy code
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.17.1-amd64.deb
+
+sudo dpkg -i elasticsearch-7.17.1-amd64.deb
+
+sudo service elasticsearch start
+bash
+Copy code
+sudo systemctl enable elasticsearch
+
+
+
+
+
+ScyllaDB
+ScyllaDB’s close-to-the-metal architecture handles millions of OPS with predictable single-digit millisecond latencies.
+keydb nhanh hơn redis
+Refit: The automatic type-safe REST library for .NET Core, Xamarin and .NET
+sqlsugar
+novu
+
+// dọn dẹp docker
+Bạn đã gửi
+docker buildx prune --all
+Bạn đã gửi
+docker builder prune --all
+sudo du -h --max-depth=1 /var/lib/docker
+sudo du -h --max-depth=1 /var/lib/docker | sort -rh
+sudo du -h --max-depth=1 /var/lib/docker | sort -h
+
+k3s
+sudo k3s crictl imagesđể xem những hình ảnh nào đã được kéo cục bộ
+sudo k3s crictl rmi --pruneđể xóa bất kỳ hình ảnh nào hiện không được sử dụng bởi vùng chứa đang chạy
 curl https://releases.rancher.com/install-docker/20.10.sh | sh
 
+Theo mặc định, kubelet tích cực lưu trữ hình ảnh vào bộ nhớ đệm cho đến khi đĩa chứa kho hình ảnh đầy khoảng 85%. 
+Bạn muốn điều chỉnh các giá trị --image-gc-high-thresholdvà --image-gc-low-thresholdnếu điều này không phù hợp với bạn. Xem tài liệu kubelet để biết thêm chi tiết:
+https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/
+gitlab
+12345679hopnk
+
 sudo apt-get update
+cài nginx rồi xóa trong workload traefik đi
+vào phần install app sẽ show hết các thành phần liên quan
 
 
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -351,5 +647,565 @@ volumes:
   redis_data_back-up:
 
 ==>
+/////////////////////elk
 
+version: '2.2'
+services:
+  apm-server:
+    image: docker.elastic.co/apm/apm-server:7.17.15
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      kibana:
+        condition: service_healthy
+    cap_add: ["CHOWN", "DAC_OVERRIDE", "SETGID", "SETUID"]
+    cap_drop: ["ALL"]
+    ports:
+    - 8200:8200
+    networks:
+    - elastic
+    command: >
+       apm-server -e
+         -E apm-server.rum.enabled=true
+         -E setup.kibana.host=kibana:5601
+         -E setup.template.settings.index.number_of_replicas=0
+         -E apm-server.kibana.enabled=true
+         -E apm-server.kibana.host=kibana:5601
+         -E output.elasticsearch.hosts=["elasticsearch:9200"]
+    healthcheck:
+      interval: 10s
+      retries: 12
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:8200/
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.15
+    environment:
+    - bootstrap.memory_lock=true
+    - cluster.name=docker-cluster
+    - cluster.routing.allocation.disk.threshold_enabled=false
+    - discovery.type=single-node
+    - ES_JAVA_OPTS=-XX:UseAVX=2 -Xms1g -Xmx1g
+    ulimits:
+      memlock:
+        hard: -1
+        soft: -1
+    volumes:
+    - esdata:/usr/share/elasticsearch/data
+    ports:
+    - 9200:9200
+    networks:
+    - elastic
+    healthcheck:
+      interval: 20s
+      retries: 10
+      test: curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.15
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+    - 5601:5601
+    networks:
+    - elastic
+    healthcheck:
+      interval: 10s
+      retries: 20
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:5601/api/status
+
+volumes:
+  esdata:
+    driver: local
+
+networks:
+  elastic:
+    driver: bridge
+
+/////////
+
+
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: abc@123
+      POSTGRES_DB: dbjira
+      NODE_PG_FORCE_NATIVE: 1
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_back-up:/var/lib/postgresql/data-backup
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--requirepass", "abc@123"]
+    volumes:
+      - redis_data:/data
+      - redis_data_back-up:/data-backup
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - "8383:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - postgres
+
+  redisinsight:
+    image: redislabs/redisinsight
+    restart: always
+    ports:
+      - "8384:8001"
+    depends_on:
+      - redis
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "abc@1234567890"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    user: root
+    volumes:
+      - sql-data:/var/opt/mssql/data
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
+    volumes:
+     - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      cluster.name: "docker-cluster"
+      network.host: 0.0.0.0
+      discovery.zen.minimum_master_nodes: 1
+      discovery.type: single-node
+      cluster.routing.allocation.disk.threshold_enabled: false
+    ulimits:
+      memlock:
+        hard: -1
+        soft: -1
+    healthcheck:
+      interval: 20s
+      retries: 10
+      test: curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'
+    networks:
+    - elastic
+    
+  apm-server:
+    image: docker.elastic.co/apm/apm-server:7.17.15
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      kibana:
+        condition: service_healthy
+    cap_add: ["CHOWN", "DAC_OVERRIDE", "SETGID", "SETUID"]
+    cap_drop: ["ALL"]
+    ports:
+    - 8200:8200
+
+    command: >
+       apm-server -e
+         -E apm-server.rum.enabled=true
+         -E setup.kibana.host=kibana:5601
+         -E setup.template.settings.index.number_of_replicas=0
+         -E apm-server.kibana.enabled=true
+         -E apm-server.kibana.host=kibana:5601
+         -E output.elasticsearch.hosts=["elasticsearch:9200"]
+    healthcheck:
+      interval: 10s
+      retries: 12
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:8200/
+    networks:
+    - elastic
+
+    
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.15
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+    - 5601:5601
+    networks:
+    - elastic
+    healthcheck:
+      interval: 10s
+      retries: 20
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:5601/api/status
+
+volumes:
+  postgres_data:
+  sql-data:
+  elasticsearch-data:
+  postgres_data_back-up:
+  redis_data:
+  redis_data_back-up:
+networks:
+  elastic:
+    driver: bridge
+///////////////////////////
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: abc@123
+      POSTGRES_DB: dbjira
+      NODE_PG_FORCE_NATIVE: 1
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_back-up:/var/lib/postgresql/data-backup
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--requirepass", "abc@123"]
+    volumes:
+      - redis_data:/data
+      - redis_data_back-up:/data-backup
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - "8383:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - postgres
+
+  redisinsight:
+    image: redislabs/redisinsight
+    restart: always
+    ports:
+      - "8384:8001"
+    depends_on:
+      - redis
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "abc@1234567890"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    user: root
+    volumes:
+      - sql-data:/var/opt/mssql/data
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
+    volumes:
+     - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx525m -Xms256m"
+      cluster.name: "docker-cluster"
+      network.host: 0.0.0.0
+      discovery.zen.minimum_master_nodes: 1
+      discovery.type: single-node
+      cluster.routing.allocation.disk.threshold_enabled: false
+   # ulimits:
+     # memlock:
+      #  hard: -1
+     #   soft: -1
+    healthcheck:
+      interval: 20s
+      retries: 10
+      test: curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'
+    networks:
+    - elastic
+    
+  apm-server:
+    restart: always
+    image: docker.elastic.co/apm/apm-server:7.17.15
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      kibana:
+        condition: service_healthy
+    cap_add: ["CHOWN", "DAC_OVERRIDE", "SETGID", "SETUID"]
+    cap_drop: ["ALL"]
+    ports:
+    - 8200:8200
+
+    command: >
+       apm-server -e
+         -E apm-server.rum.enabled=true
+         -E setup.kibana.host=kibana:5601
+         -E setup.template.settings.index.number_of_replicas=0
+         -E apm-server.kibana.enabled=true
+         -E apm-server.kibana.host=kibana:5601
+         -E output.elasticsearch.hosts=["elasticsearch:9200"]
+    healthcheck:
+      interval: 10s
+      retries: 12
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:8200/
+    networks:
+    - elastic
+  
+  kibana:
+    restart: always
+    image: docker.elastic.co/kibana/kibana:7.17.15
+    depends_on:
+      elasticsearch:
+       condition: service_healthy
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+    - 5601:5601
+    networks:
+    - elastic
+    healthcheck:
+      interval: 10s
+      retries: 20
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:5601/api/status
+
+  logstash:
+    container_name: logstash
+    restart: always
+    image: docker.elastic.co/logstash/logstash:7.17.5
+    depends_on:
+      elasticsearch:
+       condition: service_healthy
+    volumes:
+      - logstash-data:/usr/share/logstash
+    command: >
+       logstash-plugin install logstash-input-http
+    ports:
+      - "8686:8080"
+      - 5044:5044
+      - 9600:9600
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"     
+
+
+volumes:
+  postgres_data:
+  sql-data:
+  elasticsearch-data:
+  postgres_data_back-up:
+  redis_data:
+  redis_data_back-up:
+  logstash-data:
+networks:
+  elastic:
+    driver: bridge
+//////////////elk
+
+version: '3.8'
+
+services:
+  elasticsearch:
+    container_name: elasticsearch
+    restart: always
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - elk
+    environment:
+      ES_JAVA_OPTS: "-Xmx512m -Xms256m"
+      discovery.type: single-node
+      cluster.name: "docker-cluster"
+      network.host: 0.0.0.0
+      discovery.zen.minimum_master_nodes: 1
+      #ELASTIC_PASSWORD: abc@123
+
+  logstash:
+    container_name: logstash
+    restart: unless-stopped
+    image: docker.elastic.co/logstash/logstash:7.17.5
+    
+    command: >
+      sh -c '
+        logstash-plugin install logstash-input-http
+      '
+    volumes:
+      - ./elk/logstash/config:/usr/share/logstash/config
+      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline
+      - ./elk/logstash/data:/usr/share/logstash/data
+      - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline:ro
+    ports:
+      - "5044:5044"
+
+      - "8080:8080"
+    environment:
+      LS_JAVA_OPTS: "-Xmx512m -Xms256m"
+   #   network.host: 0.0.0.0
+    #  path.config: "/usr/share/logstash/pipeline"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+volumes:
+  es_data:
+networks:
+  elk:
+    driver: bridge
+///////////////////
+
+version: '3.8'
+
+services:
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
+    volumes:
+     - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx525m -Xms256m"
+      cluster.name: "docker-cluster"
+      network.host: 0.0.0.0
+      discovery.zen.minimum_master_nodes: 1
+      discovery.type: single-node
+      cluster.routing.allocation.disk.threshold_enabled: false
+    healthcheck:
+      interval: 20s
+      retries: 10
+      test: curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'
+    networks:
+    - elastic
+      
+ 
+  apm-server:
+    restart: always
+    image: docker.elastic.co/apm/apm-server:7.17.5
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    #  kibana:
+      #  condition: service_healthy
+    cap_add: ["CHOWN", "DAC_OVERRIDE", "SETGID", "SETUID"]
+    cap_drop: ["ALL"]
+    ports:
+      - 8200:8200
+    command: >
+       apm-server -e
+         -E apm-server.rum.enabled=true
+         -E setup.kibana.host=kibana:5601
+         -E setup.template.settings.index.number_of_replicas=0
+         -E apm-server.kibana.enabled=true
+         -E apm-server.kibana.host=kibana:5601
+         -E output.elasticsearch.hosts=["elasticsearch:9200"]
+    healthcheck:
+      interval: 10s
+      retries: 12
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:8200/
+    networks:
+    - elastic
+  
+  
+  logstash:
+    container_name: logstash
+    restart: always
+    image: docker.elastic.co/logstash/logstash:7.17.5
+    depends_on:
+      elasticsearch:
+       condition: service_healthy
+    volumes:
+     # - logstash-data:/usr/share/logstash
+      - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline:ro
+    command: >
+       logstash-plugin install logstash-input-http
+    ports:
+      - "8686:8080"
+      - "5045:5044"
+      - "9600:9600"
+    environment:
+      LS_JAVA_OPTS: "-Xms512m -Xmx512m"
+    networks:
+     - elastic
+       
+  kibana:
+    restart: always
+    image: docker.elastic.co/kibana/kibana:7.17.5
+    depends_on:
+      elasticsearch:
+         condition: service_healthy
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    networks:
+      - elastic
+    healthcheck:
+      interval: 10s
+      retries: 20
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:5601/api/status
+
+volumes: 
+  elasticsearch-data:
+  logstash-data:
+networks:
+  elastic:
+    driver: bridge
+
+///////////
+docker exec -it bf5620aa2c71 logstash-plugin install logstash-input-http
+
+/// oracle
+docker login container-registry.oracle.com
+hopxc1997@gmail.com    
+Aa
+docker run -d --name oracle-db \
+  -e DB_SID=ORCLCDB \
+  -e DB_PDB=ORCLPDB1 \
+  -e DB_CHARACTERSET=AL32UTF8 \
+  -e DB_MEMORY=5GB \
+  -e ORACLE_PWD=abc@123Hac0m \
+  -e NLS_LANG=VIETNAMESE_VIETNAM.AL32UTF8 \
+  -p 1521:1521 \
+  -p 5500:5500 \
+  --network oracle-net \
+  -v $(pwd)/data:/opt/oracle/oradata \
+  -v data-oracle:/opt/oracle/oradata \
+  container-registry.oracle.com/database/enterprise:19.3.0.0
+
+
+docker exec -it oracle-db sqlplus -L sys/abc@123Hac0m//localhost:1521/ORCLCDB as sysdba @healthcheck.sql
 
