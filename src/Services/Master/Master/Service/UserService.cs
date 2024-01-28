@@ -70,16 +70,10 @@ namespace Master.Service
                 Id = Guid.NewGuid().ToString(),
                 Role = "User",
                 Password = hashedPassword,
-                Create = false,
-                Delete = false,
-                Edit = false,
                 InActive = false,
                 OnDelete = false,
-                Read = true,
                 RoleNumber = 1,
                 UserName = model.Username,
-                WarehouseId = "",
-                ListWarehouseId = ""
 
             };
             await _context.UserMasters.AddAsync(resCreate);
@@ -137,17 +131,11 @@ namespace Master.Service
                         select new UserMaster()
                         {
                             Id = u.Id,
-                            Create = u.Create,
-                            Edit = u.Edit,
-                            Delete = u.Delete,
                             UserName = u.UserName,
                             InActive = u.InActive,
                             Role = u.Role,
                             RoleNumber = u.RoleNumber,
-                            Read = u.Read,
-                            WarehouseId = u.WarehouseId,
                             Password = "",
-                            ListWarehouseId = u.ListWarehouseId
                         };
             if (!string.IsNullOrEmpty(keyWords))
                 query = from u in query
@@ -156,9 +144,9 @@ namespace Master.Service
             if (!string.IsNullOrEmpty(wareHouseId))
             {
                 var listId = await _client.GetListWarehouseByIdAsync(new BaseId() { IdWareHouse = wareHouseId });
-                query = from u in query
-                        where listId.IdWareHouseList.Contains(u.WarehouseId)
-                        select u;
+                //query = from u in query
+                //        where listId.IdWareHouseList.Contains(u.WarehouseId)
+                //        select u;
             }
             _list.Result = query.Skip(pages * number).Take(number);
             _list.totalCount = await query.CountAsync();
@@ -174,12 +162,7 @@ namespace Master.Service
             var user = _context.UserMasters.AsNoTracking().FirstOrDefault(x => x.Id.Equals(model.Id) && x.OnDelete == false);
             if (user == null)
                 return false;
-            if (!string.IsNullOrEmpty(model.WarehouseId) && !user.WarehouseId.Equals(model.WarehouseId))
-            {
-                var listId = await _client.GetListWarehouseByIdAsync(new BaseId() { IdWareHouse = model.WarehouseId });
-                model.ListWarehouseId = listId.IdWareHouseList;
-                model.WarehouseId = listId.IdWareHouseList;
-            }
+         
 
             model.Password = user.Password;
             model.UserName = user.UserName;
@@ -199,7 +182,7 @@ namespace Master.Service
                 var user = await _context.UserMasters.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && x.OnDelete == false);
                 return user;
             });
-            return res.InActive;
+            return res.InActive.Value;
         }
 
         public async Task<UserMaster> GetUserByUserNameAsync(string userName)

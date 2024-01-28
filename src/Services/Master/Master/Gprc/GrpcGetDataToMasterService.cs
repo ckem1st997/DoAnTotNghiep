@@ -72,13 +72,8 @@ namespace GrpcAuthMaster
             var u = _userService.User;
             var res = new User()
             {
-                Create = u.Create,
-                Delete = u.Delete,
-                Edit = u.Edit,
-                Read = u.Read,
                 Role = u.Role,
                 UserName = u.UserName,
-                WarehouseId = u.WarehouseId,
                 Id = u.Id,
                 RoleNumber = u.RoleNumber,
             };

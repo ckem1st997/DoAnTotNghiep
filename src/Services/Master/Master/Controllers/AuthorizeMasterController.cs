@@ -70,15 +70,9 @@ namespace Master.Controllers
                 Id = user.Id,
                 Role = user.Role,
                 Password = user.Password,
-                Create = user.Create,
-                Delete = user.Delete,
-                Edit = user.Edit,
-                InActive = user.InActive,
-                Read = user.Read,
+               
                 RoleNumber = user.RoleNumber,
                 UserName = user.UserName,
-                WarehouseId = user.WarehouseId,
-                ListWarehouseId = user.ListWarehouseId,
                 RoleSelect = SelectListRole.Get()
             };
 
@@ -122,15 +116,9 @@ namespace Master.Controllers
                 Id = model.Id,
                 Role = model.Role,
                 Password = model.Password,
-                Create = model.Create,
-                Delete = model.Delete,
-                Edit = model.Edit,
                 InActive = model.InActive,
-                Read = model.Read,
                 RoleNumber = model.RoleNumber,
                 UserName = model.UserName,
-                WarehouseId = model.WarehouseId,
-                ListWarehouseId = model.ListWarehouseId
             };
             var result = await _userService.SetRoleToUser(res);
             // var result = true;
@@ -151,15 +139,12 @@ namespace Master.Controllers
             var map = new UserMaster()
             {
                 UserName = model.UserName,
-                Create = model.Create,
-                Edit = model.Edit,
-                Delete = model.Delete,
                 Id = model.Id,
                 InActive = model.InActive,
-                Read = model.Read,
+
                 RoleNumber = model.RoleNumber,
                 Role = model.Role,
-                WarehouseId = model.WarehouseId,
+
             };
             var user = _userService.GetUserById(model.Id);
             if (user != null)

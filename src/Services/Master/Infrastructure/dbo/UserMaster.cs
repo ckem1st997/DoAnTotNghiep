@@ -10,16 +10,38 @@ namespace Infrastructure
 {
     public partial class UserMaster:BaseEntity
     {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public bool InActive { get; set; }
-        public string Role { get; set; }
+
+
+        public string UserName { get; set; } = default!;
+
+
+        public string Password { get; set; } = default!;
+
+
+        public bool? InActive { get; set; }
+
+
+        public string Role { get; set; } = default!;
+
+
         public int RoleNumber { get; set; }
-        public bool Read { get; set; }
-        public bool Create { get; set; }
-        public bool Edit { get; set; }
-        public bool Delete { get; set; }
-        public string WarehouseId { get; set; }
-        public string ListWarehouseId { get; set; }
+
+
+        public long? Phone { get; set; }
+
+
+        public string? FullName { get; set; }
+
+
+        public DateTime? ModifyDate { get; set; }
+
+
+        public string? ModifyBy { get; set; }
+
+
+        public DateTime? CreateDate { get; set; }
+
+
+        public string? CreateBy { get; set; }
     }
 }
