@@ -1,4 +1,7 @@
 
+git submodule add  ../../../share/hacom.sharedrefs.git Sharedrefs
+
+
 -- DROP SCHEMA dbo;
 
 CREATE SCHEMA dbo;
