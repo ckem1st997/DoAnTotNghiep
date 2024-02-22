@@ -3,6 +3,30 @@ dương lượng data docker
 du -h --max-depth=1
 du -h --max-depth=1 | sort -h
 
+version: "3.6"
+services:
+  graphql-engine:
+    image: hasura/graphql-engine:v2.37.0
+    ports:
+      - "8686:8080"
+    restart: unless-stopped
+    environment:
+      ## postgres database to store Hasura metadata
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:abc%40123@192.168.3.162:5432/postgres
+      ## this env var can be used to add the above ms sql server database to Hasura as a data source. this can be removed/updated based on your needs
+      MSSQL_DATABASE_URL: Driver={ODBC Driver 18 for SQL Server};Server=192.168.3.162,1433;Database=MasterData;Uid=sa;Pwd=abc@1234567890;Encrypt=optional
+
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      ## uncomment next line to run console offline (i.e load console assets from server instead of CDN)
+      # HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
+      ## uncomment next line to set an admin secret
+      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+
+
 
 
 fix không có quyền git runner
