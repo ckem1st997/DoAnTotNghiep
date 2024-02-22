@@ -1,3 +1,9 @@
+dương lượng data docker
+
+du -h --max-depth=1
+
+
+
 fix không có quyền git runner
 
 sudo usermod -aG docker gitlab-runner
