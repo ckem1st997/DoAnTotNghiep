@@ -1,3 +1,77 @@
+dương lượng data docker
+
+du -h --max-depth=1
+du -h --max-depth=1 | sort -h
+
+version: "3.6"
+services:
+  graphql-engine:
+    image: hasura/graphql-engine:v2.37.0
+    ports:
+      - "8686:8080"
+    restart: unless-stopped
+    environment:
+      ## postgres database to store Hasura metadata
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:abc%40123@192.168.3.162:5432/postgres
+      ## this env var can be used to add the above ms sql server database to Hasura as a data source. this can be removed/updated based on your needs
+      MSSQL_DATABASE_URL: Driver={ODBC Driver 18 for SQL Server};Server=192.168.3.162,1433;Database=MasterData;Uid=sa;Pwd=abc@1234567890;Encrypt=optional
+
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      ## uncomment next line to run console offline (i.e load console assets from server instead of CDN)
+      # HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
+      ## uncomment next line to set an admin secret
+      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+
+
+
+
+fix không có quyền git runner
+
+sudo usermod -aG docker gitlab-runner
+sudo usermod -aG docker gitlab-runner
+sudo chmod 666 /var/run/docker.sock
+ hoặc bổ sung sau khi wor trên không được
+stages:
+  - build
+
+build:
+  script:
+    - sudo docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_IMAGE
+    - sudo docker build -t $CI_REGISTRY_IMAGE .
+    - sudo docker push $CI_REGISTRY_IMAGE
+  only:
+    - develop
+
+
+
+457
+
+To completely uninstall Docker:
+
+Step 1
+
+dpkg -l | grep -i docker
+To identify what installed package you have:
+
+Step 2
+
+sudo apt-get purge -y docker-engine docker docker.io docker-ce docker-ce-cli docker-compose-plugin
+sudo apt-get autoremove -y --purge docker-engine docker docker.io docker-ce docker-compose-plugin
+The above commands will not remove images, containers, volumes, or user created configuration files on your host. If you wish to delete all images, containers, and volumes run the following commands:
+
+sudo rm -rf /var/lib/docker /etc/docker
+sudo rm /etc/apparmor.d/docker
+sudo groupdel docker
+sudo rm -rf /var/run/docker.sock
+You have removed Docker from the system completely.
+sudo snap remove docker
+
+git submodule add  ../../../share/hacom.sharedrefs.git Sharedrefs
+
 
 -- DROP SCHEMA dbo;
 
