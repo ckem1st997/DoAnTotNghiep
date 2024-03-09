@@ -25,12 +25,11 @@ namespace Share.Base.Core.Extensions
 
             var seqServerUrl = configuration["Elasticsearch"];
             return new LoggerConfiguration()
-                    .MinimumLevel.Information()
+                    .MinimumLevel.Verbose()
                     .Enrich.WithProperty("ApplicationContext-" + getEnv, nameApp)
                     .Enrich.FromLogContext()
                    .WriteTo.Console()
-                   .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(seqServerUrl)))
-                   //.WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:5044" : logstashUrl, queueLimitBytes: 1000000)
+                   .WriteTo.Http("http://192.168.3.147:8686", queueLimitBytes: 1000000)
                    .ReadFrom.Configuration(configuration)
                     .CreateLogger();
         }

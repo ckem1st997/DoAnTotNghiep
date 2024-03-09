@@ -85,7 +85,7 @@ namespace Master
             });
             //  app.ConfigureEventBusKafka();
             app.ConfigureRequestPipeline();
-            app.UseAllElasticApm(Configuration);
+          //  app.UseAllElasticApm(Configuration);
 
         }
     }

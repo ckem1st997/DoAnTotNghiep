@@ -1,0 +1,23 @@
+https://github.com/twentyhq/twenty 
+==> mã nguồn mở cho phép tạo trực tiếp object (bảng) trên giao diện và đổ data vào table
+định nghãi table có những trường nào
+
+https://github.com/idurar/idurar-erp-crm ,   https://docs.erpnext.com/docs/user/manual/en/getting-started-with-erpnext
+==> dạng quản lý crm cơ bản 
+
+https://github.com/frappe/erpnext?tab=readme-ov-file
+open source cả erp và crm khá chi tiết, có quản lý kho,Trang Chủ
+Kế Toán
+Mua Hàng
+Bán Hàng
+Tồn Kho
+Sản Xuất
+Chất lượng
+Dự Án
+Hỗ Trợ
+Người Dùng
+Website
+Build
+CRM
+Công Cụ
+Cài đặt ERPNext
