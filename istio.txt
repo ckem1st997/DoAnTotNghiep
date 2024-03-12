@@ -1,0 +1,4 @@
+istio
+- thêm vào pod
+app=web-manager
+version=v1
