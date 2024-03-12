@@ -1,3 +1,9 @@
+istio
+- thêm vào pod
+app=web-manager
+version=v1
+
+
 thư viện search động
 https://alirezanet.github.io/Gridify/guide/extensions/elasticsearch
 
