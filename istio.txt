@@ -21,6 +21,12 @@ version=v1
 kubectl get namespace istio-system
 https://istio.io/latest/docs/ops/best-practices/
 
+add monitor
+kubectl apply -f samples/addons
+kubectl rollout status deployment/kiali -n istio-system
+istioctl dashboard kiali
+
+
 xem danh sashc api, cái nào lỗi thì xóa
 kubectl get apiservice
 kubectl delete apiservice <nameapi>
