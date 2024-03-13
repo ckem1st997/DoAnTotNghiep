@@ -1,3 +1,7 @@
+k3s
+curl -sfL https://get.k3s.io | K3S_KUBE_VERSION=v1.27.7 sh -
+
+
 istio
 - thêm vào pod
 app=web-manager
