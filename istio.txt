@@ -19,7 +19,7 @@ istio
 app=web-manager
 version=v1
 kubectl get namespace istio-system
-
+https://istio.io/latest/docs/ops/best-practices/
 
 xem danh sashc api, cái nào lỗi thì xóa
 kubectl get apiservice
