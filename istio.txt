@@ -4,7 +4,7 @@ app=web-manager
 version=v1
 
 
-
+https://istio.io/latest/docs/examples/microservices-istio/enable-istio-all-microservices/
 
 install
 curl -L https://istio.io/downloadIstio | sh -
