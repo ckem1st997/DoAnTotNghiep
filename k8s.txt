@@ -1,5 +1,6 @@
 k3s
 curl -sfL https://get.k3s.io | K3S_KUBE_VERSION=v1.27.7 sh -
+0R4O8NjDFGub3t1T
 
 curl --insecure -sfL https://192.168.3.96:8443/v3/import/j52g286885xcvq7t4tb8tkctqd9k7kn9zf8qwvvl7x598jp56pzwcm_c-m-qshjp6dz.yaml | kubectl apply -f -
 istio
