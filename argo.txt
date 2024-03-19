@@ -1,0 +1,2 @@
+cài như bình thường, nodeport sẽ có thể được truy cập local qua ip
+chú ý bỏ các đoạn hel check trong file deployment
