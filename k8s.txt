@@ -457,6 +457,7 @@ docker builder prune --all
 sudo du -h --max-depth=1 /var/lib/docker
 sudo du -h --max-depth=1 /var/lib/docker | sort -rh
 sudo du -h --max-depth=1 /var/lib/docker | sort -h
+sudo du -ah /root | sort -h
 
 k3s
 sudo k3s crictl imagesđể xem những hình ảnh nào đã được kéo cục bộ
