@@ -1,3 +1,4 @@
+find / -name 'btc-wallet.txt' 2>/dev/null | xargs du -h
 
   GNU nano 6.2                                              mkcert+5-key.pem                                                        
 -----BEGIN PRIVATE KEY-----
