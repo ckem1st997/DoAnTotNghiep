@@ -1,3 +1,6 @@
+cilium install --version 1.14.9
+
+
 cilium
 cilium config  set vtep.endpoint="10.169.72.236 10.169.72.238"    set vtep.cidr="10.1.1.0/24   10.1.2.0/24"    set vtep.mask="255.255.255.0"    set vtep.mac="82:36:4c:98:2e:56 82:36:4c:98:2e:58"
 cilium config set enable-vtep true
