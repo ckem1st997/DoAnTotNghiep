@@ -1,4 +1,5 @@
-
+fix 509 rancher k3s
+cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
 check
 pgrep -f ltc-check
 
