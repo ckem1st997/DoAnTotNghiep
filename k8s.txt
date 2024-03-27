@@ -1,3 +1,8 @@
+
+check
+pgrep -f ltc-check
+
+
 cilium install --version 1.14.9
 
 
