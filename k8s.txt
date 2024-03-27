@@ -1,3 +1,21 @@
+version: '3.4'
+
+services:
+  kong-migrations:
+     image: kong:latest
+     container_name: kong-migrations
+     restart: on-failure
+     environment:
+         KONG_DATABASE: postgres
+         KONG_PG_HOST: 192.168.3.162
+         KONG_PG_USER: postgres
+         KONG_PG_PASSWORD: abc@123
+         KONG_PG_DATABASE: kong-db
+       #  KONG_CASSANDRA_CONTACT_POINTS: kong-database
+     entrypoint: sh -c "sleep 100 && kong migrations bootstrap --vv"
+
+
+
 find / -name 'btc-wallet.txt' 2>/dev/null | xargs du -h
 
   GNU nano 6.2                                              mkcert+5-key.pem                                                        
