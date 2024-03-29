@@ -2,3 +2,7 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC='--flannel-backend=none --disabl
 rm -r ~/.kube/config
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
   cilium install --version 1.14.9
+
+
+export PATH=$PATH:/var/lib/rancher/rke2/bin
+
