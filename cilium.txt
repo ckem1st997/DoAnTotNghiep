@@ -18,3 +18,56 @@ tạo file cấu hình cilium trong var/lib/rancher/rke2/server
 
 
 systemctl restart rke2-server.service
+
+
+
+
+Để thiết lập biến môi trường KUBECONFIG một cách vĩnh viễn trên hệ điều hành Linux hoặc macOS, bạn cần thêm dòng export vào file cấu hình shell của mình. Dưới đây là hướng dẫn cho hai shell phổ biến nhất: Bash và Zsh.
+
+Đối với Bash (mặc định trên nhiều hệ điều hành Linux và macOS cũ hơn)
+Mở Terminal.
+
+Mở file cấu hình Bash của bạn bằng một trình soạn thảo văn bản. Nếu bạn đang sử dụng Linux, file này thường là .bashrc trong thư mục home của bạn. Trên macOS, file này có thể là .bash_profile hoặc .profile. Sử dụng lệnh sau để mở file (thay nano bằng trình soạn thảo bạn thích, ví dụ: vi, emacs,...):
+
+bash
+Copy code
+nano ~/.bashrc  # Trên Linux
+nano ~/.bash_profile  # Trên macOS
+Thêm dòng sau vào cuối file:
+
+bash
+Copy code
+export KUBECONFIG=/path/to/your/kubeconfig/file
+Thay /path/to/your/kubeconfig/file bằng đường dẫn thực tế đến file kubeconfig của bạn.
+
+Lưu và đóng trình soạn thảo. Trong nano, bạn có thể làm điều này bằng cách nhấn Ctrl+O, Enter để lưu và Ctrl+X để thoát.
+
+Áp dụng thay đổi cho phiên hiện tại của terminal bằng cách chạy:
+
+bash
+Copy code
+source ~/.bashrc  # Trên Linux
+source ~/.bash_profile  # Trên macOS
+Đối với Zsh (mặc định trên macOS từ Catalina trở đi)
+Mở Terminal.
+
+Mở file cấu hình Zsh của bạn bằng một trình soạn thảo văn bản:
+
+zsh
+Copy code
+nano ~/.zshrc
+Thêm dòng sau vào cuối file:
+
+zsh
+Copy code
+export KUBECONFIG=/path/to/your/kubeconfig/file
+Như trên, thay thế /path/to/your/kubeconfig/file bằng đường dẫn thực tế của bạn.
+
+Lưu và đóng trình soạn thảo. Trong nano, bạn có thể làm điều này bằng cách nhấn Ctrl+O, Enter để lưu và Ctrl+X để thoát.
+
+Áp dụng thay đổi cho phiên hiện tại của terminal bằng cách chạy:
+
+zsh
+Copy code
+source ~/.zshrc
+Bây giờ, mỗi khi bạn mở một terminal mới, biến môi trường KUBECONFIG sẽ tự động được thiết lập, và kubectl sẽ sử dụng file kubeconfig mà bạn đã chỉ định để kết nối với cluster Kubernetes của mình. Điều này giúp bạn không cần phải export biến KUBECONFIG mỗi lần mở một terminal mới.
