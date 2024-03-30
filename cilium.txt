@@ -1,3 +1,36 @@
+rancher-ui
+
+=== thêm chứng chỉ và rancher ui chart values
+helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+kubectl create namespace cattle-system
+# If you have installed the CRDs manually instead of with the `--set installCRDs=true` option added to your Helm install command, you should upgrade your CRD resources before upgrading the Helm chart:
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.7.1/cert-manager.crds.yaml
+# Add the Jetstack Helm repository
+helm repo add jetstack https://charts.jetstack.io
+# Update your local Helm chart repository cache
+helm repo update
+# Install the cert-manager Helm chart
+helm install cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --version v1.7.1
+
+
+=== cài đặt rancher với domain
+helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+
+  helm install rancher rancher-stable/rancher \
+  --namespace cattle-system \
+  --set hostname=hopnk.xyz \
+  --set replicas=1 \
+  --set bootstrapPassword=6HjhRwfdsfds43
+
+
+
+
+
+
+
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC='--flannel-backend=none --disable-network-policy' sh -
 rm -r ~/.kube/config
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
