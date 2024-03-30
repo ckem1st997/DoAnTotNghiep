@@ -1,3 +1,10 @@
+  helm install rancher rancher-stable/rancher \
+  --namespace cattle-system \
+  --set hostname=hopnk.xyz \
+  --set replicas=1 \
+  --set service.type=LoadBalancer \
+  --set bootstrapPassword=6HjhRwfdsfds43
+
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC='--flannel-backend=none --disable-network-policy --disable-kube-proxy' sh -
 sudo systemctl daemon-reload
 sudo systemctl restart k3s
