@@ -9,3 +9,12 @@ export PATH=$PATH:/var/lib/rancher/rke2/bin
 
 
 export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
+
+
+cài rke2 theo doc
+tạo và cấu hình trong fil config.yaml /etc/rancher/rke2
+
+tạo file cấu hình cilium trong var/lib/rancher/rke2/server 
+
+
+systemctl restart rke2-server.service
