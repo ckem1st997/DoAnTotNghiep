@@ -20,6 +20,57 @@ tạo file cấu hình cilium trong var/lib/rancher/rke2/server
 systemctl restart rke2-server.service
 
 
+===config.yaml
+#/etc/rancher/rke2/config.yaml
+#cluster-cidr: "10.42.0.0/16,2001:cafe:42::/56" cilium tu dong
+#service-cidr: "10.43.0.0/16,2001:cafe:43::/112" ciliun tu dong
+disable-kube-proxy: true
+network:
+  plugin: none
+cni: none  # tự cài bằng cli
+
+
+rke2-cilium-config.yaml
+# /var/lib/rancher/rke2/server/manifests/rke2-cilium-config.yaml
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: rke2-cilium
+  namespace: kube-system
+spec:
+  chart: https://helm.cilium.io/cilium
+  version: 1.14.9
+  valuesContent: |-
+    eni:
+      enabled: true
+    kubeProxyReplacement: true
+    k8sServiceHost: 127.0.0.1
+    k8sServicePort: 6443
+    hubble:
+      enabled: true
+      relay:
+        enabled: true
+      ui:
+        enabled: true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Để thiết lập biến môi trường KUBECONFIG một cách vĩnh viễn trên hệ điều hành Linux hoặc macOS, bạn cần thêm dòng export vào file cấu hình shell của mình. Dưới đây là hướng dẫn cho hai shell phổ biến nhất: Bash và Zsh.
