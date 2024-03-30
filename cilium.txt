@@ -6,3 +6,6 @@ export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
 export PATH=$PATH:/var/lib/rancher/rke2/bin
 
+
+
+export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
