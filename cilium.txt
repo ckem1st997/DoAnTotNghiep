@@ -1,3 +1,32 @@
+chú ý====================
+cài bằng cli
+cilium install --version 1.14.9
+update các biến có thể bằng helm chart
+    elm upgrade cilium cilium/cilium --version 1.14.9 \
+  --namespace kube-system \
+  --reuse-values \
+  --set kubeProxyReplacement=true
+
+helm upgrade cilium cilium/cilium --version 1.14.9 \
+    --namespace kube-system \
+    --reuse-values \
+    --set ingressController.enabled=true \
+    --set ingressController.loadbalancerMode=dedicated
+kubectl -n kube-system rollout restart deployment/cilium-operator
+kubectl -n kube-system rollout restart ds/cilium
+
+
+
+
+
+
+
+
+
+
+
+
+
 rancher-ui
 
 === thêm chứng chỉ và rancher ui chart values
