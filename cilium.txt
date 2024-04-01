@@ -54,6 +54,7 @@ chú ý====================
 cài bằng cli
 cilium install --version 1.14.9
 update các biến có thể bằng helm chart
+
     helm upgrade cilium cilium/cilium --version 1.14.9 \
   --namespace kube-system \
   --reuse-values \
@@ -70,6 +71,27 @@ helm upgrade cilium cilium/cilium --version 1.14.9 \
   --set ingressController.default=true \
   --set-string extraConfig.enable-envoy-config=true \
   --set loadBalancer.l7.backend=envoy
+
+helm upgrade cilium cilium/cilium --version 1.14.9 \
+   --namespace kube-system \
+   --reuse-values \
+   --set hubble.relay.enabled=true \
+   --set hubble.ui.enabled=true
+
+
+helm upgrade cilium cilium/cilium --version 1.14.9 \
+  --namespace kube-system \
+  --reuse-values \
+  --set kubeProxyReplacement=true \
+  --set ingressController.enabled=true \
+  --set ingressController.loadbalancerMode=dedicated \
+  --set ingressController.default=true \
+  --set-string extraConfig.enable-envoy-config=true \
+  --set loadBalancer.l7.backend=envoy \
+  --set hubble.relay.enabled=true \
+  --set hubble.ui.enabled=true
+
+
 
 kubectl -n kube-system rollout restart deployment/cilium-operator
 kubectl -n kube-system rollout restart ds/cilium
