@@ -1,3 +1,4 @@
+thêm config, curl. enable, thêm cilium-config, start
 ==helm config
 apiVersion: helm.cattle.io/v1
 kind: HelmChartConfig
