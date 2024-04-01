@@ -1,5 +1,6 @@
 thêm config, curl. enable, thêm cilium-config, start
 ==helm config
+rke2-cilium-config.yaml
 apiVersion: helm.cattle.io/v1
 kind: HelmChartConfig
 metadata:
@@ -53,7 +54,7 @@ chú ý====================
 cài bằng cli
 cilium install --version 1.14.9
 update các biến có thể bằng helm chart
-    elm upgrade cilium cilium/cilium --version 1.14.9 \
+    helm upgrade cilium cilium/cilium --version 1.14.9 \
   --namespace kube-system \
   --reuse-values \
   --set kubeProxyReplacement=true
