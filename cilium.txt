@@ -135,7 +135,11 @@ helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
   --set replicas=1 \
   --set bootstrapPassword=6HjhRwfdsfds43
 
-
+helm install rancher rancher-latest/rancher \
+  --namespace cattle-system \
+  --set hostname=rancher.hopnk.xyz \
+  --set replicas=1 \
+  --set bootstrapPassword=6HjhRwfdsfds43
 
 
 
