@@ -1,3 +1,6 @@
+ps aux | grep check-btc
+
+
 export EDITOR=nano
 
 helm install rancher rancher-stable/rancher \
