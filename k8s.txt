@@ -1,3 +1,6 @@
+tai file
+scp -r ubuntu@192.168.3.96:/data/compose/98/minio_data/* /k_minio/
+
 ps aux | grep check-btc
 
 
