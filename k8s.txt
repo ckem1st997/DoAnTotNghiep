@@ -1,3 +1,5 @@
+keyhunt -m address -f tests/66.txt -r 0000000000000000000000000000000000000000000000020000000000000000:000000000000000000000000000000000000003fffffffffffffffffffffffff -l compress -q -s 10 -t 5
+
 tai file
 scp -r ubuntu@192.168.3.96:/data/compose/98/minio_data/* /k_minio/
 ./keyhunt -m address -t 3 -f tests/btc-list-address.txt
