@@ -1,3 +1,25 @@
+fix docker ------------
+
+
+Dường như Docker daemon không thể khởi động vì đã phát hiện một tiến trình với PID 11244 vẫn đang chạy. Để khắc phục vấn đề này, bạn cần dừng tiến trình Docker đang chạy trước khi khởi động Docker daemon mới. Bạn có thể thực hiện các bước sau:
+
+Dừng Docker daemon hiện đang chạy bằng cách sử dụng lệnh sau:
+arduino
+Copy code
+sudo systemctl stop docker
+Kiểm tra lại xem Docker daemon đã dừng hoàn toàn chưa bằng cách kiểm tra trạng thái của Docker service:
+lua
+Copy code
+sudo systemctl status docker
+Nếu Docker daemon đã dừng thành công, bạn có thể xóa file /var/run/docker.pid bằng lệnh:
+bash
+Copy code
+sudo rm /var/run/docker.pid
+Sau đó, bạn có thể thử khởi động lại Docker daemon bằng lệnh:
+Copy code
+sudo dockerd
+
+
 
 Để mở rộng phân vùng ubuntu--vg-ubuntu--lv để sử dụng hết dung lượng của ổ đĩa, bạn có thể thực hiện các bước sau:
 
