@@ -1,3 +1,5 @@
+sudo lsblk
+
 fix docker ------------
 
 Dường như /var/run/docker.sock là một tập tin, không phải là một thư mục, nhưng kích thước của nó là 0 byte, có thể là một tập tin trống. Điều này không phù hợp với một socket Docker UNIX.
