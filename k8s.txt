@@ -1,3 +1,23 @@
+
+Để mở rộng phân vùng ubuntu--vg-ubuntu--lv để sử dụng hết dung lượng của ổ đĩa, bạn có thể thực hiện các bước sau:
+
+Kiểm tra dung lượng còn trống: Đầu tiên, hãy kiểm tra xem có bao nhiêu dung lượng còn trống trên phân vùng chứa phân vùng ubuntu--vg-ubuntu--lv. Bạn có thể sử dụng lệnh df -h:
+bash
+Copy code
+df -h /
+Lệnh này sẽ hiển thị thông tin về dung lượng sử dụng và dung lượng còn trống trên phân vùng /, nơi chứa phân vùng ubuntu--vg-ubuntu--lv.
+Mở rộng phân vùng vật lý (PV): Nếu có dung lượng trống trên ổ đĩa vật lý, bạn có thể mở rộng phân vùng vật lý bằng cách sử dụng lệnh lvextend. Ví dụ, nếu phân vùng vật lý của ubuntu--vg-ubuntu--lv là /dev/sda3, bạn có thể sử dụng lệnh sau:
+bash
+Copy code
+sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv
+Lệnh này sẽ mở rộng phân vùng vật lý để sử dụng hết dung lượng trống trên ổ đĩa.
+Mở rộng hệ thống tệp (filesystem): Sau khi mở rộng phân vùng vật lý, bạn cần mở rộng hệ thống tệp để sử dụng hết dung lượng mới. Đối với hệ thống tệp ext4, bạn có thể sử dụng lệnh resize2fs:
+bash
+Copy code
+sudo resize2fs /dev/ubuntu-vg/ubuntu-lv
+Lệnh này sẽ thay đổi kích thước của hệ thống tệp để phản ánh sự thay đổi trong phân vùng vật lý.
+
+
 keyhunt -m address -f tests/66.txt -r 0000000000000000000000000000000000000000000000020000000000000000:000000000000000000000000000000000000003fffffffffffffffffffffffff -l compress -q -s 10 -t 5
 
 tai file
