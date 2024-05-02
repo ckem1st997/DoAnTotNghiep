@@ -1,5 +1,18 @@
 fix docker ------------
 
+Dường như /var/run/docker.sock là một tập tin, không phải là một thư mục, nhưng kích thước của nó là 0 byte, có thể là một tập tin trống. Điều này không phù hợp với một socket Docker UNIX.
+
+Trong trường hợp này, bạn có thể thử xóa tập tin /var/run/docker.sock và sau đó cố gắng khởi động lại Docker để xem liệu vấn đề có được giải quyết không. Bạn có thể thực hiện như sau:
+
+bash
+Copy code
+sudo rm /var/run/docker.sock
+Sau đó, thử khởi động Docker daemon lại:
+
+Copy code
+sudo dockerd
+Nếu bạn gặp vấn đề với quyền truy cập, hãy đảm bảo rằng bạn đang chạy lệnh với quyền đủ cao để xóa tập tin và khởi động Docker daemon lại.
+
 
 Dường như Docker daemon không thể khởi động vì đã phát hiện một tiến trình với PID 11244 vẫn đang chạy. Để khắc phục vấn đề này, bạn cần dừng tiến trình Docker đang chạy trước khi khởi động Docker daemon mới. Bạn có thể thực hiện các bước sau:
 
