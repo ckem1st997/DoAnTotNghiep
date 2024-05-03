@@ -1,3 +1,7 @@
+giới hạn 
+mem_limit: 1294967296
+
+
 sudo lsblk
 
 fix docker ------------
