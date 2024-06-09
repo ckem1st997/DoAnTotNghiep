@@ -1,3 +1,6 @@
+devtron
+https://devtron.ai/blog/deploy-your-applications-over-k3s-lightweight-kubernetes-in-no-time/
+
 giới hạn 
 mem_limit: 1294967296
 
