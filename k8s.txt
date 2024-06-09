@@ -9,6 +9,45 @@ helm install devtron devtron/devtron-operator \
 
 
 
+version: '3.6'
+
+services:
+
+  gitlab:
+    image: gitlab/gitlab-ce:16.10.3-ce.0
+    container_name: gitlab
+    ports:
+      - "8929:8929"
+    hostname: '192.168.3.179'
+    restart: unless-stopped
+    volumes:
+      - /var/volumn/gitlab/config:/etc/gitlab
+      - /var/volumn/gitlab/logs:/var/log/gitlab
+      - /var/volumn/gitlab/data:/var/opt/gitlab
+      - /var/volumn/gitlab/backup:/var/opt/gitlab/backups
+
+    environment:
+
+       GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://192.168.3.179:8929'
+        gitlab_rails['gitlab_shell_ssh_port'] = 22
+
+
+  gitlab-runner:
+    image: gitlab/gitlab-runner:latest
+    container_name: gitlab-runner
+    restart: always
+    volumes:
+      - '/var/volumn/gitlab-runner/config:/etc/gitlab-runner'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+
+     
+
+
+
+
+
+
 giới hạn 
 mem_limit: 1294967296
 
