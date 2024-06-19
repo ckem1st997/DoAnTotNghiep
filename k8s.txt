@@ -132,7 +132,10 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC='--flannel-backend=none --disabl
 sudo systemctl daemon-reload
 sudo systemctl restart k3s
 
-
+mirrors:
+  "registry.local:5000":
+    endpoint:
+      - "http://registry.local:5000"
 fix 509 rancher k3s
 cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
 check
