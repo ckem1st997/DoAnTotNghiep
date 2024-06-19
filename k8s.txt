@@ -138,6 +138,10 @@ mirrors:
       - "http://registry.local:5000"
 fix 509 rancher k3s
 cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+gỡ traefik, cài nginx
+
+
+
 check
 pgrep -f ltc-check
 
