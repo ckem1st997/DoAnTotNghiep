@@ -900,11 +900,18 @@ nano /home/gitlab-runner/.bash_logout  commen hoặc xóa file nếu lỗi chạ
 {
   "insecure-registries": ["gitlab.mycompany.com:4567"]
 }
+
+
 /etc/docker/daemon.json
 sudo systemctl status docker
 sudo systemctl start docker
 sudo systemctl restart docker
+fix không có quyền git runner
 
+sudo usermod -aG docker gitlab-runner
+sudo usermod -aG docker gitlab-runner
+sudo chmod 666 /var/run/docker.sock
+ hoặc bổ sung sau khi wor trên không được
 sudo lsof -i :8301
 kill -9 1090569
 
