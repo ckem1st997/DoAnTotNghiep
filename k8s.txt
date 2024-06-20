@@ -1,3 +1,7 @@
+check port
+ss -tuln | grep 9200
+
+
 sentry==> đổi ở file .env, nginx.conf, các file cấu hình, nhớ restart web image
 
 
