@@ -1,4 +1,88 @@
 
+
+
+
+
+
+
+
+
+
+
+
+metricbeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+
+metricbeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+
+metricbeat.modules:
+- module: docker
+  metricsets:
+    - "container"
+    - "cpu"
+    - "diskio"
+    - "healthcheck"
+    - "info"
+    - "image"
+    - "memory"
+    - "network"
+  hosts: ["unix:///var/run/docker.sock"]
+  period: 10s
+  enabled: true
+
+
+- module: postgresql
+  log:
+    enabled: true
+    var.paths: ["/metric/log/postgres/*.log*"]
+  hosts: ["postgres://192.168.3.184:5432?sslmode=disable"]
+  username: postgres
+  password: abc@123
+  enabled: true
+  metricsets:
+    - database
+    - bgwriter
+    - activity
+    - statement
+
+  period: 10s
+
+- module: redis
+  metricsets: ["info", "keyspace"]
+  enabled: true
+  period: 10s
+  hosts: ["192.168.3.184:6379"]
+  password: "abc@123"
+
+setup.kibana:
+  host: "kibana:5601"
+
+processors:
+
+  - add_cloud_metadata: ~
+setup.dashboards.enabled: true
+output.elasticsearch:
+  hosts: 'elasticsearch:9200'
+  username: 'elastic'
+  password: '${ELASTICSEARCH_PASSWORD}'
+
+
+
+
+
+
+
+
+
+
+
+
+
 cấu hình logstash
 
          http {
