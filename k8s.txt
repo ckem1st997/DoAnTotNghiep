@@ -7,6 +7,17 @@ curl -X POST "http://localhost:9200/_security/user/apm_user" -H 'Content-Type: a
   "email" : "apm_user@example.com"
 }
 '
+ curl -X POST "http://localhost:9200/_security/role/apm_writer" -H 'Content-Type: application/json' -u "elastic:abc@123456" -d'
+{
+  "cluster": ["monitor"],
+  "indices": [
+    {
+      "names": [ "apm-*" ],
+      "privileges": ["write","create_index"]
+    }
+  ]
+}
+'
 
 
 
