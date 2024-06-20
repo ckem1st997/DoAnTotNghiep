@@ -1,3 +1,11 @@
+
+cấu hình logstash
+
+         http {
+    port => 5044
+    codec => json
+  }
+
 thêm role apm server
 curl -X POST "http://localhost:9200/_security/user/apm_user" -H 'Content-Type: application/json' -u "elastic:abc@123456" -d'
 {
