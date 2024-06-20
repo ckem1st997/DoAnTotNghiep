@@ -5,6 +5,8 @@ cấu hình logstash
     port => 5044
     codec => json
   }
+nhớ tên username và pass của elastic vô output logstash
+
 
 thêm role apm server
 curl -X POST "http://localhost:9200/_security/user/apm_user" -H 'Content-Type: application/json' -u "elastic:abc@123456" -d'
