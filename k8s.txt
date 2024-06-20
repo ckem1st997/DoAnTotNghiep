@@ -1,3 +1,16 @@
+thêm role apm server
+curl -X POST "http://localhost:9200/_security/user/apm_user" -H 'Content-Type: application/json' -u "elastic:abc@123456" -d'
+{
+  "password" : "abc@123456",
+  "roles" : [ "apm_writer" ],
+  "full_name" : "APM User",
+  "email" : "apm_user@example.com"
+}
+'
+
+
+
+
 check port
 ss -tuln | grep 9200
 
