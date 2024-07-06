@@ -1,4 +1,11 @@
 
+vô để lấy xác nhận https://manage.sslforfree.com/ 
+tải file chứng chỉ về
+https://help.zerossl.com/hc/en-us/articles/360058295894-Installing-SSL-Certificate-on-NGINX
+xem hướng dẫn
+done
+
+
 cấu hình để nginx làm proxy trỏ vào multiple domain  
 ví dụ file cấu hình
 tạo file .conf ==>  k8s.domain.conf ==>sudo systemctl restart nginx
