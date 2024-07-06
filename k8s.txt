@@ -1,7 +1,56 @@
 
+cấu hình để nginx làm proxy trỏ vào multiple domain  
+ví dụ file cấu hình
+tạo file .conf ==>  k8s.domain.conf ==>sudo systemctl restart nginx
+
+
+server {
+    listen 80;
+    server_name web-dev.hacom.vn; # Tên miền hoặc địa chỉ IP trỏ vào VM 192.168.3.180
+
+    location / {
+        proxy_pass http://192.168.3.180;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+  }
+}
+server {
+    listen 80;
+    server_name apis-dev.hacom.vn; # Tên miền hoặc địa chỉ IP trỏ vào VM 192.168.3.180
+
+    location / {
+        proxy_pass http://192.168.3.180;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+  }
+}
+
+server {
+    listen 80;
+    server_name web-manager-dev.hacom.vn; # Tên miền hoặc địa chỉ IP trỏ vào VM 192.168.3.180
+
+    location / {
+        proxy_pass http://192.168.3.180;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+  }
+}
 
 
 
+
+
+
+===================================
 
 
 
