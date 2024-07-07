@@ -45,6 +45,7 @@ done
 
 cấu hình để nginx làm proxy trỏ vào multiple domain  
 ví dụ file cấu hình
+mặc định cổng 80, trỏ về cổng nào thì thêm cổng đó thôi
 tạo file .conf ==>  k8s.domain.conf ==>sudo systemctl restart nginx
 
 
