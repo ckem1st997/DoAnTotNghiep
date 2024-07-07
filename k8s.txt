@@ -1,3 +1,30 @@
+tạo xác nhận bằng nginx
+
+tạo thêm thư mục .well-known và pki-validation và tạo thêm .txt để xác nhận vào thư mục pki-validation trong /etc/ssl-hacom/apis-dev.hacom.vn
+cấu hình
+server {
+    listen 80;
+    server_name apis-dev.hacom.vn; # Tên miền hoặc địa chỉ IP trỏ vào VM 192.168.3.180
+      # xac nhan ssl
+    location /.well-known/pki-validation/ {
+      root /etc/ssl-hacom/apis-dev.hacom.vn;
+
+    }
+
+
+    location / {
+        proxy_pass http://192.168.3.180;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+  }
+}
+
+
+
+
 
 vô để lấy xác nhận https://manage.sslforfree.com/ 
 tải file chứng chỉ về
