@@ -29,6 +29,16 @@ server {
 vô để lấy xác nhận https://manage.sslforfree.com/ 
 tải file chứng chỉ về
 https://help.zerossl.com/hc/en-us/articles/360058295894-Installing-SSL-Certificate-on-NGINX
+
+=======ubuntu
+cat certificate.crt ca_bundle.crt >> certificate.crt  
+
+===centos
+cat certificate.crt ca_bundle.crt > temp_certificate.crt
+mv temp_certificate.crt certificate.crt
+
+
+
 xem hướng dẫn
 done
 
