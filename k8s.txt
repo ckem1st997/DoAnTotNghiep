@@ -1,3 +1,122 @@
+        //           var emd = new System.Collections.ObjectModel.Collection<string>(){
+
+        //                   { "itemName" },{"attributes" },{"categories" }
+
+        //                   };
+        //           var model = new ModelConfig("ts/all-MiniLM-L12-v2");
+        //           var schema = new Schema(
+        //   "item-search-test",
+        //   new List<Field>
+        //   {
+        //new Field("id", FieldType.String, false),
+        //           new Field("itemName", FieldType.String, false),
+        //           new Field("itemCode", FieldType.String, false),
+        //           new Field("sku", FieldType.String, false),
+        //           new Field("primaryUomCode", FieldType.String, false),
+        //           new Field("warrantyDescrition", FieldType.String, false),
+        //           new Field("sex", FieldType.String, false),
+        //           new Field("style", FieldType.String, false),
+        //           //new Field("warrantyByCus", FieldType.String, false),
+        //           //new Field("warrantyByPartner", FieldType.String, false),
+        //           new Field("brand", FieldType.String, false),
+        //           new Field("primaryImage", FieldType.String, false),
+        //           new Field("attributes", FieldType.String, false),
+        //           new Field("categories", FieldType.String, false),
+        //           new Field("technicalCommons", FieldType.String, false),
+        //           new Field("tags", FieldType.String, false),
+        //           new Field("unitSellingPrice", FieldType.Float, false),
+        //           new Field("marketPrice", FieldType.Float, false),
+        //           new Field("rate", FieldType.Float, true),
+        //           new Field("rateCount", FieldType.Float, true),
+        //           new Field("itemSummary", FieldType.String, true),
+        //           new Field("onhandQuantyty", FieldType.Float, true),
+        //           new Field("categoryId", FieldType.String, true),  // Converting List<long> to JSON string
+        //       //    new Field("storeAvailables", FieldType.String, true),
+        //           new Field("embedding",FieldType.FloatArray,embed: new AutoEmbeddingConfig(emd,model))
+        //   });
+        //           //            {
+        //           //                "q": "",
+        //           //  "query_by": "embedding",
+        //           //  "page": 1,
+        //           //  "per_page": 10,
+        //           //  "exhaustive_search": true,
+        //           //  "exclude_fields": "embedding"
+        //           //}
+
+        //           //var delete = await _typesense.DeleteCollection("item-search-test");
+        //             var createCollection = await _typesense.CreateCollection(schema);
+        foreach (var item in list)
+        {
+           item.InitializeDefaults();
+            var createDocumentResult = await _typesense.CreateDocument<ElasticItem>("item-search-test", item);
+        }
+
+        //https://github.com/bfritscher/typesense-dashboard ==> ui
+        //truong danh index để tìm kiếm,
+        //  Bạn chỉ cần đưa các trường mà bạn muốn tìm kiếm / lọc / facet / sort / group_by vào lược đồ bộ sưu tập. 
+        //Chúng tôi gọi đây là các trường được lập chỉ mục.Các trường được lập chỉ mục được lưu trữ trong RAM với bản sao lưu trên đĩa.
+        var emd = new System.Collections.ObjectModel.Collection<string>(){
+
+                           { "itemName" },{"attributes" },{"categories" }
+
+                           };
+        var model = new ModelConfig("ts/multilingual-e5-large");
+        var schema = new Schema(
+"item-search-test",
+new List<Field>
+{
+        new Field("id", FieldType.String, false),
+                   new Field("itemName", FieldType.String, false),
+                   new Field("itemCode", FieldType.String, false),
+                   new Field("sku", FieldType.String, false),
+                   new Field("primaryUomCode", FieldType.String, false),
+                   new Field("warrantyDescrition", FieldType.String, false),
+                   new Field("sex", FieldType.String, false),
+                   new Field("style", FieldType.String, false),
+                   new Field("warrantyByCus", FieldType.String, false),
+                   new Field("warrantyByPartner", FieldType.String, false),
+                   new Field("brand", FieldType.String, false),
+                   new Field("primaryImage", FieldType.String, false),
+                   new Field("attributes", FieldType.String, false),
+                   new Field("categories", FieldType.String, false),
+                   new Field("technicalCommons", FieldType.String, false),
+                   new Field("tags", FieldType.String, false),
+                   new Field("unitSellingPrice", FieldType.Float, false),
+                   new Field("marketPrice", FieldType.Float, false),
+                   new Field("rate", FieldType.Float, true),
+                   new Field("rateCount", FieldType.Float, true),
+                   new Field("itemSummary", FieldType.String, true),
+                   new Field("onhandQuantyty", FieldType.Float, true),
+                   new Field("categoryId", FieldType.Int32Array, true),  // Converting List<long> to JSON string
+               //    new Field("storeAvailables", FieldType.String, true),
+                   new Field("embedding",FieldType.FloatArray,embed: new AutoEmbeddingConfig(emd,model))
+});
+
+
+        //           var delete = await _typesense.DeleteCollection("item-search-test");
+        var createCollection = await _typesense.CreateCollection(schema);
+        //     var createDocumentResult = await _typesense.CreateDocument<List<ElasticItem>>("item-search-test", list);
+
+        //MeilisearchClient client = new MeilisearchClient("http://192.168.3.162:7700", "3hTRu4I5rvtOOazyY16nsrwB3gXA7ICD");
+
+        //// An index is where the documents are stored.
+        //var indexNew = client.Index("items-search");
+        //var taskDelete = await indexNew.DeleteAllDocumentsAsync(); // # => { "uid": 0 }
+        //if (taskDelete.Error != null && taskDelete.Status == TaskInfoStatus.Succeeded)
+        //{
+        //    var task = await indexNew.AddDocumentsAsync<ElasticItem>(list, primaryKey: "id"); // # => { "uid": 0 }
+        //    var lll = await client.GetTaskAsync(task.TaskUid);
+        //    return task.Error == null && task.Status == TaskInfoStatus.Succeeded;
+        //}
+
+
+        //  BulkResponse pushItem = await _elasticClient.IndexManyAsync(list, index);
+        // return pushItem.Items.AnyList() && pushItem.Items.Count == list.Count;
+        return false;
+
+
+
+
 tạo xác nhận bằng nginx
 
 tạo thêm thư mục .well-known và pki-validation và tạo thêm .txt để xác nhận vào thư mục pki-validation trong /etc/ssl-hacom/apis-dev.hacom.vn
