@@ -1,4 +1,9 @@
-        //           var emd = new System.Collections.ObjectModel.Collection<string>(){
+https://nerdy.dev/notebook/select-starter.html
+
+
+
+
+//           var emd = new System.Collections.ObjectModel.Collection<string>(){
 
         //                   { "itemName" },{"attributes" },{"categories" }
 
